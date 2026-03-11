@@ -1,6 +1,12 @@
+---
+tags:
+  - ai总结
+  - 系统设计
+  - 程序员
+---
 # 视频文案综合分析报告（信息提炼）
 
-[视频地址](https://www.bilibili.com/video/BV1d8jezmEA9)
+[Google TL系统设计 - 聊天系统/WhatsApp](https://www.bilibili.com/video/BV1d8jezmEA9)
 
 ## 讨论视角（这期在解决什么）
 

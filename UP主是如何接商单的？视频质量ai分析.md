@@ -1,6 +1,11 @@
+---
+tags:
+  - b站视频质量分析
+  - ai总结
+---
 # 视频质量分析报告（质量分析型）
 
-[视频地址](https://www.bilibili.com/video/BV1vMPnzGEoG)
+[# UP主是如何接商单的？百万粉丝博主接商单的全流程分享！](https://www.bilibili.com/video/BV1vMPnzGEoG)
 
 ## 总评
 - 属于“强钩子 + 过程记录/流程拆解”的结构，题材清晰，适合做系列。

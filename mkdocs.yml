@@ -1,0 +1,80 @@
+site_name: Alone的知识库  # 网页标题
+site_url: https://Alone0310haha.github.io/personal-knowledge-base/
+site_description: 笔记与技术文档分享
+
+# 主题配置
+theme:
+  name: material
+  language: zh  # 中文界面
+  favicon: assets/favicon.png # 浏览器标签页图标
+  palette: 
+    # 自动切换深浅模式
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        layer: 切换到深色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        layer: 切换到浅色模式
+  features:
+    - navigation.tabs # 顶部横向导航
+    - navigation.sections # 侧边栏分组显示
+    - navigation.top # 回到顶部按钮
+    - search.suggest # 搜索建议
+    - search.highlight # 搜索关键词高亮
+    - content.code.copy # 代码块一键复制
+
+# 插件配置
+plugins:
+  - search
+  - markmap: # 支持 ```markmap 代码块
+      base_path: docs
+  - roamlinks: # 关键：让 MkDocs 支持 Obsidian 的 [[双向链接]] 语法
+
+# Markdown 解析增强
+markdown_extensions:
+  - abbr
+  - admonition # 提示框 (!!! note)
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true # 标题右侧显示链接锚点
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details # 折叠列表
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true # 代码行号可点击
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      # 支持 Markmap 的渲染格式
+      custom_fences:
+        - name: markmap
+          class: markmap
+          format: !!python/name:mkdocs_markmap.static.format_markmap
+  - pymdownx.tasklist: # 支持任务列表 - [ ]
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# 导航结构 (如果不配置，MkDocs 会根据文件夹自动生成)
+nav:
+  - 首页: index.md
+  - 笔记库: 
+      - 默认分类: notes/example.md
+
+

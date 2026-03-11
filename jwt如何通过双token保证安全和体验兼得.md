@@ -1,3 +1,10 @@
+---
+tags:
+  - ai总结
+  - 程序员
+  - 八股文
+  - 场景题
+---
 # 视频文案综合分析报告（信息提炼型）
 
 [jwt如何通过双token保证安全和体验兼得](https://www.bilibili.com/video/BV1qb6EB2EGi?p=2)

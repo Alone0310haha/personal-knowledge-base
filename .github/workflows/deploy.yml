@@ -1,0 +1,44 @@
+name: publish-docs
+on:
+  push:
+    branches:
+      - main  # 如果您的主分支名称是 master，请将其改为 master
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 获取完整历史记录，对某些插件计算修改时间有帮助
+
+      # 2. 设置 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      # 3. 安装 MkDocs 及其所有插件
+      # 包含：Material主题、双向链接插件、Markmap插件
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material \
+                      mkdocs-roamlinks-plugin \
+                      mkdocs-markmap
+
+      # 4. 配置 Git 用户信息 (用于推送到 gh-pages 分支)
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      # 5. 构建并部署到 GitHub Pages
+      # 此命令会自动构建 site 目录并推送到远程的 gh-pages 分支
+      - name: Deploy to GitHub Pages
+        run: |
+          mkdocs gh-deploy --force
