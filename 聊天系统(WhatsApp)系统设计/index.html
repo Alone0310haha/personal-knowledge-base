@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="笔记与技术文档分享" name="description"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%28WhatsApp%29%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" rel="canonical"/>
+<link href="../%E6%94%AF%E4%BB%98%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" rel="prev"/>
+<link href="../jwt%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E5%8F%8Ctoken%E4%BF%9D%E8%AF%81%E5%AE%89%E5%85%A8%E5%92%8C%E4%BD%93%E9%AA%8C%E5%85%BC%E5%BE%97/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.5" name="generator"/>
+<title>聊天系统(WhatsApp)系统设计 - Alone的知识库</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../js/unpkg.com/d3@7.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-lib@0.18.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-view@0.18.js" type="text/javascript"></script><style type="text/css">div.mkdocs-markmap {
+    width: 100%;
+    min-height: 1em;
+    border: 1px solid grey;
+}
+.mkdocs-markmap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#_1">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="Alone的知识库" class="md-header__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Alone的知识库
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              聊天系统(WhatsApp)系统设计
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../%E6%94%AF%E4%BB%98%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">
+          
+  
+  
+  笔记
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Alone的知识库" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Alone的知识库
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    笔记
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    笔记
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../%E6%94%AF%E4%BB%98%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">
+<span class="md-ellipsis">
+    
+  
+    支付系统设计
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    聊天系统(WhatsApp)系统设计
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    聊天系统(WhatsApp)系统设计
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角（这期在解决什么）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1">
+<span class="md-ellipsis">
+      
+        分论点 1：先把需求范围收敛，再谈架构
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        分论点 2：通信模型决定“推消息”的能力与复杂度
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-session-registry-heartbeat">
+<span class="md-ellipsis">
+      
+        分论点 3：用 Session Registry + Heartbeat 解决“人在哪/是否在线”
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4">
+<span class="md-ellipsis">
+      
+        分论点 4：消息路由的三种典型方案（从“最实时”到“更可扩展”）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5">
+<span class="md-ellipsis">
+      
+        分论点 5：用容量估算证明“中心化/转发”并非不可承受
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        关键数据、案例与结论（逐条可复述）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（markmap）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../jwt%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E5%8F%8Ctoken%E4%BF%9D%E8%AF%81%E5%AE%89%E5%85%A8%E5%92%8C%E4%BD%93%E9%AA%8C%E5%85%BC%E5%BE%97/">
+<span class="md-ellipsis">
+    
+  
+    JWT 双Token
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../%E4%BA%86%E8%A7%A3%E9%99%8C%E7%94%9F%E8%A1%8C%E4%B8%9A%E6%96%B9%E6%B3%95%E8%AE%BA/">
+<span class="md-ellipsis">
+    
+  
+    了解陌生行业方法论
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../UP%E4%B8%BB%E6%98%AF%E5%A6%82%E4%BD%95%E6%8E%A5%E5%95%86%E5%8D%95%E7%9A%84%EF%BC%9F%E8%A7%86%E9%A2%91%E8%B4%A8%E9%87%8Fai%E5%88%86%E6%9E%90/">
+<span class="md-ellipsis">
+    
+  
+    UP主是如何接商单的？视频质量ai分析
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角（这期在解决什么）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1">
+<span class="md-ellipsis">
+      
+        分论点 1：先把需求范围收敛，再谈架构
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        分论点 2：通信模型决定“推消息”的能力与复杂度
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-session-registry-heartbeat">
+<span class="md-ellipsis">
+      
+        分论点 3：用 Session Registry + Heartbeat 解决“人在哪/是否在线”
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4">
+<span class="md-ellipsis">
+      
+        分论点 4：消息路由的三种典型方案（从“最实时”到“更可扩展”）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5">
+<span class="md-ellipsis">
+      
+        分论点 5：用容量估算证明“中心化/转发”并非不可承受
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        关键数据、案例与结论（逐条可复述）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（markmap）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="_1">视频文案综合分析报告（信息提炼）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h1>
+<p><a href="https://www.bilibili.com/video/BV1d8jezmEA9">Google TL系统设计 - 聊天系统/WhatsApp</a></p>
+<h2 id="_2">讨论视角（这期在解决什么）<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>这期是典型“系统设计面试题：设计 WhatsApp/聊天系统”的拆解，主讲人以面试官视角强调：
+- 采用经典 Client-Server 架构，不要在面试中硬拗 P2P
+- 优先把最核心的问题讲清：消息如何可靠、低延迟地送达（online / offline）、顺序一致性、扩展性与容错
+- 通过“需求 → 通信模型 → 会话/在线状态 → 消息路由与转发 → 容量估算 → 群聊/离线/隐私”逐层展开</p>
+<h2 id="_3">核心论点与分论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">核心论点<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<p>聊天系统的设计主线是：在移动网络不稳定、并发连接极高的前提下，围绕“消息投递（delivery）”构建一套可扩展、低延迟、可容错的端到端链路；并用合理的容量估算证明方案可落地。</p>
+<h3 id="1">分论点 1：先把需求范围收敛，再谈架构<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<ul>
+<li>功能需求优先级：一对一聊天 → 在线消息 → 离线消息 → 群聊（本质是一对一的放大版，人数可限制）→ 在线状态/多端</li>
+<li>非功能需求：scalability、低 latency（尽量 &lt; 1s）、高 consistency（投递保证/顺序）、fault tolerance</li>
+</ul>
+<h3 id="2">分论点 2：通信模型决定“推消息”的能力与复杂度<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<ul>
+<li>Polling：简单但浪费（大多数请求无消息，还要频繁建连、TCP 开销）</li>
+<li>Long polling：减少无效请求、延迟更低，但服务端要维护长连接并处理超时/唤醒逻辑</li>
+<li>WebSocket：真正双向推送，低延迟、开销更小，但引入协议/兼容性与复杂度</li>
+<li>移动端网络切换（Wi-Fi ↔ 蜂窝、IP 变化）时，要用 token 标识会话；并提到 QUIC（更适合网络切换，但较新、掌握门槛高，可作为备选）</li>
+</ul>
+<h3 id="3-session-registry-heartbeat">分论点 3：用 Session Registry + Heartbeat 解决“人在哪/是否在线”<a class="headerlink" href="#3-session-registry-heartbeat" title="Permanent link">¶</a></h3>
+<ul>
+<li>用户登录后被分配到某台 chat server，并在 session registry 注册</li>
+<li>客户端定期心跳（示例：~10 秒一次）；若几分钟未收到则认为离线</li>
+<li>在线状态可用 KV store 存：userId、最后 heartbeat 的 timestamp、挂载的 chat server 等</li>
+<li>在线状态变化可推送给好友；通知类消息一致性要求较低，可投递到“逻辑收件箱”</li>
+</ul>
+<h3 id="4">分论点 4：消息路由的三种典型方案（从“最实时”到“更可扩展”）<a class="headerlink" href="#4" title="Permanent link">¶</a></h3>
+<p>1) 会话亲和（把正在聊天的两个人尽量迁移到同一台服务器）
+- 优点：延迟最低；同机可用本地时钟排序；实现更直观
+- 缺点：频繁迁移会造成抖动；热点会话/群导致热点机器（hotspot）与再均衡复杂
+- 适用：规模不大但实时要求高（视频举例：游戏房间聊天）</p>
+<p>2) 用户固定绑定某台 chat server，跨服转发（RPC/队列）
+- 优点：水平扩展更自然，用户不必迁移
+- 缺点：多一次转发导致延迟增加；强依赖 session registry 的正确性与一致性；跨服时钟不同步导致“消息顺序”更难</p>
+<p>3) 引入中心化消息总线（pub/sub service、中心化队列）
+- 目的：避免 N 台 server 互联形成 N² 链路复杂度，把持久化/排队/转发统一到消息系统
+- 风险：中心化组件可能成为瓶颈/单点，需要分片、多队列等手段分摊热点</p>
+<h3 id="5">分论点 5：用容量估算证明“中心化/转发”并非不可承受<a class="headerlink" href="#5" title="Permanent link">¶</a></h3>
+<p>视频用一组面试常见假设做数量级估算：
+- 用户规模：1B 用户；20% DAU → 200M 日活；25% 峰值在线（并发连接）→ 50M
+- 在线状态存储：每条 ~100 bytes → 50M * 100B ≈ 5GB（KV store 可承受）
+- 峰值发消息频率：高峰 5 秒 1 条（0.2 msg/s）→ 50M * 0.2 ≈ 10M msg/s
+- 单条消息大小：&lt;1KB，压缩后按 ~0.5KB 估算 → 吞吐约 10M * 0.5KB ≈ 5GB/s
+- 单机并发连接：引用 WhatsApp 2012 的公开分享：单机可支撑 ~2M connections
+  - 50M / 2M ≈ 25 台 chat server（数量级上可行）
+- “本地同服”带来的转发降低：用户倾向连接就近机房/节点，高频联系人地理位置近，提高同服概率（示例按 20% 同服做减免）
+- 如果单机只撑 50K 连接，则需要 ~1000 台 chat server；此时中心化队列/消息系统更像必选项</p>
+<h2 id="_5">关键数据、案例与结论（逐条可复述）<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li>心跳：~10 秒一次；几分钟无心跳判定离线</li>
+<li>在线状态 KV：50M 在线 * 100B ≈ 5GB</li>
+<li>峰值吞吐：10M msg/s；按 0.5KB/条约 5GB/s</li>
+<li>单机并发：WhatsApp 2012 分享单机 ~2M connections → 50M 需要 ~25 台（数量级）</li>
+<li>群聊 fanout：群 500 人分布在 10 台 chat server 上，可“跨服复制 10 份”，在各自服务器内再做本地分发，避免跨服复制 500 份</li>
+<li>离线消息量级：日活 200M、每人 40 条/天 → 8B 条/天；若 15% 为离线消息、0.5KB/条 → ~0.6TB/天；保留 30 天是 ~18TB 量级</li>
+<li>产品与隐私取舍：企业 IM 可能需要较长留存；面向普通用户应权衡隐私/泄露风险，尽量少保存消息（投递完成即可删除可降低复杂度与风险）</li>
+</ul>
+<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyDorr7orqHogYrlpKnns7vnu5/vvIhXaGF0c0FwcC9JTe+8iS0g5L+h5oGv5o+Q54K8CiMjIDEuIOWumuS5iemXrumimOS4jui+ueeVjAojIyMg55uu5qCH77yabWVzc2FnZSBkZWxpdmVyee+8iOWcqOe6vy/nprvnur/vvInjgIHkvY7lu7bov5/jgIHlj6/mianlsZXjgIHlj6/lrrnplJkKIyMjIOmdouivleW7uuiuru+8muWdmuaMgSBDbGllbnQtU2VydmVy77yb6YG/5YWNIFAyUAojIyAyLiDpnIDmsYLmi4bop6MKIyMjIOWKn+iDvQojIyMjIDE6MSBjaGF0CiMjIyMgb25saW5lIG1lc3NhZ2UKIyMjIyBvZmZsaW5lIG1lc3NhZ2UKIyMjIyBncm91cCBjaGF077yI5Lq65pWw5Y+v6ZmQ5Yi277yJCiMjIyMgcHJlc2VuY2Ugc3RhdHVz77yI5Zyo57q/L+emu+e6vy/lpJrnq6/vvIkKIyMjIOmdnuWKn+iDvQojIyMjIHNjYWxhYmlsaXR5CiMjIyMgbGF0ZW5jee+8iDwgMXMg6YeP57qn77yJCiMjIyMgY29uc2lzdGVuY3nvvIjmipXpgJLkv53or4Ev6aG65bqP77yJCiMjIyMgZmF1bHQgdG9sZXJhbmNlCiMjIDMuIOmAmuS/oeaooeWei++8iOWuouaIt+err+KGlOacjeWKoeerr++8iQojIyMgcG9sbGluZ++8iOeugOWNleS9hua1qui0ue+8iQojIyMgbG9uZyBwb2xsaW5n77yI5pu055yB5L2G5pyN5Yqh56uv5aSN5p2C77yJCiMjIyBXZWJTb2NrZXTvvIjlj4zlkJHjgIHkvY7lu7bov5/jgIHljY/orq7lpI3mnYLluqbvvIkKIyMjIOenu+WKqOerr+e9kee7nOWIh+aNou+8mnNlc3Npb24gdG9rZW7vvJtRVUlDIOWkh+mAiQojIyA0LiBTZXNzaW9uIFJlZ2lzdHJ5ICsgUHJlc2VuY2UKIyMjIOeZu+W9leWIhumFjSBjaGF0IHNlcnZlcgojIyMgc2Vzc2lvbiByZWdpc3RyeSDorrDlvZUgdXNlcklkIC0+IHNlcnZlcgojIyMgaGVhcnRiZWF077yI5a6a5pyf77yb6LaF5pe25Yik56a757q/77yJCiMjIyBLViBzdG9yZSDlrZjlnKjnur/kv6Hmga8gKyDmjqjpgIHnirbmgIHlj5jljJYKIyMgNS4g5raI5oGv6Lev55SxL+i9rOWPkeaetuaehOmAieWeiwojIyMg5pa55qGIQe+8muS8muivneS6suWSjO+8iOWQjOacjeiBiuWkqe+8iQojIyMjIOS8mO+8muacgOS9juW7tui/n+OAgeaOkuW6j+eugOWNlQojIyMjIOe8uu+8mui/geenu+aKluWKqOOAgeeDreeCueS8muivnQojIyMg5pa55qGIQu+8mueUqOaIt+WbuuWumiBzZXJ2ZXIgKyDot6jmnI3ovazlj5EKIyMjIyDkvJjvvJrmsLTlubPmianlsZXjgIHml6DpnIDov4Hnp7sKIyMjIyDnvLrvvJrlpJrkuIDmrKHovazlj5HjgIHkvp3otZYgcmVnaXN0cnnjgIHkuIDoh7TmgKfkuI7pobrluo/mm7Tpmr4KIyMjIOaWueahiEPvvJrkuK3lv4PljJbmtojmga/mgLvnur/vvIhwdWIvc3ViIC8gcXVldWXvvIkKIyMjIyDkvJjvvJrpgb/lhY0gTl4yIOmTvui3r++8m+aMgeS5heWMli/mjpLpmJ8v6L2s5Y+R57uf5LiACiMjIyMg57y677ya5Lit5b+D55O26aKIL+eDreeCue+8m+mcgOWIhueJh+OAgeWkmumYn+WIlwojIyA2LiDlrrnph4/kvLDnrpfvvIjor4HmmI7lj6/ooYzvvIkKIyMjIDFCIOeUqOaIt+OAgTIwJSBEQVXjgIEyNSUg5bOw5YC85Zyo57q/CiMjIyAxME0gbXNnL3PvvJswLjVLQi/mnaEg4oaSIDVHQi9zCiMjIyDljZXmnLogMk0gY29ubmVjdGlvbnPvvIhXaGF0c0FwcCAyMDEy77yJ4oaSIH4yNSDlj7AgY2hhdCBzZXJ2ZXIKIyMgNy4g5omp5bGV77ya576k6IGKCiMjIyBncm91cCByZWdpc3Ryee+8mmdyb3VwIC0+IHNlcnZlcnMKIyMjIOi3qOacjeaMiSBzZXJ2ZXIg5aSN5Yi277yIMTAg5Lu977yJKyDmnI3lhoUgZmFub3V0CiMjIDguIOaJqeWxle+8muemu+e6v+a2iOaBrwojIyMgb2ZmbGluZSBzdG9yYWdl77ya6K+75a6M5Yig6ZmkCiMjIyDlj6/nlKjmlofku7bns7vnu5/ml6Xlv5cgLyBOb1NRTCAvIEtWCiMjIDkuIOS6p+WTgeWPluiIje+8muiBiuWkqeiusOW9leS4jumakOengQojIyMg5LyB5Lia77ya5pu06ZW/55WZ5a2YCiMjIyBDIOerr++8muWwvemHj+WwkeS/neWtmO+8jOaKlemAkuWQjuWIoOmZpOmZjeS9jumjjumZqeS4juWkjeadguW6pg==</markmap-data></div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="text/javascript">(function initializeMarkmap() {
+    const transformer = new markmap.Transformer();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
+    const assets = transformer.getAssets();
+    const loading = Promise.all([
+        assets.styles && markmap.loadCSS(assets.styles),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
+    ]);
+
+    function parseData(content) {
+        const { root, frontmatter } = transformer.transform(content);
+        let options = markmap.deriveOptions(frontmatter?.markmap);
+        options = Object.assign(
+            {
+                fitRatio: 0.85,
+            },
+            options
+        );
+        return { root, options };
+    }
+
+    function resetMarkmap(m, el) {
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
+        el.style.height = height + "px";
+        m.fit();
+    }
+
+    function decodeBase64(encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+    }
+
+    function renderMarkmap(el) {
+        const dataEl = el.querySelector("markmap-data");
+        if (!dataEl) return;
+        let content = el.textContent;
+        if (dataEl.getAttribute("encoding") === "base64") {
+            content = decodeBase64(content);
+        }
+        el.innerHTML = "<svg>";
+        svg = el.firstChild;
+        const { root, options } = parseData(content);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
+            resetMarkmap(m, el);
+        });
+    }
+
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll(".mkdocs-markmap")) {
+            renderMarkmap(el);
+        }
+    }
+
+    loading.then(() => {
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === "childList") {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        updateMarkmaps(document);
+    });
+})();
+</script></body>
+</html>
