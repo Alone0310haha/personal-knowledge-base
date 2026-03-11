@@ -19,9 +19,9 @@ jobs:
 
       # 2. 设置 Python 环境
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.x
+          python-version: "3.12"
 
       # 3. 安装 MkDocs 及其所有插件
       # 包含：Material主题、双向链接插件、Markmap插件
