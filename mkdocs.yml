@@ -1,7 +1,7 @@
 site_name: Alone的知识库  # 网页标题
 site_url: https://Alone0310haha.github.io/personal-knowledge-base/
 site_description: 笔记与技术文档分享
-docs_dir: .
+docs_dir: docs
 
 # 主题配置
 theme:
@@ -35,7 +35,7 @@ theme:
 plugins:
   - search
   - markmap: # 支持 ```markmap 代码块
-      base_path: .
+      base_path: docs
   - roamlinks: # 关键：让 MkDocs 支持 Obsidian 的 [[双向链接]] 语法
 
 # Markdown 解析增强
