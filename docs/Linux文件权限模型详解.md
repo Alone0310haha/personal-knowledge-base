@@ -42,7 +42,7 @@ rwxr-xr-x  (755)
 ```bash
 # 修改权限
 chmod 755 file.sh           # 数字方式
-chmod +x file.sh            # 添加执行权限
+chmod +x file.sh            # 添加执行权限 (默认给 u+g+o 添加)
 chmod u+w file.sh           # 给所有者添加写权限
 chmod g-r file.sh           # 删除组读权限
 
@@ -54,6 +54,27 @@ chgrp group file            # 只改组
 # 查看权限
 ls -l file
 stat file                   # 详细状态信息
+```
+
+### 1.4 chmod 身份标识
+
+`chmod` 命令中使用符号指定权限作用的对象：
+
+| 符号 | 含义 | 说明 |
+|------|------|------|
+| `u` | user | 所有者 |
+| `g` | group | 所属组 |
+| `o` | other | 其他用户 |
+| `a` | all | 全部 (u+g+o) |
+
+**示例：**
+
+```bash
+chmod u+w file      # 给所有者添加写权限
+chmod g-r file      # 删除组的读权限
+chmod o=rw file     # 设置其他用户读写权限
+chmod a+x file      # 给所有人添加执行权限 (等同于 chmod +x)
+chmod +x file       # 默认给全部身份添加执行权限
 ```
 
 ## 2. 特殊权限
