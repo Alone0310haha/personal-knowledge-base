@@ -711,6 +711,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#34-acl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 如何判断文件是否开启了 ACL？
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -926,14 +937,36 @@
 </span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="c1"># 恢复</span>
 </span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a>setfacl<span class="w"> </span>--restore<span class="o">=</span>acl_backup.txt
 </span></code></pre></div>
+<h3 id="34-acl">3.4 如何判断文件是否开启了 ACL？<a class="headerlink" href="#34-acl" title="Permanent link">¶</a></h3>
+<p><strong>方式一：<code>ls -l</code> 查看权限位</strong></p>
+<p>如果文件开启了 ACL，权限位最后会有 <code>+</code> 号：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a>ls<span class="w"> </span>-l<span class="w"> </span>file
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="c1"># -rw-rw-r--+  1 alice  developers  ... file</span>
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="c1">#                ↑ 注意这个 +</span>
+</span></code></pre></div>
+<p><strong>方式二：<code>getfacl</code> 命令</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a>getfacl<span class="w"> </span>file
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="c1"># 如果有 ACL，会显示详细规则：</span>
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="c1"># user:alice:rw-</span>
+</span><span id="__span-9-4"><a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="c1"># group:developers:r-x</span>
+</span><span id="__span-9-5"><a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="c1"># ...</span>
+</span></code></pre></div>
+<p>如果文件没有 ACL，<code>getfacl</code> 只会显示基本的 owner/group/other 权限，和 <code>ls -l</code> 看到的一样，且 <code>ls</code> 不会显示 <code>+</code>。</p>
+<p><strong>简单判断：</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="c1"># 方式一：看 + 号</span>
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a>ls<span class="w"> </span>-l<span class="w"> </span>file<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^+'</span>
+</span><span id="__span-10-3"><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="c1"># 方式二：getfacl 有输出且包含额外规则</span>
+</span><span id="__span-10-5"><a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a>getfacl<span class="w"> </span>file<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">'^user:'</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"有 ACL"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"无 ACL"</span>
+</span></code></pre></div></p>
 <h2 id="4-chattr">4. 隐藏权限 (chattr)<a class="headerlink" href="#4-chattr" title="Permanent link">¶</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1"># 查看隐藏权限</span>
-</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>lsattr<span class="w"> </span>file
-</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>
-</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="c1"># 常用属性</span>
-</span><span id="__span-8-5"><a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a>chattr<span class="w"> </span>+i<span class="w"> </span>file<span class="w">      </span><span class="c1"># 不可修改 (即使是 root)</span>
-</span><span id="__span-8-6"><a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a>chattr<span class="w"> </span>+a<span class="w"> </span>file<span class="w">      </span><span class="c1"># 只能追加，不能删除或修改</span>
-</span><span id="__span-8-7"><a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a>chattr<span class="w"> </span>+S<span class="w"> </span>file<span class="w">      </span><span class="c1"># 同步写入</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="c1"># 查看隐藏权限</span>
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a>lsattr<span class="w"> </span>file
+</span><span id="__span-11-3"><a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="c1"># 常用属性</span>
+</span><span id="__span-11-5"><a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a>chattr<span class="w"> </span>+i<span class="w"> </span>file<span class="w">      </span><span class="c1"># 不可修改 (即使是 root)</span>
+</span><span id="__span-11-6"><a href="#__codelineno-11-6" id="__codelineno-11-6" name="__codelineno-11-6"></a>chattr<span class="w"> </span>+a<span class="w"> </span>file<span class="w">      </span><span class="c1"># 只能追加，不能删除或修改</span>
+</span><span id="__span-11-7"><a href="#__codelineno-11-7" id="__codelineno-11-7" name="__codelineno-11-7"></a>chattr<span class="w"> </span>+S<span class="w"> </span>file<span class="w">      </span><span class="c1"># 同步写入</span>
 </span></code></pre></div>
 <h2 id="5">5. 最佳实践<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
 <ol>
