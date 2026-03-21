@@ -186,6 +186,8 @@
   },
   "active": "d6ef4bde5b4b3b09",
   "lastOpenFiles": [
+    "docs/Linux文件权限模型详解.md",
+    "docs/AI编程实践：从Claude Code实践到团队协作的优化思考.md",
     "docs/原来我，一点都不懂 Git.md",
     "docs/AI 知识图谱 GraphRAG 是怎么回事？.md",
     "docs/如何拆解学习开源项目.md",
@@ -210,8 +212,6 @@
     "docs/内存200M读取1G文件并统计重复内容.md",
     "docs/BV1qb6EB2EGi_p16_信息提炼_ai总结.md",
     "docs/证监会《关于短线交易监管的若干规定》解读（要点+对A股股民影响）.md",
-    "docs/redis如何实现上亿用户实时积分排行榜.md",
-    "docs/UP主是如何接商单的？视频质量ai分析.md",
     "未命名",
     "mkdocs.yml",
     "未命名.canvas"
