@@ -6,10 +6,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="笔记与技术文档分享" name="description"/>
-<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%9F%A5%E8%AF%A2200%E6%9D%A1%E6%95%B0%E6%8D%AE%E8%80%97%E6%97%B6200ms%E5%A6%82%E4%BD%95%E5%9C%A8500ms%E5%86%85%E6%9F%A5%E8%AF%A21000%E6%9D%A1/" rel="canonical"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/Transformer%20%E5%A6%82%E4%BD%95%E6%88%90%E4%B8%BA%20AI%20%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%9C%B0%E5%9F%BA/" rel="canonical"/>
 <link href="../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
-<title>查询200条数据耗时200ms如何在500ms内查询1000条 - Alone的知识库</title>
+<title>Transformer 如何成为 AI 模型的地基 - Alone的知识库</title>
 <link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
 <link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -32,7 +32,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#200200ms500ms1000">
+<a class="md-skip" href="#transformer-ai">
           跳转至
         </a>
 </div>
@@ -56,7 +56,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              查询200条数据耗时200ms如何在500ms内查询1000条
+              Transformer 如何成为 AI 模型的地基
             
           </span>
 </div>
@@ -274,13 +274,22 @@
 <a class="md-nav__link" href="#_1">
 <span class="md-ellipsis">
       
-        讨论视角
+        来源
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
 <span class="md-ellipsis">
       
         核心论点与分论点
@@ -290,7 +299,7 @@
 <nav aria-label="核心论点与分论点" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#_3">
+<a class="md-nav__link" href="#_4">
 <span class="md-ellipsis">
       
         核心论点
@@ -299,28 +308,37 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#1">
+<a class="md-nav__link" href="#1-transformer-encoder-decoder">
 <span class="md-ellipsis">
       
-        分论点 1：为什么单线程会超时
+        分论点 1：原始 Transformer = Encoder + Decoder（面向翻译）
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#2">
+<a class="md-nav__link" href="#2n">
 <span class="md-ellipsis">
       
-        分论点 2：并行异步的基本做法
+        分论点 2：堆叠（×N）意味着“结构相同、参数不同”，训练就是在调这些参数
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#3">
+<a class="md-nav__link" href="#3decoder-token">
 <span class="md-ellipsis">
       
-        分论点 3：结果合并的线程安全
+        分论点 3：Decoder 的逐 token 生成解释了“输出更贵”与“采样参数”
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4transformer-gptdecoder-only-bertencoder-only">
+<span class="md-ellipsis">
+      
+        分论点 4：Transformer 的两大裁剪路线：GPT（Decoder-only）与 BERT（Encoder-only）
       
     </span>
 </a>
@@ -329,7 +347,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#_4">
+<a class="md-nav__link" href="#_5">
 <span class="md-ellipsis">
       
         关键数据 / 案例 / 结论
@@ -341,7 +359,16 @@
 <a class="md-nav__link" href="#markmap">
 <span class="md-ellipsis">
       
-        思维导图（markmap）
+        思维导图（Markmap）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        文字稿
       
     </span>
 </a>
@@ -353,43 +380,73 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="200200ms500ms1000">查询200条数据耗时200ms如何在500ms内查询1000条<a class="headerlink" href="#200200ms500ms1000" title="Permanent link">¶</a></h1>
-<p><a href="https://www.bilibili.com/video/BV1qb6EB2EGi?spm_id_from=333.788.videopod.episodes&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7&amp;p=17">查询200条数据耗时200ms如何在500ms内查询1000条</a></p>
-<h2 id="_1">讨论视角<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<h1 id="transformer-ai">Transformer 如何成为 AI 模型的地基<a class="headerlink" href="#transformer-ai" title="Permanent link">¶</a></h1>
+<h2 id="_1">来源<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
 <ul>
-<li>以“面试场景题/性能优化”的视角：已知单次查询 200 条数据耗时约 200ms，目标是在 500ms 内查询 1000 条</li>
-<li>关注点是：如何把串行 IO/查询拆成可并行的任务，并处理异步返回值的汇总与线程安全</li>
+<li>视频：https://www.bilibili.com/video/BV1k6yWBEEmH/</li>
+<li>BV 号：BV1k6yWBEEmH</li>
 </ul>
-<h2 id="_2">核心论点与分论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
-<h3 id="_3">核心论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
-<p>把 1000 条查询拆成 5 份（每份 200 条），用线程池并行异步查询并在末尾合并结果，总耗时由“串行累加”变为“接近单次查询耗时 + 合并开销”，从而满足 500ms 目标。</p>
-<h3 id="1">分论点 1：为什么单线程会超时<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<h2 id="_2">讨论视角<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
 <ul>
-<li>单次：200 条 ≈ 200ms</li>
-<li>1000 条如果串行拆成 5 次查询：5 × 200ms ≈ 1000ms，明显超过 500ms</li>
+<li>用“翻译任务”的原始 Transformer（Encoder-Decoder）当作母体结构，只看输入/输出与信息流，先建立宏观框架</li>
+<li>把“模型参数是什么、训练在调什么”嵌入到结构解释里：每层重复结构相同但参数不同</li>
+<li>以“生成 token 的逐步过程”解释为什么输出比输入更贵、为什么有 temperature / top-k 这类采样参数</li>
+<li>用结构裁剪的方式串起主流 LLM：Encoder-Decoder → Decoder-only（GPT 系）/ Encoder-only（BERT 系）</li>
 </ul>
-<h3 id="2">分论点 2：并行异步的基本做法<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<h2 id="_3">核心论点与分论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">核心论点<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
 <ul>
-<li>创建线程池</li>
-<li>循环提交 5 个带返回值的任务（每个任务查 200 条）</li>
-<li>通过 <code>submit + Future</code> 获取每个异步任务的返回结果</li>
-<li>最后把 5 份结果合并到一个 List 里</li>
+<li>Transformer 的核心贡献不只是一套内部算子，更是一种可堆叠的通用结构范式：Encoder 负责把文本压缩为高层次语义表示，Decoder 负责在条件语义下逐 token 生成；主流大模型基本都在这一范式上裁剪/变体而来。</li>
 </ul>
-<h3 id="3">分论点 3：结果合并的线程安全<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<h3 id="1-transformer-encoder-decoder">分论点 1：原始 Transformer = Encoder + Decoder（面向翻译）<a class="headerlink" href="#1-transformer-encoder-decoder" title="Permanent link">¶</a></h3>
 <ul>
-<li>视频强调回答要点之一是：除了“多线程并行”，还要说明“返回值合并过程”的线程安全处理</li>
-<li>更稳妥的方式是：每个 Future 返回自己的结果集，主线程顺序 <code>get</code> 后再统一合并（避免多个线程并发写同一个容器）</li>
+<li>任务：把源语言句子翻译成目标语言句子</li>
+<li>Encoder：把整句原文一次性编码成一个“高层次数字表示”（文字稿称“含义矩阵/语义表示”），不直接对应任何人类语言，但承载语义信息</li>
+<li>Decoder：在 Encoder 输出的条件下，按 token 逐步生成目标语言</li>
 </ul>
-<h2 id="_4">关键数据 / 案例 / 结论<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<h3 id="2n">分论点 2：堆叠（×N）意味着“结构相同、参数不同”，训练就是在调这些参数<a class="headerlink" href="#2n" title="Permanent link">¶</a></h3>
 <ul>
-<li>已知基线：查询 200 条 ≈ 200ms（视频用 <code>sleep(200ms)</code> 模拟 DB 查询）</li>
-<li>目标：500ms 内查询 1000 条</li>
-<li>拆分策略：1000 = 5 × 200</li>
-<li>并行效果：5 个线程并行时，总耗时约 200ms 级别（视频演示“总耗时两百多毫秒”）</li>
-<li>结论：此题本质考察线程池并行 + Future 聚合 + 合并阶段线程安全</li>
+<li>Encoder/Decoder 内部的块会重复 N 次（图中的 ×N）</li>
+<li>每一层结构相同，但参数不同（作者用 (y=Wx+b) 类比：每层是同类运算但 W、b 不同）</li>
+<li>大模型文件里巨量的权重，本质就是这些层中参数矩阵的数值；训练就是用数据反复调整这些数值，使输出符合预期</li>
 </ul>
-<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
-<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyAyMDBtcyDmn6UgMjAwIOadoe+8jDUwMG1zIOWGheafpSAxMDAwIOadoQojIyDlt7Lnn6XkuI7nm67moIcKIyMjIOWfuue6v++8mjIwMCDmnaEg4omIIDIwMG1zCiMjIyDnm67moIfvvJoxMDAwIOadoSDiiaQgNTAwbXMKIyMg5Liy6KGM6Zeu6aKYCiMjIyAxMDAwIOaLhuaIkCA1IOasoeafpeivogojIyMgNSAqIDIwMG1zIOKJiCAxMDAwbXPvvIjotoXml7bvvIkKIyMg5qC45b+D5oCd6Lev77ya5bm26KGM5byC5q2lCiMjIyDmi4bliIbvvJoxMDAwID0gNSAqIDIwMAojIyMg57q/56iL5rGg77ya5Yib5bu65Zu65a6a57q/56iL5pWw77yI56S65L6LIDXvvIkKIyMjIOaPkOS6pOS7u+WKoe+8mnN1Ym1pdCArIEZ1dHVyZe+8iOW4pui/lOWbnuWAvO+8iQojIyMg562J5b6F57uT5p6c77ya5pS26ZuGIEZ1dHVyZSDlubbojrflj5bov5Tlm54KIyMjIOWQiOW5tu+8muaKiiA1IOS7vee7k+aenOWQiOaIkCAxIOS4qiBMaXN0CiMjIOWFs+mUruihpeWFhe+8mue6v+eoi+WuieWFqAojIyMg6YG/5YWN5aSa57q/56iL5bm25Y+R5YaZ5ZCM5LiAIExpc3QKIyMjIOW7uuiuru+8muavj+S4qiBGdXR1cmUg6L+U5Zue54us56uL57uT5p6c77yM5Li757q/56iL57uf5LiA5ZCI5bm2CiMjIOmihOacn+aViOaenAojIyMg5oC76ICX5pe2IOKJiCDljZXmrKHmn6Xor6LogJfml7YgKyDlkIjlubblvIDplIDvvIh+MjAwbXMg57qn77yJ</markmap-data></div>
+<h3 id="3decoder-token">分论点 3：Decoder 的逐 token 生成解释了“输出更贵”与“采样参数”<a class="headerlink" href="#3decoder-token" title="Permanent link">¶</a></h3>
+<ul>
+<li>生成过程：当前已生成的 token 序列 + 条件语义输入 → 输出“下一个 token 的概率分布”</li>
+<li>每生成一个 token，都要完整跑一遍 Decoder（多层堆叠）</li>
+<li>结论：输出越长，计算越多；因此 API 计费/耗时上输出通常比输入更贵</li>
+<li>为了让结果不总是同一句话，需要在“从概率分布选 token”时引入随机性：</li>
+<li>temperature：控制随机性强弱（越高越随机，0 时趋向总选最大概率）</li>
+<li>top-k：只在概率最高的前 k 个 token 中采样</li>
+</ul>
+<h3 id="4transformer-gptdecoder-only-bertencoder-only">分论点 4：Transformer 的两大裁剪路线：GPT（Decoder-only）与 BERT（Encoder-only）<a class="headerlink" href="#4transformer-gptdecoder-only-bertencoder-only" title="Permanent link">¶</a></h3>
+<ul>
+<li>Decoder-only（GPT 系）：把 Encoder-Decoder 的 Encoder 去掉/吸收，只保留适合“文字接龙/自回归生成”的 Decoder 结构（文字稿称 “Decoder-only Transformer”）</li>
+<li>训练更方便：可用海量任意文本做自监督（给定前文预测下一个 token），输入/输出可由规则自动构造</li>
+<li>产物：GPT、Claude、Gemini、DeepSeek、Kimi 等主流生成式大模型都属于此类变种</li>
+<li>Encoder-only（BERT 系）：保留 Encoder，用“掩码填空”式训练来学理解（mask middle token 让模型预测缺失词）</li>
+<li>更擅长：理解文章大意、信息抽取、实体识别、标注关系等</li>
+<li>产物：BERT 及其变体</li>
+</ul>
+<h2 id="_5">关键数据 / 案例 / 结论<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li>时间线（作者用来定位 Transformer 与大模型关系）：</li>
+<li>2017：提出 Transformer（Attention Is All You Need）</li>
+<li>2018：BERT 基于 Transformer 刷新多项榜单</li>
+<li>2019：GPT-2 让“大语言模型”概念进入大众视野</li>
+<li>翻译示例：输入 “I am Wang” → Encoder 得到语义表示 → Decoder 从开始标记起逐 token 生成“我是王”直到结束标记</li>
+<li>token 概念：Decoder 输出的是词表中每个 token 的概率分布（文字稿举例 GPT-2 词表 50,257）</li>
+<li>训练方式对比：</li>
+<li>Encoder-Decoder 翻译训练需要成对语料（原文+译文），属于监督学习</li>
+<li>Decoder-only 训练可用任意文本做 next-token 预测，属于自监督学习（输入前缀，输出下一个 token）</li>
+<li>Encoder-only（BERT）用 mask 预测缺失词，偏理解型</li>
+</ul>
+<h2 id="markmap">思维导图（Markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBUcmFuc2Zvcm1lciDmiJDkuLogQUkg5qih5Z6L5Zyw5Z+6CiMjIOWOn+WniyBUcmFuc2Zvcm1lcu+8iOe/u+ivke+8iQojIyMgRW5jb2Rlcu+8iOe8lueggeWZqO+8iQojIyMjIOi+k+WFpe+8muaVtOWPpeWOn+aWhwojIyMjIOi+k+WHuu+8mumrmOWxguasoeivreS5ieihqOekuu+8iOS6uuexu+S4jeWPr+ebtOaOpeivu++8iQojIyMjIOe7k+aehO+8muWdl+mHjeWkjSDDl07vvIjnu5PmnoTlkIzjgIHlj4LmlbDkuI3lkIzvvIkKIyMjIERlY29kZXLvvIjop6PnoIHlmajvvIkKIyMjIyDovpPlhaXvvJror63kuYnooajnpLogKyDlt7LnlJ/miJAgdG9rZW4KIyMjIyDovpPlh7rvvJrkuIvkuIDkuKogdG9rZW4g5qaC546H5YiG5biDCiMjIyMg6YCQIHRva2VuIOeUn+aIkOebtOWIsOe7k+adn+agh+iusAojIyDlj4LmlbDkuI7orq3nu4MKIyMjIOavj+WxguWPguaVsOS4jeWQjO+8iOexu+avlCB5PVd4K2LvvIkKIyMjIOiuree7gz3nlKjmlbDmja7osIPmlbTlj4LmlbDmlbDlgLwKIyMjIOaooeWei+aWh+S7tuW+iOWkpz3lrZjmnYPph43lj4LmlbAKIyMg55Sf5oiQ5Li65LuA5LmI6LS1CiMjIyDmr4/nlJ/miJAgMSDkuKogdG9rZW4g6YO96KaB5a6M5pW06LeR5LiA6YGNIERlY29kZXIKIyMjIOi+k+WHuui2iumVv++8jOiuoeeul+i2iuWkmiAtPiDovpPlh7rmm7TotLUKIyMg6YeH5qC3562W55WlCiMjIyB0ZW1wZXJhdHVyZe+8mumaj+acuuaAp+W8uuW8sQojIyMgdG9wLWvvvJrlj6rlnKjliY0gayDmpoLnjocgdG9rZW4g5Lit6YeH5qC3CiMjIOS4pOadoeijgeWJqui3r+e6vwojIyMgRGVjb2Rlci1vbmx577yIR1BUIOezu++8iQojIyMjIOmAguWQiOiHquWbnuW9kueUn+aIkO+8iOaWh+Wtl+aOpem+me+8iQojIyMjIOiuree7g++8muiHquebkeedoyBuZXh0LXRva2VuCiMjIyMg5Luj6KGo77yaR1BUL0NsYXVkZS9HZW1pbmkvRGVlcFNlZWsvS2ltaeKApgojIyMgRW5jb2Rlci1vbmx577yIQkVSVCDns7vvvIkKIyMjIyDpgILlkIjnkIbop6PkuI7kv6Hmga/mir3lj5YKIyMjIyDorq3nu4PvvJptYXNrIOWhq+epuumihOa1iwojIyMjIOS7o+ihqO+8mkJFUlQg5Y+K5Y+Y5L2T</markmap-data></div>
+<h2 id="_6">文字稿<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<ul>
+<li>file:///d:/code/self/tmp/BV1k6yWBEEmH_文字稿.md</li>
+</ul>
 </article>
 </div>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>

@@ -6,10 +6,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="笔记与技术文档分享" name="description"/>
-<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%9F%A5%E8%AF%A2200%E6%9D%A1%E6%95%B0%E6%8D%AE%E8%80%97%E6%97%B6200ms%E5%A6%82%E4%BD%95%E5%9C%A8500ms%E5%86%85%E6%9F%A5%E8%AF%A21000%E6%9D%A1/" rel="canonical"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E4%B8%8A%E7%BA%BF%202%20%E5%B9%B4%E7%9A%84%E9%99%90%E6%B5%81%E4%BB%A3%E7%A0%81%E8%A2%AB%E6%89%93%E7%88%86%EF%BC%9A%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%20%2B%20Redis%20%E8%84%9A%E6%9C%AC%E7%9A%84%E5%9D%91/" rel="canonical"/>
 <link href="../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
-<title>查询200条数据耗时200ms如何在500ms内查询1000条 - Alone的知识库</title>
+<title>上线 2 年的限流代码被打爆：滑动窗口 + Redis 脚本的坑 - Alone的知识库</title>
 <link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
 <link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -32,7 +32,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#200200ms500ms1000">
+<a class="md-skip" href="#_1">
           跳转至
         </a>
 </div>
@@ -56,7 +56,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              查询200条数据耗时200ms如何在500ms内查询1000条
+              上线 2 年的限流代码被打爆：滑动窗口 + Redis 脚本的坑
             
           </span>
 </div>
@@ -302,7 +302,7 @@
 <a class="md-nav__link" href="#1">
 <span class="md-ellipsis">
       
-        分论点 1：为什么单线程会超时
+        分论点 1：现有实现的基本逻辑（滑动窗口）
       
     </span>
 </a>
@@ -311,16 +311,25 @@
 <a class="md-nav__link" href="#2">
 <span class="md-ellipsis">
       
-        分论点 2：并行异步的基本做法
+        分论点 2：致命问题在“时间戳来源”
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#3">
+<a class="md-nav__link" href="#3-redis">
 <span class="md-ellipsis">
       
-        分论点 3：结果合并的线程安全
+        分论点 3：修复方式：把时间统一到 Redis 侧
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4-redis">
+<span class="md-ellipsis">
+      
+        分论点 4：进一步的工程权衡：每次请求都打 Redis 的成本
       
     </span>
 </a>
@@ -341,7 +350,16 @@
 <a class="md-nav__link" href="#markmap">
 <span class="md-ellipsis">
       
-        思维导图（markmap）
+        思维导图（Markmap）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        对应文字稿
       
     </span>
 </a>
@@ -353,43 +371,63 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="200200ms500ms1000">查询200条数据耗时200ms如何在500ms内查询1000条<a class="headerlink" href="#200200ms500ms1000" title="Permanent link">¶</a></h1>
-<p><a href="https://www.bilibili.com/video/BV1qb6EB2EGi?spm_id_from=333.788.videopod.episodes&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7&amp;p=17">查询200条数据耗时200ms如何在500ms内查询1000条</a></p>
+<h1>上线 2 年的限流代码被打爆：滑动窗口 + Redis 脚本的坑</h1>
+<p><a href="https://www.bilibili.com/video/BV1f1wkzzEHi/?spm_id_from=333.1365.list.card_archive.click&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7">上线 2 年的限流代码被打爆：滑动窗口 + Redis 脚本的坑</a></p>
 <h2 id="_1">讨论视角<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
 <ul>
-<li>以“面试场景题/性能优化”的视角：已知单次查询 200 条数据耗时约 200ms，目标是在 500ms 内查询 1000 条</li>
-<li>关注点是：如何把串行 IO/查询拆成可并行的任务，并处理异步返回值的汇总与线程安全</li>
+<li>从一次线上压测现象出发：压测流量已到阈值却没有触发限流，反推“限流实现”存在逻辑/工程缺陷</li>
+<li>以“滑动窗口 + Redis ZSET + Lua 脚本”为例，拆解限流正确性依赖的关键前提（尤其是时间来源）</li>
+<li>讨论“准确性 vs 性能/复杂度”的工程权衡：集群强一致限流 vs 单机近似限流</li>
 </ul>
 <h2 id="_2">核心论点与分论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
 <h3 id="_3">核心论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
-<p>把 1000 条查询拆成 5 份（每份 200 条），用线程池并行异步查询并在末尾合并结果，总耗时由“串行累加”变为“接近单次查询耗时 + 合并开销”，从而满足 500ms 目标。</p>
-<h3 id="1">分论点 1：为什么单线程会超时<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
 <ul>
-<li>单次：200 条 ≈ 200ms</li>
-<li>1000 条如果串行拆成 5 次查询：5 × 200ms ≈ 1000ms，明显超过 500ms</li>
+<li>基于滑动窗口的集群限流如果把“当前时间戳”交给客户端/业务节点传入，在多机时钟不一致的情况下会导致窗口统计失真，从而出现“该限流却没限”的结果；时间应在同一可信侧统一生成（例如在 Redis 端取时间）。</li>
 </ul>
-<h3 id="2">分论点 2：并行异步的基本做法<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<h3 id="1">分论点 1：现有实现的基本逻辑（滑动窗口）<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
 <ul>
-<li>创建线程池</li>
-<li>循环提交 5 个带返回值的任务（每个任务查 200 条）</li>
-<li>通过 <code>submit + Future</code> 获取每个异步任务的返回结果</li>
-<li>最后把 5 份结果合并到一个 List 里</li>
+<li>存储结构：用 Redis 的 ZSET（Sorted Set）按时间戳记录请求（score 为时间戳）</li>
+<li>每次请求流程（Lua 脚本保证原子性）：</li>
+<li>清理窗口外的旧记录</li>
+<li>统计窗口内有效记录数量</li>
+<li>若小于阈值：把“当前时间戳”写入 ZSET 并放行</li>
+<li>若大于等于阈值：拒绝请求（限流）</li>
 </ul>
-<h3 id="3">分论点 3：结果合并的线程安全<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<h3 id="2">分论点 2：致命问题在“时间戳来源”<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
 <ul>
-<li>视频强调回答要点之一是：除了“多线程并行”，还要说明“返回值合并过程”的线程安全处理</li>
-<li>更稳妥的方式是：每个 Future 返回自己的结果集，主线程顺序 <code>get</code> 后再统一合并（避免多个线程并发写同一个容器）</li>
+<li>当前实现把“当前时间”从客户端/应用侧传入脚本</li>
+<li>集群环境下不同机器时钟存在偏差（快/慢不一致）</li>
+<li>结果：同一逻辑窗口在不同机器上写入的时间戳不统一，导致统计出来的窗口内请求数不准，从而出现漏限流/误限流</li>
+</ul>
+<h3 id="3-redis">分论点 3：修复方式：把时间统一到 Redis 侧<a class="headerlink" href="#3-redis" title="Permanent link">¶</a></h3>
+<ul>
+<li>应用侧不再传当前时间</li>
+<li>在 Lua 脚本里用 Redis 侧的本地时间函数获取当前时间，保证同一个限流键下的时间源一致</li>
+<li>同时作者强调时间精度要足够细（文稿提到使用微秒级），否则滑动窗口会被“离散化”成非预期效果</li>
+</ul>
+<h3 id="4-redis">分论点 4：进一步的工程权衡：每次请求都打 Redis 的成本<a class="headerlink" href="#4-redis" title="Permanent link">¶</a></h3>
+<ul>
+<li>即使单次 Redis 操作很快，高并发下“每请求一次就访问 Redis”仍是显著开销与潜在瓶颈</li>
+<li>当并发极高且对“集群限流精确阈值”要求没那么严时，可考虑近似方案：</li>
+<li>单机限流：每台机器本地按自己的 QPS 阈值限流</li>
+<li>定期同步：以固定周期从 Redis 拉取/下发配置（而非每请求访问 Redis）</li>
+<li>代价与接受条件：</li>
+<li>可能出现“某台机器已满、另一台机器尚有余量”的不均衡现象</li>
+<li>若负载均衡足够均匀，该现象概率低，可接受为“工程 trade-off”，换取吞吐与可用性</li>
 </ul>
 <h2 id="_4">关键数据 / 案例 / 结论<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
 <ul>
-<li>已知基线：查询 200 条 ≈ 200ms（视频用 <code>sleep(200ms)</code> 模拟 DB 查询）</li>
-<li>目标：500ms 内查询 1000 条</li>
-<li>拆分策略：1000 = 5 × 200</li>
-<li>并行效果：5 个线程并行时，总耗时约 200ms 级别（视频演示“总耗时两百多毫秒”）</li>
-<li>结论：此题本质考察线程池并行 + Future 聚合 + 合并阶段线程安全</li>
+<li>案例现象：压测请求量达到预定阈值仍未触发限流</li>
+<li>关键结论：滑动窗口限流的正确性强依赖“统一时间源”；跨机传入时间会破坏统计</li>
+<li>Lua 脚本价值：能把“清理 + 统计 + 写入/拒绝”串成一个原子操作，避免并发竞态（但它无法解决时间源不一致）</li>
+<li>工程原则：很多时候“牺牲一点精度”可能换来更好的性能或更高的基础稳定性，关键在于业务能否接受该误差</li>
 </ul>
-<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
-<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyAyMDBtcyDmn6UgMjAwIOadoe+8jDUwMG1zIOWGheafpSAxMDAwIOadoQojIyDlt7Lnn6XkuI7nm67moIcKIyMjIOWfuue6v++8mjIwMCDmnaEg4omIIDIwMG1zCiMjIyDnm67moIfvvJoxMDAwIOadoSDiiaQgNTAwbXMKIyMg5Liy6KGM6Zeu6aKYCiMjIyAxMDAwIOaLhuaIkCA1IOasoeafpeivogojIyMgNSAqIDIwMG1zIOKJiCAxMDAwbXPvvIjotoXml7bvvIkKIyMg5qC45b+D5oCd6Lev77ya5bm26KGM5byC5q2lCiMjIyDmi4bliIbvvJoxMDAwID0gNSAqIDIwMAojIyMg57q/56iL5rGg77ya5Yib5bu65Zu65a6a57q/56iL5pWw77yI56S65L6LIDXvvIkKIyMjIOaPkOS6pOS7u+WKoe+8mnN1Ym1pdCArIEZ1dHVyZe+8iOW4pui/lOWbnuWAvO+8iQojIyMg562J5b6F57uT5p6c77ya5pS26ZuGIEZ1dHVyZSDlubbojrflj5bov5Tlm54KIyMjIOWQiOW5tu+8muaKiiA1IOS7vee7k+aenOWQiOaIkCAxIOS4qiBMaXN0CiMjIOWFs+mUruihpeWFhe+8mue6v+eoi+WuieWFqAojIyMg6YG/5YWN5aSa57q/56iL5bm25Y+R5YaZ5ZCM5LiAIExpc3QKIyMjIOW7uuiuru+8muavj+S4qiBGdXR1cmUg6L+U5Zue54us56uL57uT5p6c77yM5Li757q/56iL57uf5LiA5ZCI5bm2CiMjIOmihOacn+aViOaenAojIyMg5oC76ICX5pe2IOKJiCDljZXmrKHmn6Xor6LogJfml7YgKyDlkIjlubblvIDplIDvvIh+MjAwbXMg57qn77yJ</markmap-data></div>
+<h2 id="markmap">思维导图（Markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyDpm4bnvqTpmZDmtYHku6PnoIHooqvmiZPniIbvvJrmu5Hliqjnqpflj6PnmoTlnZEKIyMg546w6LGhCiMjIyDljovmtYvliLDpmIjlgLzku43mnKrpmZDmtYEKIyMjIOi/veS7o+eggeWPkeeOsOWunueOsOWtmOWcqOmXrumimAojIyDmlrnmoYhB77ya5ruR5Yqo56qX5Y+jICsgUmVkaXMgWlNFVCArIEx1YQojIyMg5a2Y5YKo77yaWlNFVO+8iHNjb3JlPeaXtumXtOaIs++8iQojIyMg5rWB56iL77yITHVhIOWOn+WtkO+8iQojIyMjIOa4heeQhueql+WPo+WkluiusOW9lQojIyMjIOe7n+iuoeeql+WPo+WGheaVsOmHjwojIyMjIDwg6ZiI5YC877ya5YaZ5YWl5b2T5YmN5pe26Ze05oiz5bm25pS+6KGMCiMjIyMgPj0g6ZiI5YC877ya5ouS57udCiMjIOWFs+mUrue8uumZt++8muaXtumXtOaIs+adpea6kAojIyMg5b2T5YmN5pe26Ze055Sx5bqU55So5L6n5Lyg5YWlCiMjIyDlpJrmnLrml7bpkp/kuI3kuIDoh7QgLT4g57uf6K6h56qX5Y+j5aSx55yfCiMjIyDnu5PmnpzvvJrmvI/pmZDmtYEv6K+v6ZmQ5rWBCiMjIOS/ruWkje+8mue7n+S4gOaXtumXtOa6kAojIyMgTHVhIOWcqCBSZWRpcyDkvqflj5bml7bpl7QKIyMjIOW6lOeUqOS4jeWGjeS8oCBub3cKIyMjIOazqOaEj+eyvuW6pu+8iOW+ruenkue6p++8iemBv+WFjeeql+WPo+emu+aVo+WMlgojIyDmlrnmoYhC77ya5Y2V5py66L+R5Ly86ZmQ5rWB77yI5oCn6IO95LyY5YWI77yJCiMjIyDmr4/lj7DmnLrlmajmnKzlnLDpmZDmtYEKIyMjIOWumuacn+S7jiBSZWRpcyDlkIzmraXphY3nva4v6YWN6aKdCiMjIyDku6Pku7fvvJrlj6/og73nn63ml7bkuI3lnYfooaEKIyMjIOadoeS7tu+8mkxCIOi2s+Wkn+Wdh+WMgO+8jOS4muWKoeWPr+aOpeWPl+ivr+W3rgojIyDmgLvnu5MKIyMjIOato+ehruaApyB2cyDmgKfog70v5aSN5p2C5bqmIOeahCB0cmFkZS1vZmY=</markmap-data></div>
+<h2 id="_5">对应文字稿<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="file:///d:/code/self/tmp/BV1f1wkzzEHi_文字稿.md">BV1f1wkzzEHi_文字稿.md</a></li>
+</ul>
 </article>
 </div>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>

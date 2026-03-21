@@ -6,10 +6,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="笔记与技术文档分享" name="description"/>
-<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%9F%A5%E8%AF%A2200%E6%9D%A1%E6%95%B0%E6%8D%AE%E8%80%97%E6%97%B6200ms%E5%A6%82%E4%BD%95%E5%9C%A8500ms%E5%86%85%E6%9F%A5%E8%AF%A21000%E6%9D%A1/" rel="canonical"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/Token%20%E4%B8%8E%20Embedding%EF%BC%9ALLM%20%E4%B8%8E%20RAG%20%E7%9A%84%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/" rel="canonical"/>
 <link href="../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
-<title>查询200条数据耗时200ms如何在500ms内查询1000条 - Alone的知识库</title>
+<title>Token 与 Embedding：LLM 与 RAG 的数据处理机制 - Alone的知识库</title>
 <link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
 <link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -32,7 +32,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#200200ms500ms1000">
+<a class="md-skip" href="#token-embeddingllm-rag">
           跳转至
         </a>
 </div>
@@ -56,7 +56,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              查询200条数据耗时200ms如何在500ms内查询1000条
+              Token 与 Embedding：LLM 与 RAG 的数据处理机制
             
           </span>
 </div>
@@ -274,13 +274,22 @@
 <a class="md-nav__link" href="#_1">
 <span class="md-ellipsis">
       
-        讨论视角
+        来源
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
 <span class="md-ellipsis">
       
         核心论点与分论点
@@ -290,7 +299,7 @@
 <nav aria-label="核心论点与分论点" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#_3">
+<a class="md-nav__link" href="#_4">
 <span class="md-ellipsis">
       
         核心论点
@@ -299,28 +308,37 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#1">
+<a class="md-nav__link" href="#1tokenization">
 <span class="md-ellipsis">
       
-        分论点 1：为什么单线程会超时
+        分论点 1：Tokenization 的作用是把文字变成高效可计算的编号序列
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#2">
+<a class="md-nav__link" href="#2embedding-1">
 <span class="md-ellipsis">
       
-        分论点 2：并行异步的基本做法
+        分论点 2：Embedding 的作用是把“1 维编号”升维成“高维向量”，表达复杂相似性关系
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#3">
+<a class="md-nav__link" href="#3tokenizer-embedding">
 <span class="md-ellipsis">
       
-        分论点 3：结果合并的线程安全
+        分论点 3：Tokenizer 固定不变；Embedding 通过训练得到，是模型结构的一部分
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4llm-embedding-rag-embedding">
+<span class="md-ellipsis">
+      
+        分论点 4：LLM embedding 与 RAG embedding 的相同点与根本差异
       
     </span>
 </a>
@@ -329,7 +347,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#_4">
+<a class="md-nav__link" href="#_5">
 <span class="md-ellipsis">
       
         关键数据 / 案例 / 结论
@@ -341,7 +359,7 @@
 <a class="md-nav__link" href="#markmap">
 <span class="md-ellipsis">
       
-        思维导图（markmap）
+        思维导图（Markmap）
       
     </span>
 </a>
@@ -353,43 +371,69 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="200200ms500ms1000">查询200条数据耗时200ms如何在500ms内查询1000条<a class="headerlink" href="#200200ms500ms1000" title="Permanent link">¶</a></h1>
-<p><a href="https://www.bilibili.com/video/BV1qb6EB2EGi?spm_id_from=333.788.videopod.episodes&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7&amp;p=17">查询200条数据耗时200ms如何在500ms内查询1000条</a></p>
-<h2 id="_1">讨论视角<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<h1 id="token-embeddingllm-rag">Token 与 Embedding：LLM 与 RAG 的数据处理机制<a class="headerlink" href="#token-embeddingllm-rag" title="Permanent link">¶</a></h1>
+<h2 id="_1">来源<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
 <ul>
-<li>以“面试场景题/性能优化”的视角：已知单次查询 200 条数据耗时约 200ms，目标是在 500ms 内查询 1000 条</li>
-<li>关注点是：如何把串行 IO/查询拆成可并行的任务，并处理异步返回值的汇总与线程安全</li>
+<li><a href="https://www.bilibili.com/video/BV1oNv8BPE2m/">Token 与 Embedding：LLM 与 RAG 的数据处理机制</a></li>
 </ul>
-<h2 id="_2">核心论点与分论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
-<h3 id="_3">核心论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
-<p>把 1000 条查询拆成 5 份（每份 200 条），用线程池并行异步查询并在末尾合并结果，总耗时由“串行累加”变为“接近单次查询耗时 + 合并开销”，从而满足 500ms 目标。</p>
-<h3 id="1">分论点 1：为什么单线程会超时<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<h2 id="_2">讨论视角<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
 <ul>
-<li>单次：200 条 ≈ 200ms</li>
-<li>1000 条如果串行拆成 5 次查询：5 × 200ms ≈ 1000ms，明显超过 500ms</li>
+<li>从“计算机不擅长直接处理文字”出发，解释为什么大模型入口先把文字变成 token（编号）</li>
+<li>从“模型是连续函数”出发，解释为什么还需要 embedding：把离散编号映射到高维连续向量，才能表达“既近又远”的语义/语言关系并提高训练效率</li>
+<li>对比澄清两类 embedding：</li>
+<li>大语言模型内部的 token embedding（逐 token）</li>
+<li>RAG/检索用的文本 embedding（整段/整句）</li>
 </ul>
-<h3 id="2">分论点 2：并行异步的基本做法<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<h2 id="_3">核心论点与分论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">核心论点<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
 <ul>
-<li>创建线程池</li>
-<li>循环提交 5 个带返回值的任务（每个任务查 200 条）</li>
-<li>通过 <code>submit + Future</code> 获取每个异步任务的返回结果</li>
-<li>最后把 5 份结果合并到一个 List 里</li>
+<li>大语言模型实际处理的是 token（数字编号）及其 embedding（高维向量），而不是原始文字；tokenizer 属于固定的数据预处理，而 embedding 是模型的一部分、需要训练得到。</li>
 </ul>
-<h3 id="3">分论点 3：结果合并的线程安全<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<h3 id="1tokenization">分论点 1：Tokenization 的作用是把文字变成高效可计算的编号序列<a class="headerlink" href="#1tokenization" title="Permanent link">¶</a></h3>
 <ul>
-<li>视频强调回答要点之一是：除了“多线程并行”，还要说明“返回值合并过程”的线程安全处理</li>
-<li>更稳妥的方式是：每个 Future 返回自己的结果集，主线程顺序 <code>get</code> 后再统一合并（避免多个线程并发写同一个容器）</li>
+<li>计算机存储与计算天然更适合数值：文字在底层是离散字符序列，直接让模型从字符“读出概念”再处理会很慢</li>
+<li>做法：构建词典/词表，用数字代表词或词片段；文本先经 tokenizer 变成 token 序列，再送入模型</li>
+<li>token 与“单词”不必一一对应：可把单词拆成词片段 token，以覆盖未见词（作者用 “oldest = old + EST” 类比）</li>
 </ul>
-<h2 id="_4">关键数据 / 案例 / 结论<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<h3 id="2embedding-1">分论点 2：Embedding 的作用是把“1 维编号”升维成“高维向量”，表达复杂相似性关系<a class="headerlink" href="#2embedding-1" title="Permanent link">¶</a></h3>
 <ul>
-<li>已知基线：查询 200 条 ≈ 200ms（视频用 <code>sleep(200ms)</code> 模拟 DB 查询）</li>
-<li>目标：500ms 内查询 1000 条</li>
-<li>拆分策略：1000 = 5 × 200</li>
-<li>并行效果：5 个线程并行时，总耗时约 200ms 级别（视频演示“总耗时两百多毫秒”）</li>
-<li>结论：此题本质考察线程池并行 + Future 聚合 + 合并阶段线程安全</li>
+<li>作者给出的关键前提：大模型可近似看作一个复杂的连续函数；若输入数值更接近，输出更容易呈现相似性</li>
+<li>但 token 只是一个数字（1 维），无法同时表达多种“相似/差异维度”（语言、类别、形状、颜色等）</li>
+<li>解决：把 token 映射为多维向量（embedding），每个维度可承载某些抽象特征，从而表达“香蕉与苹果同为水果但不同形状/颜色”“苹果与 apple 同物不同语言”等“既近又远”的关系</li>
 </ul>
-<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
-<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyAyMDBtcyDmn6UgMjAwIOadoe+8jDUwMG1zIOWGheafpSAxMDAwIOadoQojIyDlt7Lnn6XkuI7nm67moIcKIyMjIOWfuue6v++8mjIwMCDmnaEg4omIIDIwMG1zCiMjIyDnm67moIfvvJoxMDAwIOadoSDiiaQgNTAwbXMKIyMg5Liy6KGM6Zeu6aKYCiMjIyAxMDAwIOaLhuaIkCA1IOasoeafpeivogojIyMgNSAqIDIwMG1zIOKJiCAxMDAwbXPvvIjotoXml7bvvIkKIyMg5qC45b+D5oCd6Lev77ya5bm26KGM5byC5q2lCiMjIyDmi4bliIbvvJoxMDAwID0gNSAqIDIwMAojIyMg57q/56iL5rGg77ya5Yib5bu65Zu65a6a57q/56iL5pWw77yI56S65L6LIDXvvIkKIyMjIOaPkOS6pOS7u+WKoe+8mnN1Ym1pdCArIEZ1dHVyZe+8iOW4pui/lOWbnuWAvO+8iQojIyMg562J5b6F57uT5p6c77ya5pS26ZuGIEZ1dHVyZSDlubbojrflj5bov5Tlm54KIyMjIOWQiOW5tu+8muaKiiA1IOS7vee7k+aenOWQiOaIkCAxIOS4qiBMaXN0CiMjIOWFs+mUruihpeWFhe+8mue6v+eoi+WuieWFqAojIyMg6YG/5YWN5aSa57q/56iL5bm25Y+R5YaZ5ZCM5LiAIExpc3QKIyMjIOW7uuiuru+8muavj+S4qiBGdXR1cmUg6L+U5Zue54us56uL57uT5p6c77yM5Li757q/56iL57uf5LiA5ZCI5bm2CiMjIOmihOacn+aViOaenAojIyMg5oC76ICX5pe2IOKJiCDljZXmrKHmn6Xor6LogJfml7YgKyDlkIjlubblvIDplIDvvIh+MjAwbXMg57qn77yJ</markmap-data></div>
+<h3 id="3tokenizer-embedding">分论点 3：Tokenizer 固定不变；Embedding 通过训练得到，是模型结构的一部分<a class="headerlink" href="#3tokenizer-embedding" title="Permanent link">¶</a></h3>
+<ul>
+<li>tokenization 属于数据预处理：训练时 tokenizer 固定不变，不在模型里更新</li>
+<li>embedding 不同：维度很高、要为每个 token 分配一组向量参数，无法手工设计，只能通过训练学出</li>
+<li>embedding 向量中每个维度的含义通常不可解释（作者强调：我们只知道这样做效果好，但难以解释每一维代表什么）</li>
+</ul>
+<h3 id="4llm-embedding-rag-embedding">分论点 4：LLM embedding 与 RAG embedding 的相同点与根本差异<a class="headerlink" href="#4llm-embedding-rag-embedding" title="Permanent link">¶</a></h3>
+<ul>
+<li>相同点：都把文本映射到向量空间，用向量距离/相似度表达语义关系</li>
+<li>不同点（目的与训练方式）：</li>
+<li>LLM：训练目标是“预测下一个 token”（文字接龙式 next-token prediction）</li>
+<li>RAG embedding：训练目标是“概括文本含义并可检索”，常用对比学习（正样本更近、负样本更远）</li>
+<li>不同点（架构细节）：作者提到 RAG/embedding 模型常为 encoder-only（类似 BERT）且一般不做 mask；而 LLM（decoder-only）为自回归生成需要 mask</li>
+</ul>
+<h2 id="_5">关键数据 / 案例 / 结论<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li>词表大小（vocab size / wordpiece size）影响效率与覆盖范围：</li>
+<li>GPT-2 级别词表：约 50,257 个 token；中文常出现“一个汉字一个 token”，甚至生僻字需要多个 token，导致效率低与支持差</li>
+<li>GPT-4o 的 tokenizer 词表：约 200,000，覆盖更多中文词，提升中文处理效率</li>
+<li>embedding 维度（作者称 d_model / n_embd）示例：</li>
+<li>GPT-2 XL：约 1,600 维</li>
+<li>DeepSeek-R1：约 7,168 维</li>
+<li>作者推测：更顶尖的模型 embedding 维度可能已上万（维度越高，代表“描述一个词的视角”越细腻）</li>
+<li>embedding 的一种实现方式（作者的解释路径）：</li>
+<li>把 token 先表示成 one-hot（长度=词表大小、几乎全 0）</li>
+<li>通过一个普通线性层（linear）把 one-hot 映射到 embedding 维度</li>
+<li>工程上可用查表/稀疏优化，但数学本质一致</li>
+<li>输出端通常还有“反向映射”：</li>
+<li>模型内部处理的是 embedding</li>
+<li>最后通过线性层把 embedding 转回 token 空间，便于输出人类可读文字</li>
+</ul>
+<h2 id="markmap">思维导图（Markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBUb2tlbiDkuI4gRW1iZWRkaW5n77yITExNICYgUkFH77yJCiMjIFRva2Vu77yI5Li65LuA5LmI5LiN5piv55u05o6l5paH5a2X77yJCiMjIyDorqHnrpfmnLrmk4Xplb/mlbDlgLzvvIzkuI3mk4Xplb/nm7TmjqXlpITnkIbnprvmlaPlrZfnrKYKIyMjIFRva2VuaXplcu+8muaWh+WtlyAtPiB0b2tlbiDnvJblj7fluo/liJcKIyMjIHRva2VuIOS4jeetieS6juWNleivjQojIyMjIOWPr+aLhuaIkOivjeeJh+aute+8iHN1YndvcmTvvIkKIyMjIyDopobnm5bmnKrop4Hor43vvIjkvovvvJpvbGQgKyBFU1TvvIkKIyMjIOivjeihqOWkp+Wwj++8iHZvY2FiIHNpemXvvInlvbHlk43mlYjnjocKIyMjIyBHUFQtMiB+NTAsMjU377ya5Lit5paH5bi45LiA5a2X5LiAIHRva2Vu77yM5pWI546H5L2OCiMjIyMgR1BULTRvIH4yMDAsMDAw77ya6KaG55uW5pu05aSa5Lit5paH6K+N77yM5pWI546H5pu06auYCiMjIEVtYmVkZGluZ++8iOS4uuS7gOS5iOi/mOimgeWGjeWBmuS4gOatpe+8iQojIyMg5qih5Z6L5Y+v6L+R5Ly855yL5L2c6L+e57ut5Ye95pWwCiMjIyAxIOe7tCB0b2tlbiDml6Dms5Xooajovr7lpJrnu7Tnm7jkvLzmgKfvvIjor63oqIAv57G75YirL+W9oueKti/popzoibLigKbvvIkKIyMjIEVtYmVkZGluZ++8mnRva2VuIC0+IOmrmOe7tOWQkemHjwojIyMjIOe7tOW6pui2iumrmO+8jOaPj+i/sOinhuinkui2iue7huiFuwojIyMjIOekuuS+i++8mkdQVC0yIFhMIH4xNjAw77ybRGVlcFNlZWstUjEgfjcxNjjvvJvmm7TlpKfmqKHlnovlj6/og73kuIrkuIcKIyMgVG9rZW5pemVyIHZzIEVtYmVkZGluZyDnmoTmnKzotKjljLrliKsKIyMjIFRva2VuaXplcu+8mumihOWkhOeQhue7hOS7tu+8jOiuree7g+aXtuWbuuWumuS4jeWPmAojIyMgRW1iZWRkaW5n77ya5qih5Z6L55qE5LiA6YOo5YiG77yM5Y+C5pWw6YCa6L+H6K6t57uD5a2m5b6XCiMjIyDlkJHph4/mr4/kuIDnu7TlkKvkuYnpgJrluLjkuI3lj6/op6Pph4oKIyMgRW1iZWRkaW5nIOeahOWunueOsO+8iOebtOingueJiO+8iQojIyMgb25lLWhvdO+8iOmVv+W6pj3or43ooajlpKflsI/vvIkKIyMjIOe6v+aAp+WxguaYoOWwhOWIsCBkX21vZGVsIOe7tAojIyMg5bel56iL5LyY5YyW77ya5p+l6KGoL+eogOeWj+efqemYte+8iOacrOi0qOS4gOiHtO+8iQojIyBMTE0gZW1iZWRkaW5nIHZzIFJBRyBlbWJlZGRpbmcKIyMjIExMTQojIyMjIOebruagh++8mumihOa1i+S4i+S4gOS4qiB0b2tlbu+8iG5leHQtdG9rZW7vvIkKIyMjIyDoh6rlm57lvZLvvJrpnIDopoEgbWFza++8iGRlY29kZXItb25see+8iQojIyMgUkFHIGVtYmVkZGluZwojIyMjIOebruagh++8muaVtOauteivreS5ieWQkemHj+eUqOS6juajgOe0ogojIyMjIOiuree7g++8muWvueavlOWtpuS5oO+8iOato+agt+acrOi/keOAgei0n+agt+acrOi/nO+8iQojIyMjIOW4uOinge+8mmVuY29kZXItb25see+8iOexu+S8vCBCRVJU77yJ77yM6YCa5bi45LiN5YGaIG1hc2s=</markmap-data></div>
 </article>
 </div>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>

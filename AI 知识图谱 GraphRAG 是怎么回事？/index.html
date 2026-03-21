@@ -6,10 +6,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="笔记与技术文档分享" name="description"/>
-<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%9F%A5%E8%AF%A2200%E6%9D%A1%E6%95%B0%E6%8D%AE%E8%80%97%E6%97%B6200ms%E5%A6%82%E4%BD%95%E5%9C%A8500ms%E5%86%85%E6%9F%A5%E8%AF%A21000%E6%9D%A1/" rel="canonical"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/AI%20%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%20GraphRAG%20%E6%98%AF%E6%80%8E%E4%B9%88%E5%9B%9E%E4%BA%8B%EF%BC%9F/" rel="canonical"/>
 <link href="../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
-<title>查询200条数据耗时200ms如何在500ms内查询1000条 - Alone的知识库</title>
+<title>AI 知识图谱 GraphRAG 是怎么回事？ - Alone的知识库</title>
 <link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
 <link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -32,7 +32,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#200200ms500ms1000">
+<a class="md-skip" href="#ai-graphrag">
           跳转至
         </a>
 </div>
@@ -56,7 +56,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              查询200条数据耗时200ms如何在500ms内查询1000条
+              AI 知识图谱 GraphRAG 是怎么回事？
             
           </span>
 </div>
@@ -274,13 +274,22 @@
 <a class="md-nav__link" href="#_1">
 <span class="md-ellipsis">
       
-        讨论视角
+        来源
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
 <span class="md-ellipsis">
       
         核心论点与分论点
@@ -290,7 +299,7 @@
 <nav aria-label="核心论点与分论点" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#_3">
+<a class="md-nav__link" href="#_4">
 <span class="md-ellipsis">
       
         核心论点
@@ -299,19 +308,19 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#1">
+<a class="md-nav__link" href="#1-rag">
 <span class="md-ellipsis">
       
-        分论点 1：为什么单线程会超时
+        分论点 1：传统 RAG 的关键问题是“全句问题”与“局部片段”的相似度经常不够
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#2">
+<a class="md-nav__link" href="#2graphrag-">
 <span class="md-ellipsis">
       
-        分论点 2：并行异步的基本做法
+        分论点 2：GraphRAG 用知识图谱把一句话变成“实体-关系-属性”，把关系显式化
       
     </span>
 </a>
@@ -320,7 +329,34 @@
 <a class="md-nav__link" href="#3">
 <span class="md-ellipsis">
       
-        分论点 3：结果合并的线程安全
+        分论点 3：构图在大模型时代变成“提示词驱动的信息抽取”，并通过反复追问榨干信息
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4graphrag">
+<span class="md-ellipsis">
+      
+        分论点 4：GraphRAG 通过合并同名实体与生成“摘要描述”，把分散信息整合成文档级结构
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5">
+<span class="md-ellipsis">
+      
+        分论点 5：用社区检测把大图分块成“子图”，再逐层总结得到层级图谱，用于全局问题
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#6">
+<span class="md-ellipsis">
+      
+        分论点 6：最终仍回到向量检索，但检索对象变成“原文切片 + 图谱节点/边/社区摘要”
       
     </span>
 </a>
@@ -329,7 +365,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#_4">
+<a class="md-nav__link" href="#_5">
 <span class="md-ellipsis">
       
         关键数据 / 案例 / 结论
@@ -341,7 +377,7 @@
 <a class="md-nav__link" href="#markmap">
 <span class="md-ellipsis">
       
-        思维导图（markmap）
+        思维导图（Markmap）
       
     </span>
 </a>
@@ -353,43 +389,89 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="200200ms500ms1000">查询200条数据耗时200ms如何在500ms内查询1000条<a class="headerlink" href="#200200ms500ms1000" title="Permanent link">¶</a></h1>
-<p><a href="https://www.bilibili.com/video/BV1qb6EB2EGi?spm_id_from=333.788.videopod.episodes&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7&amp;p=17">查询200条数据耗时200ms如何在500ms内查询1000条</a></p>
-<h2 id="_1">讨论视角<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<h1 id="ai-graphrag">AI 知识图谱 GraphRAG 是怎么回事？<a class="headerlink" href="#ai-graphrag" title="Permanent link">¶</a></h1>
+<h2 id="_1">来源<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
 <ul>
-<li>以“面试场景题/性能优化”的视角：已知单次查询 200 条数据耗时约 200ms，目标是在 500ms 内查询 1000 条</li>
-<li>关注点是：如何把串行 IO/查询拆成可并行的任务，并处理异步返回值的汇总与线程安全</li>
+<li><a href="https://www.bilibili.com/video/BV1zoKuzoENM/">AI 知识图谱 GraphRAG 是怎么回事？</a></li>
+<li>BV 号：BV1zoKuzoENM</li>
 </ul>
-<h2 id="_2">核心论点与分论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
-<h3 id="_3">核心论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
-<p>把 1000 条查询拆成 5 份（每份 200 条），用线程池并行异步查询并在末尾合并结果，总耗时由“串行累加”变为“接近单次查询耗时 + 合并开销”，从而满足 500ms 目标。</p>
-<h3 id="1">分论点 1：为什么单线程会超时<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<h2 id="_2">讨论视角<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
 <ul>
-<li>单次：200 条 ≈ 200ms</li>
-<li>1000 条如果串行拆成 5 次查询：5 × 200ms ≈ 1000ms，明显超过 500ms</li>
+<li>先指出传统 RAG 的“切块 + 向量检索”在全局问题/细节问题上的结构性矛盾：块大丢细节，块小丢关系</li>
+<li>用“知识图谱（Graph）”把文本拆成“实体-关系-属性”的结构化表示，解决“整体问题 vs 局部片段”匹配度不足</li>
+<li>强调 GraphRAG 的关键变化：让大模型贯穿在构图、补全、合并、总结、分层、查询等几乎每一步，而不仅仅是最后回答阶段</li>
 </ul>
-<h3 id="2">分论点 2：并行异步的基本做法<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<h2 id="_3">核心论点与分论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">核心论点<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
 <ul>
-<li>创建线程池</li>
-<li>循环提交 5 个带返回值的任务（每个任务查 200 条）</li>
-<li>通过 <code>submit + Future</code> 获取每个异步任务的返回结果</li>
-<li>最后把 5 份结果合并到一个 List 里</li>
+<li>GraphRAG 通过把文本转为知识图谱并分层摘要，再把图谱节点/边与原文片段一起向量化检索，实现“既能抓住细节定位，又能保留跨片段关系与全局结构”的 RAG。</li>
 </ul>
-<h3 id="3">分论点 3：结果合并的线程安全<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<h3 id="1-rag">分论点 1：传统 RAG 的关键问题是“全句问题”与“局部片段”的相似度经常不够<a class="headerlink" href="#1-rag" title="Permanent link">¶</a></h3>
 <ul>
-<li>视频强调回答要点之一是：除了“多线程并行”，还要说明“返回值合并过程”的线程安全处理</li>
-<li>更稳妥的方式是：每个 Future 返回自己的结果集，主线程顺序 <code>get</code> 后再统一合并（避免多个线程并发写同一个容器）</li>
+<li>例子：把文章按句切块存向量库后</li>
+<li>问“老王喜欢吃什么”容易命中“老王喜欢吃西瓜/桃子”</li>
+<li>问“文章里提到了几次西瓜”可能漏检，因为“老王喜欢吃”这类上下文会稀释“西瓜”这一局部目标</li>
+<li>解决的直觉矛盾：</li>
+<li>切块大：保留关系但容易漏细节</li>
+<li>切块小：细节好命中但关系被切断</li>
 </ul>
-<h2 id="_4">关键数据 / 案例 / 结论<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<h3 id="2graphrag-">分论点 2：GraphRAG 用知识图谱把一句话变成“实体-关系-属性”，把关系显式化<a class="headerlink" href="#2graphrag-" title="Permanent link">¶</a></h3>
 <ul>
-<li>已知基线：查询 200 条 ≈ 200ms（视频用 <code>sleep(200ms)</code> 模拟 DB 查询）</li>
-<li>目标：500ms 内查询 1000 条</li>
-<li>拆分策略：1000 = 5 × 200</li>
-<li>并行效果：5 个线程并行时，总耗时约 200ms 级别（视频演示“总耗时两百多毫秒”）</li>
-<li>结论：此题本质考察线程池并行 + Future 聚合 + 合并阶段线程安全</li>
+<li>将“老王爱吃西瓜”表示为：</li>
+<li>实体（Entity）：老王、西瓜</li>
+<li>关系（Relationship）：爱吃</li>
+<li>属性：实体属性（老王=人、西瓜=水果）与关系属性（爱吃…）</li>
+<li>这种“实体+关系+属性”的图结构对应知识图谱/属性图（Property Graph）</li>
 </ul>
-<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
-<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyAyMDBtcyDmn6UgMjAwIOadoe+8jDUwMG1zIOWGheafpSAxMDAwIOadoQojIyDlt7Lnn6XkuI7nm67moIcKIyMjIOWfuue6v++8mjIwMCDmnaEg4omIIDIwMG1zCiMjIyDnm67moIfvvJoxMDAwIOadoSDiiaQgNTAwbXMKIyMg5Liy6KGM6Zeu6aKYCiMjIyAxMDAwIOaLhuaIkCA1IOasoeafpeivogojIyMgNSAqIDIwMG1zIOKJiCAxMDAwbXPvvIjotoXml7bvvIkKIyMg5qC45b+D5oCd6Lev77ya5bm26KGM5byC5q2lCiMjIyDmi4bliIbvvJoxMDAwID0gNSAqIDIwMAojIyMg57q/56iL5rGg77ya5Yib5bu65Zu65a6a57q/56iL5pWw77yI56S65L6LIDXvvIkKIyMjIOaPkOS6pOS7u+WKoe+8mnN1Ym1pdCArIEZ1dHVyZe+8iOW4pui/lOWbnuWAvO+8iQojIyMg562J5b6F57uT5p6c77ya5pS26ZuGIEZ1dHVyZSDlubbojrflj5bov5Tlm54KIyMjIOWQiOW5tu+8muaKiiA1IOS7vee7k+aenOWQiOaIkCAxIOS4qiBMaXN0CiMjIOWFs+mUruihpeWFhe+8mue6v+eoi+WuieWFqAojIyMg6YG/5YWN5aSa57q/56iL5bm25Y+R5YaZ5ZCM5LiAIExpc3QKIyMjIOW7uuiuru+8muavj+S4qiBGdXR1cmUg6L+U5Zue54us56uL57uT5p6c77yM5Li757q/56iL57uf5LiA5ZCI5bm2CiMjIOmihOacn+aViOaenAojIyMg5oC76ICX5pe2IOKJiCDljZXmrKHmn6Xor6LogJfml7YgKyDlkIjlubblvIDplIDvvIh+MjAwbXMg57qn77yJ</markmap-data></div>
+<h3 id="3">分论点 3：构图在大模型时代变成“提示词驱动的信息抽取”，并通过反复追问榨干信息<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<ul>
+<li>过去：实体识别/关系抽取需要复杂算法与模型</li>
+<li>GraphRAG：用大模型完成</li>
+<li>步骤：命名实体识别（NER）→ 关系抽取（Relation Extraction）→ 按约定格式输出结构化文本 → 解析成图</li>
+<li>实体类型需要根据场景预设（文中提到默认可含：团体、人、地点、事件等）</li>
+<li>会要求模型为每个实体/关系生成检索用的文本描述</li>
+<li>迭代补全（文中称 data mining）：每次生成后把“原文 + 当前抽取结果”再发给模型追问“还有没有遗漏”，直到模型确认没有补充</li>
+</ul>
+<h3 id="4graphrag">分论点 4：GraphRAG 通过合并同名实体与生成“摘要描述”，把分散信息整合成文档级结构<a class="headerlink" href="#4graphrag" title="Permanent link">¶</a></h3>
+<ul>
+<li>对每个片段单独抽图后，自动合并同名实体（如所有“老王”、所有“西瓜”）</li>
+<li>合并时会把原本分散在节点/边上的描述信息一并整合</li>
+<li>再让大模型把合并后的描述整理成更完整通顺的总结性描述，作为该节点/边的最终描述</li>
+<li>重要配套：维护“图谱元素 ↔ 原文片段”的可追溯映射（后续检索会回链到原文证据）</li>
+</ul>
+<h3 id="5">分论点 5：用社区检测把大图分块成“子图”，再逐层总结得到层级图谱，用于全局问题<a class="headerlink" href="#5" title="Permanent link">¶</a></h3>
+<ul>
+<li>图太大时直接查图不便：用社区检测把连接更密的子图合并为“社区”</li>
+<li>对每个社区让大模型基于节点/边描述做更高层的总结</li>
+<li>可反复“合并→总结”向上抽象，形成层级结构：</li>
+<li>越往上：越抽象、越概括</li>
+<li>越往下：越贴近原文、越细节</li>
+<li>额外收益：图谱上的推理</li>
+<li>文中示例：由“老王爱吃瓜和桃”“小王爱吃瓜”可推理“小王不爱吃桃”（原文未显式出现）</li>
+</ul>
+<h3 id="6">分论点 6：最终仍回到向量检索，但检索对象变成“原文切片 + 图谱节点/边/社区摘要”<a class="headerlink" href="#6" title="Permanent link">¶</a></h3>
+<ul>
+<li>将图谱中每个节点、每条边的“实体信息 + 总结性描述”当作文本片段做 embedding，存入向量库</li>
+<li>原文的切片也同样存入向量库</li>
+<li>查询时把用户问题向量化，去匹配：</li>
+<li>只查图谱某层/某几层</li>
+<li>只查原文</li>
+<li>或全部都查</li>
+</ul>
+<h2 id="_5">关键数据 / 案例 / 结论<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li>典型失败案例：统计类问题（“提到了几次西瓜”）在按句/按段切块的传统 RAG 中容易漏检</li>
+<li>GraphRAG 抽取任务两步：</li>
+<li>NER（命名实体识别）</li>
+<li>Relation Extraction（关系抽取）</li>
+<li>迭代补全：抽图后反复追问模型补充，直到其声明无遗漏（文中类比“大模型 PUA”）</li>
+<li>两类查询策略（文中描述的两种 search）：</li>
+<li>从底层图谱向上回溯：更擅长细节定位、证据回链</li>
+<li>从高层摘要向下追索：更擅长全局/抽象问题（例如“文章核心观点是什么”）</li>
+<li>作者结论：尽管流程高度依赖大模型看起来“不靠谱”，但根据微软论文的实验结果，整体效果仍不错，因此 GraphRAG 本质是“让大模型渗透到整个流程”的系统设计</li>
+</ul>
+<h2 id="markmap">思维导图（Markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBHcmFwaFJBR++8iOefpeivhuWbvuiwsSBSQUfvvIkKIyMg5Lyg57ufIFJBRyDnl5vngrkKIyMjIOWIh+Wdl+WkpyAtPiDmvI/nu4boioIKIyMjIOWIh+Wdl+WwjyAtPiDkuKLlhbPns7sKIyMjIOWFqOWPpemXrumimCB2cyDlsYDpg6jniYfmrrUg55u45Ly85bqm5L2OCiMjIOaguOW/g+aAnei3r++8muaKiuaWh+acrOWPmOaIkOWbvgojIyMg5a6e5L2TIEVudGl0eQojIyMg5YWz57O7IFJlbGF0aW9uc2hpcAojIyMg5bGe5oCn77yI5a6e5L2TL+WFs+ezu++8iQojIyMg57uT5p6E77ya5bGe5oCn5Zu+77yITFBH77yJCiMjIOaehOWbvua1geeoi++8iExMTSDpqbHliqjvvIkKIyMjIOmihOiuvuWunuS9k+exu+Wei++8iOS6ui/lnLDngrkv5LqL5Lu2L+e7hOe7h+KApu+8iQojIyMgTkVS77ya6K+G5Yir5a6e5L2TCiMjIyBSRe+8muaKveWPluWFs+ezuwojIyMg55Sf5oiQ5a6e5L2TL+WFs+ezu+aPj+i/sO+8iOeUqOS6juajgOe0ou+8iQojIyMg6L+t5Luj6KGl5YWo77yIRGF0YSBtaW5pbmfvvInvvJrlj43lpI3ov73pl67nm7TliLDml6DooaXlhYUKIyMg5ZCI5bm25LiO5Y+v6L+95rqvCiMjIyDlkIjlubblkIzlkI3lrp7kvZMKIyMjIOaVtOWQiOiKgueCuS/ovrnmj4/ov7AKIyMjIExMTSDnlJ/miJDmm7TpgJrpobrnmoTmnIDnu4jmj4/ov7AKIyMjIOe7tOaKpOWbvuiwseWFg+e0oCDihpQg5Y6f5paH54mH5q615pig5bCE77yI5Zue6ZO+6K+B5o2u77yJCiMjIOWIhuWxguaRmOimgQojIyMg56S+5Yy65qOA5rWL77ya5oqK5a+G6ZuG5a2Q5Zu+5ZCI5bm25oiQ56S+5Yy6CiMjIyDlr7nnpL7ljLrlgZrpq5jlsYLmgLvnu5MKIyMjIOWPjeWkjeWQiOW5ti/mgLvnu5MgLT4g5bGC57qn5Zu+6LCxCiMjIyMg5LiK5bGC77ya5oq96LGh5qaC5ousCiMjIyMg5LiL5bGC77ya6LS06L+R5Y6f5paH57uG6IqCCiMjIyDlm77osLHmjqjnkIbvvJrlj6/mjqjlh7rljp/mlofmnKrmmI7or7TnmoTnu5PorroKIyMg5qOA57Si5LiO5Zue562UCiMjIyDlkJHph4/ljJbvvJroioLngrkv6L65L+ekvuWMuuaPj+i/sCArIOWOn+aWh+WIh+eJh+mDveWFpeW6kwojIyMg5p+l6K+i77ya5Y+q5p+l5p+Q5bGCIC8g5p+l5Y6f5paHIC8g5YWo6YOo5p+lCiMjIyDnrZbnlaUKIyMjIyDku47lupXlsYLotbfvvIjnu4boioLlrprkvY3vvIkKIyMjIyDku47pq5jlsYLotbfvvIjlhajlsYDmpoLmi6zvvIkKIyMjIOaJk+WMheivgeaNriArIOmXrumimCAtPiDkuqTnu5kgTExNIOeUn+aIkOetlOahiA==</markmap-data></div>
 </article>
 </div>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>

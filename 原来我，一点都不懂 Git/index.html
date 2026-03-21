@@ -6,10 +6,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="笔记与技术文档分享" name="description"/>
-<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%BC%BA%E4%B8%80%E8%87%B4%E8%BF%98%E6%98%AF%E4%BF%9D%E7%94%9F%E5%AD%98%EF%BC%9FBASE%20%E7%90%86%E8%AE%BA%EF%BC%88p64%EF%BC%89/" rel="canonical"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%8E%9F%E6%9D%A5%E6%88%91%EF%BC%8C%E4%B8%80%E7%82%B9%E9%83%BD%E4%B8%8D%E6%87%82%20Git/" rel="canonical"/>
 <link href="../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
-<title>强一致还是保生存？BASE 理论（p64） - Alone的知识库</title>
+<title>原来我，一点都不懂 Git - Alone的知识库</title>
 <link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
 <link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -32,7 +32,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#base-p64">
+<a class="md-skip" href="#_1">
           跳转至
         </a>
 </div>
@@ -56,7 +56,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              强一致还是保生存？BASE 理论（p64）
+              原来我，一点都不懂 Git
             
           </span>
 </div>
@@ -274,7 +274,7 @@
 <a class="md-nav__link" href="#_1">
 <span class="md-ellipsis">
       
-        讨论视角（这期在解决什么）
+        讨论视角
       
     </span>
 </a>
@@ -299,46 +299,37 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#1cap-p-c-a">
+<a class="md-nav__link" href="#1git">
 <span class="md-ellipsis">
       
-        分论点 1：CAP 的底层约束：P 必然存在，问题是 C 与 A 怎么选
+        分论点 1：Git 只靠三类对象表达“历史快照”
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#2acid-vs-base">
+<a class="md-nav__link" href="#2commit-tree-blob">
 <span class="md-ellipsis">
       
-        分论点 2：ACID vs BASE：刚性事务与柔性事务的架构思想碰撞
+        分论点 2：Commit → Tree → Blob 的引用链解释了“省空间”的来源
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#3base">
+<a class="md-nav__link" href="#3">
 <span class="md-ellipsis">
       
-        分论点 3：BASE 三要素：基本可用、软状态、最终一致
+        分论点 3：对象不可变解释了“删了文件仓库也不变小”
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#4-acid-mq">
+<a class="md-nav__link" href="#4parent-commit-branch">
 <span class="md-ellipsis">
       
-        分论点 4：典型落地：核心链路 ACID + 非核心链路 MQ 异步解耦（刚柔并济）
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#5">
-<span class="md-ellipsis">
-      
-        分论点 5：稳定运行的两道兜底：幂等 + 重试/补偿（含死信与人工对账）
+        分论点 4：Parent 让 commit 串成历史；Branch 只是“指针”
       
     </span>
 </a>
@@ -350,7 +341,7 @@
 <a class="md-nav__link" href="#_4">
 <span class="md-ellipsis">
       
-        关键数据、案例与结论（逐条可复述）
+        关键数据 / 案例 / 结论
       
     </span>
 </a>
@@ -359,7 +350,7 @@
 <a class="md-nav__link" href="#markmap">
 <span class="md-ellipsis">
       
-        思维导图（markmap）
+        思维导图（Markmap）
       
     </span>
 </a>
@@ -371,76 +362,54 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="base-p64">强一致还是保生存？BASE 理论（p64）<a class="headerlink" href="#base-p64" title="Permanent link">¶</a></h1>
-<p><a href="https://www.bilibili.com/video/BV1qb6EB2EGi?spm_id_from=333.788.videopod.episodes&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7&amp;p=64">强一致还是保生存？BASE 理论（p64）</a></p>
-<h2 id="_1">讨论视角（这期在解决什么）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<h1>原来我，一点都不懂 Git</h1>
+<p><a href="https://www.bilibili.com/video/BV18ZiFB3EUy/?spm_id_from=333.1365.list.card_archive.click&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7">原来我，一点都不懂 Git</a></p>
+<h2 id="_1">讨论视角<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
 <ul>
-<li>以“强一致还是保生存”为核心矛盾，解释分布式系统在流量洪峰与网络分区下必然要做取舍</li>
-<li>先用 CAP 把“取舍的物理定律”讲清，再用 BASE 给出互联网系统可落地的工程解法</li>
-<li>强调 BASE 不是“摆烂妥协”，而是用可控边界换吞吐与可用性，并通过机制把风险收口到可治理范围</li>
+<li>从“为什么仓库会莫名其妙变大、为什么删文件也不变小”这种工程痛点切入，用 Git 的底层对象模型解释现象</li>
+<li>用“对象引用链”的方式把 Git 还原成一个内容寻址（哈希）数据库：对象不可变、靠引用组织结构</li>
+<li>重点解释 3 类核心对象（commit/tree/blob）以及 branch 只是“引用指针”而非对象</li>
 </ul>
 <h2 id="_2">核心论点与分论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
 <h3 id="_3">核心论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
-<p>在分布式系统中网络分区（P）不可避免，因此分区容错是前提；当分区发生时，如果执着于强一致（C），就只能拒绝服务以避免错乱，系统可用性（A）会崩。电商等业务往往必须优先保可用（A），因此只能在分区时放弃强一致，转向“最终一致”。BASE 理论就是对这种 AP 取向的工程化延伸：核心链路强一致，非核心链路异步化与最终一致，并通过幂等、重试/补偿、死信等兜底机制把一致性风险控制住。</p>
-<h3 id="1cap-p-c-a">分论点 1：CAP 的底层约束：P 必然存在，问题是 C 与 A 怎么选<a class="headerlink" href="#1cap-p-c-a" title="Permanent link">¶</a></h3>
 <ul>
-<li>分布式网络中节点通信中断是客观必然，P（分区容错）必须接受</li>
-<li>一旦发生分区：</li>
-<li>选择 C：要求各节点数据实时同步一致 -&gt; 只能拒绝服务，避免错乱</li>
-<li>选择 A：保证系统能继续对外提供服务 -&gt; 必然牺牲强一致</li>
-<li>互联网典型场景（如电商下单）中，“不可用”往往比“短暂不一致”更致命</li>
+<li>Git 的本质是一个由哈希定位的对象库；一次提交（commit）通过 tree 记录目录结构，通过 blob 记录文件内容；分支（branch）只是指向某个 commit 的引用。</li>
 </ul>
-<h3 id="2acid-vs-base">分论点 2：ACID vs BASE：刚性事务与柔性事务的架构思想碰撞<a class="headerlink" href="#2acid-vs-base" title="Permanent link">¶</a></h3>
+<h3 id="1git">分论点 1：Git 只靠三类对象表达“历史快照”<a class="headerlink" href="#1git" title="Permanent link">¶</a></h3>
 <ul>
-<li>传统数据库偏 ACID：</li>
-<li>追求强一致与刚性事务</li>
-<li>风格更“悲观”：为了不出错，愿意牺牲吞吐</li>
-<li>银行核心交易等强一致场景必需</li>
-<li>互联网架构偏 BASE：</li>
-<li>风格更“乐观”：允许数据存在延迟与中间态</li>
-<li>以牺牲强一致换取高吞吐与高可用</li>
-<li>前提是“最终能收敛到一致”，且窗口可控</li>
+<li><strong>Blob</strong>：文件内容本体（某个文件在某一时刻的内容快照）</li>
+<li><strong>Tree</strong>：目录结构（记录目录下有哪些条目，以及每个条目指向哪个 blob/tree）</li>
+<li><strong>Commit</strong>：一次提交（记录元信息 + 指向一个 tree + 可选 parent 指向上一个 commit）</li>
 </ul>
-<h3 id="3base">分论点 3：BASE 三要素：基本可用、软状态、最终一致<a class="headerlink" href="#3base" title="Permanent link">¶</a></h3>
+<h3 id="2commit-tree-blob">分论点 2：Commit → Tree → Blob 的引用链解释了“省空间”的来源<a class="headerlink" href="#2commit-tree-blob" title="Permanent link">¶</a></h3>
 <ul>
-<li>基本可用（Basically Available）：</li>
-<li>流量洪峰时允许降级/限流/屏蔽非核心功能</li>
-<li>目标是保住核心链路稳定（可用性优先）</li>
-<li>软状态（Soft State）：</li>
-<li>接受数据存在中间状态与短暂不一致（例如支付成功后积分未到账）</li>
-<li>最终一致（Eventual Consistency）：</li>
-<li>系统必须保证在一个时间窗口后，各副本最终对齐</li>
-<li>关键在于界定与治理这个“可容忍窗口”（多大延迟算可接受）</li>
+<li>每次提交并不把“整个仓库所有文件内容”重新保存一份</li>
+<li>对于未变化的文件，新 commit 的 tree 仍可复用旧的 blob</li>
+<li>只有新增/修改的文件才会产生新的 blob（并在新的 tree 中指向它）</li>
 </ul>
-<h3 id="4-acid-mq">分论点 4：典型落地：核心链路 ACID + 非核心链路 MQ 异步解耦（刚柔并济）<a class="headerlink" href="#4-acid-mq" title="Permanent link">¶</a></h3>
+<h3 id="3">分论点 3：对象不可变解释了“删了文件仓库也不变小”<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
 <ul>
-<li>核心环节（如下单/扣库存/资金）：</li>
-<li>仍采用数据库事务保证主流程强一致</li>
-<li>主流程结束后（如积分/通知等非核心业务）：</li>
-<li>不做同步调用，改为写入消息队列</li>
-<li>积分服务异步消费消息完成更新</li>
-<li>MQ 作为“软状态载体”，让系统在可用性与一致性之间达到工程平衡</li>
+<li>blob 一旦生成就不会被修改或自动删除</li>
+<li>即使你后续删除文件并提交，新 commit 只是新的 tree 不再引用那个 blob</li>
+<li>只要对象库里还保留该 blob（哪怕不再被任何引用链触达），它仍占磁盘</li>
 </ul>
-<h3 id="5">分论点 5：稳定运行的两道兜底：幂等 + 重试/补偿（含死信与人工对账）<a class="headerlink" href="#5" title="Permanent link">¶</a></h3>
+<h3 id="4parent-commit-branch">分论点 4：Parent 让 commit 串成历史；Branch 只是“指针”<a class="headerlink" href="#4parent-commit-branch" title="Permanent link">¶</a></h3>
 <ul>
-<li>幂等：</li>
-<li>网络抖动/重试会导致消息重复投递或重复消费</li>
-<li>业务层必须做去重校验，确保同一消息多次处理结果只生效一次</li>
-<li>重试与补偿：</li>
-<li>消费失败不能丢弃，需要重试机制（分级重试）</li>
-<li>引入死信队列承接长期失败消息，并配合人工对账作为最终防线</li>
+<li>commit 会记录 parent（上一次提交的哈希），由此形成提交链</li>
+<li>branch 不是一种新对象，本质是对某个 commit 的引用</li>
+<li>切换分支/checkout 可以理解为：把 HEAD/工作区指向另一个 commit</li>
 </ul>
-<h2 id="_4">关键数据、案例与结论（逐条可复述）<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<h2 id="_4">关键数据 / 案例 / 结论<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
 <ul>
-<li>案例：分区时若坚持强一致 -&gt; 系统拒绝服务；电商类场景不可用更致命 -&gt; 必须保可用</li>
-<li>案例：支付成功后积分未到账属于软状态与最终一致窗口内的合法现象</li>
-<li>结论：</li>
-<li>CAP 是“硬约束”，BASE 是“工程解法”</li>
-<li>主链路强一致，支链路最终一致</li>
-<li>一致性风险必须通过幂等、重试/补偿、死信队列与对账闭环治理</li>
+<li>作者用一个极简仓库演示：</li>
+<li>第一次提交：commit 指向 tree，tree 指向包含文件内容的 blob</li>
+<li>第二次提交新增文件：新 tree 会指向“旧文件 blob + 新文件 blob”，旧 blob 复用以节省空间</li>
+<li>删除文件再提交：tree 不再引用某 blob，但 blob 仍存在于对象库中</li>
+<li>仓库膨胀的直观原因：大量大文件/模型文件一旦被提交形成 blob，即便后续删除文件，blob 也不会自动消失</li>
+<li>解决思路（视频给出的方向）：先让这些大 blob 变成“未被引用的悬空对象”，再清理未引用对象（本质是做对象回收）</li>
 </ul>
-<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
-<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyDlvLrkuIDoh7Tov5jmmK/kv53nlJ/lrZjvvJ9CQVNFIOeQhuiuuu+8iHA2NO+8iQojIyDnu4jmnoHlkb3popgKIyMjIOaVsOaNrue7neWvueWHhuehriB2cyDns7vnu5/lj6/nlKjmgKcKIyMjIOa1gemHj+a0quWzsC/nvZHnu5zliIbljLrkuIvlv4XnhLblj5boiI0KIyMgQ0FQIOeJqeeQhuWumuW+iwojIyMgUO+8iOWIhuWMuuWuuemUme+8ieS4jeWPr+mBv+WFjQojIyMg5YiG5Yy65Y+R55Sf5pe2CiMjIyMg6YCJIEPvvIjlvLrkuIDoh7TvvIktPiDmi5Lnu53mnI3liqHpgb/lhY3plJnkubEKIyMjIyDpgIkgQe+8iOWPr+eUqOaAp++8iS0+IOaUvuW8g+W8uuS4gOiHtAojIyMg55S15ZWG562J5Zy65pmv77ya5LiN5Y+v55So5pu06Ie05ZG9IC0+IOWAvuWQkSBBUAojIyBBQ0lEIHZzIEJBU0UKIyMjIEFDSUTvvIjliJrmgKfkuovliqHvvIkKIyMjIyDlvLrkuIDoh7TjgIHmgrLop4LjgIHlkJ7lkJDlj5fpmZAKIyMjIyDpk7booYzmoLjlv4PkuqTmmJPlv4XpnIAKIyMjIEJBU0XvvIjmn5TmgKfkuovliqHvvIkKIyMjIyDlhYHorrjlu7bov5/kuI7kuK3pl7TmgIEKIyMjIyDnlKjkuIDoh7TmgKfmjaLlkJ7lkJDkuI7lj6/nlKgKIyMgQkFTRSDkuInopoHntKAKIyMjIEJhc2ljYWxseSBBdmFpbGFibGXvvIjln7rmnKzlj6/nlKjvvIkKIyMjIyDpmY3nuqcv6ZmQ5rWBL+Wxj+iUvemdnuaguOW/g+WKn+iDvQojIyMjIOS/neaguOW/g+mTvui3r+eos+WumgojIyMgU29mdCBTdGF0Ze+8iOi9r+eKtuaAge+8iQojIyMjIOWFgeiuuOS4remXtOaAge+8iOWmguenr+WIhua7nuWQju+8iQojIyMgRXZlbnR1YWwgQ29uc2lzdGVuY3nvvIjmnIDnu4jkuIDoh7TvvIkKIyMjIyDlnKjml7bpl7Tnqpflj6PlkI7mlLbmlZvkuIDoh7QKIyMjIyDnqpflj6PovrnnlYzlv4Xpobvlj6/msrvnkIYKIyMg5YW45Z6L6JC95Zyw77yI5Yia5p+U5bm25rWO77yJCiMjIyDmoLjlv4Ppk77ot6/vvJpEQiDkuovliqEgQUNJRO+8iOS4i+WNlS/lupPlrZgv6LWE6YeR77yJCiMjIyDpnZ7moLjlv4Ppk77ot6/vvJpNUSDlvILmraXvvIjnp6/liIYv6YCa55+l77yJCiMjIyBNUSA9IOi9r+eKtuaAgei9veS9kwojIyDlhZzlupXmnLrliLYKIyMjIOW5guetie+8iOmYsumHjeWkjea2iOi0ue+8iQojIyMg6YeN6K+V5LiO6KGl5YG/CiMjIyMg5YiG57qn6YeN6K+VCiMjIyMg5q275L+h6Zif5YiXCiMjIyMg5Lq65bel5a+56LSm5L2c5Li65pyA5ZCO6Ziy57q/</markmap-data></div>
+<h2 id="markmap">思维导图（Markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBHaXQg55qE5pys6LSo77yI5a+56LGh5qih5Z6L77yJCiMjIOaguOW/g+Wvueixoe+8iDMg5Liq77yJCiMjIyBCbG9iCiMjIyMg5paH5Lu25YaF5a655b+r54WnCiMjIyMg5YaF5a655a+75Z2A77yI5ZOI5biM77yJCiMjIyMg5LiN5Y+v5Y+YCiMjIyBUcmVlCiMjIyMg55uu5b2V57uT5p6ECiMjIyMg5p2h55uuIC0+IGJsb2IvdHJlZSDnmoTlvJXnlKgKIyMjIENvbW1pdAojIyMjIOWFg+S/oeaBr++8iOS9nOiAhS/mj5DkuqTogIUvbWVzc2FnZe+8iQojIyMjIOaMh+WQkeS4gOS4qiB0cmVlCiMjIyMgcGFyZW50IC0+IOS4iuS4gOS4qiBjb21taXQKIyMg5byV55So6ZO+CiMjIyBDb21taXQgLT4gVHJlZSAtPiBCbG9iCiMjIyDmlrDmj5DkuqTlpI3nlKjml6cgYmxvYu+8iOacquWPmOaWh+S7tu+8iQojIyDkuLrku4DkuYjliKDmlofku7bku5PlupPkuI3lj5jlsI8KIyMjIOWIoOmZpCvmj5DkuqQgPSDmlrAgdHJlZSDkuI3lho3lvJXnlKjml6cgYmxvYgojIyMg5penIGJsb2Ig5LuN5Zyo5a+56LGh5bqT6YeM77yI5LiN5Y+v5Y+Y44CB5LiN5Lya6Ieq5Yqo5Yig77yJCiMjIyDpnIDopoHorqnlhbbmiJDkuLrmnKrlvJXnlKjlr7nosaHlkI7lho3lgZrmuIXnkIYv5Zue5pS2CiMjIEJyYW5jaCDmmK/ku4DkuYgKIyMjIGJyYW5jaCA9IOaMh+WQkeafkOS4qiBjb21taXQg55qE5byV55So77yI5oyH6ZKI77yJCiMjIyBjaGVja291dC/liIfmjaLliIbmlK8gPSDmjIflkJHkuI3lkIwgY29tbWl0</markmap-data></div>
 </article>
 </div>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>

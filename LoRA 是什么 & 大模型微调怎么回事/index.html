@@ -6,10 +6,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="笔记与技术文档分享" name="description"/>
-<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%9F%A5%E8%AF%A2200%E6%9D%A1%E6%95%B0%E6%8D%AE%E8%80%97%E6%97%B6200ms%E5%A6%82%E4%BD%95%E5%9C%A8500ms%E5%86%85%E6%9F%A5%E8%AF%A21000%E6%9D%A1/" rel="canonical"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/LoRA%20%E6%98%AF%E4%BB%80%E4%B9%88%20%26%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83%E6%80%8E%E4%B9%88%E5%9B%9E%E4%BA%8B/" rel="canonical"/>
 <link href="../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
-<title>查询200条数据耗时200ms如何在500ms内查询1000条 - Alone的知识库</title>
+<title>LoRA 是什么 &amp; 大模型微调怎么回事 - Alone的知识库</title>
 <link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
 <link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -32,7 +32,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#200200ms500ms1000">
+<a class="md-skip" href="#lora">
           跳转至
         </a>
 </div>
@@ -56,7 +56,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              查询200条数据耗时200ms如何在500ms内查询1000条
+              LoRA 是什么 &amp; 大模型微调怎么回事
             
           </span>
 </div>
@@ -274,13 +274,22 @@
 <a class="md-nav__link" href="#_1">
 <span class="md-ellipsis">
       
-        讨论视角
+        来源
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
 <span class="md-ellipsis">
       
         核心论点与分论点
@@ -290,7 +299,7 @@
 <nav aria-label="核心论点与分论点" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#_3">
+<a class="md-nav__link" href="#_4">
 <span class="md-ellipsis">
       
         核心论点
@@ -299,10 +308,10 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#1">
+<a class="md-nav__link" href="#1sft">
 <span class="md-ellipsis">
       
-        分论点 1：为什么单线程会超时
+        分论点 1：训练/预训练/监督微调（SFT）的本质相同，差别在数据与目的
       
     </span>
 </a>
@@ -311,16 +320,16 @@
 <a class="md-nav__link" href="#2">
 <span class="md-ellipsis">
       
-        分论点 2：并行异步的基本做法
+        分论点 2：微调算力占比小，但显存占用与预训练/全量训练同量级
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#3">
+<a class="md-nav__link" href="#3lora">
 <span class="md-ellipsis">
       
-        分论点 3：结果合并的线程安全
+        分论点 3：LoRA 的做法是“冻结大矩阵，只训练两个小矩阵”
       
     </span>
 </a>
@@ -329,7 +338,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#_4">
+<a class="md-nav__link" href="#_5">
 <span class="md-ellipsis">
       
         关键数据 / 案例 / 结论
@@ -341,7 +350,7 @@
 <a class="md-nav__link" href="#markmap">
 <span class="md-ellipsis">
       
-        思维导图（markmap）
+        思维导图（Markmap）
       
     </span>
 </a>
@@ -353,43 +362,83 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="200200ms500ms1000">查询200条数据耗时200ms如何在500ms内查询1000条<a class="headerlink" href="#200200ms500ms1000" title="Permanent link">¶</a></h1>
-<p><a href="https://www.bilibili.com/video/BV1qb6EB2EGi?spm_id_from=333.788.videopod.episodes&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7&amp;p=17">查询200条数据耗时200ms如何在500ms内查询1000条</a></p>
-<h2 id="_1">讨论视角<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<h1 id="lora">LoRA 是什么 &amp; 大模型微调怎么回事<a class="headerlink" href="#lora" title="Permanent link">¶</a></h1>
+<h2 id="_1">来源<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
 <ul>
-<li>以“面试场景题/性能优化”的视角：已知单次查询 200 条数据耗时约 200ms，目标是在 500ms 内查询 1000 条</li>
-<li>关注点是：如何把串行 IO/查询拆成可并行的任务，并处理异步返回值的汇总与线程安全</li>
+<li><a href="https://www.bilibili.com/video/BV1PvwYzxE9D/">LoRA 是什么 &amp; 大模型微调怎么回事</a></li>
+<li>BV 号：BV1PvwYzxE9D</li>
 </ul>
-<h2 id="_2">核心论点与分论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
-<h3 id="_3">核心论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
-<p>把 1000 条查询拆成 5 份（每份 200 条），用线程池并行异步查询并在末尾合并结果，总耗时由“串行累加”变为“接近单次查询耗时 + 合并开销”，从而满足 500ms 目标。</p>
-<h3 id="1">分论点 1：为什么单线程会超时<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<h2 id="_2">讨论视角<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
 <ul>
-<li>单次：200 条 ≈ 200ms</li>
-<li>1000 条如果串行拆成 5 次查询：5 × 200ms ≈ 1000ms，明显超过 500ms</li>
+<li>从“Transformer 本质是矩阵运算”切入，把“训练/微调”还原为“调整参数矩阵里的数”</li>
+<li>用“算力开销 vs 显存开销”的账单来解释：为什么微调算得少，但显存不一定少</li>
+<li>通过一个 1.5B 玩具模型的显存估算，引出 LoRA 的动机与做法：减少需要训练的参数数量</li>
 </ul>
-<h3 id="2">分论点 2：并行异步的基本做法<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<h2 id="_3">核心论点与分论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">核心论点<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
 <ul>
-<li>创建线程池</li>
-<li>循环提交 5 个带返回值的任务（每个任务查 200 条）</li>
-<li>通过 <code>submit + Future</code> 获取每个异步任务的返回结果</li>
-<li>最后把 5 份结果合并到一个 List 里</li>
+<li>LoRA（Low-Rank Adaptation）通过“低秩增量矩阵”替代“全量参数更新”，把训练/微调时与“可训练参数数量成正比”的显存开销大幅降下来，从而让大模型微调更可用。</li>
 </ul>
-<h3 id="3">分论点 3：结果合并的线程安全<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<h3 id="1sft">分论点 1：训练/预训练/监督微调（SFT）的本质相同，差别在数据与目的<a class="headerlink" href="#1sft" title="Permanent link">¶</a></h3>
 <ul>
-<li>视频强调回答要点之一是：除了“多线程并行”，还要说明“返回值合并过程”的线程安全处理</li>
-<li>更稳妥的方式是：每个 Future 返回自己的结果集，主线程顺序 <code>get</code> 后再统一合并（避免多个线程并发写同一个容器）</li>
+<li>模型由大量矩阵运算组成，能被人“直接控制/调整”的主要是权重矩阵（参数）</li>
+<li>训练就是：用海量数据计算输出 → 与期望输出比较 → 通过梯度下降等方式不断调整参数</li>
+<li>预训练：输入广泛的普通文本，目的在于“学知识/学语言”</li>
+<li>监督微调（SFT）：输入对话式/指令式文本，目的在于“学会把用户输入当问题，并给出答案”，不再只是文字接龙</li>
 </ul>
-<h2 id="_4">关键数据 / 案例 / 结论<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<h3 id="2">分论点 2：微调算力占比小，但显存占用与预训练/全量训练同量级<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
 <ul>
-<li>已知基线：查询 200 条 ≈ 200ms（视频用 <code>sleep(200ms)</code> 模拟 DB 查询）</li>
-<li>目标：500ms 内查询 1000 条</li>
-<li>拆分策略：1000 = 5 × 200</li>
-<li>并行效果：5 个线程并行时，总耗时约 200ms 级别（视频演示“总耗时两百多毫秒”）</li>
-<li>结论：此题本质考察线程池并行 + Future 聚合 + 合并阶段线程安全</li>
+<li>微调的数据量通常远小于预训练（作者用“几万分之一量级”做对比），因此计算量也小</li>
+<li>但显存账单里，除了模型参数本体，还包括：</li>
+<li>推理时的 KV cache、激活值等</li>
+<li>训练时额外需要的梯度、优化器状态（尤其是 AdamW 这类优化器）</li>
+<li>因为“梯度/优化器状态”与“需要训练的参数数量”成正比，全量微调会被显存卡住</li>
 </ul>
-<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
-<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyAyMDBtcyDmn6UgMjAwIOadoe+8jDUwMG1zIOWGheafpSAxMDAwIOadoQojIyDlt7Lnn6XkuI7nm67moIcKIyMjIOWfuue6v++8mjIwMCDmnaEg4omIIDIwMG1zCiMjIyDnm67moIfvvJoxMDAwIOadoSDiiaQgNTAwbXMKIyMg5Liy6KGM6Zeu6aKYCiMjIyAxMDAwIOaLhuaIkCA1IOasoeafpeivogojIyMgNSAqIDIwMG1zIOKJiCAxMDAwbXPvvIjotoXml7bvvIkKIyMg5qC45b+D5oCd6Lev77ya5bm26KGM5byC5q2lCiMjIyDmi4bliIbvvJoxMDAwID0gNSAqIDIwMAojIyMg57q/56iL5rGg77ya5Yib5bu65Zu65a6a57q/56iL5pWw77yI56S65L6LIDXvvIkKIyMjIOaPkOS6pOS7u+WKoe+8mnN1Ym1pdCArIEZ1dHVyZe+8iOW4pui/lOWbnuWAvO+8iQojIyMg562J5b6F57uT5p6c77ya5pS26ZuGIEZ1dHVyZSDlubbojrflj5bov5Tlm54KIyMjIOWQiOW5tu+8muaKiiA1IOS7vee7k+aenOWQiOaIkCAxIOS4qiBMaXN0CiMjIOWFs+mUruihpeWFhe+8mue6v+eoi+WuieWFqAojIyMg6YG/5YWN5aSa57q/56iL5bm25Y+R5YaZ5ZCM5LiAIExpc3QKIyMjIOW7uuiuru+8muavj+S4qiBGdXR1cmUg6L+U5Zue54us56uL57uT5p6c77yM5Li757q/56iL57uf5LiA5ZCI5bm2CiMjIOmihOacn+aViOaenAojIyMg5oC76ICX5pe2IOKJiCDljZXmrKHmn6Xor6LogJfml7YgKyDlkIjlubblvIDplIDvvIh+MjAwbXMg57qn77yJ</markmap-data></div>
+<h3 id="3lora">分论点 3：LoRA 的做法是“冻结大矩阵，只训练两个小矩阵”<a class="headerlink" href="#3lora" title="Permanent link">¶</a></h3>
+<ul>
+<li>对于需要训练的某个大矩阵 (W)（形状 (a \times c)），LoRA 不直接更新 (W) 的全部元素</li>
+<li>而是引入两个小矩阵：</li>
+<li>(A)：(a \times r)</li>
+<li>(B)：(r \times c)</li>
+<li>用 (A \cdot B) 得到一个同形状的增量矩阵，再与原矩阵相加作为新参数：(W' = W + A B)</li>
+<li>训练时冻结 (W)，只训练 (A, B)，因此可训练参数数目大幅减少</li>
+</ul>
+<h2 id="_5">关键数据 / 案例 / 结论<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li>预训练数据规模与算力：</li>
+<li>商用大模型预训练数据量通常为 PB 级，清洗后也可能仍有几十到上百 TB</li>
+<li>例：千问 3 预训练使用约 36 万亿 token；按 1 token ≈ 2–4 bytes 粗算约 70–140 TB</li>
+<li>作者观点：99% 以上的训练资源花在预训练阶段</li>
+<li>监督微调（SFT）规模：</li>
+<li>数据量与算力远小于预训练（作者提到可能连 1% 算力都不到）</li>
+<li>但显存占用与“是否全量训练参数”强相关</li>
+<li>显存账单示例（1.5B 参数“玩具模型”粗算）：</li>
+<li>FP16 参数本体约 3 GB</li>
+<li>推理时 KV cache + 激活值等约 2 GB → 运行合计约 5 GB</li>
+<li>若全量微调：<ul>
+<li>梯度约再占 3 GB</li>
+<li>AdamW 优化器状态需 FP32，并为每个参数维护多份状态（作者列举主权重副本 + 动量等），成为显存大户</li>
+<li>总计粗算约 26 GB，超出 24 GB 显存卡的门槛</li>
+</ul>
+</li>
+<li>LoRA 参数量对比示例：</li>
+<li>原矩阵 (100 \times 200 = 20000) 参数</li>
+<li>设 (r=8)：新增可训练参数为 (100 \times 8 + 8 \times 200 = 2400)，约为原来的 12%</li>
+<li>显存影响（作者给出的直观结论）：<ul>
+<li>前向显存略增（示例从 ~5 GB 到 ~5.6 GB）</li>
+<li>训练相关显存（梯度+优化器状态）因只对应 12% 参数而显著下降（示例从 ~21 GB 降到 ~2.5 GB）</li>
+<li>总体微调显存需求落到 ~8 GB 左右（示例口径约为原来的 30%）</li>
+</ul>
+</li>
+<li>rank 与 alpha：</li>
+<li>(r) 即 LoRA 的 rank；“Low-Rank”强调 (r) 很小</li>
+<li>工程上常见做法是在 (A B) 加到 (W) 之前乘一个系数（作者提到常见为 (\alpha / r)，且 (\alpha) 常取 (2r) 作为初始），用于在改动 (r) 时保持更新量级更稳定</li>
+<li>为什么 LoRA 有效（作者的解释路径）：</li>
+<li>微调目标通常只是“改变说话方式/聚焦某个领域”，相比“从零学一切”的预训练，所需改变的有效参数比例本就很小</li>
+<li>这些关键变化分散在全模型里，人难以手工筛选；LoRA 让训练过程“自己筛出重要方向/参数子空间”</li>
+</ul>
+<h2 id="markmap">思维导图（Markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBMb1JBIOS4juWkp+aooeWei+W+ruiwgwojIyDop4bop5IKIyMjIFRyYW5zZm9ybWVyPeefqemYtei/kOeul+e7hOWQiAojIyMg6K6t57uDPeiwg+WPguaVsOefqemYtemHjOeahOaVsAojIyMg6LSm5Y2V5rOV77ya566X5YqbIHZzIOaYvuWtmAojIyDmpoLlv7XljLrliIYKIyMjIOmihOiuree7g++8iFByZS10cmFpbmluZ++8iQojIyMjIOaVsOaNru+8muW5v+azm+aZrumAmuaWh+acrAojIyMjIOebrueahO+8muWtpuefpeivhi/lrabor63oqIAKIyMjIyDnibnlvoHvvJrmlbDmja5QQue6p+OAgeeul+WKm+WNoOavlD45OSUKIyMjIOebkeedo+W+ruiwg++8iFNGVO+8iQojIyMjIOaVsOaNru+8muWvueivnS/mjIfku6TlvI8KIyMjIyDnm67nmoTvvJrmiorovpPlhaXlvZPpl67popjjgIHovpPlh7rlvZPnrZTmoYgKIyMjIyDnibnlvoHvvJrnrpflipvljaDmr5TlsI/vvIzkvYbmmL7lrZjkuI3kuIDlrprlsI8KIyMg5pi+5a2Y55O26aKI77yI56S65L6L77yaMS41QiDlj4LmlbDvvIkKIyMjIOaOqOeQhuaYvuWtmAojIyMjIOWPguaVsO+8iEZQMTbvvIl+M0dCCiMjIyMgS1YgY2FjaGUgKyDmv4DmtLvlgLwgfjJHQgojIyMjIOWQiOiuoSB+NUdCCiMjIyDlhajph4/lvq7osIPpop3lpJbmmL7lrZgKIyMjIyDmoq/luqYgfjNHQgojIyMjIOS8mOWMluWZqOeKtuaAge+8iEFkYW1X77yMRlAzMu+8jOWkmuS7veeKtuaAge+8ieWNoOWkp+WktAojIyMjIOWQiOiuoeeyl+eulyB+MjZHQu+8iOWNoeS9jzI0R0LmmL7lrZjpl6jmp5vvvIkKIyMgTG9SQe+8iExvdy1SYW5rIEFkYXB0YXRpb27vvIkKIyMjIOaguOW/g+aAneaDs++8muWHj+WwkeWPr+iuree7g+WPguaVsOaVsOmHjwojIyMg5py65Yi2CiMjIyMg5Ya757uT5Y6f55+p6Zi1IFcKIyMjIyDlvJXlhaUgQShhw5dyKeOAgUIocsOXYykKIyMjIyBXJyA9IFcgKyBBQgojIyMjIOWPquiuree7gyBB44CBQgojIyMg5Y+C5pWw6YeP5L6L5a2QCiMjIyMgVzogMTAww5cyMDA9MjAwMDAKIyMjIyByPTgg4oaSIEEsQuWFsTI0MDDvvIh+MTIl77yJCiMjIyDmmL7lrZjmlYjmnpzvvIjnm7Top4nvvIkKIyMjIyDliY3lkJHnlaXlop4KIyMjIyDmoq/luqYv5LyY5YyW5Zmo54q25oCB5aSn5bmF5LiL6ZmNCiMjIyMg5oC75L2T5Y+v5oqK5b6u6LCD5pi+5a2Y6ZmN5YiwIH44R0Ig6YeP57qn77yI56S65L6L5Y+j5b6E77yJCiMjIyDlt6XnqIvnu4boioIKIyMjIyDluLjnlKjnvKnmlL7vvJphbHBoYS9yCiMjIyMgYWxwaGEg5bi45Y+WIDJyIOS9nOS4uuWIneWni++8jOS+v+S6juiwgyByIOaXtuS/neaMgemHj+e6p+eos+WumgojIyDkuLrku4DkuYjmnInmlYjvvIjkvZzogIXop6Pph4rvvIkKIyMjIOW+ruiwg+acrOWwseWPqumcgOaUueWPmOW+iOWwj+avlOS+i+eahOacieaViOWPguaVsAojIyMg5YWz6ZSu5Y+Y5YyW5YiG5pWj6Zq+5omL6YCJCiMjIyBMb1JB6K6p6K6t57uD6L+H56iL6Ieq5bex562b5Ye66YeN6KaB5pa55ZCR</markmap-data></div>
 </article>
 </div>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
