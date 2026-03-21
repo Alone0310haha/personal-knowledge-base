@@ -157,6 +157,39 @@ getfacl -R /path > acl_backup.txt
 setfacl --restore=acl_backup.txt
 ```
 
+### 3.4 如何判断文件是否开启了 ACL？
+
+**方式一：`ls -l` 查看权限位**
+
+如果文件开启了 ACL，权限位最后会有 `+` 号：
+
+```bash
+ls -l file
+# -rw-rw-r--+  1 alice  developers  ... file
+#                ↑ 注意这个 +
+```
+
+**方式二：`getfacl` 命令**
+
+```bash
+getfacl file
+# 如果有 ACL，会显示详细规则：
+# user:alice:rw-
+# group:developers:r-x
+# ...
+```
+
+如果文件没有 ACL，`getfacl` 只会显示基本的 owner/group/other 权限，和 `ls -l` 看到的一样，且 `ls` 不会显示 `+`。
+
+**简单判断：**
+```bash
+# 方式一：看 + 号
+ls -l file | grep '^+'
+
+# 方式二：getfacl 有输出且包含额外规则
+getfacl file | grep -q '^user:' && echo "有 ACL" || echo "无 ACL"
+```
+
 ## 4. 隐藏权限 (chattr)
 
 ```bash
