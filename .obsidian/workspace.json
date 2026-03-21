@@ -11,10 +11,14 @@
             "id": "d6ef4bde5b4b3b09",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "关系图谱"
+              "type": "markdown",
+              "state": {
+                "file": "docs/如何拆解学习开源项目.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "如何拆解学习开源项目"
             }
           }
         ]
@@ -182,7 +186,24 @@
   },
   "active": "d6ef4bde5b4b3b09",
   "lastOpenFiles": [
+    "docs/原来我，一点都不懂 Git.md",
+    "docs/AI 知识图谱 GraphRAG 是怎么回事？.md",
+    "docs/如何拆解学习开源项目.md",
+    "docs/LoRA 是什么 & 大模型微调怎么回事.md",
+    "docs/Token 与 Embedding：LLM 与 RAG 的数据处理机制.md",
+    "docs/多头注意力 Multi-Head Attention 机制详解.md",
+    "docs/美团or饿了么“找出附近1km的商家“.md",
+    "docs/大模型训练原理：梯度下降，从一条直线讲起.md",
+    "docs/binlog 刷盘机制.md",
+    "docs/count(＊) vs count(1) vs count(字段).md",
+    "docs/Dubbo 负载均衡策略选型（p62）.md",
+    "docs/前模糊索引失效（LIKE '%xxx'）.md",
+    "docs/如何防止 Spring Boot 反编译？.md",
+    "docs/分库分表 ID 冲突解决方案.md",
+    "docs/别再误解：Spring 的单例是容器视角，不是 JVM 视角.md",
     "docs/查询200条数据耗时200ms如何在500ms内查询1000条.md",
+    "docs/上线 2 年的限流代码被打爆：滑动窗口 + Redis 脚本的坑.md",
+    "docs/Transformer 如何成为 AI 模型的地基.md",
     "docs/给你一个亿 Redis Keys，如何统计双方的共同好友.md",
     "docs/BV1qb6EB2EGi_p17_信息提炼_ai总结.md",
     "docs/BV1qb6EB2EGi_p14_信息提炼_ai总结.md",
@@ -191,21 +212,8 @@
     "docs/证监会《关于短线交易监管的若干规定》解读（要点+对A股股民影响）.md",
     "docs/redis如何实现上亿用户实时积分排行榜.md",
     "docs/UP主是如何接商单的？视频质量ai分析.md",
-    "docs/jwt如何通过双token保证安全和体验兼得.md",
-    "docs/Java中的CopyOnWriteArrayList是什么.md",
-    "docs/支付系统设计.md",
-    "docs/使用redis出现缓存击穿雪崩穿透应该怎么解决.md",
-    "docs/如何使用 Redis 记录上亿用户连续登录天数.md",
-    "docs/如何设计分布式日志存储架构.md",
-    "docs/聊天系统(WhatsApp)系统设计.md",
-    "未命名.md",
     "未命名",
     "mkdocs.yml",
-    "聊天系统(WhatsApp)系统设计.md",
-    "了解陌生行业方法论.md",
-    "未命名.canvas",
-    "jwt如何通过双token保证安全和体验兼得.md",
-    "支付系统设计.md",
-    "UP主是如何接商单的？视频质量ai分析.md"
+    "未命名.canvas"
   ]
 }
