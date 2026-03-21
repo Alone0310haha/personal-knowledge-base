@@ -69,12 +69,5 @@ markdown_extensions:
 # 导航结构 (如果不配置，MkDocs 会根据文件夹自动生成)
 nav:
   - 首页: index.md
-  - 笔记:
-      - 支付系统设计: 支付系统设计.md
-      - 聊天系统(WhatsApp)系统设计: 聊天系统(WhatsApp)系统设计.md
-      - JWT 双Token: jwt如何通过双token保证安全和体验兼得.md
-      - 了解陌生行业方法论: 了解陌生行业方法论.md
-      - UP主是如何接商单的？视频质量ai分析: UP主是如何接商单的？视频质量ai分析.md
-      - B站批量下载与AI总结流水线: B站批量下载与AI总结流水线.md
 
 
