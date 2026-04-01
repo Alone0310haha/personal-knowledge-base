@@ -1,0 +1,912 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/prometheus-tech/%E7%AC%AC%2030%20%E8%AF%BE-%E7%B3%BB%E7%BB%9F%E9%9B%86%E6%88%90%E4%B8%8E%E4%BC%98%E5%8C%96/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第 30 课：系统集成与优化 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#30" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第 30 课：系统集成与优化
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#301" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.1 最终系统应该长什么样
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#302" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.2 配置管理：你需要哪些配置项
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="30.2 配置管理：你需要哪些配置项">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3021-reload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.2.1 热加载（reload）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#303" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.3 可观测性：你的系统也要“被监控”
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="30.3 可观测性：你的系统也要“被监控”">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3031" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.3.1 抓取侧
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3032" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.3.2 查询侧
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3033" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.3.3 存储侧
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3034" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.3.4 告警侧
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#304" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.4 并发模型：哪些地方适合并发
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="30.4 并发模型：哪些地方适合并发">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3041-scraper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.4.1 Scraper 并发
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3042-tsdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.4.2 TSDB 并发
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3043" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.4.3 查询并发
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#305" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.5 缓存：把“重复工作”缓存起来
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="30.5 缓存：把“重复工作”缓存起来">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3051-series-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.5.1 series selection 缓存
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3052-query_range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.5.2 query_range 结果缓存
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#306" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.6 限流与保护：防止系统被打挂
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#307" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.7 持久化：从“能跑”到“能重启恢复”
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="30.7 持久化：从“能跑”到“能重启恢复”">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3071-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.7.1 WAL（最简版）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3072-snapshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.7.2 Snapshot（可选）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#308" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.8 性能验证：用什么方式判断优化有效
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#309" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30.9 最终交付清单（建议）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        课后小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="30">第 30 课：系统集成与优化<a class="headerlink" href="#30" title="Permanent link">¶</a></h1>
+<p><strong>学习时长</strong>：4-6 小时<br/>
+<strong>难度等级</strong>：⭐⭐⭐⭐ 深入<br/>
+<strong>先修要求</strong>：完成第 25-29 课（抓取器/存储/PromQL/API/UI/告警引擎）</p>
+<hr/>
+<h2 id="_1">学习目标<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>完成本课程后，你将能够：</p>
+<ul>
+<li>✅ 把前面实现的模块整合成一个可运行的“简化版 Prometheus”</li>
+<li>✅ 为系统补齐关键的运行能力：配置管理、热加载、可观测性、自监控指标</li>
+<li>✅ 做 4 类核心优化：并发、缓存、限流、持久化</li>
+<li>✅ 能用压测与指标定位瓶颈：抓取侧、写入侧、查询侧、告警侧</li>
+<li>✅ 输出一份可交付的最小系统说明：如何启动、如何验证、如何排障</li>
+</ul>
+<hr/>
+<h2 id="301">30.1 最终系统应该长什么样<a class="headerlink" href="#301" title="Permanent link">¶</a></h2>
+<p>把你在第 25-29 课实现的组件串起来：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>flowchart TD
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  A[Config] --&gt; B[Discovery/Targets]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  B --&gt; C[Scraper]
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>  C --&gt; D[Parser]
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>  D --&gt; E[TSDB]
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>  E --&gt; F[Query Engine]
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>  F --&gt; G[HTTP API]
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>  G --&gt; H[UI]
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>  F --&gt; I[Rule Engine]
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>  I --&gt; J[Notifier/Webhook]
+</span></code></pre></div>
+<p>最小闭环：</p>
+<ul>
+<li>targets 可配置</li>
+<li>抓取能持续运行</li>
+<li>查询能返回 vector/matrix</li>
+<li>告警能 firing/resolved 并推送</li>
+</ul>
+<hr/>
+<h2 id="302">30.2 配置管理：你需要哪些配置项<a class="headerlink" href="#302" title="Permanent link">¶</a></h2>
+<p>建议把配置分成 4 组：</p>
+<p>1) <strong>抓取配置</strong>
+- targets（static/file_sd）
+- scrape_interval / timeout</p>
+<p>2) <strong>存储配置</strong>
+- 数据目录（path）
+- retention（time/size）</p>
+<p>3) <strong>查询配置</strong>
+- query timeout
+- max points / max samples（保护）</p>
+<p>4) <strong>告警配置</strong>
+- rules 文件路径
+- group interval
+- webhook/receiver 地址</p>
+<h3 id="3021-reload">30.2.1 热加载（reload）<a class="headerlink" href="#3021-reload" title="Permanent link">¶</a></h3>
+<p>最小可用的热加载策略：</p>
+<ul>
+<li>收到 <code>SIGHUP</code>（或 Windows 下提供 <code>/reload</code> API）</li>
+<li>重新读取配置</li>
+<li>对比新旧配置，增删目标/规则</li>
+</ul>
+<p>直觉：</p>
+<ul>
+<li>目标变了：增删 scrape loop</li>
+<li>规则变了：重建 rule groups</li>
+</ul>
+<hr/>
+<h2 id="303">30.3 可观测性：你的系统也要“被监控”<a class="headerlink" href="#303" title="Permanent link">¶</a></h2>
+<p>至少暴露两类自监控指标：</p>
+<h3 id="3031">30.3.1 抓取侧<a class="headerlink" href="#3031" title="Permanent link">¶</a></h3>
+<ul>
+<li><code>up</code></li>
+<li><code>scrape_duration_seconds</code></li>
+<li><code>scrape_samples_scraped</code></li>
+<li><code>scrape_errors_total</code></li>
+</ul>
+<h3 id="3032">30.3.2 查询侧<a class="headerlink" href="#3032" title="Permanent link">¶</a></h3>
+<ul>
+<li><code>query_requests_total</code></li>
+<li><code>query_duration_seconds</code></li>
+<li><code>query_errors_total</code></li>
+</ul>
+<h3 id="3033">30.3.3 存储侧<a class="headerlink" href="#3033" title="Permanent link">¶</a></h3>
+<ul>
+<li><code>tsdb_head_series</code></li>
+<li><code>tsdb_writes_total</code></li>
+<li><code>tsdb_read_samples_total</code></li>
+</ul>
+<h3 id="3034">30.3.4 告警侧<a class="headerlink" href="#3034" title="Permanent link">¶</a></h3>
+<ul>
+<li><code>rule_evaluations_total</code></li>
+<li><code>rule_eval_duration_seconds</code></li>
+<li><code>alerts_firing</code></li>
+<li><code>notifications_sent_total</code> / <code>notifications_errors_total</code></li>
+</ul>
+<p>直觉：你需要这些指标来定位瓶颈，而不是靠猜。</p>
+<hr/>
+<h2 id="304">30.4 并发模型：哪些地方适合并发<a class="headerlink" href="#304" title="Permanent link">¶</a></h2>
+<h3 id="3041-scraper">30.4.1 Scraper 并发<a class="headerlink" href="#3041-scraper" title="Permanent link">¶</a></h3>
+<ul>
+<li>每个 target 一个 loop（最直观）</li>
+<li>targets 多时需要并发上限（worker pool 或 semaphore）</li>
+</ul>
+<h3 id="3042-tsdb">30.4.2 TSDB 并发<a class="headerlink" href="#3042-tsdb" title="Permanent link">¶</a></h3>
+<p>最小实现通常先做单写入锁：</p>
+<ul>
+<li>Append 加锁</li>
+<li>查询可并发读（读写锁）</li>
+</ul>
+<p>后续优化方向：</p>
+<ul>
+<li>series 分片（按 hash 分 shard），降低锁竞争</li>
+<li>chunk append 与 index 更新分离</li>
+</ul>
+<h3 id="3043">30.4.3 查询并发<a class="headerlink" href="#3043" title="Permanent link">¶</a></h3>
+<p>并发查询需要保护：</p>
+<ul>
+<li>最大并发查询数</li>
+<li>每个查询的最大返回点数/最大样本数</li>
+<li>超时与取消</li>
+</ul>
+<hr/>
+<h2 id="305">30.5 缓存：把“重复工作”缓存起来<a class="headerlink" href="#305" title="Permanent link">¶</a></h2>
+<p>两类最常见缓存：</p>
+<h3 id="3051-series-selection">30.5.1 series selection 缓存<a class="headerlink" href="#3051-series-selection" title="Permanent link">¶</a></h3>
+<ul>
+<li>相同 matchers 在短时间内重复查询很常见</li>
+<li>缓存 postings/series 列表能显著减少 CPU</li>
+</ul>
+<h3 id="3052-query_range">30.5.2 query_range 结果缓存<a class="headerlink" href="#3052-query_range" title="Permanent link">¶</a></h3>
+<ul>
+<li>Grafana 会频繁刷新相同时间窗口</li>
+<li>可以按（query,start,end,step）做短 TTL 缓存</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>缓存要有上限与 TTL</li>
+<li>缓存命中率比缓存大小更重要</li>
+</ul>
+<hr/>
+<h2 id="306">30.6 限流与保护：防止系统被打挂<a class="headerlink" href="#306" title="Permanent link">¶</a></h2>
+<p>建议至少做 5 个保护点：</p>
+<ul>
+<li>最大抓取并发数（避免瞬时大量请求）</li>
+<li>最大每次抓取解析行数/样本数（避免异常端点返回爆炸）</li>
+<li>query timeout</li>
+<li>query_range 最大点数：<code>(end-start)/step</code> 上限</li>
+<li>告警发送队列上限（避免下游不可用时内存爆炸）</li>
+</ul>
+<hr/>
+<h2 id="307">30.7 持久化：从“能跑”到“能重启恢复”<a class="headerlink" href="#307" title="Permanent link">¶</a></h2>
+<p>你在第 26 课做的是内存 TSDB，这一课可以加一个最小持久化：</p>
+<h3 id="3071-wal">30.7.1 WAL（最简版）<a class="headerlink" href="#3071-wal" title="Permanent link">¶</a></h3>
+<ul>
+<li>Append 时追加写入一个日志文件（JSON 行或二进制都可）</li>
+<li>启动时回放 WAL 恢复内存状态</li>
+</ul>
+<h3 id="3072-snapshot">30.7.2 Snapshot（可选）<a class="headerlink" href="#3072-snapshot" title="Permanent link">¶</a></h3>
+<ul>
+<li>定期把内存状态写成 snapshot</li>
+<li>启动时先加载 snapshot，再回放 snapshot 之后的 WAL</li>
+</ul>
+<p>直觉：这就是 Prometheus 的“WAL + Checkpoint”思想的简化版。</p>
+<hr/>
+<h2 id="308">30.8 性能验证：用什么方式判断优化有效<a class="headerlink" href="#308" title="Permanent link">¶</a></h2>
+<p>建议你至少做 3 类验证：</p>
+<p>1) 抓取规模
+- targets 从 10 → 100 → 1000 的变化
+- 观察 scrape_duration 与错误率</p>
+<p>2) 查询压力
+- 同一条 query_range 在不同 step 下的耗时差异
+- 观察 query_duration 与 CPU</p>
+<p>3) 告警压力
+- 规则数量从 10 → 100 → 1000
+- 观察 rule_eval_duration 与通知队列</p>
+<p>不要靠“感觉”，要用自监控指标看趋势。</p>
+<hr/>
+<h2 id="309">30.9 最终交付清单（建议）<a class="headerlink" href="#309" title="Permanent link">¶</a></h2>
+<p>你可以把“可交付”定义为这 8 件事：</p>
+<ul>
+<li>能启动（单命令）</li>
+<li>能配置 targets 与 rules</li>
+<li>能抓到样本并写入 TSDB</li>
+<li><code>/api/v1/query</code> 可用</li>
+<li><code>/api/v1/query_range</code> 可用</li>
+<li>UI 可用（哪怕简陋）</li>
+<li>告警 firing/resolved 可用，并能发送 webhook</li>
+<li>自监控指标可用，并能解释“当前瓶颈在哪里”</li>
+</ul>
+<hr/>
+<h2 id="_2">课后小结<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>集成的关键是边界清晰：Scraper 产样本，TSDB 存样本，Engine 算结果，Rule 引擎判告警，Notifier 负责送出去</li>
+<li>优化的关键是可观测性：没有自监控指标就很难定位瓶颈</li>
+<li>保护机制比性能更优先：限流/超时/上限决定系统能不能稳定运行</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

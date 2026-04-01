@@ -1,0 +1,849 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/prometheus-tech/%E7%AC%AC%2022%20%E8%AF%BE-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%9A%E5%8A%A1%E6%8C%87%E6%A0%87/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第 22 课：自定义业务指标 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#22" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第 22 课：自定义业务指标
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#221" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.1 为什么要做业务指标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#222-red-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2 业务指标的优先级：从 RED / USE / 四个黄金信号入手
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22.2 业务指标的优先级：从 RED / USE / 四个黄金信号入手">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2221-web-red" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.1 Web 服务（推荐 RED）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2222-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.2 资源型组件（推荐 USE）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2223" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.3 先把“黄金信号”补齐
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#223-name-type-labels-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3 指标设计四件套：Name / Type / Labels / Unit
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22.3 指标设计四件套：Name / Type / Labels / Unit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2231-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.1 命名（Name）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2232-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.2 类型（Type）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2233-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.3 标签（Labels）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2234-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.4 单位（Unit）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#224" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.4 具体场景示例：下单接口怎么做指标
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22.4 具体场景示例：下单接口怎么做指标">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2241" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.4.1 要回答的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2242" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.4.2 指标设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#225" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5 从指标到查询：把闭环跑通
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22.5 从指标到查询：把闭环跑通">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2251-qps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.1 QPS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2252" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.2 错误率
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2253-p95-p99histogram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.3 P95 / P99（Histogram）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#226-90" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.6 常见坑：90% 的问题都在这里
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#227" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.7 实践建议：如何小步落地
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        课后小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="22">第 22 课：自定义业务指标<a class="headerlink" href="#22" title="Permanent link">¶</a></h1>
+<p><strong>学习时长</strong>：2-3 小时<br/>
+<strong>难度等级</strong>：⭐⭐⭐ 进阶<br/>
+<strong>先修要求</strong>：完成第 21 课 - Java 监控指标基础</p>
+<hr/>
+<h2 id="_1">学习目标<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>完成本课程后，你将能够：</p>
+<ul>
+<li>✅ 知道哪些业务指标值得做（可观测性优先级）</li>
+<li>✅ 能为一个业务场景设计指标：指标名、类型、标签、单位</li>
+<li>✅ 能避免常见坑：高基数标签、错误的指标类型、重复统计</li>
+<li>✅ 能把“指标 → 查询 → 告警/面板”串成闭环</li>
+<li>✅ 理解业务指标和系统指标（JVM、HTTP、DB）的分工边界</li>
+</ul>
+<hr/>
+<h2 id="221">22.1 为什么要做业务指标<a class="headerlink" href="#221" title="Permanent link">¶</a></h2>
+<p>系统指标（CPU、内存、GC、线程）能告诉你“系统快不快、稳不稳”，但很难直接回答：</p>
+<ul>
+<li>用户是否在失败？</li>
+<li>哪个业务链路在慢？</li>
+<li>哪个接口在抖？</li>
+<li>订单/支付/下单是否异常？</li>
+</ul>
+<p>业务指标的目标就是把“业务状态”量化成可查询的时间序列。</p>
+<hr/>
+<h2 id="222-red-use">22.2 业务指标的优先级：从 RED / USE / 四个黄金信号入手<a class="headerlink" href="#222-red-use" title="Permanent link">¶</a></h2>
+<h3 id="2221-web-red">22.2.1 Web 服务（推荐 RED）<a class="headerlink" href="#2221-web-red" title="Permanent link">¶</a></h3>
+<ul>
+<li>R（Rate）：请求量/吞吐</li>
+<li>E（Errors）：错误率</li>
+<li>D（Duration）：耗时分布（P95/P99）</li>
+</ul>
+<h3 id="2222-use">22.2.2 资源型组件（推荐 USE）<a class="headerlink" href="#2222-use" title="Permanent link">¶</a></h3>
+<ul>
+<li>U（Utilization）：利用率</li>
+<li>S（Saturation）：饱和度（排队/拥塞）</li>
+<li>E（Errors）：错误</li>
+</ul>
+<h3 id="2223">22.2.3 先把“黄金信号”补齐<a class="headerlink" href="#2223" title="Permanent link">¶</a></h3>
+<ul>
+<li>延迟（Latency）</li>
+<li>流量（Traffic）</li>
+<li>错误（Errors）</li>
+<li>饱和（Saturation）</li>
+</ul>
+<p>业务指标优先从这四个做起，最容易产生价值。</p>
+<hr/>
+<h2 id="223-name-type-labels-unit">22.3 指标设计四件套：Name / Type / Labels / Unit<a class="headerlink" href="#223-name-type-labels-unit" title="Permanent link">¶</a></h2>
+<h3 id="2231-name">22.3.1 命名（Name）<a class="headerlink" href="#2231-name" title="Permanent link">¶</a></h3>
+<p>建议：</p>
+<ul>
+<li>小写 + 下划线</li>
+<li>带单位后缀：<code>_seconds</code>、<code>_bytes</code>、<code>_total</code></li>
+<li>避免多义：一个指标只表达一个含义</li>
+</ul>
+<p>例子：</p>
+<ul>
+<li><code>order_create_total</code></li>
+<li><code>order_create_failures_total</code></li>
+<li><code>order_create_duration_seconds</code>（Histogram）</li>
+</ul>
+<h3 id="2232-type">22.3.2 类型（Type）<a class="headerlink" href="#2232-type" title="Permanent link">¶</a></h3>
+<p>常用选择：</p>
+<ul>
+<li>Counter：累计事件（下单次数、支付失败次数）</li>
+<li>Gauge：瞬时值（队列长度、在线用户数）</li>
+<li>Histogram：分布（耗时、大小）——最常用</li>
+</ul>
+<p>经验建议：</p>
+<ul>
+<li>延迟优先用 Histogram（能做 P95/P99，能做 SLO）</li>
+<li>不要用 Gauge 做“累计量”</li>
+</ul>
+<h3 id="2233-labels">22.3.3 标签（Labels）<a class="headerlink" href="#2233-labels" title="Permanent link">¶</a></h3>
+<p>标签用于切维度，但最容易踩坑。</p>
+<p>推荐标签（低风险）：</p>
+<ul>
+<li><code>service</code> / <code>job</code></li>
+<li><code>endpoint</code>（注意控制数量）</li>
+<li><code>method</code>、<code>status</code></li>
+<li><code>result</code>（success/fail）</li>
+</ul>
+<p>避免标签（高风险，高基数）：</p>
+<ul>
+<li><code>user_id</code>、<code>order_id</code>、<code>trace_id</code>、<code>request_id</code></li>
+<li><code>error_message</code>（错误文本会爆炸）</li>
+</ul>
+<h3 id="2234-unit">22.3.4 单位（Unit）<a class="headerlink" href="#2234-unit" title="Permanent link">¶</a></h3>
+<p>必须明确单位，避免“数值看不懂”：</p>
+<ul>
+<li>时间：<code>seconds</code></li>
+<li>大小：<code>bytes</code></li>
+<li>个数：<code>total</code>（计数）</li>
+</ul>
+<hr/>
+<h2 id="224">22.4 具体场景示例：下单接口怎么做指标<a class="headerlink" href="#224" title="Permanent link">¶</a></h2>
+<p>假设你有接口：<code>POST /api/orders</code></p>
+<h3 id="2241">22.4.1 要回答的问题<a class="headerlink" href="#2241" title="Permanent link">¶</a></h3>
+<ul>
+<li>QPS 是否异常？</li>
+<li>错误率是否升高？（按错误类型/状态码）</li>
+<li>P95/P99 是否变慢？</li>
+<li>是否集中在某个渠道（channel）或某个商品类型（sku_type）？</li>
+</ul>
+<h3 id="2242">22.4.2 指标设计<a class="headerlink" href="#2242" title="Permanent link">¶</a></h3>
+<p>1) 请求总量（Counter）</p>
+<ul>
+<li><code>order_create_requests_total{endpoint="/api/orders",result="success|fail",channel="app|h5"}</code></li>
+</ul>
+<p>2) 耗时（Histogram）</p>
+<ul>
+<li><code>order_create_duration_seconds_bucket{endpoint="/api/orders",channel="app|h5",le="..."}</code></li>
+</ul>
+<p>3) 业务失败类型（Counter）</p>
+<ul>
+<li><code>order_create_failures_total{reason="insufficient_stock|invalid_coupon|..."}</code></li>
+</ul>
+<p>注意：<code>reason</code> 只能是“有限集合”，绝不能把错误消息直接塞进去。</p>
+<hr/>
+<h2 id="225">22.5 从指标到查询：把闭环跑通<a class="headerlink" href="#225" title="Permanent link">¶</a></h2>
+<h3 id="2251-qps">22.5.1 QPS<a class="headerlink" href="#2251-qps" title="Permanent link">¶</a></h3>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="ow">or</span><span class="nv">der_create_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">channel</span><span class="o">)</span>
+</span></code></pre></div>
+<h3 id="2252">22.5.2 错误率<a class="headerlink" href="#2252" title="Permanent link">¶</a></h3>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="ow">or</span><span class="nv">der_create_requests_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">"</span><span class="s">fail</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="o">/</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="ow">or</span><span class="nv">der_create_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span></code></pre></div>
+<h3 id="2253-p95-p99histogram">22.5.3 P95 / P99（Histogram）<a class="headerlink" href="#2253-p95-p99histogram" title="Permanent link">¶</a></h3>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kr">histogram_quantile</span><span class="o">(</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="mf">0.95</span><span class="p">,</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="ow">or</span><span class="nv">der_create_duration_seconds_bucket</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">le</span><span class="p">,</span><span class="w"> </span><span class="nv">channel</span><span class="o">)</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="o">)</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="226-90">22.6 常见坑：90% 的问题都在这里<a class="headerlink" href="#226-90" title="Permanent link">¶</a></h2>
+<ul>
+<li>把高基数信息做成 label（user_id / order_id / trace_id）</li>
+<li>指标名没有单位，或者单位混用（ms 和 s 混）</li>
+<li>计数类用 Gauge（重启后归零造成误解）</li>
+<li>Histogram buckets 设计不合理（过少/过多）</li>
+<li>同一事件被多次统计（中间件 + 业务各算一遍）</li>
+<li>只做指标不做查询/告警（没有闭环就没有价值）</li>
+</ul>
+<hr/>
+<h2 id="227">22.7 实践建议：如何小步落地<a class="headerlink" href="#227" title="Permanent link">¶</a></h2>
+<p>1) 先给每个关键接口补齐 RED（QPS/错误/耗时）
+2) 先把标签控制在 3-5 个以内，并且每个标签值集合可控
+3) 先做面板，再做告警（用面板验证指标是否可靠）
+4) 对指标规模进行预算（抓取量、series 数、写入量）</p>
+<hr/>
+<h2 id="_2">课后小结<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>业务指标要回答业务问题：先选问题，再选指标</li>
+<li>Name/Type/Labels/Unit 是设计核心，其中 Labels 最容易出事故</li>
+<li>先把 RED/黄金信号做对，再做更细的业务拆分</li>
+<li>最终一定要形成闭环：指标 → 查询 → 面板/告警 → 迭代</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

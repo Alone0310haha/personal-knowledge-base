@@ -69,5 +69,6 @@ markdown_extensions:
 # 导航结构 (如果不配置，MkDocs 会根据文件夹自动生成)
 nav:
   - 首页: index.md
+  - Prometheus: prometheus-tech/Prometheus教程目录.md
 
 

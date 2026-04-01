@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="笔记与技术文档分享" name="description"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/LoRA%20%E6%98%AF%E4%BB%80%E4%B9%88%20%26%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83%E6%80%8E%E4%B9%88%E5%9B%9E%E4%BA%8B/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>LoRA 是什么 &amp; 大模型微调怎么回事 - Alone的知识库</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../js/unpkg.com/d3@7.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-lib@0.18.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-view@0.18.js" type="text/javascript"></script><style type="text/css">div.mkdocs-markmap {
+    width: 100%;
+    min-height: 1em;
+    border: 1px solid grey;
+}
+.mkdocs-markmap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#lora">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="Alone的知识库" class="md-header__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Alone的知识库
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              LoRA 是什么 &amp; 大模型微调怎么回事
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Alone的知识库" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Alone的知识库
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+<span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        来源
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1sft">
+<span class="md-ellipsis">
+      
+        分论点 1：训练/预训练/监督微调（SFT）的本质相同，差别在数据与目的
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        分论点 2：微调算力占比小，但显存占用与预训练/全量训练同量级
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3lora">
+<span class="md-ellipsis">
+      
+        分论点 3：LoRA 的做法是“冻结大矩阵，只训练两个小矩阵”
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        关键数据 / 案例 / 结论
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（Markmap）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="lora">LoRA 是什么 &amp; 大模型微调怎么回事<a class="headerlink" href="#lora" title="Permanent link">¶</a></h1>
+<h2 id="_1">来源<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://www.bilibili.com/video/BV1PvwYzxE9D/">LoRA 是什么 &amp; 大模型微调怎么回事</a></li>
+<li>BV 号：BV1PvwYzxE9D</li>
+</ul>
+<h2 id="_2">讨论视角<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>从“Transformer 本质是矩阵运算”切入，把“训练/微调”还原为“调整参数矩阵里的数”</li>
+<li>用“算力开销 vs 显存开销”的账单来解释：为什么微调算得少，但显存不一定少</li>
+<li>通过一个 1.5B 玩具模型的显存估算，引出 LoRA 的动机与做法：减少需要训练的参数数量</li>
+</ul>
+<h2 id="_3">核心论点与分论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">核心论点<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ul>
+<li>LoRA（Low-Rank Adaptation）通过“低秩增量矩阵”替代“全量参数更新”，把训练/微调时与“可训练参数数量成正比”的显存开销大幅降下来，从而让大模型微调更可用。</li>
+</ul>
+<h3 id="1sft">分论点 1：训练/预训练/监督微调（SFT）的本质相同，差别在数据与目的<a class="headerlink" href="#1sft" title="Permanent link">¶</a></h3>
+<ul>
+<li>模型由大量矩阵运算组成，能被人“直接控制/调整”的主要是权重矩阵（参数）</li>
+<li>训练就是：用海量数据计算输出 → 与期望输出比较 → 通过梯度下降等方式不断调整参数</li>
+<li>预训练：输入广泛的普通文本，目的在于“学知识/学语言”</li>
+<li>监督微调（SFT）：输入对话式/指令式文本，目的在于“学会把用户输入当问题，并给出答案”，不再只是文字接龙</li>
+</ul>
+<h3 id="2">分论点 2：微调算力占比小，但显存占用与预训练/全量训练同量级<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<ul>
+<li>微调的数据量通常远小于预训练（作者用“几万分之一量级”做对比），因此计算量也小</li>
+<li>但显存账单里，除了模型参数本体，还包括：</li>
+<li>推理时的 KV cache、激活值等</li>
+<li>训练时额外需要的梯度、优化器状态（尤其是 AdamW 这类优化器）</li>
+<li>因为“梯度/优化器状态”与“需要训练的参数数量”成正比，全量微调会被显存卡住</li>
+</ul>
+<h3 id="3lora">分论点 3：LoRA 的做法是“冻结大矩阵，只训练两个小矩阵”<a class="headerlink" href="#3lora" title="Permanent link">¶</a></h3>
+<ul>
+<li>对于需要训练的某个大矩阵 (W)（形状 (a \times c)），LoRA 不直接更新 (W) 的全部元素</li>
+<li>而是引入两个小矩阵：</li>
+<li>(A)：(a \times r)</li>
+<li>(B)：(r \times c)</li>
+<li>用 (A \cdot B) 得到一个同形状的增量矩阵，再与原矩阵相加作为新参数：(W' = W + A B)</li>
+<li>训练时冻结 (W)，只训练 (A, B)，因此可训练参数数目大幅减少</li>
+</ul>
+<h2 id="_5">关键数据 / 案例 / 结论<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li>预训练数据规模与算力：</li>
+<li>商用大模型预训练数据量通常为 PB 级，清洗后也可能仍有几十到上百 TB</li>
+<li>例：千问 3 预训练使用约 36 万亿 token；按 1 token ≈ 2–4 bytes 粗算约 70–140 TB</li>
+<li>作者观点：99% 以上的训练资源花在预训练阶段</li>
+<li>监督微调（SFT）规模：</li>
+<li>数据量与算力远小于预训练（作者提到可能连 1% 算力都不到）</li>
+<li>但显存占用与“是否全量训练参数”强相关</li>
+<li>显存账单示例（1.5B 参数“玩具模型”粗算）：</li>
+<li>FP16 参数本体约 3 GB</li>
+<li>推理时 KV cache + 激活值等约 2 GB → 运行合计约 5 GB</li>
+<li>若全量微调：<ul>
+<li>梯度约再占 3 GB</li>
+<li>AdamW 优化器状态需 FP32，并为每个参数维护多份状态（作者列举主权重副本 + 动量等），成为显存大户</li>
+<li>总计粗算约 26 GB，超出 24 GB 显存卡的门槛</li>
+</ul>
+</li>
+<li>LoRA 参数量对比示例：</li>
+<li>原矩阵 (100 \times 200 = 20000) 参数</li>
+<li>设 (r=8)：新增可训练参数为 (100 \times 8 + 8 \times 200 = 2400)，约为原来的 12%</li>
+<li>显存影响（作者给出的直观结论）：<ul>
+<li>前向显存略增（示例从 ~5 GB 到 ~5.6 GB）</li>
+<li>训练相关显存（梯度+优化器状态）因只对应 12% 参数而显著下降（示例从 ~21 GB 降到 ~2.5 GB）</li>
+<li>总体微调显存需求落到 ~8 GB 左右（示例口径约为原来的 30%）</li>
+</ul>
+</li>
+<li>rank 与 alpha：</li>
+<li>(r) 即 LoRA 的 rank；“Low-Rank”强调 (r) 很小</li>
+<li>工程上常见做法是在 (A B) 加到 (W) 之前乘一个系数（作者提到常见为 (\alpha / r)，且 (\alpha) 常取 (2r) 作为初始），用于在改动 (r) 时保持更新量级更稳定</li>
+<li>为什么 LoRA 有效（作者的解释路径）：</li>
+<li>微调目标通常只是“改变说话方式/聚焦某个领域”，相比“从零学一切”的预训练，所需改变的有效参数比例本就很小</li>
+<li>这些关键变化分散在全模型里，人难以手工筛选；LoRA 让训练过程“自己筛出重要方向/参数子空间”</li>
+</ul>
+<h2 id="markmap">思维导图（Markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBMb1JBIOS4juWkp+aooeWei+W+ruiwgwojIyDop4bop5IKIyMjIFRyYW5zZm9ybWVyPeefqemYtei/kOeul+e7hOWQiAojIyMg6K6t57uDPeiwg+WPguaVsOefqemYtemHjOeahOaVsAojIyMg6LSm5Y2V5rOV77ya566X5YqbIHZzIOaYvuWtmAojIyDmpoLlv7XljLrliIYKIyMjIOmihOiuree7g++8iFByZS10cmFpbmluZ++8iQojIyMjIOaVsOaNru+8muW5v+azm+aZrumAmuaWh+acrAojIyMjIOebrueahO+8muWtpuefpeivhi/lrabor63oqIAKIyMjIyDnibnlvoHvvJrmlbDmja5QQue6p+OAgeeul+WKm+WNoOavlD45OSUKIyMjIOebkeedo+W+ruiwg++8iFNGVO+8iQojIyMjIOaVsOaNru+8muWvueivnS/mjIfku6TlvI8KIyMjIyDnm67nmoTvvJrmiorovpPlhaXlvZPpl67popjjgIHovpPlh7rlvZPnrZTmoYgKIyMjIyDnibnlvoHvvJrnrpflipvljaDmr5TlsI/vvIzkvYbmmL7lrZjkuI3kuIDlrprlsI8KIyMg5pi+5a2Y55O26aKI77yI56S65L6L77yaMS41QiDlj4LmlbDvvIkKIyMjIOaOqOeQhuaYvuWtmAojIyMjIOWPguaVsO+8iEZQMTbvvIl+M0dCCiMjIyMgS1YgY2FjaGUgKyDmv4DmtLvlgLwgfjJHQgojIyMjIOWQiOiuoSB+NUdCCiMjIyDlhajph4/lvq7osIPpop3lpJbmmL7lrZgKIyMjIyDmoq/luqYgfjNHQgojIyMjIOS8mOWMluWZqOeKtuaAge+8iEFkYW1X77yMRlAzMu+8jOWkmuS7veeKtuaAge+8ieWNoOWkp+WktAojIyMjIOWQiOiuoeeyl+eulyB+MjZHQu+8iOWNoeS9jzI0R0LmmL7lrZjpl6jmp5vvvIkKIyMgTG9SQe+8iExvdy1SYW5rIEFkYXB0YXRpb27vvIkKIyMjIOaguOW/g+aAneaDs++8muWHj+WwkeWPr+iuree7g+WPguaVsOaVsOmHjwojIyMg5py65Yi2CiMjIyMg5Ya757uT5Y6f55+p6Zi1IFcKIyMjIyDlvJXlhaUgQShhw5dyKeOAgUIocsOXYykKIyMjIyBXJyA9IFcgKyBBQgojIyMjIOWPquiuree7gyBB44CBQgojIyMg5Y+C5pWw6YeP5L6L5a2QCiMjIyMgVzogMTAww5cyMDA9MjAwMDAKIyMjIyByPTgg4oaSIEEsQuWFsTI0MDDvvIh+MTIl77yJCiMjIyDmmL7lrZjmlYjmnpzvvIjnm7Top4nvvIkKIyMjIyDliY3lkJHnlaXlop4KIyMjIyDmoq/luqYv5LyY5YyW5Zmo54q25oCB5aSn5bmF5LiL6ZmNCiMjIyMg5oC75L2T5Y+v5oqK5b6u6LCD5pi+5a2Y6ZmN5YiwIH44R0Ig6YeP57qn77yI56S65L6L5Y+j5b6E77yJCiMjIyDlt6XnqIvnu4boioIKIyMjIyDluLjnlKjnvKnmlL7vvJphbHBoYS9yCiMjIyMgYWxwaGEg5bi45Y+WIDJyIOS9nOS4uuWIneWni++8jOS+v+S6juiwgyByIOaXtuS/neaMgemHj+e6p+eos+WumgojIyDkuLrku4DkuYjmnInmlYjvvIjkvZzogIXop6Pph4rvvIkKIyMjIOW+ruiwg+acrOWwseWPqumcgOaUueWPmOW+iOWwj+avlOS+i+eahOacieaViOWPguaVsAojIyMg5YWz6ZSu5Y+Y5YyW5YiG5pWj6Zq+5omL6YCJCiMjIyBMb1JB6K6p6K6t57uD6L+H56iL6Ieq5bex562b5Ye66YeN6KaB5pa55ZCR</markmap-data></div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="text/javascript">(function initializeMarkmap() {
+    const transformer = new markmap.Transformer();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
+    const assets = transformer.getAssets();
+    const loading = Promise.all([
+        assets.styles && markmap.loadCSS(assets.styles),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
+    ]);
+
+    function parseData(content) {
+        const { root, frontmatter } = transformer.transform(content);
+        let options = markmap.deriveOptions(frontmatter?.markmap);
+        options = Object.assign(
+            {
+                fitRatio: 0.85,
+            },
+            options
+        );
+        return { root, options };
+    }
+
+    function resetMarkmap(m, el) {
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
+        el.style.height = height + "px";
+        m.fit();
+    }
+
+    function decodeBase64(encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+    }
+
+    function renderMarkmap(el) {
+        const dataEl = el.querySelector("markmap-data");
+        if (!dataEl) return;
+        let content = el.textContent;
+        if (dataEl.getAttribute("encoding") === "base64") {
+            content = decodeBase64(content);
+        }
+        el.innerHTML = "<svg>";
+        svg = el.firstChild;
+        const { root, options } = parseData(content);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
+            resetMarkmap(m, el);
+        });
+    }
+
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll(".mkdocs-markmap")) {
+            renderMarkmap(el);
+        }
+    }
+
+    loading.then(() => {
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === "childList") {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        updateMarkmaps(document);
+    });
+})();
+</script></body>
+</html>

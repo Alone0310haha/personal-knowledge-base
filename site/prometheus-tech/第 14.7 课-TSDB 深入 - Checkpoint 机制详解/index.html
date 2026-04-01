@@ -1,0 +1,728 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/prometheus-tech/%E7%AC%AC%2014.7%20%E8%AF%BE-TSDB%20%E6%B7%B1%E5%85%A5%20-%20Checkpoint%20%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第 14.7 课：TSDB 深入 - Checkpoint 机制详解 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#147-tsdb-checkpoint" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第 14.7 课：TSDB 深入 - Checkpoint 机制详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1471-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.1 Checkpoint 要解决什么问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1472-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.2 Checkpoint 是什么
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1473-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.3 什么时候会创建 Checkpoint
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1474-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.4 Checkpoint 里包含哪些内容
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1475-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.5 Checkpoint 生成流程（结构视角）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1476-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.6 Checkpoint 如何加速重启恢复
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1477-checkpoint-wal-truncate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.7 Checkpoint 与 WAL Truncate 的关系
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1478" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.8 常见现象与排查思路
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.7.8 常见现象与排查思路">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#14781" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.8.1 重启很慢
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14782-wal-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.8.2 WAL 一直涨但 checkpoint 很少
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14783-wal-corruption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.8.3 出现 WAL Corruption（损坏）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1479" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7.9 源码定位（想进一步看实现）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="147-tsdb-checkpoint">第 14.7 课：TSDB 深入 - Checkpoint 机制详解<a class="headerlink" href="#147-tsdb-checkpoint" title="Permanent link">¶</a></h1>
+<p><strong>学习时长</strong>：1-2 小时<br/>
+<strong>难度等级</strong>：⭐⭐⭐⭐ 深入<br/>
+<strong>先修要求</strong>：完成第 14 课 - TSDB 深入 - WAL 与恢复</p>
+<hr/>
+<h2 id="1471-checkpoint">14.7.1 Checkpoint 要解决什么问题<a class="headerlink" href="#1471-checkpoint" title="Permanent link">¶</a></h2>
+<p>Prometheus 的 Head 在内存里，写入会持续追加到 WAL。重启时需要回放 WAL 才能恢复 Head。</p>
+<p>如果 WAL 一直增长，重启时回放会越来越慢。因此需要一个机制把“很老的 WAL”变成更短、更干净、可快速回放的形式，这就是 Checkpoint。</p>
+<p>一句话：</p>
+<blockquote>
+<p>Checkpoint 是对旧 WAL 的一次整理与压缩，用于加速重启恢复，并让旧 WAL 可以被安全截断。</p>
+</blockquote>
+<hr/>
+<h2 id="1472-checkpoint">14.7.2 Checkpoint 是什么<a class="headerlink" href="#1472-checkpoint" title="Permanent link">¶</a></h2>
+<p>Checkpoint 是 WAL 的一个“快照化版本”，但它本质上仍然是 WAL 格式：</p>
+<ul>
+<li>存在于 <code>data/wal/checkpoint.N/</code>（N 是递增编号）</li>
+<li>目录里依然是分段文件（segment），文件名也是数字</li>
+<li>可以像普通 WAL 一样被 Reader 顺序读取</li>
+</ul>
+<p>它不是把 Head 直接序列化成一个大对象，而是把“恢复 Head 所需的记录流”整理成更短的一段。</p>
+<hr/>
+<h2 id="1473-checkpoint">14.7.3 什么时候会创建 Checkpoint<a class="headerlink" href="#1473-checkpoint" title="Permanent link">¶</a></h2>
+<p>Prometheus 会周期性对 WAL 做整理（checkpoint + truncate），触发点通常与“截断 WAL 的时机”相关。</p>
+<p>直觉上可以这样理解：</p>
+<ul>
+<li>WAL 里已经有一大段数据“足够旧”，继续保留只会拖慢重启</li>
+<li>先把这段旧 WAL 做成 checkpoint</li>
+<li>再把对应的旧 segments 截断掉</li>
+</ul>
+<p>创建 checkpoint 时，通常不会把最新的 WAL 段包含进去，避免与正在写入的段纠缠。</p>
+<hr/>
+<h2 id="1474-checkpoint">14.7.4 Checkpoint 里包含哪些内容<a class="headerlink" href="#1474-checkpoint" title="Permanent link">¶</a></h2>
+<p>Checkpoint 不是“原封不动复制旧 WAL”，它会做筛选与整理：</p>
+<ul>
+<li>保留：恢复 Head 需要的关键信息</li>
+<li>丢弃：明显不再需要的旧数据（例如早于某个时间点的样本）</li>
+</ul>
+<p>在 Prometheus 的实现里，checkpoint 过程中通常会涉及这些策略：</p>
+<ul>
+<li>Series：只保留仍然需要的 series（例如仍在 Head 中存在，或短期内仍可能被引用）</li>
+<li>Samples：丢弃早于某个最小时间（mint）的样本</li>
+<li>Metadata：只保留最新元数据（避免重复）</li>
+<li>Tombstones/Exemplars/Histograms：按需要保留或裁剪（取决于记录类型与时间范围）</li>
+</ul>
+<p>直觉总结：</p>
+<blockquote>
+<p>Checkpoint 让 WAL 从全量流水账变成恢复 Head 的最小必要流水账。</p>
+</blockquote>
+<hr/>
+<h2 id="1475-checkpoint">14.7.5 Checkpoint 生成流程（结构视角）<a class="headerlink" href="#1475-checkpoint" title="Permanent link">¶</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>flowchart TD
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  A[选择要整理的 WAL 段范围&lt;br/&gt;from..to] --&gt; B[读取：旧 checkpoint + 指定 WAL 段]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  B --&gt; C[逐条解码 record]
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>  C --&gt; D[筛选/裁剪&lt;br/&gt;丢弃过老样本、丢弃无用 series、保留最新 metadata]
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>  D --&gt; E[写入临时目录&lt;br/&gt;checkpoint.N.tmp/]
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>  E --&gt; F[原子替换为正式目录&lt;br/&gt;checkpoint.N/]
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>  F --&gt; G[截断 WAL&lt;br/&gt;删除/跳过旧 segments]
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>  G --&gt; H[删除更老的 checkpoint]
+</span></code></pre></div>
+<p>两个关键点：</p>
+<ul>
+<li>先写 <code>checkpoint.N.tmp/</code>，全部成功后再切换为 <code>checkpoint.N/</code>，避免半成品影响重启</li>
+<li>只有 checkpoint 落地成功，才会去截断旧 WAL</li>
+</ul>
+<hr/>
+<h2 id="1476-checkpoint">14.7.6 Checkpoint 如何加速重启恢复<a class="headerlink" href="#1476-checkpoint" title="Permanent link">¶</a></h2>
+<p>没有 checkpoint：</p>
+<ul>
+<li>启动时从最老的 WAL segment 开始回放</li>
+</ul>
+<p>有 checkpoint：</p>
+<ul>
+<li>启动时先找到最新的 <code>checkpoint.N/</code></li>
+<li>先回放 checkpoint（更短、更干净）</li>
+<li>再回放 checkpoint 之后的 WAL segments（只剩较新的一小段）</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>sequenceDiagram
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>  autonumber
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>  participant P as Prometheus 启动
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>  participant W as data/wal/
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>  participant CP as checkpoint.N/
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>  participant SEG as WAL segments（N 之后）
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>  participant H as Head
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a>  P-&gt;&gt;W: 查找最新 checkpoint.N（可选）
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a>  alt 有 checkpoint
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a>    P-&gt;&gt;CP: 回放 checkpoint 记录
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a>    CP--&gt;&gt;H: 应用 series/samples/...
+</span><span id="__span-1-13"><a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a>    P-&gt;&gt;SEG: 回放剩余 segments
+</span><span id="__span-1-14"><a href="#__codelineno-1-14" id="__codelineno-1-14" name="__codelineno-1-14"></a>    SEG--&gt;&gt;H: 应用新写入记录
+</span><span id="__span-1-15"><a href="#__codelineno-1-15" id="__codelineno-1-15" name="__codelineno-1-15"></a>  else 没有 checkpoint
+</span><span id="__span-1-16"><a href="#__codelineno-1-16" id="__codelineno-1-16" name="__codelineno-1-16"></a>    P-&gt;&gt;SEG: 从最老 segment 开始回放
+</span><span id="__span-1-17"><a href="#__codelineno-1-17" id="__codelineno-1-17" name="__codelineno-1-17"></a>    SEG--&gt;&gt;H: 应用所有记录
+</span><span id="__span-1-18"><a href="#__codelineno-1-18" id="__codelineno-1-18" name="__codelineno-1-18"></a>  end
+</span><span id="__span-1-19"><a href="#__codelineno-1-19" id="__codelineno-1-19" name="__codelineno-1-19"></a>  H--&gt;&gt;P: Head 恢复完成
+</span></code></pre></div>
+<p>恢复时间通常取决于两件事：</p>
+<ul>
+<li>要回放的记录量（checkpoint 能显著减少）</li>
+<li>series 数量与索引构建成本（高基数会明显拖慢）</li>
+</ul>
+<hr/>
+<h2 id="1477-checkpoint-wal-truncate">14.7.7 Checkpoint 与 WAL Truncate 的关系<a class="headerlink" href="#1477-checkpoint-wal-truncate" title="Permanent link">¶</a></h2>
+<p>Checkpoint 给了 WAL “安全截断”的依据：</p>
+<ul>
+<li>checkpoint 已经覆盖了旧 segments 的必要信息</li>
+<li>旧 segments 可以被删除或忽略</li>
+</ul>
+<p>因此，如果你观察到：</p>
+<ul>
+<li>checkpoint 目录在增长，旧的 segment 文件在减少<br/>
+通常说明 WAL 整理在正常工作。</li>
+</ul>
+<p>相反，如果：</p>
+<ul>
+<li><code>data/wal/</code> 的 segment 文件持续变多，但很少出现 checkpoint<br/>
+一般说明整理频率跟不上写入压力，或者受限于某些条件（例如数据太新、选择范围不足以 checkpoint）。</li>
+</ul>
+<hr/>
+<h2 id="1478">14.7.8 常见现象与排查思路<a class="headerlink" href="#1478" title="Permanent link">¶</a></h2>
+<h3 id="14781">14.7.8.1 重启很慢<a class="headerlink" href="#14781" title="Permanent link">¶</a></h3>
+<p>优先从这三类原因入手：</p>
+<ul>
+<li>WAL 过大：<code>data/wal/</code> 段太多/体积太大</li>
+<li>高基数：<code>prometheus_tsdb_head_series</code> 很高</li>
+<li>磁盘慢：读取 WAL 与解码时 IO 成本高</li>
+</ul>
+<h3 id="14782-wal-checkpoint">14.7.8.2 WAL 一直涨但 checkpoint 很少<a class="headerlink" href="#14782-wal-checkpoint" title="Permanent link">¶</a></h3>
+<p>常见解释：</p>
+<ul>
+<li>系统保留了最近一段 WAL 以保证可靠性（不会把最新段 checkpoint 掉）</li>
+<li>写入量太低/段太少，不满足“值得 checkpoint”的范围</li>
+<li>checkpoint 失败（磁盘、权限、空间不足等）</li>
+</ul>
+<h3 id="14783-wal-corruption">14.7.8.3 出现 WAL Corruption（损坏）<a class="headerlink" href="#14783-wal-corruption" title="Permanent link">¶</a></h3>
+<p>极端情况下 WAL 可能损坏。修复策略通常是：</p>
+<ul>
+<li>丢弃损坏位置之后的数据，保证系统能重新启动并继续写入</li>
+</ul>
+<p>代价是：</p>
+<ul>
+<li>最新一段数据可能丢失（损坏点之后）</li>
+</ul>
+<hr/>
+<h2 id="1479">14.7.9 源码定位（想进一步看实现）<a class="headerlink" href="#1479" title="Permanent link">¶</a></h2>
+<p>按“checkpoint 生成 → WAL 读取 → 回放到 Head → truncate”的顺序：</p>
+<ul>
+<li><code>tsdb/wlog/checkpoint.go</code>：checkpoint 的生成与清理</li>
+<li><code>tsdb/wlog/wlog.go</code>：WAL 的 segment/page/record 写入与 Repair</li>
+<li><code>tsdb/wlog/reader.go</code>：WAL Reader</li>
+<li><code>tsdb/head_wal.go</code>：回放 record 并应用到 Head</li>
+<li><code>tsdb/head.go</code>：触发 checkpoint 与截断 WAL 的逻辑</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

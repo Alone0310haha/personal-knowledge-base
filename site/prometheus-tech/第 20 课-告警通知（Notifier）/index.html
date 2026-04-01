@@ -1,0 +1,747 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/prometheus-tech/%E7%AC%AC%2020%20%E8%AF%BE-%E5%91%8A%E8%AD%A6%E9%80%9A%E7%9F%A5%EF%BC%88Notifier%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第 20 课：告警通知（Notifier） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#20-notifier" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第 20 课：告警通知（Notifier）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#201-notifier-prometheus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1 Notifier 在 Prometheus 架构中的位置
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#202-notifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2 Notifier 负责什么，不负责什么
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#203" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3 从规则到通知：端到端数据流
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#204-alertmanager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4 Alertmanager 目标从哪里来（静态 + 服务发现）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#205-send-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5 队列与批量：为什么需要 send loop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#206" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.6 失败与丢弃：最重要的几个直觉
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.6 失败与丢弃：最重要的几个直觉">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2061" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.6.1 队列满
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2062" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.6.2 发送失败
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#207-drainonshutdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.7 关闭行为：DrainOnShutdown 是什么意思
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#208-alertmanager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.8 排错：告警为什么没到 Alertmanager
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#209" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.9 关键自监控指标（建议从这几条开始）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2010" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.10 源码阅读建议（最小闭环）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        课后小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="20-notifier">第 20 课：告警通知（Notifier）<a class="headerlink" href="#20-notifier" title="Permanent link">¶</a></h1>
+<p><strong>学习时长</strong>：2-3 小时<br/>
+<strong>难度等级</strong>：⭐⭐⭐ 进阶<br/>
+<strong>先修要求</strong>：完成第 19 课 - 告警与规则管理</p>
+<hr/>
+<h2 id="_1">学习目标<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>完成本课程后，你将能够：</p>
+<ul>
+<li>✅ 说清 Prometheus Notifier 的职责：把告警推送给 Alertmanager</li>
+<li>✅ 理解告警从 Rule Manager 到 Notifier 再到 Alertmanager 的路径</li>
+<li>✅ 理解 Notifier 的核心机制：队列、批量、重试、丢弃策略</li>
+<li>✅ 知道 Alertmanager 的服务发现与 relabel 在哪里生效</li>
+<li>✅ 能用 Prometheus 自监控指标定位“告警推送失败/队列堆积”</li>
+</ul>
+<hr/>
+<h2 id="201-notifier-prometheus">20.1 Notifier 在 Prometheus 架构中的位置<a class="headerlink" href="#201-notifier-prometheus" title="Permanent link">¶</a></h2>
+<p>告警链路可以简化为：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>flowchart TD
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  A[Rule Manager] --&gt; B[生成 Alerts]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  B --&gt; C[Notifier Manager]
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>  C --&gt; D[Alertmanager targets]
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>  D --&gt; E[HTTP 推送 /api/v2/alerts]
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>  E --&gt; F[Alertmanager]
+</span></code></pre></div>
+<p>Rule Manager 决定“要不要告警”，Notifier 负责“把告警可靠地送出去”。</p>
+<hr/>
+<h2 id="202-notifier">20.2 Notifier 负责什么，不负责什么<a class="headerlink" href="#202-notifier" title="Permanent link">¶</a></h2>
+<p>Notifier 负责：</p>
+<ul>
+<li>把一批 alerts 通过 HTTP 发给 Alertmanager</li>
+<li>维护发送队列，控制批量大小</li>
+<li>处理短期失败（网络抖动、目标暂时不可用）</li>
+<li>记录发送成功/失败/丢弃的指标</li>
+</ul>
+<p>Notifier 不负责：</p>
+<ul>
+<li>告警去重、分组、路由、抑制、静默</li>
+</ul>
+<p>这些属于 Alertmanager 的工作。</p>
+<hr/>
+<h2 id="203">20.3 从规则到通知：端到端数据流<a class="headerlink" href="#203" title="Permanent link">¶</a></h2>
+<p>把第 19 课的 alerting rule 放进来：</p>
+<p>1) rule group 到点评估，AlertingRule 产生 alerts<br/>
+2) Rule Manager 调用 Notifier 的 NotifyFunc 发送<br/>
+3) Notifier 把 alerts 入队（按目标 Alertmanager 分流）<br/>
+4) 后台 send loop 批量取出并发送  </p>
+<p>源码定位：</p>
+<ul>
+<li>Notifier Manager：<code>notifier/manager.go</code></li>
+<li>发送循环：<code>notifier/sendloop.go</code></li>
+</ul>
+<hr/>
+<h2 id="204-alertmanager">20.4 Alertmanager 目标从哪里来（静态 + 服务发现）<a class="headerlink" href="#204-alertmanager" title="Permanent link">¶</a></h2>
+<p>Prometheus 可以通过两种方式拿到 Alertmanager 地址：</p>
+<ul>
+<li>静态配置：直接写 URLs</li>
+<li>服务发现：通过 SD 获取 Target Groups，再经过 relabel 得到最终 targets</li>
+</ul>
+<p>直觉和抓取服务发现一样：</p>
+<ul>
+<li>服务发现产出“候选目标”</li>
+<li>relabel 决定“最终使用哪些目标、改写哪些标签/地址”</li>
+</ul>
+<p>Notifier 对 Alertmanager 同样维护“目标集合”，并且会对每个 Alertmanager 地址维护发送循环（send loop）。</p>
+<hr/>
+<h2 id="205-send-loop">20.5 队列与批量：为什么需要 send loop<a class="headerlink" href="#205-send-loop" title="Permanent link">¶</a></h2>
+<p>Notifier 发送告警时面临两个现实问题：</p>
+<ul>
+<li>一次规则评估可能产生很多条 alerts</li>
+<li>网络可能失败或延迟，不适合在评估线程里直接同步发送</li>
+</ul>
+<p>因此 Notifier 使用 send loop 的模式：</p>
+<ul>
+<li>alerts 先进入队列（QueueCapacity）</li>
+<li>后台 goroutine 按批取出（MaxBatchSize）</li>
+<li>发送成功就丢弃，失败则按策略处理</li>
+</ul>
+<p>在 <code>sendloop.go</code> 中可以看到几个关键点：</p>
+<ul>
+<li>队列满会丢最旧的（倾向保留最新告警）</li>
+<li>单次批量不会超过 MaxBatchSize</li>
+<li>有 work 信号后，循环持续发送直到队列清空</li>
+</ul>
+<hr/>
+<h2 id="206">20.6 失败与丢弃：最重要的几个直觉<a class="headerlink" href="#206" title="Permanent link">¶</a></h2>
+<h3 id="2061">20.6.1 队列满<a class="headerlink" href="#2061" title="Permanent link">¶</a></h3>
+<p>当队列满时：</p>
+<ul>
+<li>新告警进来，会挤掉队列中更旧的告警</li>
+<li>对应 dropped 指标会上升</li>
+</ul>
+<p>直觉：Notifer 的目标是“尽快把最新状态送出去”，而不是保证每条历史告警都送达。</p>
+<h3 id="2062">20.6.2 发送失败<a class="headerlink" href="#2062" title="Permanent link">¶</a></h3>
+<p>常见失败原因：</p>
+<ul>
+<li>Alertmanager 不可达（网络、DNS、端口）</li>
+<li>TLS/鉴权配置错误</li>
+<li>Alertmanager 过载/限流</li>
+</ul>
+<p>失败会体现在 errors 指标与日志里，同时队列可能堆积。</p>
+<hr/>
+<h2 id="207-drainonshutdown">20.7 关闭行为：DrainOnShutdown 是什么意思<a class="headerlink" href="#207-drainonshutdown" title="Permanent link">¶</a></h2>
+<p>Prometheus 关闭时，Notifier 可以选择：</p>
+<ul>
+<li>DrainOnShutdown=true：尽量把队列里剩余告警发送出去再退出</li>
+<li>DrainOnShutdown=false：直接丢弃队列中未发送的告警</li>
+</ul>
+<p>直觉选择：</p>
+<ul>
+<li>对稳定性要求高：倾向 drain</li>
+<li>希望快速退出：倾向不 drain</li>
+</ul>
+<hr/>
+<h2 id="208-alertmanager">20.8 排错：告警为什么没到 Alertmanager<a class="headerlink" href="#208-alertmanager" title="Permanent link">¶</a></h2>
+<p>建议按这个顺序排：</p>
+<p>1) <code>/alerts</code>：Prometheus 是否真的进入 firing（是否产生 alerts）
+2) Prometheus 配置：是否配置了 alertmanagers（静态或 SD）
+3) 网络连通性：Prometheus 到 Alertmanager 的 HTTP 是否通
+4) Notifier 指标：是否 errors/dropped/queue_length 在上升
+5) Alertmanager 侧：是否收到（UI/日志）</p>
+<hr/>
+<h2 id="209">20.9 关键自监控指标（建议从这几条开始）<a class="headerlink" href="#209" title="Permanent link">¶</a></h2>
+<p>Notifier 会暴露一组 <code>prometheus_notifications_*</code> 指标（名称随版本可能略有变化），核心关注点：</p>
+<ul>
+<li>发送成功次数（sent）</li>
+<li>发送失败次数（errors）</li>
+<li>丢弃数量（dropped）</li>
+<li>队列长度（queue_length）</li>
+<li>发送延迟（latency）</li>
+</ul>
+<p>直觉用法：</p>
+<ul>
+<li>errors 上升 + queue_length 上升：发送失败且堆积</li>
+<li>dropped 上升：队列满或批次过大导致丢弃</li>
+</ul>
+<hr/>
+<h2 id="2010">20.10 源码阅读建议（最小闭环）<a class="headerlink" href="#2010" title="Permanent link">¶</a></h2>
+<p>建议按“管理目标 → 入队 → 发送循环 → HTTP 请求”顺序读：</p>
+<ul>
+<li><code>notifier/manager.go</code>：配置应用、Alertmanager 目标集合管理</li>
+<li><code>notifier/alertmanagerset.go</code>：每个 AM 配置对应的集合</li>
+<li><code>notifier/sendloop.go</code>：队列、批量、发送循环、丢弃策略</li>
+<li><code>notifier/alertmanager.go</code>：和 Alertmanager API 的对接细节</li>
+</ul>
+<hr/>
+<h2 id="_2">课后小结<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>Notifier 的核心职责是“可靠地把 alerts 推给 Alertmanager”</li>
+<li>关键机制是队列 + 批量发送 + 丢弃策略，确保规则评估不被网络阻塞</li>
+<li>排错先确认 firing，再看目标是否正确，最后看 notifier 的 errors/queue/dropped 指标</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

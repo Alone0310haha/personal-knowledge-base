@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="笔记与技术文档分享" name="description"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/Token%20%E4%B8%8E%20Embedding%EF%BC%9ALLM%20%E4%B8%8E%20RAG%20%E7%9A%84%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Token 与 Embedding：LLM 与 RAG 的数据处理机制 - Alone的知识库</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../js/unpkg.com/d3@7.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-lib@0.18.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-view@0.18.js" type="text/javascript"></script><style type="text/css">div.mkdocs-markmap {
+    width: 100%;
+    min-height: 1em;
+    border: 1px solid grey;
+}
+.mkdocs-markmap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#token-embeddingllm-rag">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="Alone的知识库" class="md-header__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Alone的知识库
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Token 与 Embedding：LLM 与 RAG 的数据处理机制
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Alone的知识库" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Alone的知识库
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+<span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        来源
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1tokenization">
+<span class="md-ellipsis">
+      
+        分论点 1：Tokenization 的作用是把文字变成高效可计算的编号序列
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2embedding-1">
+<span class="md-ellipsis">
+      
+        分论点 2：Embedding 的作用是把“1 维编号”升维成“高维向量”，表达复杂相似性关系
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3tokenizer-embedding">
+<span class="md-ellipsis">
+      
+        分论点 3：Tokenizer 固定不变；Embedding 通过训练得到，是模型结构的一部分
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4llm-embedding-rag-embedding">
+<span class="md-ellipsis">
+      
+        分论点 4：LLM embedding 与 RAG embedding 的相同点与根本差异
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        关键数据 / 案例 / 结论
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（Markmap）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="token-embeddingllm-rag">Token 与 Embedding：LLM 与 RAG 的数据处理机制<a class="headerlink" href="#token-embeddingllm-rag" title="Permanent link">¶</a></h1>
+<h2 id="_1">来源<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://www.bilibili.com/video/BV1oNv8BPE2m/">Token 与 Embedding：LLM 与 RAG 的数据处理机制</a></li>
+</ul>
+<h2 id="_2">讨论视角<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>从“计算机不擅长直接处理文字”出发，解释为什么大模型入口先把文字变成 token（编号）</li>
+<li>从“模型是连续函数”出发，解释为什么还需要 embedding：把离散编号映射到高维连续向量，才能表达“既近又远”的语义/语言关系并提高训练效率</li>
+<li>对比澄清两类 embedding：</li>
+<li>大语言模型内部的 token embedding（逐 token）</li>
+<li>RAG/检索用的文本 embedding（整段/整句）</li>
+</ul>
+<h2 id="_3">核心论点与分论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">核心论点<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ul>
+<li>大语言模型实际处理的是 token（数字编号）及其 embedding（高维向量），而不是原始文字；tokenizer 属于固定的数据预处理，而 embedding 是模型的一部分、需要训练得到。</li>
+</ul>
+<h3 id="1tokenization">分论点 1：Tokenization 的作用是把文字变成高效可计算的编号序列<a class="headerlink" href="#1tokenization" title="Permanent link">¶</a></h3>
+<ul>
+<li>计算机存储与计算天然更适合数值：文字在底层是离散字符序列，直接让模型从字符“读出概念”再处理会很慢</li>
+<li>做法：构建词典/词表，用数字代表词或词片段；文本先经 tokenizer 变成 token 序列，再送入模型</li>
+<li>token 与“单词”不必一一对应：可把单词拆成词片段 token，以覆盖未见词（作者用 “oldest = old + EST” 类比）</li>
+</ul>
+<h3 id="2embedding-1">分论点 2：Embedding 的作用是把“1 维编号”升维成“高维向量”，表达复杂相似性关系<a class="headerlink" href="#2embedding-1" title="Permanent link">¶</a></h3>
+<ul>
+<li>作者给出的关键前提：大模型可近似看作一个复杂的连续函数；若输入数值更接近，输出更容易呈现相似性</li>
+<li>但 token 只是一个数字（1 维），无法同时表达多种“相似/差异维度”（语言、类别、形状、颜色等）</li>
+<li>解决：把 token 映射为多维向量（embedding），每个维度可承载某些抽象特征，从而表达“香蕉与苹果同为水果但不同形状/颜色”“苹果与 apple 同物不同语言”等“既近又远”的关系</li>
+</ul>
+<h3 id="3tokenizer-embedding">分论点 3：Tokenizer 固定不变；Embedding 通过训练得到，是模型结构的一部分<a class="headerlink" href="#3tokenizer-embedding" title="Permanent link">¶</a></h3>
+<ul>
+<li>tokenization 属于数据预处理：训练时 tokenizer 固定不变，不在模型里更新</li>
+<li>embedding 不同：维度很高、要为每个 token 分配一组向量参数，无法手工设计，只能通过训练学出</li>
+<li>embedding 向量中每个维度的含义通常不可解释（作者强调：我们只知道这样做效果好，但难以解释每一维代表什么）</li>
+</ul>
+<h3 id="4llm-embedding-rag-embedding">分论点 4：LLM embedding 与 RAG embedding 的相同点与根本差异<a class="headerlink" href="#4llm-embedding-rag-embedding" title="Permanent link">¶</a></h3>
+<ul>
+<li>相同点：都把文本映射到向量空间，用向量距离/相似度表达语义关系</li>
+<li>不同点（目的与训练方式）：</li>
+<li>LLM：训练目标是“预测下一个 token”（文字接龙式 next-token prediction）</li>
+<li>RAG embedding：训练目标是“概括文本含义并可检索”，常用对比学习（正样本更近、负样本更远）</li>
+<li>不同点（架构细节）：作者提到 RAG/embedding 模型常为 encoder-only（类似 BERT）且一般不做 mask；而 LLM（decoder-only）为自回归生成需要 mask</li>
+</ul>
+<h2 id="_5">关键数据 / 案例 / 结论<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li>词表大小（vocab size / wordpiece size）影响效率与覆盖范围：</li>
+<li>GPT-2 级别词表：约 50,257 个 token；中文常出现“一个汉字一个 token”，甚至生僻字需要多个 token，导致效率低与支持差</li>
+<li>GPT-4o 的 tokenizer 词表：约 200,000，覆盖更多中文词，提升中文处理效率</li>
+<li>embedding 维度（作者称 d_model / n_embd）示例：</li>
+<li>GPT-2 XL：约 1,600 维</li>
+<li>DeepSeek-R1：约 7,168 维</li>
+<li>作者推测：更顶尖的模型 embedding 维度可能已上万（维度越高，代表“描述一个词的视角”越细腻）</li>
+<li>embedding 的一种实现方式（作者的解释路径）：</li>
+<li>把 token 先表示成 one-hot（长度=词表大小、几乎全 0）</li>
+<li>通过一个普通线性层（linear）把 one-hot 映射到 embedding 维度</li>
+<li>工程上可用查表/稀疏优化，但数学本质一致</li>
+<li>输出端通常还有“反向映射”：</li>
+<li>模型内部处理的是 embedding</li>
+<li>最后通过线性层把 embedding 转回 token 空间，便于输出人类可读文字</li>
+</ul>
+<h2 id="markmap">思维导图（Markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBUb2tlbiDkuI4gRW1iZWRkaW5n77yITExNICYgUkFH77yJCiMjIFRva2Vu77yI5Li65LuA5LmI5LiN5piv55u05o6l5paH5a2X77yJCiMjIyDorqHnrpfmnLrmk4Xplb/mlbDlgLzvvIzkuI3mk4Xplb/nm7TmjqXlpITnkIbnprvmlaPlrZfnrKYKIyMjIFRva2VuaXplcu+8muaWh+WtlyAtPiB0b2tlbiDnvJblj7fluo/liJcKIyMjIHRva2VuIOS4jeetieS6juWNleivjQojIyMjIOWPr+aLhuaIkOivjeeJh+aute+8iHN1YndvcmTvvIkKIyMjIyDopobnm5bmnKrop4Hor43vvIjkvovvvJpvbGQgKyBFU1TvvIkKIyMjIOivjeihqOWkp+Wwj++8iHZvY2FiIHNpemXvvInlvbHlk43mlYjnjocKIyMjIyBHUFQtMiB+NTAsMjU377ya5Lit5paH5bi45LiA5a2X5LiAIHRva2Vu77yM5pWI546H5L2OCiMjIyMgR1BULTRvIH4yMDAsMDAw77ya6KaG55uW5pu05aSa5Lit5paH6K+N77yM5pWI546H5pu06auYCiMjIEVtYmVkZGluZ++8iOS4uuS7gOS5iOi/mOimgeWGjeWBmuS4gOatpe+8iQojIyMg5qih5Z6L5Y+v6L+R5Ly855yL5L2c6L+e57ut5Ye95pWwCiMjIyAxIOe7tCB0b2tlbiDml6Dms5Xooajovr7lpJrnu7Tnm7jkvLzmgKfvvIjor63oqIAv57G75YirL+W9oueKti/popzoibLigKbvvIkKIyMjIEVtYmVkZGluZ++8mnRva2VuIC0+IOmrmOe7tOWQkemHjwojIyMjIOe7tOW6pui2iumrmO+8jOaPj+i/sOinhuinkui2iue7huiFuwojIyMjIOekuuS+i++8mkdQVC0yIFhMIH4xNjAw77ybRGVlcFNlZWstUjEgfjcxNjjvvJvmm7TlpKfmqKHlnovlj6/og73kuIrkuIcKIyMgVG9rZW5pemVyIHZzIEVtYmVkZGluZyDnmoTmnKzotKjljLrliKsKIyMjIFRva2VuaXplcu+8mumihOWkhOeQhue7hOS7tu+8jOiuree7g+aXtuWbuuWumuS4jeWPmAojIyMgRW1iZWRkaW5n77ya5qih5Z6L55qE5LiA6YOo5YiG77yM5Y+C5pWw6YCa6L+H6K6t57uD5a2m5b6XCiMjIyDlkJHph4/mr4/kuIDnu7TlkKvkuYnpgJrluLjkuI3lj6/op6Pph4oKIyMgRW1iZWRkaW5nIOeahOWunueOsO+8iOebtOingueJiO+8iQojIyMgb25lLWhvdO+8iOmVv+W6pj3or43ooajlpKflsI/vvIkKIyMjIOe6v+aAp+WxguaYoOWwhOWIsCBkX21vZGVsIOe7tAojIyMg5bel56iL5LyY5YyW77ya5p+l6KGoL+eogOeWj+efqemYte+8iOacrOi0qOS4gOiHtO+8iQojIyBMTE0gZW1iZWRkaW5nIHZzIFJBRyBlbWJlZGRpbmcKIyMjIExMTQojIyMjIOebruagh++8mumihOa1i+S4i+S4gOS4qiB0b2tlbu+8iG5leHQtdG9rZW7vvIkKIyMjIyDoh6rlm57lvZLvvJrpnIDopoEgbWFza++8iGRlY29kZXItb25see+8iQojIyMgUkFHIGVtYmVkZGluZwojIyMjIOebruagh++8muaVtOauteivreS5ieWQkemHj+eUqOS6juajgOe0ogojIyMjIOiuree7g++8muWvueavlOWtpuS5oO+8iOato+agt+acrOi/keOAgei0n+agt+acrOi/nO+8iQojIyMjIOW4uOinge+8mmVuY29kZXItb25see+8iOexu+S8vCBCRVJU77yJ77yM6YCa5bi45LiN5YGaIG1hc2s=</markmap-data></div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="text/javascript">(function initializeMarkmap() {
+    const transformer = new markmap.Transformer();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
+    const assets = transformer.getAssets();
+    const loading = Promise.all([
+        assets.styles && markmap.loadCSS(assets.styles),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
+    ]);
+
+    function parseData(content) {
+        const { root, frontmatter } = transformer.transform(content);
+        let options = markmap.deriveOptions(frontmatter?.markmap);
+        options = Object.assign(
+            {
+                fitRatio: 0.85,
+            },
+            options
+        );
+        return { root, options };
+    }
+
+    function resetMarkmap(m, el) {
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
+        el.style.height = height + "px";
+        m.fit();
+    }
+
+    function decodeBase64(encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+    }
+
+    function renderMarkmap(el) {
+        const dataEl = el.querySelector("markmap-data");
+        if (!dataEl) return;
+        let content = el.textContent;
+        if (dataEl.getAttribute("encoding") === "base64") {
+            content = decodeBase64(content);
+        }
+        el.innerHTML = "<svg>";
+        svg = el.firstChild;
+        const { root, options } = parseData(content);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
+            resetMarkmap(m, el);
+        });
+    }
+
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll(".mkdocs-markmap")) {
+            renderMarkmap(el);
+        }
+    }
+
+    loading.then(() => {
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === "childList") {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        updateMarkmaps(document);
+    });
+})();
+</script></body>
+</html>

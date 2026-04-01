@@ -1,0 +1,1438 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/prometheus-tech/%E5%AD%A6%E4%B9%A0%E6%8C%87%E5%8D%97/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Prometheus 源码学习指南 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#prometheus" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Prometheus 源码学习指南
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、项目概述
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、学习路径
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、学习路径">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 1：基础入门（1-2 周）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="阶段 1：基础入门（1-2 周）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 理解核心概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 实践操作
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 2：架构理解（2-3 周）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="阶段 2：架构理解（2-3 周）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 内部架构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 数据流理解
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 3：核心模块深入学习（4-6 周）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="阶段 3：核心模块深入学习（4-6 周）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-tsdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 TSDB 存储引擎
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-promql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 PromQL 查询引擎
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 服务发现与抓取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-web-ui-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Web UI 与 API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 4：高级主题（2-3 周）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="阶段 4：高级主题（2-3 周）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 远程存储集成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 告警与规则
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 配置与重载
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 5：实践与贡献（持续）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="阶段 5：实践与贡献（持续）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 开发环境搭建
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 贡献指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 调试技巧
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、学习资源
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、学习资源">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        官方资源
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        博客与文章
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        视频资源
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        书籍
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、代码阅读建议
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、代码阅读建议">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 入口点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 关键数据结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 调试技巧
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、学习检查清单
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、学习检查清单">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基础阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        架构阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心模块阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        高级阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实践阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、常见问题
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、常见问题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1: 如何快速定位某个功能的代码？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2-tsdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2: TSDB 块是如何组织的？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-promql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3: PromQL 查询是如何执行的？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q4: 如何参与贡献？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、学习建议
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、时间规划建议
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="prometheus">Prometheus 源码学习指南<a class="headerlink" href="#prometheus" title="Permanent link">¶</a></h1>
+<p>本指南旨在帮助你系统地学习 Prometheus 监控系统的架构设计与源码实现。</p>
+<h2 id="_1">一、项目概述<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>Prometheus 是一个开源的系统和服务监控系统，由 CNCF 托管。其核心特性包括：</p>
+<ul>
+<li><strong>多维度数据模型</strong>：通过指标名称和键值对标签定义时间序列</li>
+<li><strong>PromQL</strong>：强大的查询语言</li>
+<li><strong>Pull 模型</strong>：通过 HTTP 拉取方式收集指标</li>
+<li><strong>服务发现</strong>：支持静态配置或动态服务发现</li>
+<li><strong>本地存储</strong>：高效的时序数据库 (TSDB)</li>
+<li><strong>告警与规则</strong>：支持告警规则和记录规则</li>
+</ul>
+<h2 id="_2">二、学习路径<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<h3 id="11-2">阶段 1：基础入门（1-2 周）<a class="headerlink" href="#11-2" title="Permanent link">¶</a></h3>
+<h4 id="11">1.1 理解核心概念<a class="headerlink" href="#11" title="Permanent link">¶</a></h4>
+<p><strong>阅读材料</strong>：
+- <a href="./README.md">README.md</a> - 项目概述和架构概览
+- <a href="./docs/getting_started.md">docs/getting_started.md</a> - 入门教程
+- <a href="./docs/querying/basics.md">docs/querying/basics.md</a> - PromQL 基础
+- <a href="./docs/storage.md">docs/storage.md</a> - 存储机制</p>
+<p><strong>关键概念</strong>：
+- 时间序列（Time Series）
+- 指标（Metric）与标签（Labels）
+- 抓取（Scrape）与目标（Target）
+- 即时向量（Instant Vector）与范围向量（Range Vector）
+- 抓取间隔（Scrape Interval）与评估间隔（Evaluation Interval）</p>
+<h4 id="12">1.2 实践操作<a class="headerlink" href="#12" title="Permanent link">¶</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1"># 1. 下载并运行 Prometheus</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>docker<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span>prometheus<span class="w"> </span>-d<span class="w"> </span>-p<span class="w"> </span><span class="m">127</span>.0.0.1:9090:9090<span class="w"> </span>prom/prometheus
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1"># 2. 配置自监控（参考 prometheus.yml 示例）</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="c1"># 3. 使用 Expression Browser 查询指标</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="c1"># 4. 尝试创建告警规则和记录规则</span>
+</span></code></pre></div>
+<p><strong>练习</strong>：
+- 配置 Prometheus 监控自身
+- 使用 PromQL 查询各种指标
+- 创建简单的告警规则</p>
+<h3 id="22-3">阶段 2：架构理解（2-3 周）<a class="headerlink" href="#22-3" title="Permanent link">¶</a></h3>
+<h4 id="21">2.1 内部架构<a class="headerlink" href="#21" title="Permanent link">¶</a></h4>
+<p><strong>核心文档</strong>：
+- <a href="./documentation/internal_architecture.md">documentation/internal_architecture.md</a> - <strong>必读</strong></p>
+<p><strong>核心组件</strong>：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>┌─────────────────────────────────────────────────────────┐
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>│                    Prometheus Server                      │
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>├─────────────────────────────────────────────────────────┤
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>│  │   Retrieval  │  │    Storage   │  │    HTTP      │  │
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>│  │              │  │              │  │   Server     │  │
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>│  │  - SD Disc.  │  │  - TSDB      │  │  - UI        │  │
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>│  │  - Scrape    │  │  - Remote    │  │  - API       │  │
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a>│  │  - Manager   │  │    Read/Write│  │              │  │
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a>│  └──────────────┘  └──────────────┘  └──────────────┘  │
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a>│  ┌──────────────┐  ┌──────────────┐                     │
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a>│  │     Rule     │  │   Notifier   │                     │
+</span><span id="__span-1-13"><a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a>│  │    Manager   │  │   Manager    │                     │
+</span><span id="__span-1-14"><a href="#__codelineno-1-14" id="__codelineno-1-14" name="__codelineno-1-14"></a>│  └──────────────┘  └──────────────┘                     │
+</span><span id="__span-1-15"><a href="#__codelineno-1-15" id="__codelineno-1-15" name="__codelineno-1-15"></a>└─────────────────────────────────────────────────────────┘
+</span></code></pre></div>
+<p><strong>组件说明</strong>：</p>
+<ol>
+<li><strong>Scrape Discovery Manager</strong></li>
+<li>服务发现管理</li>
+<li>持续更新监控目标列表</li>
+<li>
+<p>源码：<code>discovery/manager.go</code></p>
+</li>
+<li>
+<p><strong>Scrape Manager</strong></p>
+</li>
+<li>执行实际的目标抓取</li>
+<li>应用标签和重标签配置</li>
+<li>
+<p>源码：<code>scrape/manager.go</code></p>
+</li>
+<li>
+<p><strong>Storage</strong></p>
+</li>
+<li>本地 TSDB 存储</li>
+<li>远程存储集成</li>
+<li>
+<p>源码：<code>storage/</code>, <code>tsdb/</code></p>
+</li>
+<li>
+<p><strong>PromQL Engine</strong></p>
+</li>
+<li>查询语言引擎</li>
+<li>表达式解析与执行</li>
+<li>
+<p>源码：<code>promql/engine.go</code></p>
+</li>
+<li>
+<p><strong>Rule Manager</strong></p>
+</li>
+<li>告警和记录规则评估</li>
+<li>
+<p>源码：<code>rules/manager.go</code></p>
+</li>
+<li>
+<p><strong>Notifier</strong></p>
+</li>
+<li>告警发送到 Alertmanager</li>
+<li>
+<p>源码：<code>notifier/notifier.go</code></p>
+</li>
+<li>
+<p><strong>Web UI &amp; API</strong></p>
+</li>
+<li>Web 界面和 API 服务</li>
+<li>源码：<code>web/web.go</code></li>
+</ol>
+<h4 id="22">2.2 数据流理解<a class="headerlink" href="#22" title="Permanent link">¶</a></h4>
+<p><strong>写入流程</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>Target → Scrape → Storage (TSDB) → Remote Write
+</span></code></pre></div></p>
+<p><strong>查询流程</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>HTTP API → PromQL Engine → Storage (Local + Remote) → Response
+</span></code></pre></div></p>
+<p><strong>告警流程</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>Rule Manager → PromQL → Notifier → Alertmanager
+</span></code></pre></div></p>
+<h3 id="34-6">阶段 3：核心模块深入学习（4-6 周）<a class="headerlink" href="#34-6" title="Permanent link">¶</a></h3>
+<h4 id="31-tsdb">3.1 TSDB 存储引擎<a class="headerlink" href="#31-tsdb" title="Permanent link">¶</a></h4>
+<p><strong>文档</strong>：
+- <a href="./tsdb/README.md">tsdb/README.md</a>
+- <a href="./tsdb/docs/format/README.md">tsdb/docs/format/README.md</a> - 数据格式
+- <a href="./tsdb/docs/usage.md">tsdb/docs/usage.md</a> - 使用指南</p>
+<p><strong>关键博客系列</strong>（强烈推荐）：
+1. <a href="https://ganeshvernekar.com/blog/prometheus-tsdb-the-head-block/">The Head Block</a>
+2. <a href="https://ganeshvernekar.com/blog/prometheus-tsdb-wal-and-checkpoint/">WAL and Checkpoint</a>
+3. <a href="https://ganeshvernekar.com/blog/prometheus-tsdb-mmapping-head-chunks-from-disk/">Memory Mapping of Head Chunks from Disk</a>
+4. <a href="https://ganeshvernekar.com/blog/prometheus-tsdb-persistent-block-and-its-index/">Persistent Block and its Index</a>
+5. <a href="https://ganeshvernekar.com/blog/prometheus-tsdb-queries/">Queries</a>
+6. <a href="https://ganeshvernekar.com/blog/prometheus-tsdb-compaction-and-retention/">Compaction and Retention</a>
+7. <a href="https://ganeshvernekar.com/blog/prometheus-tsdb-snapshot-on-shutdown/">Snapshot on Shutdown</a></p>
+<p><strong>源码阅读顺序</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>1. tsdb/db.go              - TSDB 主入口
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>2. tsdb/head.go            - 内存 Head 块
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>3. tsdb/wlog/              - 预写日志
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>4. tsdb/block.go           - 持久化块
+</span><span id="__span-5-5"><a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a>5. tsdb/compact.go         - 压缩逻辑
+</span></code></pre></div></p>
+<p><strong>关键知识点</strong>：
+- 2 小时块存储机制
+- WAL（Write-Ahead Log）
+- 内存映射（mmap）
+- 压缩与保留策略
+- 数据格式（chunks, index, tombstones）</p>
+<h4 id="32-promql">3.2 PromQL 查询引擎<a class="headerlink" href="#32-promql" title="Permanent link">¶</a></h4>
+<p><strong>文档</strong>：
+- <a href="./docs/querying/basics.md">docs/querying/basics.md</a>
+- <a href="./docs/querying/operators.md">docs/querying/operators.md</a>
+- <a href="./docs/querying/functions.md">docs/querying/functions.md</a>
+- <a href="./docs/querying/api.md">docs/querying/api.md</a></p>
+<p><strong>源码阅读顺序</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a>1. promql/parser/          - 词法与语法分析
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>2. promql/engine.go        - 查询执行引擎
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a>3. promql/functions.go     - 内置函数实现
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>4. promql/operators.go     - 操作符实现
+</span></code></pre></div></p>
+<p><strong>关键知识点</strong>：
+- AST（抽象语法树）解析
+- 查询执行计划
+- 向量化执行
+- 范围查询与即时查询
+- 原生直方图支持</p>
+<h4 id="33">3.3 服务发现与抓取<a class="headerlink" href="#33" title="Permanent link">¶</a></h4>
+<p><strong>文档</strong>：
+- <a href="./discovery/README.md">discovery/README.md</a>
+- <a href="./docs/configuration/configuration.md">docs/configuration/configuration.md</a></p>
+<p><strong>源码阅读顺序</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>1. discovery/manager.go    - 发现管理器
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>2. scrape/manager.go       - 抓取管理器
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>3. scrape/scrape.go        - 抓取循环
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a>4. scrape/target.go        - 目标管理
+</span></code></pre></div></p>
+<p><strong>关键知识点</strong>：
+- 服务发现机制
+- 目标重标签（relabeling）
+- 抓取超时与重试
+- 指标重标签</p>
+<h4 id="34-web-ui-api">3.4 Web UI 与 API<a class="headerlink" href="#34-web-ui-api" title="Permanent link">¶</a></h4>
+<p><strong>文档</strong>：
+- <a href="./web/ui/README.md">web/ui/README.md</a> - 前端 UI 开发指南</p>
+<p><strong>源码阅读顺序</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a>1. web/web.go              - Web 服务器
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>2. web/api/v1/api.go       - API v1 实现
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>3. web/ui/                 - 前端 React 应用
+</span></code></pre></div></p>
+<p><strong>API 端点</strong>：
+- <code>/api/v1/query</code> - 即时查询
+- <code>/api/v1/query_range</code> - 范围查询
+- <code>/api/v1/series</code> - 系列查询
+- <code>/api/v1/alerts</code> - 告警查询
+- <code>/metrics</code> - Prometheus 自身指标</p>
+<h3 id="42-3">阶段 4：高级主题（2-3 周）<a class="headerlink" href="#42-3" title="Permanent link">¶</a></h3>
+<h4 id="41">4.1 远程存储集成<a class="headerlink" href="#41" title="Permanent link">¶</a></h4>
+<p><strong>文档</strong>：
+- <a href="./docs/storage.md">docs/storage.md</a> - Remote storage integrations 章节</p>
+<p><strong>源码阅读</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a>1. storage/remote/         - 远程存储实现
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a>2. prompb/                 - Protocol Buffers 定义
+</span></code></pre></div></p>
+<p><strong>关键知识点</strong>：
+- Remote Write 协议
+- Remote Read 协议
+- 队列管理与分片
+- 与本地存储的协同</p>
+<h4 id="42">4.2 告警与规则<a class="headerlink" href="#42" title="Permanent link">¶</a></h4>
+<p><strong>文档</strong>：
+- <a href="./docs/configuration/alerting_rules.md">docs/configuration/alerting_rules.md</a>
+- <a href="./docs/configuration/recording_rules.md">docs/configuration/recording_rules.md</a></p>
+<p><strong>源码阅读</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a>1. rules/manager.go        - 规则管理器
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a>2. rules/alert.go          - 告警规则
+</span><span id="__span-10-3"><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a>3. rules/recording.go      - 记录规则
+</span><span id="__span-10-4"><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a>4. notifier/notifier.go    - 告警通知
+</span></code></pre></div></p>
+<h4 id="43">4.3 配置与重载<a class="headerlink" href="#43" title="Permanent link">¶</a></h4>
+<p><strong>文档</strong>：
+- <a href="./docs/configuration/configuration.md">docs/configuration/configuration.md</a></p>
+<p><strong>源码阅读</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a>1. config/config.go        - 配置解析
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a>2. cmd/prometheus/main.go  - 主函数与组件协调
+</span></code></pre></div></p>
+<p><strong>关键知识点</strong>：
+- YAML 配置解析
+- 热重载机制（SIGHUP）
+- 配置验证</p>
+<h3 id="5">阶段 5：实践与贡献（持续）<a class="headerlink" href="#5" title="Permanent link">¶</a></h3>
+<h4 id="51">5.1 开发环境搭建<a class="headerlink" href="#51" title="Permanent link">¶</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="c1"># 1. 克隆仓库</span>
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/prometheus/prometheus.git
+</span><span id="__span-12-3"><a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="nb">cd</span><span class="w"> </span>prometheus
+</span><span id="__span-12-4"><a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a>
+</span><span id="__span-12-5"><a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="c1"># 2. 安装依赖</span>
+</span><span id="__span-12-6"><a href="#__codelineno-12-6" id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="c1"># Go: 版本见 go.mod</span>
+</span><span id="__span-12-7"><a href="#__codelineno-12-7" id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="c1"># NodeJS: 版本见 .nvmrc</span>
+</span><span id="__span-12-8"><a href="#__codelineno-12-8" id="__codelineno-12-8" name="__codelineno-12-8"></a><span class="c1"># npm: &gt;= 10</span>
+</span><span id="__span-12-9"><a href="#__codelineno-12-9" id="__codelineno-12-9" name="__codelineno-12-9"></a>
+</span><span id="__span-12-10"><a href="#__codelineno-12-10" id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="c1"># 3. 构建</span>
+</span><span id="__span-12-11"><a href="#__codelineno-12-11" id="__codelineno-12-11" name="__codelineno-12-11"></a>make<span class="w"> </span>build
+</span><span id="__span-12-12"><a href="#__codelineno-12-12" id="__codelineno-12-12" name="__codelineno-12-12"></a>
+</span><span id="__span-12-13"><a href="#__codelineno-12-13" id="__codelineno-12-13" name="__codelineno-12-13"></a><span class="c1"># 4. 运行测试</span>
+</span><span id="__span-12-14"><a href="#__codelineno-12-14" id="__codelineno-12-14" name="__codelineno-12-14"></a>make<span class="w"> </span><span class="nb">test</span>
+</span><span id="__span-12-15"><a href="#__codelineno-12-15" id="__codelineno-12-15" name="__codelineno-12-15"></a>
+</span><span id="__span-12-16"><a href="#__codelineno-12-16" id="__codelineno-12-16" name="__codelineno-12-16"></a><span class="c1"># 5. 代码检查</span>
+</span><span id="__span-12-17"><a href="#__codelineno-12-17" id="__codelineno-12-17" name="__codelineno-12-17"></a>make<span class="w"> </span>lint
+</span></code></pre></div>
+<h4 id="52">5.2 贡献指南<a class="headerlink" href="#52" title="Permanent link">¶</a></h4>
+<p><strong>文档</strong>：
+- <a href="./CONTRIBUTING.md">CONTRIBUTING.md</a>
+- <a href="./AGENTS.md">AGENTS.md</a> - PR 提交规范</p>
+<p><strong>贡献步骤</strong>：
+1. 选择 <code>low-hanging-fruit</code> 标签的 issue
+2. 在 issue 下评论认领
+3. 创建分支并实现
+4. 编写测试
+5. 提交 PR（遵循规范格式）</p>
+<p><strong>PR 规范</strong>：
+- 标题格式：<code>area: short description</code>
+- 包含 release-notes 块
+- 每个 commit 独立可测试
+- 使用 <code>git commit -s</code> 签名</p>
+<h4 id="53">5.3 调试技巧<a class="headerlink" href="#53" title="Permanent link">¶</a></h4>
+<p><strong>PromQL 解析器调试</strong>：
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="c1"># 生成解析器</span>
+</span><span id="__span-13-2"><a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a>make<span class="w"> </span>parser
+</span><span id="__span-13-3"><a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="c1"># 修改 promql/parser/generated_parser.y.go</span>
+</span><span id="__span-13-5"><a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="c1"># 设置 yyDebug = 5 和 yyErrorVerbose = true</span>
+</span></code></pre></div></p>
+<p><strong>日志级别</strong>：
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a>./prometheus<span class="w"> </span>--log.level<span class="o">=</span>debug
+</span></code></pre></div></p>
+<h2 id="_3">三、学习资源<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">官方资源<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>官方网站</strong>：https://prometheus.io</li>
+<li><strong>官方文档</strong>：https://prometheus.io/docs/</li>
+<li><strong>GitHub 仓库</strong>：https://github.com/prometheus/prometheus</li>
+<li><strong>邮件列表</strong>：prometheus-developers@googlegroups.com</li>
+<li><strong>IRC</strong>：#prometheus-dev on irc.libera.chat</li>
+</ul>
+<h3 id="_5">博客与文章<a class="headerlink" href="#_5" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>TSDB 系列博客</strong>：https://ganeshvernekar.com/blog/（强烈推荐）</li>
+<li><strong>PromCon 演讲</strong>：https://promcon.io/</li>
+<li><strong>设计文档</strong>：https://fabxc.org/tsdb/（存档）</li>
+</ul>
+<h3 id="_6">视频资源<a class="headerlink" href="#_6" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>PromCon 2017</strong>: Storing 16 Bytes at Scale - https://youtu.be/b_pEevMAC3I</li>
+<li><strong>其他 PromCon 演讲</strong>：https://www.youtube.com/results?search_query=promcon</li>
+</ul>
+<h3 id="_7">书籍<a class="headerlink" href="#_7" title="Permanent link">¶</a></h3>
+<ul>
+<li>《Prometheus 实战》（国内出版）</li>
+<li>《Prometheus: Up &amp; Running》（O'Reilly）</li>
+</ul>
+<h2 id="_8">四、代码阅读建议<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<h3 id="41_1">4.1 入口点<a class="headerlink" href="#41_1" title="Permanent link">¶</a></h3>
+<p><strong>主函数</strong>：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a>cmd/prometheus/main.go (第 77-600 行)
+</span></code></pre></div></p>
+<p>主要流程：
+1. 解析命令行参数
+2. 初始化配置
+3. 创建各组件实例
+4. 使用 <code>oklog/run</code> 包协调启动
+5. 处理信号和重载</p>
+<h3 id="42_1">4.2 关键数据结构<a class="headerlink" href="#42_1" title="Permanent link">¶</a></h3>
+<p><strong>时间序列样本</strong>：
+<div class="language-go highlight"><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="c1">// promql/value.go</span>
+</span><span id="__span-16-2"><a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Sample</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-16-3"><a href="#__codelineno-16-3" id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="w">    </span><span class="nx">T</span><span class="w"> </span><span class="kt">int64</span><span class="w">       </span><span class="c1">// 时间戳</span>
+</span><span id="__span-16-4"><a href="#__codelineno-16-4" id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="w">    </span><span class="nx">F</span><span class="w"> </span><span class="kt">float64</span><span class="w">     </span><span class="c1">// 浮点值</span>
+</span><span id="__span-16-5"><a href="#__codelineno-16-5" id="__codelineno-16-5" name="__codelineno-16-5"></a><span class="w">    </span><span class="nx">H</span><span class="w"> </span><span class="o">*</span><span class="nx">Histogram</span><span class="w">  </span><span class="c1">// 直方图值</span>
+</span><span id="__span-16-6"><a href="#__codelineno-16-6" id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="w">    </span><span class="nx">Metric</span><span class="w"> </span><span class="nx">labels</span><span class="p">.</span><span class="nx">Labels</span>
+</span><span id="__span-16-7"><a href="#__codelineno-16-7" id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p><strong>查询类型</strong>：
+<div class="language-go highlight"><pre><span></span><code><span id="__span-17-1"><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="c1">// promql/query.go</span>
+</span><span id="__span-17-2"><a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="kd">type</span><span class="w"> </span><span class="nx">QueryType</span><span class="w"> </span><span class="kt">int</span>
+</span><span id="__span-17-3"><a href="#__codelineno-17-3" id="__codelineno-17-3" name="__codelineno-17-3"></a>
+</span><span id="__span-17-4"><a href="#__codelineno-17-4" id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="kd">const</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-17-5"><a href="#__codelineno-17-5" id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="w">    </span><span class="nx">QueryInstant</span><span class="w"> </span><span class="nx">QueryType</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">iota</span>
+</span><span id="__span-17-6"><a href="#__codelineno-17-6" id="__codelineno-17-6" name="__codelineno-17-6"></a><span class="w">    </span><span class="nx">QueryRange</span>
+</span><span id="__span-17-7"><a href="#__codelineno-17-7" id="__codelineno-17-7" name="__codelineno-17-7"></a><span class="p">)</span>
+</span></code></pre></div></p>
+<h3 id="43_1">4.3 调试技巧<a class="headerlink" href="#43_1" title="Permanent link">¶</a></h3>
+<ol>
+<li>
+<p><strong>使用 promtool</strong>：
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="c1"># 检查配置</span>
+</span><span id="__span-18-2"><a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a>promtool<span class="w"> </span>check<span class="w"> </span>config<span class="w"> </span>prometheus.yml
+</span><span id="__span-18-3"><a href="#__codelineno-18-3" id="__codelineno-18-3" name="__codelineno-18-3"></a>
+</span><span id="__span-18-4"><a href="#__codelineno-18-4" id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="c1"># 检查规则</span>
+</span><span id="__span-18-5"><a href="#__codelineno-18-5" id="__codelineno-18-5" name="__codelineno-18-5"></a>promtool<span class="w"> </span>check<span class="w"> </span>rules<span class="w"> </span>rules.yml
+</span><span id="__span-18-6"><a href="#__codelineno-18-6" id="__codelineno-18-6" name="__codelineno-18-6"></a>
+</span><span id="__span-18-7"><a href="#__codelineno-18-7" id="__codelineno-18-7" name="__codelineno-18-7"></a><span class="c1"># 单元测试规则</span>
+</span><span id="__span-18-8"><a href="#__codelineno-18-8" id="__codelineno-18-8" name="__codelineno-18-8"></a>promtool<span class="w"> </span><span class="nb">test</span><span class="w"> </span>rules<span class="w"> </span>test.yml
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>API 调试</strong>：
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a href="#__codelineno-19-1" id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="c1"># 即时查询</span>
+</span><span id="__span-19-2"><a href="#__codelineno-19-2" id="__codelineno-19-2" name="__codelineno-19-2"></a>curl<span class="w"> </span><span class="s1">'http://localhost:9090/api/v1/query?query=up'</span>
+</span><span id="__span-19-3"><a href="#__codelineno-19-3" id="__codelineno-19-3" name="__codelineno-19-3"></a>
+</span><span id="__span-19-4"><a href="#__codelineno-19-4" id="__codelineno-19-4" name="__codelineno-19-4"></a><span class="c1"># 范围查询</span>
+</span><span id="__span-19-5"><a href="#__codelineno-19-5" id="__codelineno-19-5" name="__codelineno-19-5"></a>curl<span class="w"> </span><span class="s1">'http://localhost:9090/api/v1/query_range?query=up&amp;start=2023-01-01&amp;end=2023-01-02&amp;step=1h'</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>指标端点</strong>：
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a href="#__codelineno-20-1" id="__codelineno-20-1" name="__codelineno-20-1"></a>curl<span class="w"> </span>http://localhost:9090/metrics
+</span></code></pre></div></p>
+</li>
+</ol>
+<h2 id="_9">五、学习检查清单<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<h3 id="_10">基础阶段<a class="headerlink" href="#_10" title="Permanent link">¶</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 理解 Prometheus 核心概念</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 能够配置 Prometheus 监控目标</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 熟练使用 PromQL 查询</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 理解告警和记录规则</li>
+</ul>
+<h3 id="_11">架构阶段<a class="headerlink" href="#_11" title="Permanent link">¶</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 理解各组件职责</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 掌握数据流转过程</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 能够绘制架构图</li>
+</ul>
+<h3 id="_12">核心模块阶段<a class="headerlink" href="#_12" title="Permanent link">¶</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 理解 TSDB 存储原理</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 理解 PromQL 执行机制</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 理解服务发现流程</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 理解抓取机制</li>
+</ul>
+<h3 id="_13">高级阶段<a class="headerlink" href="#_13" title="Permanent link">¶</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 理解远程存储集成</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 理解告警通知机制</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 理解配置重载原理</li>
+</ul>
+<h3 id="_14">实践阶段<a class="headerlink" href="#_14" title="Permanent link">¶</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 能够搭建开发环境</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 能够运行测试</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 能够提交 PR</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 能够调试问题</li>
+</ul>
+<h2 id="_15">六、常见问题<a class="headerlink" href="#_15" title="Permanent link">¶</a></h2>
+<h3 id="q1">Q1: 如何快速定位某个功能的代码？<a class="headerlink" href="#q1" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: 
+1. 使用 <code>internal_architecture.md</code> 了解组件位置
+2. 使用 GitHub 代码搜索
+3. 查看相关测试文件</p>
+<h3 id="q2-tsdb">Q2: TSDB 块是如何组织的？<a class="headerlink" href="#q2-tsdb" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: 
+- 每 2 小时一个块
+- 块包含 chunks（数据）、index（索引）、meta.json（元数据）
+- WAL 保证崩溃恢复
+- 后台压缩成更大的块</p>
+<h3 id="q3-promql">Q3: PromQL 查询是如何执行的？<a class="headerlink" href="#q3-promql" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: 
+1. 词法/语法分析生成 AST
+2. 创建可执行查询
+3. 从存储获取迭代器
+4. 惰性执行表达式
+5. 返回结果</p>
+<h3 id="q4">Q4: 如何参与贡献？<a class="headerlink" href="#q4" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: 
+1. 阅读 CONTRIBUTING.md
+2. 选择适合的 issue
+3. 遵循 PR 规范
+4. 确保测试通过</p>
+<h2 id="_16">七、学习建议<a class="headerlink" href="#_16" title="Permanent link">¶</a></h2>
+<ol>
+<li><strong>循序渐进</strong>：不要一开始就深入源码，先理解概念和使用</li>
+<li><strong>实践为主</strong>：多动手配置、查询、调试</li>
+<li><strong>阅读博客</strong>：TSDB 系列博客质量极高</li>
+<li><strong>查看测试</strong>：测试是最好的文档</li>
+<li><strong>参与社区</strong>：邮件列表和 IRC 是获取帮助的好地方</li>
+<li><strong>做笔记</strong>：记录关键理解和疑问</li>
+<li><strong>分享知识</strong>：写博客或做分享加深理解</li>
+</ol>
+<h2 id="_17">八、时间规划建议<a class="headerlink" href="#_17" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>时间</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基础入门</td>
+<td>1-2 周</td>
+<td>理解概念，会使用</td>
+</tr>
+<tr>
+<td>架构理解</td>
+<td>2-3 周</td>
+<td>理解组件和数据流</td>
+</tr>
+<tr>
+<td>核心模块</td>
+<td>4-6 周</td>
+<td>深入 TSDB、PromQL 等</td>
+</tr>
+<tr>
+<td>高级主题</td>
+<td>2-3 周</td>
+<td>远程存储、告警等</td>
+</tr>
+<tr>
+<td>实践贡献</td>
+<td>持续</td>
+<td>参与开源贡献</td>
+</tr>
+</tbody>
+</table>
+<p><strong>总计</strong>：约 3-4 个月系统学习</p>
+<hr/>
+<p><strong>最后提醒</strong>：学习开源项目是一个长期过程，不要急于求成。保持好奇心，享受探索的乐趣！</p>
+<p>祝学习顺利！🚀</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

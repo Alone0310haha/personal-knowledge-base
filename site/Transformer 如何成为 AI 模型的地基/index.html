@@ -1,0 +1,475 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="笔记与技术文档分享" name="description"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/Transformer%20%E5%A6%82%E4%BD%95%E6%88%90%E4%B8%BA%20AI%20%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%9C%B0%E5%9F%BA/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Transformer 如何成为 AI 模型的地基 - Alone的知识库</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../js/unpkg.com/d3@7.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-lib@0.18.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-view@0.18.js" type="text/javascript"></script><style type="text/css">div.mkdocs-markmap {
+    width: 100%;
+    min-height: 1em;
+    border: 1px solid grey;
+}
+.mkdocs-markmap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#transformer-ai">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="Alone的知识库" class="md-header__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Alone的知识库
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Transformer 如何成为 AI 模型的地基
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Alone的知识库" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Alone的知识库
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+<span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        来源
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-transformer-encoder-decoder">
+<span class="md-ellipsis">
+      
+        分论点 1：原始 Transformer = Encoder + Decoder（面向翻译）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2n">
+<span class="md-ellipsis">
+      
+        分论点 2：堆叠（×N）意味着“结构相同、参数不同”，训练就是在调这些参数
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3decoder-token">
+<span class="md-ellipsis">
+      
+        分论点 3：Decoder 的逐 token 生成解释了“输出更贵”与“采样参数”
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4transformer-gptdecoder-only-bertencoder-only">
+<span class="md-ellipsis">
+      
+        分论点 4：Transformer 的两大裁剪路线：GPT（Decoder-only）与 BERT（Encoder-only）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        关键数据 / 案例 / 结论
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（Markmap）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        文字稿
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="transformer-ai">Transformer 如何成为 AI 模型的地基<a class="headerlink" href="#transformer-ai" title="Permanent link">¶</a></h1>
+<h2 id="_1">来源<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<ul>
+<li>视频：https://www.bilibili.com/video/BV1k6yWBEEmH/</li>
+<li>BV 号：BV1k6yWBEEmH</li>
+</ul>
+<h2 id="_2">讨论视角<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>用“翻译任务”的原始 Transformer（Encoder-Decoder）当作母体结构，只看输入/输出与信息流，先建立宏观框架</li>
+<li>把“模型参数是什么、训练在调什么”嵌入到结构解释里：每层重复结构相同但参数不同</li>
+<li>以“生成 token 的逐步过程”解释为什么输出比输入更贵、为什么有 temperature / top-k 这类采样参数</li>
+<li>用结构裁剪的方式串起主流 LLM：Encoder-Decoder → Decoder-only（GPT 系）/ Encoder-only（BERT 系）</li>
+</ul>
+<h2 id="_3">核心论点与分论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">核心论点<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ul>
+<li>Transformer 的核心贡献不只是一套内部算子，更是一种可堆叠的通用结构范式：Encoder 负责把文本压缩为高层次语义表示，Decoder 负责在条件语义下逐 token 生成；主流大模型基本都在这一范式上裁剪/变体而来。</li>
+</ul>
+<h3 id="1-transformer-encoder-decoder">分论点 1：原始 Transformer = Encoder + Decoder（面向翻译）<a class="headerlink" href="#1-transformer-encoder-decoder" title="Permanent link">¶</a></h3>
+<ul>
+<li>任务：把源语言句子翻译成目标语言句子</li>
+<li>Encoder：把整句原文一次性编码成一个“高层次数字表示”（文字稿称“含义矩阵/语义表示”），不直接对应任何人类语言，但承载语义信息</li>
+<li>Decoder：在 Encoder 输出的条件下，按 token 逐步生成目标语言</li>
+</ul>
+<h3 id="2n">分论点 2：堆叠（×N）意味着“结构相同、参数不同”，训练就是在调这些参数<a class="headerlink" href="#2n" title="Permanent link">¶</a></h3>
+<ul>
+<li>Encoder/Decoder 内部的块会重复 N 次（图中的 ×N）</li>
+<li>每一层结构相同，但参数不同（作者用 (y=Wx+b) 类比：每层是同类运算但 W、b 不同）</li>
+<li>大模型文件里巨量的权重，本质就是这些层中参数矩阵的数值；训练就是用数据反复调整这些数值，使输出符合预期</li>
+</ul>
+<h3 id="3decoder-token">分论点 3：Decoder 的逐 token 生成解释了“输出更贵”与“采样参数”<a class="headerlink" href="#3decoder-token" title="Permanent link">¶</a></h3>
+<ul>
+<li>生成过程：当前已生成的 token 序列 + 条件语义输入 → 输出“下一个 token 的概率分布”</li>
+<li>每生成一个 token，都要完整跑一遍 Decoder（多层堆叠）</li>
+<li>结论：输出越长，计算越多；因此 API 计费/耗时上输出通常比输入更贵</li>
+<li>为了让结果不总是同一句话，需要在“从概率分布选 token”时引入随机性：</li>
+<li>temperature：控制随机性强弱（越高越随机，0 时趋向总选最大概率）</li>
+<li>top-k：只在概率最高的前 k 个 token 中采样</li>
+</ul>
+<h3 id="4transformer-gptdecoder-only-bertencoder-only">分论点 4：Transformer 的两大裁剪路线：GPT（Decoder-only）与 BERT（Encoder-only）<a class="headerlink" href="#4transformer-gptdecoder-only-bertencoder-only" title="Permanent link">¶</a></h3>
+<ul>
+<li>Decoder-only（GPT 系）：把 Encoder-Decoder 的 Encoder 去掉/吸收，只保留适合“文字接龙/自回归生成”的 Decoder 结构（文字稿称 “Decoder-only Transformer”）</li>
+<li>训练更方便：可用海量任意文本做自监督（给定前文预测下一个 token），输入/输出可由规则自动构造</li>
+<li>产物：GPT、Claude、Gemini、DeepSeek、Kimi 等主流生成式大模型都属于此类变种</li>
+<li>Encoder-only（BERT 系）：保留 Encoder，用“掩码填空”式训练来学理解（mask middle token 让模型预测缺失词）</li>
+<li>更擅长：理解文章大意、信息抽取、实体识别、标注关系等</li>
+<li>产物：BERT 及其变体</li>
+</ul>
+<h2 id="_5">关键数据 / 案例 / 结论<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li>时间线（作者用来定位 Transformer 与大模型关系）：</li>
+<li>2017：提出 Transformer（Attention Is All You Need）</li>
+<li>2018：BERT 基于 Transformer 刷新多项榜单</li>
+<li>2019：GPT-2 让“大语言模型”概念进入大众视野</li>
+<li>翻译示例：输入 “I am Wang” → Encoder 得到语义表示 → Decoder 从开始标记起逐 token 生成“我是王”直到结束标记</li>
+<li>token 概念：Decoder 输出的是词表中每个 token 的概率分布（文字稿举例 GPT-2 词表 50,257）</li>
+<li>训练方式对比：</li>
+<li>Encoder-Decoder 翻译训练需要成对语料（原文+译文），属于监督学习</li>
+<li>Decoder-only 训练可用任意文本做 next-token 预测，属于自监督学习（输入前缀，输出下一个 token）</li>
+<li>Encoder-only（BERT）用 mask 预测缺失词，偏理解型</li>
+</ul>
+<h2 id="markmap">思维导图（Markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBUcmFuc2Zvcm1lciDmiJDkuLogQUkg5qih5Z6L5Zyw5Z+6CiMjIOWOn+WniyBUcmFuc2Zvcm1lcu+8iOe/u+ivke+8iQojIyMgRW5jb2Rlcu+8iOe8lueggeWZqO+8iQojIyMjIOi+k+WFpe+8muaVtOWPpeWOn+aWhwojIyMjIOi+k+WHuu+8mumrmOWxguasoeivreS5ieihqOekuu+8iOS6uuexu+S4jeWPr+ebtOaOpeivu++8iQojIyMjIOe7k+aehO+8muWdl+mHjeWkjSDDl07vvIjnu5PmnoTlkIzjgIHlj4LmlbDkuI3lkIzvvIkKIyMjIERlY29kZXLvvIjop6PnoIHlmajvvIkKIyMjIyDovpPlhaXvvJror63kuYnooajnpLogKyDlt7LnlJ/miJAgdG9rZW4KIyMjIyDovpPlh7rvvJrkuIvkuIDkuKogdG9rZW4g5qaC546H5YiG5biDCiMjIyMg6YCQIHRva2VuIOeUn+aIkOebtOWIsOe7k+adn+agh+iusAojIyDlj4LmlbDkuI7orq3nu4MKIyMjIOavj+WxguWPguaVsOS4jeWQjO+8iOexu+avlCB5PVd4K2LvvIkKIyMjIOiuree7gz3nlKjmlbDmja7osIPmlbTlj4LmlbDmlbDlgLwKIyMjIOaooeWei+aWh+S7tuW+iOWkpz3lrZjmnYPph43lj4LmlbAKIyMg55Sf5oiQ5Li65LuA5LmI6LS1CiMjIyDmr4/nlJ/miJAgMSDkuKogdG9rZW4g6YO96KaB5a6M5pW06LeR5LiA6YGNIERlY29kZXIKIyMjIOi+k+WHuui2iumVv++8jOiuoeeul+i2iuWkmiAtPiDovpPlh7rmm7TotLUKIyMg6YeH5qC3562W55WlCiMjIyB0ZW1wZXJhdHVyZe+8mumaj+acuuaAp+W8uuW8sQojIyMgdG9wLWvvvJrlj6rlnKjliY0gayDmpoLnjocgdG9rZW4g5Lit6YeH5qC3CiMjIOS4pOadoeijgeWJqui3r+e6vwojIyMgRGVjb2Rlci1vbmx577yIR1BUIOezu++8iQojIyMjIOmAguWQiOiHquWbnuW9kueUn+aIkO+8iOaWh+Wtl+aOpem+me+8iQojIyMjIOiuree7g++8muiHquebkeedoyBuZXh0LXRva2VuCiMjIyMg5Luj6KGo77yaR1BUL0NsYXVkZS9HZW1pbmkvRGVlcFNlZWsvS2ltaeKApgojIyMgRW5jb2Rlci1vbmx577yIQkVSVCDns7vvvIkKIyMjIyDpgILlkIjnkIbop6PkuI7kv6Hmga/mir3lj5YKIyMjIyDorq3nu4PvvJptYXNrIOWhq+epuumihOa1iwojIyMjIOS7o+ihqO+8mkJFUlQg5Y+K5Y+Y5L2T</markmap-data></div>
+<h2 id="_6">文字稿<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<ul>
+<li>file:///d:/code/self/tmp/BV1k6yWBEEmH_文字稿.md</li>
+</ul>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="text/javascript">(function initializeMarkmap() {
+    const transformer = new markmap.Transformer();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
+    const assets = transformer.getAssets();
+    const loading = Promise.all([
+        assets.styles && markmap.loadCSS(assets.styles),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
+    ]);
+
+    function parseData(content) {
+        const { root, frontmatter } = transformer.transform(content);
+        let options = markmap.deriveOptions(frontmatter?.markmap);
+        options = Object.assign(
+            {
+                fitRatio: 0.85,
+            },
+            options
+        );
+        return { root, options };
+    }
+
+    function resetMarkmap(m, el) {
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
+        el.style.height = height + "px";
+        m.fit();
+    }
+
+    function decodeBase64(encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+    }
+
+    function renderMarkmap(el) {
+        const dataEl = el.querySelector("markmap-data");
+        if (!dataEl) return;
+        let content = el.textContent;
+        if (dataEl.getAttribute("encoding") === "base64") {
+            content = decodeBase64(content);
+        }
+        el.innerHTML = "<svg>";
+        svg = el.firstChild;
+        const { root, options } = parseData(content);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
+            resetMarkmap(m, el);
+        });
+    }
+
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll(".mkdocs-markmap")) {
+            renderMarkmap(el);
+        }
+    }
+
+    loading.then(() => {
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === "childList") {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        updateMarkmaps(document);
+    });
+})();
+</script></body>
+</html>

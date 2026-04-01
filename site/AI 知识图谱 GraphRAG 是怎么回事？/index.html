@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="笔记与技术文档分享" name="description"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/AI%20%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%20GraphRAG%20%E6%98%AF%E6%80%8E%E4%B9%88%E5%9B%9E%E4%BA%8B%EF%BC%9F/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>AI 知识图谱 GraphRAG 是怎么回事？ - Alone的知识库</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../js/unpkg.com/d3@7.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-lib@0.18.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-view@0.18.js" type="text/javascript"></script><style type="text/css">div.mkdocs-markmap {
+    width: 100%;
+    min-height: 1em;
+    border: 1px solid grey;
+}
+.mkdocs-markmap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#ai-graphrag">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="Alone的知识库" class="md-header__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Alone的知识库
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              AI 知识图谱 GraphRAG 是怎么回事？
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Alone的知识库" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Alone的知识库
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+<span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        来源
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-rag">
+<span class="md-ellipsis">
+      
+        分论点 1：传统 RAG 的关键问题是“全句问题”与“局部片段”的相似度经常不够
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2graphrag-">
+<span class="md-ellipsis">
+      
+        分论点 2：GraphRAG 用知识图谱把一句话变成“实体-关系-属性”，把关系显式化
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+<span class="md-ellipsis">
+      
+        分论点 3：构图在大模型时代变成“提示词驱动的信息抽取”，并通过反复追问榨干信息
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4graphrag">
+<span class="md-ellipsis">
+      
+        分论点 4：GraphRAG 通过合并同名实体与生成“摘要描述”，把分散信息整合成文档级结构
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5">
+<span class="md-ellipsis">
+      
+        分论点 5：用社区检测把大图分块成“子图”，再逐层总结得到层级图谱，用于全局问题
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#6">
+<span class="md-ellipsis">
+      
+        分论点 6：最终仍回到向量检索，但检索对象变成“原文切片 + 图谱节点/边/社区摘要”
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        关键数据 / 案例 / 结论
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（Markmap）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="ai-graphrag">AI 知识图谱 GraphRAG 是怎么回事？<a class="headerlink" href="#ai-graphrag" title="Permanent link">¶</a></h1>
+<h2 id="_1">来源<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://www.bilibili.com/video/BV1zoKuzoENM/">AI 知识图谱 GraphRAG 是怎么回事？</a></li>
+<li>BV 号：BV1zoKuzoENM</li>
+</ul>
+<h2 id="_2">讨论视角<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>先指出传统 RAG 的“切块 + 向量检索”在全局问题/细节问题上的结构性矛盾：块大丢细节，块小丢关系</li>
+<li>用“知识图谱（Graph）”把文本拆成“实体-关系-属性”的结构化表示，解决“整体问题 vs 局部片段”匹配度不足</li>
+<li>强调 GraphRAG 的关键变化：让大模型贯穿在构图、补全、合并、总结、分层、查询等几乎每一步，而不仅仅是最后回答阶段</li>
+</ul>
+<h2 id="_3">核心论点与分论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">核心论点<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ul>
+<li>GraphRAG 通过把文本转为知识图谱并分层摘要，再把图谱节点/边与原文片段一起向量化检索，实现“既能抓住细节定位，又能保留跨片段关系与全局结构”的 RAG。</li>
+</ul>
+<h3 id="1-rag">分论点 1：传统 RAG 的关键问题是“全句问题”与“局部片段”的相似度经常不够<a class="headerlink" href="#1-rag" title="Permanent link">¶</a></h3>
+<ul>
+<li>例子：把文章按句切块存向量库后</li>
+<li>问“老王喜欢吃什么”容易命中“老王喜欢吃西瓜/桃子”</li>
+<li>问“文章里提到了几次西瓜”可能漏检，因为“老王喜欢吃”这类上下文会稀释“西瓜”这一局部目标</li>
+<li>解决的直觉矛盾：</li>
+<li>切块大：保留关系但容易漏细节</li>
+<li>切块小：细节好命中但关系被切断</li>
+</ul>
+<h3 id="2graphrag-">分论点 2：GraphRAG 用知识图谱把一句话变成“实体-关系-属性”，把关系显式化<a class="headerlink" href="#2graphrag-" title="Permanent link">¶</a></h3>
+<ul>
+<li>将“老王爱吃西瓜”表示为：</li>
+<li>实体（Entity）：老王、西瓜</li>
+<li>关系（Relationship）：爱吃</li>
+<li>属性：实体属性（老王=人、西瓜=水果）与关系属性（爱吃…）</li>
+<li>这种“实体+关系+属性”的图结构对应知识图谱/属性图（Property Graph）</li>
+</ul>
+<h3 id="3">分论点 3：构图在大模型时代变成“提示词驱动的信息抽取”，并通过反复追问榨干信息<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<ul>
+<li>过去：实体识别/关系抽取需要复杂算法与模型</li>
+<li>GraphRAG：用大模型完成</li>
+<li>步骤：命名实体识别（NER）→ 关系抽取（Relation Extraction）→ 按约定格式输出结构化文本 → 解析成图</li>
+<li>实体类型需要根据场景预设（文中提到默认可含：团体、人、地点、事件等）</li>
+<li>会要求模型为每个实体/关系生成检索用的文本描述</li>
+<li>迭代补全（文中称 data mining）：每次生成后把“原文 + 当前抽取结果”再发给模型追问“还有没有遗漏”，直到模型确认没有补充</li>
+</ul>
+<h3 id="4graphrag">分论点 4：GraphRAG 通过合并同名实体与生成“摘要描述”，把分散信息整合成文档级结构<a class="headerlink" href="#4graphrag" title="Permanent link">¶</a></h3>
+<ul>
+<li>对每个片段单独抽图后，自动合并同名实体（如所有“老王”、所有“西瓜”）</li>
+<li>合并时会把原本分散在节点/边上的描述信息一并整合</li>
+<li>再让大模型把合并后的描述整理成更完整通顺的总结性描述，作为该节点/边的最终描述</li>
+<li>重要配套：维护“图谱元素 ↔ 原文片段”的可追溯映射（后续检索会回链到原文证据）</li>
+</ul>
+<h3 id="5">分论点 5：用社区检测把大图分块成“子图”，再逐层总结得到层级图谱，用于全局问题<a class="headerlink" href="#5" title="Permanent link">¶</a></h3>
+<ul>
+<li>图太大时直接查图不便：用社区检测把连接更密的子图合并为“社区”</li>
+<li>对每个社区让大模型基于节点/边描述做更高层的总结</li>
+<li>可反复“合并→总结”向上抽象，形成层级结构：</li>
+<li>越往上：越抽象、越概括</li>
+<li>越往下：越贴近原文、越细节</li>
+<li>额外收益：图谱上的推理</li>
+<li>文中示例：由“老王爱吃瓜和桃”“小王爱吃瓜”可推理“小王不爱吃桃”（原文未显式出现）</li>
+</ul>
+<h3 id="6">分论点 6：最终仍回到向量检索，但检索对象变成“原文切片 + 图谱节点/边/社区摘要”<a class="headerlink" href="#6" title="Permanent link">¶</a></h3>
+<ul>
+<li>将图谱中每个节点、每条边的“实体信息 + 总结性描述”当作文本片段做 embedding，存入向量库</li>
+<li>原文的切片也同样存入向量库</li>
+<li>查询时把用户问题向量化，去匹配：</li>
+<li>只查图谱某层/某几层</li>
+<li>只查原文</li>
+<li>或全部都查</li>
+</ul>
+<h2 id="_5">关键数据 / 案例 / 结论<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li>典型失败案例：统计类问题（“提到了几次西瓜”）在按句/按段切块的传统 RAG 中容易漏检</li>
+<li>GraphRAG 抽取任务两步：</li>
+<li>NER（命名实体识别）</li>
+<li>Relation Extraction（关系抽取）</li>
+<li>迭代补全：抽图后反复追问模型补充，直到其声明无遗漏（文中类比“大模型 PUA”）</li>
+<li>两类查询策略（文中描述的两种 search）：</li>
+<li>从底层图谱向上回溯：更擅长细节定位、证据回链</li>
+<li>从高层摘要向下追索：更擅长全局/抽象问题（例如“文章核心观点是什么”）</li>
+<li>作者结论：尽管流程高度依赖大模型看起来“不靠谱”，但根据微软论文的实验结果，整体效果仍不错，因此 GraphRAG 本质是“让大模型渗透到整个流程”的系统设计</li>
+</ul>
+<h2 id="markmap">思维导图（Markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBHcmFwaFJBR++8iOefpeivhuWbvuiwsSBSQUfvvIkKIyMg5Lyg57ufIFJBRyDnl5vngrkKIyMjIOWIh+Wdl+WkpyAtPiDmvI/nu4boioIKIyMjIOWIh+Wdl+WwjyAtPiDkuKLlhbPns7sKIyMjIOWFqOWPpemXrumimCB2cyDlsYDpg6jniYfmrrUg55u45Ly85bqm5L2OCiMjIOaguOW/g+aAnei3r++8muaKiuaWh+acrOWPmOaIkOWbvgojIyMg5a6e5L2TIEVudGl0eQojIyMg5YWz57O7IFJlbGF0aW9uc2hpcAojIyMg5bGe5oCn77yI5a6e5L2TL+WFs+ezu++8iQojIyMg57uT5p6E77ya5bGe5oCn5Zu+77yITFBH77yJCiMjIOaehOWbvua1geeoi++8iExMTSDpqbHliqjvvIkKIyMjIOmihOiuvuWunuS9k+exu+Wei++8iOS6ui/lnLDngrkv5LqL5Lu2L+e7hOe7h+KApu+8iQojIyMgTkVS77ya6K+G5Yir5a6e5L2TCiMjIyBSRe+8muaKveWPluWFs+ezuwojIyMg55Sf5oiQ5a6e5L2TL+WFs+ezu+aPj+i/sO+8iOeUqOS6juajgOe0ou+8iQojIyMg6L+t5Luj6KGl5YWo77yIRGF0YSBtaW5pbmfvvInvvJrlj43lpI3ov73pl67nm7TliLDml6DooaXlhYUKIyMg5ZCI5bm25LiO5Y+v6L+95rqvCiMjIyDlkIjlubblkIzlkI3lrp7kvZMKIyMjIOaVtOWQiOiKgueCuS/ovrnmj4/ov7AKIyMjIExMTSDnlJ/miJDmm7TpgJrpobrnmoTmnIDnu4jmj4/ov7AKIyMjIOe7tOaKpOWbvuiwseWFg+e0oCDihpQg5Y6f5paH54mH5q615pig5bCE77yI5Zue6ZO+6K+B5o2u77yJCiMjIOWIhuWxguaRmOimgQojIyMg56S+5Yy65qOA5rWL77ya5oqK5a+G6ZuG5a2Q5Zu+5ZCI5bm25oiQ56S+5Yy6CiMjIyDlr7nnpL7ljLrlgZrpq5jlsYLmgLvnu5MKIyMjIOWPjeWkjeWQiOW5ti/mgLvnu5MgLT4g5bGC57qn5Zu+6LCxCiMjIyMg5LiK5bGC77ya5oq96LGh5qaC5ousCiMjIyMg5LiL5bGC77ya6LS06L+R5Y6f5paH57uG6IqCCiMjIyDlm77osLHmjqjnkIbvvJrlj6/mjqjlh7rljp/mlofmnKrmmI7or7TnmoTnu5PorroKIyMg5qOA57Si5LiO5Zue562UCiMjIyDlkJHph4/ljJbvvJroioLngrkv6L65L+ekvuWMuuaPj+i/sCArIOWOn+aWh+WIh+eJh+mDveWFpeW6kwojIyMg5p+l6K+i77ya5Y+q5p+l5p+Q5bGCIC8g5p+l5Y6f5paHIC8g5YWo6YOo5p+lCiMjIyDnrZbnlaUKIyMjIyDku47lupXlsYLotbfvvIjnu4boioLlrprkvY3vvIkKIyMjIyDku47pq5jlsYLotbfvvIjlhajlsYDmpoLmi6zvvIkKIyMjIOaJk+WMheivgeaNriArIOmXrumimCAtPiDkuqTnu5kgTExNIOeUn+aIkOetlOahiA==</markmap-data></div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="text/javascript">(function initializeMarkmap() {
+    const transformer = new markmap.Transformer();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
+    const assets = transformer.getAssets();
+    const loading = Promise.all([
+        assets.styles && markmap.loadCSS(assets.styles),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
+    ]);
+
+    function parseData(content) {
+        const { root, frontmatter } = transformer.transform(content);
+        let options = markmap.deriveOptions(frontmatter?.markmap);
+        options = Object.assign(
+            {
+                fitRatio: 0.85,
+            },
+            options
+        );
+        return { root, options };
+    }
+
+    function resetMarkmap(m, el) {
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
+        el.style.height = height + "px";
+        m.fit();
+    }
+
+    function decodeBase64(encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+    }
+
+    function renderMarkmap(el) {
+        const dataEl = el.querySelector("markmap-data");
+        if (!dataEl) return;
+        let content = el.textContent;
+        if (dataEl.getAttribute("encoding") === "base64") {
+            content = decodeBase64(content);
+        }
+        el.innerHTML = "<svg>";
+        svg = el.firstChild;
+        const { root, options } = parseData(content);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
+            resetMarkmap(m, el);
+        });
+    }
+
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll(".mkdocs-markmap")) {
+            renderMarkmap(el);
+        }
+    }
+
+    loading.then(() => {
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === "childList") {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        updateMarkmaps(document);
+    });
+})();
+</script></body>
+</html>

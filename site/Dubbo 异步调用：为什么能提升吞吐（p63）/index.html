@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="笔记与技术文档分享" name="description"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/Dubbo%20%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E6%8F%90%E5%8D%87%E5%90%9E%E5%90%90%EF%BC%88p63%EF%BC%89/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Dubbo 异步调用：为什么能提升吞吐（p63） - Alone的知识库</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../js/unpkg.com/d3@7.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-lib@0.18.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-view@0.18.js" type="text/javascript"></script><style type="text/css">div.mkdocs-markmap {
+    width: 100%;
+    min-height: 1em;
+    border: 1px solid grey;
+}
+.mkdocs-markmap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#dubbo-p63">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="Alone的知识库" class="md-header__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Alone的知识库
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Dubbo 异步调用：为什么能提升吞吐（p63）
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Alone的知识库" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Alone的知识库
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+<span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        讨论视角（这期在解决什么）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1">
+<span class="md-ellipsis">
+      
+        分论点 1：同步聚合调用的本质浪费：线程大部分时间在“等”
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        分论点 2：异步并行的收益：从“累加延迟”变为“取最大值”，吞吐提升
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3dubbo-futuremap-requestid">
+<span class="md-ellipsis">
+      
+        分论点 3：Dubbo 异步调用在客户端如何落地：非阻塞写 + FutureMap + requestId 关联
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4io">
+<span class="md-ellipsis">
+      
+        分论点 4：服务端同样要做线程模型隔离：IO 线程只做收发，耗时任务下沉到业务线程池
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5">
+<span class="md-ellipsis">
+      
+        分论点 5：异步三大陷阱：上下文丢失、内存堆积、异常隐身
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        关键数据、案例与结论（逐条可复述）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（markmap）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="dubbo-p63">Dubbo 异步调用：为什么能提升吞吐（p63）<a class="headerlink" href="#dubbo-p63" title="Permanent link">¶</a></h1>
+<p><a href="https://www.bilibili.com/video/BV1qb6EB2EGi?spm_id_from=333.788.videopod.episodes&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7&amp;p=63">Dubbo 异步调用：为什么能提升吞吐（p63）</a></p>
+<h2 id="_1">讨论视角（这期在解决什么）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<ul>
+<li>以“CPU 很闲但线程池耗尽”的线上悖论切入，把问题归因到同步阻塞（IO 等待）对业务线程的占用</li>
+<li>从聚合调用链路出发，解释异步并行对延迟与吞吐的改造：阻塞模型浪费计算资源，非阻塞模型用架构换效率</li>
+<li>给出 Dubbo 异步调用的端到端机制与三大工程陷阱，强调“异步=用内存换吞吐”的代价管理</li>
+</ul>
+<h2 id="_2">核心论点与分论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<h3 id="_3">核心论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<p>在高并发链路中，性能瓶颈往往来自同步阻塞导致业务线程被 IO 等待占满：CPU 利用率不高，但线程池先耗尽，系统无法再接新请求。Dubbo 的异步调用通过非阻塞网络 IO + Future 回调机制，让线程快速释放并并行化下游调用，把“总耗时累加”变成“取决于最慢子调用”，以更少的线程支撑更高吞吐；但异步会引入上下文传递、内存堆积与异常可观测性等新风险，需要配套治理。</p>
+<h3 id="1">分论点 1：同步聚合调用的本质浪费：线程大部分时间在“等”<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<ul>
+<li>典型现象：CPU 占用率不到 20%，但线程池耗尽（线程被 IO 等待占满）</li>
+<li>聚合调用场景：若某个下游服务成为短板（示例：服务 B 耗时 100ms）</li>
+<li>同步模式下，主线程在整个请求生命周期（示例：230ms）中 90%+ 时间处于等待状态</li>
+<li>并发一上来，“无效占用”的线程迅速填满线程池，导致系统拒绝或超时</li>
+</ul>
+<h3 id="2">分论点 2：异步并行的收益：从“累加延迟”变为“取最大值”，吞吐提升<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<ul>
+<li>并行化后，A/B/C 等下游可同时执行</li>
+<li>链路总耗时不再是 A+B+C 的累加，而是取决于最慢的那个子调用</li>
+<li>本质取舍：以并发度换低延迟，以非阻塞换高吞吐（用更少业务线程承载更多请求）</li>
+</ul>
+<h3 id="3dubbo-futuremap-requestid">分论点 3：Dubbo 异步调用在客户端如何落地：非阻塞写 + FutureMap + requestId 关联<a class="headerlink" href="#3dubbo-futuremap-requestid" title="Permanent link">¶</a></h3>
+<ul>
+<li>发送阶段：只做一次 native 非阻塞写入，把数据包写入网卡缓冲区后，业务线程立刻返回继续处理其他任务</li>
+<li>结果承接：框架维护全局 Future Map</li>
+<li>requestId 作为唯一关联键</li>
+<li>发出请求时把对应 Future 挂到 Map 里等待回填</li>
+<li>回包阶段：底层 IO 线程（如 Netty 线程）收到响应后</li>
+<li>通过 requestId 查表定位 Future</li>
+<li>写入结果并触发回调链路，形成“无显式阻塞点”的完成通知</li>
+</ul>
+<h3 id="4io">分论点 4：服务端同样要做线程模型隔离：IO 线程只做收发，耗时任务下沉到业务线程池<a class="headerlink" href="#4io" title="Permanent link">¶</a></h3>
+<ul>
+<li>如果把计算/耗时任务直接跑在核心 IO 线程或有限线程池上，会导致核心线程被长期占用，形成服务端阻塞</li>
+<li>关键做法：收到请求后立刻把耗时任务转移到独立业务线程池</li>
+<li>核心网络线程快速释放</li>
+<li>IO 层吞吐不受业务耗时拖累</li>
+<li>这种分层线程模型是高并发网关/中间件的常见做法</li>
+</ul>
+<h3 id="5">分论点 5：异步三大陷阱：上下文丢失、内存堆积、异常隐身<a class="headerlink" href="#5" title="Permanent link">¶</a></h3>
+<ul>
+<li>上下文丢失：</li>
+<li>异步回调发生在线程切换后，日志链路（traceId）、用户信息等上下文可能丢失</li>
+<li>需要在任务提交前做上下文快照/装饰（context decorate），在回调线程恢复</li>
+<li>内存堆积与 OOM 风险：</li>
+<li>发送端是非阻塞的，若服务端处理不过来，客户端会积压大量 Future</li>
+<li>需要对客户端做并发上限控制（例如信号量限流），避免无限堆积</li>
+<li>异常不可观测：</li>
+<li>异步线程的异常不会自然回到主流程，容易“无日志、难排查”</li>
+<li>在 Future 链路末尾强制补齐异常兜底（exceptionally）并记录关键日志</li>
+</ul>
+<h2 id="_4">关键数据、案例与结论（逐条可复述）<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<ul>
+<li>现象：CPU &lt; 20% 但线程池耗尽（同步阻塞导致 IO 等待占满业务线程）</li>
+<li>案例：聚合调用中服务 B 100ms；同步模式下整体 230ms，主线程 90%+ 时间在等待</li>
+<li>结论：Dubbo 异步调用是一种“用内存缓存并发度”的架构升级</li>
+<li>收益：线程解耦、并行化、吞吐提升、尾延迟由“累加”转为“取最大”</li>
+<li>代价：上下文、内存、异常可观测性必须配套治理</li>
+</ul>
+<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBEdWJibyDlvILmraXosIPnlKjvvJrkuLrku4DkuYjog73mj5DljYflkJ7lkJDvvIhwNjPvvIkKIyMg546w6LGh77yI57q/5LiK5oKW6K6677yJCiMjIyBDUFUg5b6I6Zey77yIPDIwJe+8iQojIyMg57q/56iL5rGg6ICX5bC9IC0+IOezu+e7n+aXoOazleaOpeaWsOivt+axggojIyMg5qC55Zug77ya5ZCM5q2l6Zi75aGe77yISU8g562J5b6F5Y2g5ruh5Lia5Yqh57q/56iL77yJCiMjIOWQjOatpeiBmuWQiOiwg+eUqOeahOmXrumimAojIyMg5LiL5ri455+t5p2/5ouW57Sv5YWo6ZO+6LevCiMjIyDnpLrkvovvvJpCPTEwMG1zCiMjIyDmgLvogJfml7bnpLrkvovvvJoyMzBtcwojIyMg57q/56iLIDkwJSsg5pe26Ze05Zyo562J5b6FIC0+IOaegeWkp+a1qui0uQojIyDlvILmraXlubbooYzluKbmnaXnmoTlj5jljJYKIyMjIEEvQi9DIOW5tuihjOaJp+ihjAojIyMg5oC76ICX5pe277ya5LuO57Sv5YqgIC0+IOWPluacgOaFouWtkOiwg+eUqAojIyMg5pys6LSo77ya5bm25Y+R5bqm5o2i5L2O5bu26L+f77yM6Z2e6Zi75aGe5o2i6auY5ZCe5ZCQCiMjIOWuouaIt+err+WunueOsOacuuWItgojIyMg6Z2e6Zi75aGe5YaZ5YWl77yIbmF0aXZlIHdyaXRlIC0+IOe9keWNoee8k+WGsuWMuu+8iQojIyMgRnV0dXJlTWFw77yI5YWo5bGA5pig5bCE77yJCiMjIyMgcmVxdWVzdElkIOS9nOS4uuWFs+iBlOmUrgojIyMgSU8g57q/56iL5pS25YyFCiMjIyMg5oyJIHJlcXVlc3RJZCDmib7liLAgRnV0dXJlCiMjIyMg5YaZ5YWl57uT5p6cICsg6Kem5Y+R5Zue6LCD6ZO+CiMjIOacjeWKoeerr+iQveWcsAojIyMgSU8g57q/56iL5Y+q5YGa5pS25Y+RCiMjIyDogJfml7bku7vliqHkuIvmsonliLDkuJrliqHnur/nqIvmsaAKIyMjIOWIhuWxgue6v+eoi+aooeWeiyAtPiDkv53mjIHlkJ7lkJAKIyMg5LiJ5aSn6Zm36ZixCiMjIyDkuIrkuIvmlofkuKLlpLEKIyMjIyB0cmFjZUlkL+eUqOaIt+S/oeaBr+S4ouWksSAtPiDpnIDopoEgY29udGV4dCBkZWNvcmF0ZQojIyMg5YaF5a2Y5aCG56evL09PTQojIyMjIEZ1dHVyZSDnp6/ljosgLT4g5a6i5oi356uv5L+h5Y+36YeP6ZmQ5rWBCiMjIyDlvILluLjpmpDouqsKIyMjIyDkuI3lm57liLDkuLvmtYHnqIsgLT4gZXhjZXB0aW9uYWxseSDlhZzlupUgKyDmiZPml6Xlv5cKIyMg57uT6K66CiMjIyDlvILmraUgPSDnlKjlhoXlrZjnvJPlrZjlubblj5HluqbnmoTmnrbmnoTljYfnuqcKIyMjIOW/hemhu+mFjeWll++8muS4iuS4i+aWhy/pmZDmtYEv5byC5bi45Y+v6KeC5rWL5oCn</markmap-data></div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="text/javascript">(function initializeMarkmap() {
+    const transformer = new markmap.Transformer();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
+    const assets = transformer.getAssets();
+    const loading = Promise.all([
+        assets.styles && markmap.loadCSS(assets.styles),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
+    ]);
+
+    function parseData(content) {
+        const { root, frontmatter } = transformer.transform(content);
+        let options = markmap.deriveOptions(frontmatter?.markmap);
+        options = Object.assign(
+            {
+                fitRatio: 0.85,
+            },
+            options
+        );
+        return { root, options };
+    }
+
+    function resetMarkmap(m, el) {
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
+        el.style.height = height + "px";
+        m.fit();
+    }
+
+    function decodeBase64(encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+    }
+
+    function renderMarkmap(el) {
+        const dataEl = el.querySelector("markmap-data");
+        if (!dataEl) return;
+        let content = el.textContent;
+        if (dataEl.getAttribute("encoding") === "base64") {
+            content = decodeBase64(content);
+        }
+        el.innerHTML = "<svg>";
+        svg = el.firstChild;
+        const { root, options } = parseData(content);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
+            resetMarkmap(m, el);
+        });
+    }
+
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll(".mkdocs-markmap")) {
+            renderMarkmap(el);
+        }
+    }
+
+    loading.then(() => {
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === "childList") {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        updateMarkmaps(document);
+    });
+})();
+</script></body>
+</html>

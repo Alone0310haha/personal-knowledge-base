@@ -1,0 +1,747 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/prometheus-tech/%E7%AC%AC%2012%20%E8%AF%BE-%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2%E6%B5%81%E7%A8%8B/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第 12 课：数据查询流程 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#12" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第 12 课：数据查询流程
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 查询链路总览：从请求到结果
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12.1 查询链路总览：从请求到结果">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1211-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1.1 Mermaid 流程图（结构视角）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#122-instant-query-vs-range-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 Instant Query vs Range Query
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12.2 Instant Query vs Range Query">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1221-instant-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2.1 Instant Query（瞬时查询）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1222-range-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2.2 Range Query（范围查询）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 查询引擎在做什么：四步
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#124-storage-head-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.4 Storage 查询：Head + Blocks 怎么一起工作
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#125" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.5 查询结果格式：你需要看懂的最小集合
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#126-http-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.6 实践：用 HTTP API 调试查询
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12.6 实践：用 HTTP API 调试查询">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1261" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.6.1 用浏览器直接请求
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1262" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.6.2 用 “先查标签、再查值” 的排查顺序
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#127" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.7 常见问题与快速定位
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        课后小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="12">第 12 课：数据查询流程<a class="headerlink" href="#12" title="Permanent link">¶</a></h1>
+<p><strong>学习时长</strong>：3-4 小时<br/>
+<strong>难度等级</strong>：⭐⭐⭐ 进阶<br/>
+<strong>先修要求</strong>：完成第 11 课 - 数据写入流程</p>
+<hr/>
+<h2 id="_1">学习目标<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>完成本课程后，你将能够：</p>
+<ul>
+<li>✅ 说清一次 PromQL 查询从 HTTP API 到 TSDB 的完整路径</li>
+<li>✅ 理解 Instant Query 与 Range Query 的区别与使用场景</li>
+<li>✅ 理解查询引擎在做什么：解析 → 计划 → 执行 → 返回</li>
+<li>✅ 理解 Head + Blocks 如何共同参与查询</li>
+<li>✅ 会用 HTTP API 调试查询，并读懂返回结果结构</li>
+</ul>
+<hr/>
+<h2 id="121">12.1 查询链路总览：从请求到结果<a class="headerlink" href="#121" title="Permanent link">¶</a></h2>
+<p>Prometheus 的查询路径可以压缩成：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>HTTP API / Web UI / Grafana
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  ↓
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>PromQL Engine（解析与执行）
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>  ↓
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>Storage（TSDB：Head + Blocks）
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>  ↓
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>结果编码（JSON）→ 返回客户端
+</span></code></pre></div>
+<h3 id="1211-mermaid">12.1.1 Mermaid 流程图（结构视角）<a class="headerlink" href="#1211-mermaid" title="Permanent link">¶</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>flowchart TD
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>  A[用户 / Grafana] --&gt; B[HTTP API&lt;br/&gt;/api/v1/query 或 /api/v1/query_range]
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>  B --&gt; C[PromQL Parser&lt;br/&gt;解析为 AST]
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>  C --&gt; D[PromQL Engine&lt;br/&gt;生成执行计划]
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>  D --&gt; E[Queryable Storage]
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>  E --&gt; F[TSDB Head]
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>  E --&gt; G[TSDB Blocks]
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>  D --&gt; H[执行：选择 series → 取样本 → 函数/聚合]
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a>  H --&gt; I[结果编码为 JSON]
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a>  I --&gt; A
+</span></code></pre></div>
+<hr/>
+<h2 id="122-instant-query-vs-range-query">12.2 Instant Query vs Range Query<a class="headerlink" href="#122-instant-query-vs-range-query" title="Permanent link">¶</a></h2>
+<p>Prometheus 常用两类查询接口：</p>
+<h3 id="1221-instant-query">12.2.1 Instant Query（瞬时查询）<a class="headerlink" href="#1221-instant-query" title="Permanent link">¶</a></h3>
+<ul>
+<li>接口：<code>/api/v1/query</code></li>
+<li>含义：在一个“时间点”上计算表达式的结果</li>
+<li>典型用途：看当前值、看告警条件、看 TopN</li>
+</ul>
+<p>示例：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>GET /api/v1/query?query=up
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>GET /api/v1/query?query=rate(http_requests_total[5m])
+</span></code></pre></div>
+<h3 id="1222-range-query">12.2.2 Range Query（范围查询）<a class="headerlink" href="#1222-range-query" title="Permanent link">¶</a></h3>
+<ul>
+<li>接口：<code>/api/v1/query_range</code></li>
+<li>含义：在一个“时间范围”内按步长（step）反复计算，返回一条曲线（或多条）</li>
+<li>典型用途：画图、看趋势、做区间聚合</li>
+</ul>
+<p>示例：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>GET /api/v1/query_range?query=rate(http_requests_total[5m])&amp;start=...&amp;end=...&amp;step=15s
+</span></code></pre></div>
+<p>你可以把它理解为：</p>
+<ul>
+<li>Instant：算一次</li>
+<li>Range：按 step 算很多次</li>
+</ul>
+<hr/>
+<h2 id="123">12.3 查询引擎在做什么：四步<a class="headerlink" href="#123" title="Permanent link">¶</a></h2>
+<p>一次 PromQL 查询在引擎内大致分四步：</p>
+<p>1) <strong>解析</strong>：把 PromQL 文本解析成 AST（抽象语法树）<br/>
+2) <strong>计划</strong>：确定要从 Storage 拿哪些时间序列、要取什么时间范围<br/>
+3) <strong>执行</strong>：取样本并计算（函数、聚合、二元运算、向量匹配等）<br/>
+4) <strong>返回</strong>：把结果序列化为 JSON 返回</p>
+<p>本课重点不是源码细节，而是抓住两个直觉：</p>
+<ul>
+<li>引擎先“选 series”，再“读样本”</li>
+<li>Range 查询的代价通常更高，因为计算次数更多</li>
+</ul>
+<hr/>
+<h2 id="124-storage-head-blocks">12.4 Storage 查询：Head + Blocks 怎么一起工作<a class="headerlink" href="#124-storage-head-blocks" title="Permanent link">¶</a></h2>
+<p>TSDB 数据分成两部分：</p>
+<ul>
+<li>Head：最新写入的数据（更热）</li>
+<li>Blocks：历史持久化块（更冷）</li>
+</ul>
+<p>查询时 Storage 会把两部分合并成一个“可查询视图”，引擎只关心：</p>
+<ul>
+<li>给我“满足标签条件”的 series</li>
+<li>给我“这些 series 在时间范围内的样本”</li>
+</ul>
+<p>因此常见现象是：</p>
+<ul>
+<li>查最近几分钟：主要命中 Head</li>
+<li>查几小时/几天：会读很多 Blocks，IO 与 CPU 压力更大</li>
+</ul>
+<hr/>
+<h2 id="125">12.5 查询结果格式：你需要看懂的最小集合<a class="headerlink" href="#125" title="Permanent link">¶</a></h2>
+<p>HTTP API 返回是 JSON，结构一般是：</p>
+<ul>
+<li><code>status</code>：success / error</li>
+<li><code>data.resultType</code>：vector / matrix / scalar / string</li>
+<li><code>data.result</code>：结果数据</li>
+</ul>
+<p>最常见两种：</p>
+<ul>
+<li>Instant Query 返回 <code>vector</code>（一组样本点，每条 series 一个点）</li>
+<li>Range Query 返回 <code>matrix</code>（一组时间序列曲线，每条 series 多个点）</li>
+</ul>
+<hr/>
+<h2 id="126-http-api">12.6 实践：用 HTTP API 调试查询<a class="headerlink" href="#126-http-api" title="Permanent link">¶</a></h2>
+<p>目标：不依赖 UI，也能定位“查询为什么慢、为什么为空、为什么标签不对”。</p>
+<h3 id="1261">12.6.1 用浏览器直接请求<a class="headerlink" href="#1261" title="Permanent link">¶</a></h3>
+<p>Instant Query：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>http://localhost:9090/api/v1/query?query=up
+</span></code></pre></div>
+<p>Range Query（示例参数用你自己的时间戳替换）：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>http://localhost:9090/api/v1/query_range?query=up&amp;start=1711944000&amp;end=1711947600&amp;step=15s
+</span></code></pre></div>
+<h3 id="1262">12.6.2 用 “先查标签、再查值” 的排查顺序<a class="headerlink" href="#1262" title="Permanent link">¶</a></h3>
+<p>1) 先查有没有 series：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">=</span><span class="p">"</span><span class="s">prometheus</span><span class="p">"}</span>
+</span></code></pre></div>
+<p>2) 再查有没有值随时间变化：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">prometheus_http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span></code></pre></div>
+<p>3) 最后再写复杂表达式（聚合/子查询/联表）</p>
+<hr/>
+<h2 id="127">12.7 常见问题与快速定位<a class="headerlink" href="#127" title="Permanent link">¶</a></h2>
+<ul>
+<li>查询为空：多半是标签条件不匹配，先用 <code>up</code> 逐步缩小过滤条件</li>
+<li>查询很慢：先缩短时间范围、增大 step、减少高基数维度，再考虑优化表达式</li>
+<li>图表“锯齿/断点”：检查 step 是否太大、数据是否被保留策略删掉、目标是否 intermittent（看 <code>up</code>）</li>
+</ul>
+<hr/>
+<h2 id="_2">课后小结<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>查询链路：HTTP API → PromQL Engine → Storage（Head + Blocks）→ JSON 返回</li>
+<li>Instant 是单点计算，Range 是按 step 多次计算</li>
+<li>引擎先选 series 再读样本，时间范围与基数决定成本</li>
+<li>用 HTTP API 可以快速验证“有没有数据/标签是否正确/表达式是否可执行”</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

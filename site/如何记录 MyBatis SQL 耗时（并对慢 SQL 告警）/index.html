@@ -1,0 +1,460 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="笔记与技术文档分享" name="description"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%A6%82%E4%BD%95%E8%AE%B0%E5%BD%95%20MyBatis%20SQL%20%E8%80%97%E6%97%B6%EF%BC%88%E5%B9%B6%E5%AF%B9%E6%85%A2%20SQL%20%E5%91%8A%E8%AD%A6%EF%BC%89/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>如何记录 MyBatis SQL 耗时（并对慢 SQL 告警） - Alone的知识库</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../js/unpkg.com/d3@7.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-lib@0.18.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-view@0.18.js" type="text/javascript"></script><style type="text/css">div.mkdocs-markmap {
+    width: 100%;
+    min-height: 1em;
+    border: 1px solid grey;
+}
+.mkdocs-markmap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#mybatis-sql-sql">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="Alone的知识库" class="md-header__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Alone的知识库
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              如何记录 MyBatis SQL 耗时（并对慢 SQL 告警）
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Alone的知识库" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Alone的知识库
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+<span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        讨论视角（这期在解决什么）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-sql">
+<span class="md-ellipsis">
+      
+        分论点 1：现有日志只能看到 SQL/参数/返回量，看不到“用时”
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2mybatis-spring-boot">
+<span class="md-ellipsis">
+      
+        分论点 2：MyBatis 插件在 Spring Boot 下的声明与注册方式
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-mybatis">
+<span class="md-ellipsis">
+      
+        分论点 3：插件只能增强 MyBatis 的“四大核心类”
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4queryupdate">
+<span class="md-ellipsis">
+      
+        分论点 4：耗时统计的拦截点选择：query/update
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5invocationproceed">
+<span class="md-ellipsis">
+      
+        分论点 5：实现逻辑：invocation.proceed 前后打点 + 可选告警
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        关键数据、案例与结论（逐条可复述）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（markmap）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="mybatis-sql-sql">如何记录 MyBatis SQL 耗时（并对慢 SQL 告警）<a class="headerlink" href="#mybatis-sql-sql" title="Permanent link">¶</a></h1>
+<p><a href="https://www.bilibili.com/video/BV1qb6EB2EGi?spm_id_from=333.788.videopod.episodes&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7&amp;p=42">如何记录 MyBatis SQL 耗时（并对慢 SQL 告警）</a></p>
+<h2 id="_1">讨论视角（这期在解决什么）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<ul>
+<li>以“如何优雅记录 MyBatis SQL 耗时，并对超时 SQL 告警”作为目标，强调仅靠日志打印 SQL/参数并不能得到耗时</li>
+<li>从 MyBatis 插件（Interceptor）机制切入：通过拦截底层核心组件的方法，在执行前后埋点统计耗时</li>
+<li>用“只能拦截四大核心组件”作为边界条件，指导如何选对拦截点（记录耗时优先拦截 StatementHandler）</li>
+</ul>
+<h2 id="_2">核心论点与分论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<h3 id="_3">核心论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<p>记录 MyBatis 每条 SQL 的耗时，最直接的工程做法是写一个 MyBatis 插件：实现 <code>Interceptor</code>，用 <code>@Intercepts/@Signature</code> 指定拦截 <code>StatementHandler.query(...)</code>（以及需要的话 <code>update(...)</code>），在 <code>invocation.proceed()</code> 前后记录时间差，并输出 SQL 与耗时；当耗时超过阈值时触发告警，从而在业务侧快速发现慢 SQL 并推动数据库优化。</p>
+<h3 id="1-sql">分论点 1：现有日志只能看到 SQL/参数/返回量，看不到“用时”<a class="headerlink" href="#1-sql" title="Permanent link">¶</a></h3>
+<ul>
+<li>常规做法：整合 MyBatis（或 MyBatis-Plus）日志后，可以在日志里看到执行的 SQL、参数、返回条数</li>
+<li>痛点：日志不会默认输出“这一条 SQL 执行了多久”</li>
+</ul>
+<h3 id="2mybatis-spring-boot">分论点 2：MyBatis 插件在 Spring Boot 下的声明与注册方式<a class="headerlink" href="#2mybatis-spring-boot" title="Permanent link">¶</a></h3>
+<ul>
+<li>在 Spring Boot 中：</li>
+<li>新建一个类实现 <code>Interceptor</code></li>
+<li>重写拦截方法（<code>intercept</code> 等）</li>
+<li>标记为 Spring 组件（例如 <code>@Component</code>），让其自动注册到 MyBatis 插件链</li>
+</ul>
+<h3 id="3-mybatis">分论点 3：插件只能增强 MyBatis 的“四大核心类”<a class="headerlink" href="#3-mybatis" title="Permanent link">¶</a></h3>
+<p>视频列举的可拦截点（四大核心组件）：</p>
+<ul>
+<li>Executor：执行数据库操作前的第一道入口，会先处理一级/二级缓存相关逻辑</li>
+<li>StatementHandler：真正执行 JDBC 语句的组件（执行 SQL 的关键位置）</li>
+<li>ParameterHandler：负责设置 SQL 参数（可用于参数修正/过滤敏感内容等）</li>
+<li>ResultSetHandler：负责处理查询结果（可用于结果加工）</li>
+</ul>
+<p>结论：要统计 SQL 执行耗时，首选拦截 <code>StatementHandler</code>。</p>
+<h3 id="4queryupdate">分论点 4：耗时统计的拦截点选择：query/update<a class="headerlink" href="#4queryupdate" title="Permanent link">¶</a></h3>
+<ul>
+<li>查询耗时：拦截 <code>StatementHandler.query(...)</code></li>
+<li>需要在 <code>@Signature</code> 里写清方法名与参数类型（即使没有重载也建议完整指定）</li>
+<li>增删改耗时：拦截 <code>StatementHandler.update(...)</code></li>
+<li>视频说明：增删改走 <code>update</code> 方法；如需统计也可追加一个 <code>@Signature</code></li>
+<li>视频侧重：通常慢 SQL 更常出现在查询，因此演示以 query 为主</li>
+</ul>
+<h3 id="5invocationproceed">分论点 5：实现逻辑：invocation.proceed 前后打点 + 可选告警<a class="headerlink" href="#5invocationproceed" title="Permanent link">¶</a></h3>
+<p>典型实现步骤（视频口径）：</p>
+<ul>
+<li>记录开始时间 <code>start</code></li>
+<li>通过 <code>invocation.getTarget()</code> 拿到被增强的 <code>StatementHandler</code></li>
+<li>从 <code>statementHandler.getBoundSql()</code> 拿到 <code>BoundSql</code>，再 <code>getSql()</code> 获取目标 SQL 文本</li>
+<li>调用 <code>invocation.proceed()</code> 执行真实数据库操作</li>
+<li>执行结束记录 <code>end</code>，计算耗时 <code>cost = end - start</code></li>
+<li>输出：SQL + cost（以及必要的上下文信息）</li>
+<li>告警扩展：如果 <code>cost &gt; threshold</code>，发送告警（视频提到但未展开实现）</li>
+</ul>
+<h2 id="_4">关键数据、案例与结论（逐条可复述）<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<ul>
+<li>核心组件范围：插件只允许增强 Executor / StatementHandler / ParameterHandler / ResultSetHandler</li>
+<li>关键方法：</li>
+<li>查询：<code>StatementHandler.query(...)</code></li>
+<li>增删改：<code>StatementHandler.update(...)</code></li>
+<li>输出目标：每条 SQL 的执行耗时；超阈值触发告警，提示需要优化 MySQL</li>
+</ul>
+<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyDlpoLkvZXorrDlvZUgTXlCYXRpcyBTUUwg6ICX5pe277yI5bm25a+55oWiIFNRTCDlkYrorabvvIkKIyMg55uu5qCHCiMjIyDorrDlvZXmr4/mnaEgU1FMIOeahOaJp+ihjOiAl+aXtgojIyMg6LaF6ZiI5YC85Y+R6YCB5ZGK6K2mIC0+IOaOqOWKqCBNeVNRTCDkvJjljJYKIyMg55eb54K5CiMjIyDku4XphY3nva7ml6Xlv5fvvJrog73nnIvliLAgU1FML+WPguaVsC/ov5Tlm57ph48KIyMjIOS9hueci+S4jeWIsOiAl+aXtgojIyDmlrnmoYjvvJpNeUJhdGlzIOaPkuS7tiBJbnRlcmNlcHRvcgojIyMgU3ByaW5nIEJvb3Qg5LiL5aOw5piOCiMjIyMg5a6e546wIEludGVyY2VwdG9yCiMjIyMgQENvbXBvbmVudCDoh6rliqjms6jlhozliLDmj5Lku7bpk74KIyMjIOWPquiDveaLpuaIquWbm+Wkp+aguOW/g+exuwojIyMjIEV4ZWN1dG9y77yI57yT5a2YL+aJp+ihjOWFpeWPo++8iQojIyMjIFN0YXRlbWVudEhhbmRsZXLvvIjmiafooYwgU1FMIOeahOWFs+mUrueCue+8iQojIyMjIFBhcmFtZXRlckhhbmRsZXLvvIjorr7nva7lj4LmlbDvvIzlj6/lgZrohLHmlY8v5L+u5q2j77yJCiMjIyMgUmVzdWx0U2V0SGFuZGxlcu+8iOWkhOeQhue7k+aenO+8jOWPr+WBmue7k+aenOWKoOW3pe+8iQojIyDmi6bmiKrngrnpgInmi6kKIyMjIOe7n+iuoeafpeivouiAl+aXtu+8mlN0YXRlbWVudEhhbmRsZXIucXVlcnkoLi4uKQojIyMg57uf6K6h5aKe5Yig5pS56ICX5pe277yaU3RhdGVtZW50SGFuZGxlci51cGRhdGUoLi4uKQojIyMgQEludGVyY2VwdHMvQFNpZ25hdHVyZSDmjIflrprmlrnms5XlkI0gKyDlj4LmlbDnsbvlnosKIyMg57uf6K6h6YC76L6RCiMjIyBzdGFydCA9IG5vdwojIyMgdGFyZ2V0ID0gaW52b2NhdGlvbi5nZXRUYXJnZXQoKQojIyMgc3FsID0gdGFyZ2V0LmdldEJvdW5kU3FsKCkuZ2V0U3FsKCkKIyMjIGludm9jYXRpb24ucHJvY2VlZCgpCiMjIyBjb3N0ID0gZW5kIC0gc3RhcnQKIyMjIGxvZyhzcWwsIGNvc3QpCiMjIyBpZiBjb3N0ID4gdGhyZXNob2xkIC0+IOWRiuitpg==</markmap-data></div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="text/javascript">(function initializeMarkmap() {
+    const transformer = new markmap.Transformer();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
+    const assets = transformer.getAssets();
+    const loading = Promise.all([
+        assets.styles && markmap.loadCSS(assets.styles),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
+    ]);
+
+    function parseData(content) {
+        const { root, frontmatter } = transformer.transform(content);
+        let options = markmap.deriveOptions(frontmatter?.markmap);
+        options = Object.assign(
+            {
+                fitRatio: 0.85,
+            },
+            options
+        );
+        return { root, options };
+    }
+
+    function resetMarkmap(m, el) {
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
+        el.style.height = height + "px";
+        m.fit();
+    }
+
+    function decodeBase64(encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+    }
+
+    function renderMarkmap(el) {
+        const dataEl = el.querySelector("markmap-data");
+        if (!dataEl) return;
+        let content = el.textContent;
+        if (dataEl.getAttribute("encoding") === "base64") {
+            content = decodeBase64(content);
+        }
+        el.innerHTML = "<svg>";
+        svg = el.firstChild;
+        const { root, options } = parseData(content);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
+            resetMarkmap(m, el);
+        });
+    }
+
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll(".mkdocs-markmap")) {
+            renderMarkmap(el);
+        }
+    }
+
+    loading.then(() => {
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === "childList") {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        updateMarkmaps(document);
+    });
+})();
+</script></body>
+</html>

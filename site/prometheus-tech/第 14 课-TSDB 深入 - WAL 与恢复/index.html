@@ -1,0 +1,766 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/prometheus-tech/%E7%AC%AC%2014%20%E8%AF%BE-TSDB%20%E6%B7%B1%E5%85%A5%20-%20WAL%20%E4%B8%8E%E6%81%A2%E5%A4%8D/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第 14 课：TSDB 深入 - WAL 与恢复 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#14-tsdb-wal" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第 14 课：TSDB 深入 - WAL 与恢复
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#141-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 WAL 是什么，解决什么问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#142-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 WAL 在写入链路中的位置
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#143-wal-segment-page-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 WAL 存储形态：Segment / Page / Record
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#144-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4 记录（Record）里通常有什么
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#145-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.5 写入 WAL：为什么追加写很快
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#146-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.6 回放 WAL：重启时为什么会慢
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#147-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7 Checkpoint：为什么需要它
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#148-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.8 WAL 截断与清理：什么时候会发生
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#149-wal-corruption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.9 WAL 损坏（Corruption）与修复思路
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1410-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.10 实践：用文件与页面观察 WAL 行为
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1411-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.11 源码阅读建议（按 WAL 最小闭环）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        课后小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="14-tsdb-wal">第 14 课：TSDB 深入 - WAL 与恢复<a class="headerlink" href="#14-tsdb-wal" title="Permanent link">¶</a></h1>
+<p><strong>学习时长</strong>：3-4 小时<br/>
+<strong>难度等级</strong>：⭐⭐⭐⭐ 深入<br/>
+<strong>先修要求</strong>：完成第 13 课 - TSDB 深入 - Head Block</p>
+<hr/>
+<h2 id="_1">学习目标<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>完成本课程后，你将能够：</p>
+<ul>
+<li>✅ 说清 WAL（Write-Ahead Log）在 TSDB 中的作用：可恢复、追加写、顺序 IO</li>
+<li>✅ 了解 WAL 的基本存储形态：分段（segment）+ 分页（page）+ 记录（record）</li>
+<li>✅ 理解“写入 WAL”和“回放 WAL”分别在做什么</li>
+<li>✅ 理解 Checkpoint 的意义：加速恢复 + 允许截断旧 WAL</li>
+<li>✅ 能用现象定位问题：WAL 过大、恢复慢、WAL 损坏与修复</li>
+</ul>
+<hr/>
+<h2 id="141-wal">14.1 WAL 是什么，解决什么问题<a class="headerlink" href="#141-wal" title="Permanent link">¶</a></h2>
+<p>Head 在内存里，进程崩溃会丢内存状态。WAL 的目标就是：</p>
+<ul>
+<li>写入时把关键变更追加到磁盘</li>
+<li>重启时按写入顺序回放，恢复 Head</li>
+</ul>
+<p>一句话总结：</p>
+<blockquote>
+<p>WAL 是 Head 的“操作记录”，确保崩溃后能把 Head 还原出来。</p>
+</blockquote>
+<hr/>
+<h2 id="142-wal">14.2 WAL 在写入链路中的位置<a class="headerlink" href="#142-wal" title="Permanent link">¶</a></h2>
+<p>写入时，样本会进入 Head，同时把变更写入 WAL：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>flowchart TD
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  A[Scrape/Remote Write input] --&gt; B[Appender]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  B --&gt; C[Head]
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>  C --&gt; D[更新 series / chunks / index]
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>  C --&gt; E[WAL 追加写]
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>  D --&gt; F[可查询的最新数据]
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>  E --&gt; G[可恢复的写入记录]
+</span></code></pre></div>
+<p>你只需要记住一个直觉：</p>
+<ul>
+<li>Head 负责“可查”</li>
+<li>WAL 负责“可恢复”</li>
+</ul>
+<hr/>
+<h2 id="143-wal-segment-page-record">14.3 WAL 存储形态：Segment / Page / Record<a class="headerlink" href="#143-wal-segment-page-record" title="Permanent link">¶</a></h2>
+<p>Prometheus 的 WAL 不是一个大文件，而是一组分段文件：</p>
+<ul>
+<li>每个段文件叫一个 <strong>segment</strong></li>
+<li>segment 文件名是数字（例如 <code>00000000</code>、<code>00000001</code>）</li>
+<li>默认单个 segment 大小上限是 128MB</li>
+</ul>
+<p>为了让写入更稳定，segment 内部按固定大小写入：</p>
+<ul>
+<li><strong>page</strong>：32KB</li>
+<li><strong>record</strong>：写入的逻辑记录（比如 series、samples、tombstones 等）</li>
+</ul>
+<p>两个关键点：</p>
+<ul>
+<li>record 可能跨 page（必要时会拆分）</li>
+<li>record 不会跨 segment（便于安全截断旧 segment）</li>
+</ul>
+<hr/>
+<h2 id="144-record">14.4 记录（Record）里通常有什么<a class="headerlink" href="#144-record" title="Permanent link">¶</a></h2>
+<p>WAL 里记录的不是“文本指标”，而是 TSDB 的内部增量信息，常见类型包括：</p>
+<ul>
+<li>Series：某个 series 的定义（labels + seriesID）</li>
+<li>Samples：某些 series 的样本点</li>
+<li>Tombstones：删除标记（逻辑删除）</li>
+<li>Exemplars：样本的 exemplar（如果启用）</li>
+<li>Metadata：指标元数据（如果启用）</li>
+<li>HistogramSamples / FloatHistogramSamples：直方图相关样本（版本相关）</li>
+</ul>
+<p>直觉理解：</p>
+<ul>
+<li>Series 先把“名字和身份”写清楚</li>
+<li>Samples 再把“这个身份的值”写进去</li>
+</ul>
+<hr/>
+<h2 id="145-wal">14.5 写入 WAL：为什么追加写很快<a class="headerlink" href="#145-wal" title="Permanent link">¶</a></h2>
+<p>WAL 的写入基本是顺序追加：</p>
+<ul>
+<li>不做随机写</li>
+<li>主要是 append + 周期性 fsync</li>
+<li>减少磁盘寻道与碎片化</li>
+</ul>
+<p>因此 WAL 写入通常很快，瓶颈更多来自：</p>
+<ul>
+<li>磁盘 IO 很差（或同盘有重负载）</li>
+<li>写入量过大（抓取目标太多、样本太多）</li>
+<li>高基数导致 series 创建/索引更新开销大</li>
+</ul>
+<hr/>
+<h2 id="146-wal">14.6 回放 WAL：重启时为什么会慢<a class="headerlink" href="#146-wal" title="Permanent link">¶</a></h2>
+<p>Prometheus 重启时，需要把 Head 恢复出来。直觉流程是：</p>
+<p>1) 找到“最新的 checkpoint”（如果存在）
+2) 从 checkpoint 开始读取记录
+3) 再读取 checkpoint 之后的 wal segments
+4) 按顺序解码 record，并应用到 Head（创建 series、追加样本、应用 tombstones 等）</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>sequenceDiagram
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>  autonumber
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>  participant P as Prometheus 启动
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>  participant CP as Checkpoint
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>  participant WAL as WAL Segments
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>  participant H as Head
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>  P-&gt;&gt;CP: 找到最新 checkpoint.N（可选）
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a>  CP--&gt;&gt;P: checkpoint 记录流（可选）
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a>  P-&gt;&gt;WAL: 读取 checkpoint 之后的 segments
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a>  WAL--&gt;&gt;P: WAL 记录流
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a>  P-&gt;&gt;H: 按顺序应用记录（series/samples/...)
+</span><span id="__span-1-13"><a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a>  H--&gt;&gt;P: Head 恢复完成
+</span></code></pre></div>
+<p>恢复慢的常见原因：</p>
+<ul>
+<li>WAL 太大（写入量大或截断不及时）</li>
+<li>高基数（series 多，索引构建耗时）</li>
+<li>磁盘 IO 差（读取与解码慢）</li>
+</ul>
+<hr/>
+<h2 id="147-checkpoint">14.7 Checkpoint：为什么需要它<a class="headerlink" href="#147-checkpoint" title="Permanent link">¶</a></h2>
+<p>如果每次重启都从第一个 wal segment 开始回放，WAL 越积越大，启动就会越来越慢。</p>
+<p>Checkpoint 的目标是：</p>
+<ul>
+<li>把一段旧 WAL 压缩成一个更“短”的可回放版本</li>
+<li>让系统可以安全地截断旧 segment</li>
+</ul>
+<p>Checkpoint 的形态：</p>
+<ul>
+<li>存在 WAL 目录下的 <code>checkpoint.N/</code> 目录（N 是一个整数）</li>
+<li>内部也按 WAL 的分段格式存储，便于统一用同一套 Reader 读取</li>
+</ul>
+<p>Checkpoint 的生成、筛选与截断策略细节较多，单独整理在文档中：</p>
+<ul>
+<li><a href="../%E7%AC%AC%2014.7%20%E8%AF%BE-TSDB%20%E6%B7%B1%E5%85%A5%20-%20Checkpoint%20%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/">第 14.7 课-TSDB 深入 - Checkpoint 机制详解</a></li>
+</ul>
+<hr/>
+<h2 id="148-wal">14.8 WAL 截断与清理：什么时候会发生<a class="headerlink" href="#148-wal" title="Permanent link">¶</a></h2>
+<p>Prometheus 会在后台周期性做：</p>
+<ul>
+<li>创建 checkpoint（覆盖一段旧 WAL）</li>
+<li>截断旧 segment（删除或跳过不再需要的段）</li>
+<li>删除更老的 checkpoint（保留最新即可）</li>
+</ul>
+<p>直觉判断：</p>
+<ul>
+<li>有 checkpoint：说明系统在“整理旧 WAL”</li>
+<li>WAL 段数量持续增加且不减少：说明“整理跟不上写入”或受限于某些条件</li>
+</ul>
+<hr/>
+<h2 id="149-wal-corruption">14.9 WAL 损坏（Corruption）与修复思路<a class="headerlink" href="#149-wal-corruption" title="Permanent link">¶</a></h2>
+<p>WAL 是磁盘文件，极端情况下会出现损坏或“撕裂写”（例如断电、磁盘故障）。</p>
+<p>Prometheus 的基本策略是：</p>
+<ul>
+<li>检测到损坏后，报告损坏位置（segment + offset）</li>
+<li>通过 repair 丢弃损坏点之后的数据，保证后续可继续写入</li>
+</ul>
+<p>直觉理解：</p>
+<blockquote>
+<p>修复的代价是“丢掉损坏点之后的那段最新数据”，换取“系统能重新启动并继续工作”。</p>
+</blockquote>
+<hr/>
+<h2 id="1410-wal">14.10 实践：用文件与页面观察 WAL 行为<a class="headerlink" href="#1410-wal" title="Permanent link">¶</a></h2>
+<p>目标：把抽象概念和 <code>data/wal/</code> 目录对应起来。</p>
+<p>1) 运行一段时间让 Prometheus 持续写入<br/>
+2) 观察 <code>data/wal/</code> 目录：是否出现递增的 segment 文件（数字文件名）<br/>
+3) 观察是否出现 <code>checkpoint.N/</code> 目录<br/>
+4) 重启 Prometheus，观察启动时是否提示 WAL replay / checkpoint 相关日志（不同版本日志略有差异）</p>
+<p>如果你发现重启变慢，可以用这条主线排查：</p>
+<ul>
+<li>是否 WAL 段很多/很大</li>
+<li>是否 <code>prometheus_tsdb_head_series</code> 很高（高基数）</li>
+<li>磁盘 IO 是否有明显瓶颈</li>
+</ul>
+<hr/>
+<h2 id="1411-wal">14.11 源码阅读建议（按 WAL 最小闭环）<a class="headerlink" href="#1411-wal" title="Permanent link">¶</a></h2>
+<p>建议按“写入 → checkpoint → 回放 → 修复”的顺序读：</p>
+<p>1) <code>tsdb/wlog/wlog.go</code>：WAL 写入、segment/page 组织、Repair<br/>
+2) <code>tsdb/wlog/reader.go</code>：WAL 读取与迭代<br/>
+3) <code>tsdb/wlog/checkpoint.go</code>：checkpoint 的生成与清理<br/>
+4) <code>tsdb/head_wal.go</code>：把 record 应用到 Head（回放逻辑）<br/>
+5) <code>tsdb/head.go</code>：WAL 截断逻辑（checkpoint + truncate）  </p>
+<hr/>
+<h2 id="_2">课后小结<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>WAL 是 Head 的“可恢复写入记录”，核心价值是崩溃恢复</li>
+<li>WAL 以 segment 组织，内部用 page 批量写，record 表达 TSDB 内部增量</li>
+<li>Checkpoint 用来缩短回放链路，并支持截断旧 WAL</li>
+<li>恢复慢通常是 WAL 大、基数高、磁盘慢；损坏修复通常意味着丢最新一段数据</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
