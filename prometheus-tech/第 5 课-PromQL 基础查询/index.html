@@ -1,0 +1,2176 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/prometheus-tech/%E7%AC%AC%205%20%E8%AF%BE-PromQL%20%E5%9F%BA%E7%A1%80%E6%9F%A5%E8%AF%A2/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第 5 课：PromQL 基础查询 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#5-promql" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第 5 课：PromQL 基础查询
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#51-promql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 PromQL 简介
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.1 PromQL 简介">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#511-promql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.1 什么是 PromQL？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#512-promql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.2 PromQL 的查询场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 核心概念：即时向量 vs 范围向量
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 核心概念：即时向量 vs 范围向量">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#521-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.1 什么是向量（Vector）？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5211" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.1.1 指标、时间序列与向量的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#522-instant-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.2 即时向量（Instant Vector）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#523-range-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.3 范围向量（Range Vector）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#524-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.4 即时向量 vs 范围向量 对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#525" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.5 重要规则
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 基本查询语法
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3 基本查询语法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#531" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.1 查询所有时间序列
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#532" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.2 标签过滤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#533" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.3 标签匹配操作符
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3.3 标签匹配操作符">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 等于匹配（=）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 不等于匹配（!=）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 正则匹配（=~）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 正则不匹配（!~）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#534" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.4 时间范围选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 聚合操作
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.4 聚合操作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#541" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.1 什么是聚合？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#542" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.2 聚合语法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#543" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.3 常用聚合函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#544" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.4 按标签分组聚合
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#545" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.5 聚合实战示例
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 实践环节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.5 实践环节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-expression-browser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实践 5.1：使用 Expression Browser 基础查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-vs_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实践 5.2：即时向量 vs 范围向量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实践 5.3：标签过滤练习
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实践 5.4：聚合操作练习
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实践 5.5：综合查询练习
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#56" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 查询优化技巧
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.6 查询优化技巧">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#561" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.1 使用标签索引加速
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#562" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.2 避免高基数查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#563" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.3 选择合适的时间范围
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#564" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.4 使用记录规则预计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#57" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7 常见问题与排查
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.7 常见问题与排查">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#571" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.1 查询无结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#572" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.2 查询过慢
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#573" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.3 范围向量使用错误
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#58" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.8 最佳实践
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.8 最佳实践">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#581" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.8.1 查询命名规范
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#582" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.8.2 查询结构优化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#583" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.8.3 避免的查询模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#59" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.9 知识检查
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.9 知识检查">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        选择题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        简答题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实操题
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#510" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.10 延伸阅读
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.10 延伸阅读">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        必读
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        选读
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        工具
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#511" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.11 下节预告
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="5-promql">第 5 课：PromQL 基础查询<a class="headerlink" href="#5-promql" title="Permanent link">¶</a></h1>
+<p><strong>学习时长</strong>：3-4 小时<br/>
+<strong>难度等级</strong>：⭐⭐ 基础<br/>
+<strong>先修要求</strong>：完成第 4 课 - 时间序列数据模型</p>
+<hr/>
+<h2 id="_1">学习目标<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>完成本课程后，你将能够：</p>
+<ul>
+<li>✅ 理解即时向量（Instant Vector）和范围向量（Range Vector）的区别</li>
+<li>✅ 掌握 PromQL 的基本查询语法</li>
+<li>✅ 熟练使用标签匹配操作符进行过滤</li>
+<li>✅ 使用聚合操作对数据进行分组统计</li>
+<li>✅ 在 Expression Browser 中执行各种基础查询</li>
+<li>✅ 设计合理的查询表达式解决实际问题</li>
+</ul>
+<hr/>
+<h2 id="51-promql">5.1 PromQL 简介<a class="headerlink" href="#51-promql" title="Permanent link">¶</a></h2>
+<h3 id="511-promql">5.1.1 什么是 PromQL？<a class="headerlink" href="#511-promql" title="Permanent link">¶</a></h3>
+<p><strong>PromQL</strong>（Prometheus Query Language）是 Prometheus 的查询语言，用于：</p>
+<ul>
+<li>📊 **查询和展示**时间序列数据</li>
+<li>🔍 **过滤和聚合**指标</li>
+<li>📈 **计算速率、趋势**等派生指标</li>
+<li>🚨 **告警规则**的条件表达式</li>
+<li>📉 **Grafana 仪表盘**的数据源</li>
+</ul>
+<p><strong>类比理解</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>数据库</th>
+<th>查询语言</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MySQL</td>
+<td>SQL</td>
+<td>查询关系型数据</td>
+</tr>
+<tr>
+<td>Elasticsearch</td>
+<td>DSL</td>
+<td>查询文档数据</td>
+</tr>
+<tr>
+<td><strong>Prometheus</strong></td>
+<td><strong>PromQL</strong></td>
+<td><strong>查询时间序列数据</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="512-promql">5.1.2 PromQL 的查询场景<a class="headerlink" href="#512-promql" title="Permanent link">¶</a></h3>
+<p><strong>场景 1：即时查询（当前状态）</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1"># 当前的 CPU 使用率</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nv">node_cpu_seconds_total</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1"># 当前的内存使用量</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nv">node_memory_MemUsed_bytes</span>
+</span></code></pre></div>
+<p><strong>场景 2：历史趋势（过去一段时间）</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1"># 过去 5 分钟的请求速率</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="c1"># 过去 1 小时的错误增长数</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="kr">increase</span><span class="o">(</span><span class="nv">http_errors_total</span><span class="p">[</span><span class="s">1h</span><span class="p">]</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>场景 3：聚合统计（全局视图）</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># 所有实例的总请求数</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="k">sum</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="c1"># 每个服务的平均延迟</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="k">avg</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">http_request_duration_seconds</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>场景 4：告警判断</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># CPU 使用率超过 80%</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nv">node_cpu_seconds_total</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.8</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="c1"># 错误率超过 5%</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_errors_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.05</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="52-vs">5.2 核心概念：即时向量 vs 范围向量<a class="headerlink" href="#52-vs" title="Permanent link">¶</a></h2>
+<p>理解这两种向量是掌握 PromQL 的**关键基础**！</p>
+<h3 id="521-vector">5.2.1 什么是向量（Vector）？<a class="headerlink" href="#521-vector" title="Permanent link">¶</a></h3>
+<p>在 PromQL 中，**向量**是"一组时间序列"的集合。</p>
+<p><strong>类比理解</strong>：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>单个时间序列 = 一条记录
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>向量 = 多条记录的集合
+</span></code></pre></div>
+<p><strong>示例</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1"># 单个时间序列</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span>
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="c1"># 向量（多个时间序列）</span>
+</span><span id="__span-5-5"><a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="nv">http_requests_total</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="err">包含所有</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="err">和</span><span class="w"> </span><span class="nv">service</span><span class="w"> </span><span class="err">的组合</span>
+</span></code></pre></div>
+<hr/>
+<h3 id="5211">5.2.1.1 指标、时间序列与向量的关系<a class="headerlink" href="#5211" title="Permanent link">¶</a></h3>
+<p><strong>常见问题</strong>：指标和向量是什么关系？</p>
+<p><strong>三者关系图</strong>：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a>指标（Metric）
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>    ↓ 通过标签实例化
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a>时间序列（Time Series）
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>    ↓ 多个时间序列组成
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a>向量（Vector）
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a>    ↓ PromQL 查询返回
+</span><span id="__span-6-7"><a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a>结果集
+</span></code></pre></div>
+<p><strong>详细解释</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>含义</th>
+<th>例子</th>
+<th>返回结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>指标</strong></td>
+<td>逻辑概念，一类数据</td>
+<td><code>http_requests_total</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>时间序列</strong></td>
+<td>具体实例，带标签</td>
+<td><code>http_requests_total{method="POST"}</code></td>
+<td>单个序列</td>
+</tr>
+<tr>
+<td><strong>向量</strong></td>
+<td>多个时间序列的集合</td>
+<td><code>http_requests_total</code></td>
+<td>多个序列</td>
+</tr>
+</tbody>
+</table>
+<p><strong>类比理解</strong>：</p>
+<p><strong>类比 1：Excel 表格</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>指标 = 表格的名称（如"销售记录表"）
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>向量 = 查询结果（可以是一行、多行或全部数据）
+</span></code></pre></div></p>
+<p><strong>类比 2：图书馆</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a>指标 = 一本书的名称（如"哈利波特"）
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>向量 = 图书馆里这本书的所有副本集合
+</span></code></pre></div></p>
+<p><strong>具体示例</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="c1"># 指标：http_requests_total</span>
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="c1"># 包含以下时间序列：</span>
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span>
+</span><span id="__span-9-4"><a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span>
+</span><span id="__span-9-5"><a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">order-service</span><span class="p">"}</span>
+</span><span id="__span-9-6"><a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">order-service</span><span class="p">"}</span>
+</span><span id="__span-9-7"><a href="#__codelineno-9-7" id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="c1"># 这些时间序列的集合 = 向量</span>
+</span></code></pre></div>
+<p><strong>在 PromQL 查询中的体现</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="c1"># 查询指标 http_requests_total</span>
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="nv">http_requests_total</span>
+</span><span id="__span-10-3"><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="c1"># 实际返回的是一个向量（多个时间序列）：</span>
+</span><span id="__span-10-5"><a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="p">[</span>
+</span><span id="__span-10-6"><a href="#__codelineno-10-6" id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">  </span><span class="p">{</span><span class="nl">__name__</span><span class="o">=</span><span class="p">"</span><span class="s">http_requests_total</span><span class="p">",</span><span class="w"> </span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">",</span><span class="w"> </span><span class="err">...</span><span class="p">},</span>
+</span><span id="__span-10-7"><a href="#__codelineno-10-7" id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">  </span><span class="p">{</span><span class="nl">__name__</span><span class="o">=</span><span class="p">"</span><span class="s">http_requests_total</span><span class="p">",</span><span class="w"> </span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">",</span><span class="w"> </span><span class="err">...</span><span class="p">},</span>
+</span><span id="__span-10-8"><a href="#__codelineno-10-8" id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">  </span><span class="p">{</span><span class="nl">__name__</span><span class="o">=</span><span class="p">"</span><span class="s">http_requests_total</span><span class="p">",</span><span class="w"> </span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">order-service</span><span class="p">",</span><span class="w"> </span><span class="err">...</span><span class="p">},</span>
+</span><span id="__span-10-9"><a href="#__codelineno-10-9" id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="w">  </span><span class="err">...</span>
+</span><span id="__span-10-10"><a href="#__codelineno-10-10" id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="err">]</span>
+</span></code></pre></div>
+<p><strong>关键要点</strong>：</p>
+<ol>
+<li><strong>指标是"类名"</strong>：<code>http_requests_total</code> 是一个逻辑概念</li>
+<li><strong>时间序列是"对象实例"</strong>：<code>http_requests_total{method="POST"}</code> 是具体实例</li>
+<li><strong>向量是"对象集合"</strong>：查询 <code>http_requests_total</code> 返回的所有时间序列</li>
+<li><strong>所有 PromQL 查询的结果都是向量</strong>（可能包含 0 个、1 个或多个时间序列）</li>
+</ol>
+<p><strong>为什么需要向量这个概念？</strong></p>
+<p><strong>原因 1：批量操作</strong>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="c1"># 可以对整个向量进行操作</span>
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="err">一次性计算所有时间序列的速率</span>
+</span><span id="__span-11-3"><a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="c1"># 而不是逐个处理</span>
+</span><span id="__span-11-5"><a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-11-6"><a href="#__codelineno-11-6" id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-11-7"><a href="#__codelineno-11-7" id="__codelineno-11-7" name="__codelineno-11-7"></a><span class="err">...</span>
+</span></code></pre></div></p>
+<p><strong>原因 2：聚合运算</strong>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="c1"># 可以对向量进行聚合</span>
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">method</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span><span id="__span-12-3"><a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="c1"># 按 method 标签将向量中的多个时间序列合并为更少的时间序列</span>
+</span></code></pre></div></p>
+<p><strong>原因 3：向量匹配</strong>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="c1"># 两个向量可以进行运算</span>
+</span><span id="__span-13-2"><a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=</span><span class="p">"</span><span class="s">200</span><span class="p">"}</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">http_requests_total</span>
+</span><span id="__span-13-3"><a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="c1"># 左边向量除以右边向量（自动按标签匹配）</span>
+</span></code></pre></div></p>
+<p>一句话理解：</p>
+<ul>
+<li>指标是"类名"（如 http_requests_total）</li>
+<li>时间序列是"对象实例"（如 http_requests_total{method="POST"}）</li>
+<li>向量是"对象集合"（如查询 http_requests_total 返回的所有时间序列）</li>
+</ul>
+<hr/>
+<h3 id="522-instant-vector">5.2.2 即时向量（Instant Vector）<a class="headerlink" href="#522-instant-vector" title="Permanent link">¶</a></h3>
+<p><strong>定义</strong>：在**某个时间点**的采样值集合。</p>
+<p><strong>通俗理解</strong>：<strong>"快照"</strong> - 在某一瞬间拍下所有时间序列的当前值。</p>
+<p><strong>语法</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="c1"># 不带时间范围，默认查询当前时刻</span>
+</span><span id="__span-14-2"><a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="nv">http_requests_total</span>
+</span><span id="__span-14-3"><a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="nv">node_memory_MemUsed_bytes</span>
+</span></code></pre></div>
+<p><strong>示例</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="c1"># 查询所有服务的当前请求总数</span>
+</span><span id="__span-15-2"><a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="nv">http_requests_total</span>
+</span><span id="__span-15-3"><a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a>
+</span><span id="__span-15-4"><a href="#__codelineno-15-4" id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="c1"># 结果（假设当前时刻有多个时间序列）：</span>
+</span><span id="__span-15-5"><a href="#__codelineno-15-5" id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span><span class="w">    </span><span class="err">=</span><span class="w"> </span><span class="mi">1523</span>
+</span><span id="__span-15-6"><a href="#__codelineno-15-6" id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span><span class="w">   </span><span class="err">=</span><span class="w"> </span><span class="mi">842</span>
+</span><span id="__span-15-7"><a href="#__codelineno-15-7" id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">order-service</span><span class="p">"}</span><span class="w">   </span><span class="err">=</span><span class="w"> </span><span class="mi">2341</span>
+</span><span id="__span-15-8"><a href="#__codelineno-15-8" id="__codelineno-15-8" name="__codelineno-15-8"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">order-service</span><span class="p">"}</span><span class="w">  </span><span class="err">=</span><span class="w"> </span><span class="mi">1567</span>
+</span></code></pre></div>
+<p><strong>可视化表示</strong>：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a>时间线：
+</span><span id="__span-16-2"><a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a>────────────────────────────────────────────────→
+</span><span id="__span-16-3"><a href="#__codelineno-16-3" id="__codelineno-16-3" name="__codelineno-16-3"></a>         ↓
+</span><span id="__span-16-4"><a href="#__codelineno-16-4" id="__codelineno-16-4" name="__codelineno-16-4"></a>     当前时刻（即时向量）
+</span><span id="__span-16-5"><a href="#__codelineno-16-5" id="__codelineno-16-5" name="__codelineno-16-5"></a>         ↓
+</span><span id="__span-16-6"><a href="#__codelineno-16-6" id="__codelineno-16-6" name="__codelineno-16-6"></a>    拍下所有时间序列的当前值
+</span><span id="__span-16-7"><a href="#__codelineno-16-7" id="__codelineno-16-7" name="__codelineno-16-7"></a>
+</span><span id="__span-16-8"><a href="#__codelineno-16-8" id="__codelineno-16-8" name="__codelineno-16-8"></a>    http_requests_total:
+</span><span id="__span-16-9"><a href="#__codelineno-16-9" id="__codelineno-16-9" name="__codelineno-16-9"></a>    - {method="GET", service="user"}     → 1523
+</span><span id="__span-16-10"><a href="#__codelineno-16-10" id="__codelineno-16-10" name="__codelineno-16-10"></a>    - {method="POST", service="user"}    → 842
+</span><span id="__span-16-11"><a href="#__codelineno-16-11" id="__codelineno-16-11" name="__codelineno-16-11"></a>    - {method="GET", service="order"}    → 2341
+</span><span id="__span-16-12"><a href="#__codelineno-16-12" id="__codelineno-16-12" name="__codelineno-16-12"></a>    - {method="POST", service="order"}   → 1567
+</span></code></pre></div>
+<p><strong>适用场景</strong>：
+- ✅ 查询当前状态（如当前内存使用量）
+- ✅ Gauge 类型的指标
+- ✅ 不需要计算速率的场景</p>
+<h3 id="523-range-vector">5.2.3 范围向量（Range Vector）<a class="headerlink" href="#523-range-vector" title="Permanent link">¶</a></h3>
+<p><strong>定义</strong>：在**一段时间范围内**的所有采样值集合。</p>
+<p><strong>通俗理解</strong>：<strong>"录像"</strong> - 记录一段时间内所有时间序列的变化过程。</p>
+<p><strong>语法</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-17-1"><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="c1"># 带时间范围 [时长]</span>
+</span><span id="__span-17-2"><a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span>
+</span><span id="__span-17-3"><a href="#__codelineno-17-3" id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="nv">node_memory_MemUsed_bytes</span><span class="p">[</span><span class="s">1h</span><span class="p">]</span>
+</span></code></pre></div>
+<p><strong>示例</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-18-1"><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="c1"># 查询过去 5 分钟的所有请求数据</span>
+</span><span id="__span-18-2"><a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span>
+</span><span id="__span-18-3"><a href="#__codelineno-18-3" id="__codelineno-18-3" name="__codelineno-18-3"></a>
+</span><span id="__span-18-4"><a href="#__codelineno-18-4" id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="c1"># 结果（每个时间序列包含多个时间点的值）：</span>
+</span><span id="__span-18-5"><a href="#__codelineno-18-5" id="__codelineno-18-5" name="__codelineno-18-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="err">:</span>
+</span><span id="__span-18-6"><a href="#__codelineno-18-6" id="__codelineno-18-6" name="__codelineno-18-6"></a><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="mi">00</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">1500</span>
+</span><span id="__span-18-7"><a href="#__codelineno-18-7" id="__codelineno-18-7" name="__codelineno-18-7"></a><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="mi">01</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">1508</span>
+</span><span id="__span-18-8"><a href="#__codelineno-18-8" id="__codelineno-18-8" name="__codelineno-18-8"></a><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="mi">02</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">1515</span>
+</span><span id="__span-18-9"><a href="#__codelineno-18-9" id="__codelineno-18-9" name="__codelineno-18-9"></a><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="mi">03</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">1520</span>
+</span><span id="__span-18-10"><a href="#__codelineno-18-10" id="__codelineno-18-10" name="__codelineno-18-10"></a><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="mi">04</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">1523</span>
+</span><span id="__span-18-11"><a href="#__codelineno-18-11" id="__codelineno-18-11" name="__codelineno-18-11"></a>
+</span><span id="__span-18-12"><a href="#__codelineno-18-12" id="__codelineno-18-12" name="__codelineno-18-12"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="err">:</span>
+</span><span id="__span-18-13"><a href="#__codelineno-18-13" id="__codelineno-18-13" name="__codelineno-18-13"></a><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="mi">00</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">830</span>
+</span><span id="__span-18-14"><a href="#__codelineno-18-14" id="__codelineno-18-14" name="__codelineno-18-14"></a><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="mi">01</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">835</span>
+</span><span id="__span-18-15"><a href="#__codelineno-18-15" id="__codelineno-18-15" name="__codelineno-18-15"></a><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="mi">02</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">838</span>
+</span><span id="__span-18-16"><a href="#__codelineno-18-16" id="__codelineno-18-16" name="__codelineno-18-16"></a><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="mi">03</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">840</span>
+</span><span id="__span-18-17"><a href="#__codelineno-18-17" id="__codelineno-18-17" name="__codelineno-18-17"></a><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="mi">04</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">842</span>
+</span></code></pre></div>
+<p><strong>可视化表示</strong>：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a href="#__codelineno-19-1" id="__codelineno-19-1" name="__codelineno-19-1"></a>时间线：
+</span><span id="__span-19-2"><a href="#__codelineno-19-2" id="__codelineno-19-2" name="__codelineno-19-2"></a>────────────────────────────────────────────────→
+</span><span id="__span-19-3"><a href="#__codelineno-19-3" id="__codelineno-19-3" name="__codelineno-19-3"></a>    ←─────  过去 5 分钟  ─────→
+</span><span id="__span-19-4"><a href="#__codelineno-19-4" id="__codelineno-19-4" name="__codelineno-19-4"></a>         ↓                    ↓
+</span><span id="__span-19-5"><a href="#__codelineno-19-5" id="__codelineno-19-5" name="__codelineno-19-5"></a>      5 分钟前              现在
+</span><span id="__span-19-6"><a href="#__codelineno-19-6" id="__codelineno-19-6" name="__codelineno-19-6"></a>         ↓
+</span><span id="__span-19-7"><a href="#__codelineno-19-7" id="__codelineno-19-7" name="__codelineno-19-7"></a>    记录这段时间内的所有数据点
+</span><span id="__span-19-8"><a href="#__codelineno-19-8" id="__codelineno-19-8" name="__codelineno-19-8"></a>
+</span><span id="__span-19-9"><a href="#__codelineno-19-9" id="__codelineno-19-9" name="__codelineno-19-9"></a>    http_requests_total[5m]:
+</span><span id="__span-19-10"><a href="#__codelineno-19-10" id="__codelineno-19-10" name="__codelineno-19-10"></a>    - {method="GET", service="user"}:
+</span><span id="__span-19-11"><a href="#__codelineno-19-11" id="__codelineno-19-11" name="__codelineno-19-11"></a>      [1500, 1508, 1515, 1520, 1523]  ← 5 个数据点
+</span><span id="__span-19-12"><a href="#__codelineno-19-12" id="__codelineno-19-12" name="__codelineno-19-12"></a>    - {method="POST", service="user"}:
+</span><span id="__span-19-13"><a href="#__codelineno-19-13" id="__codelineno-19-13" name="__codelineno-19-13"></a>      [830, 835, 838, 840, 842]       ← 5 个数据点
+</span></code></pre></div>
+<p><strong>适用场景</strong>：
+- ✅ 计算速率（<code>rate()</code>、<code>irate()</code>）
+- ✅ 计算增长量（<code>increase()</code>）
+- ✅ 计算变化量（<code>delta()</code>）
+- ❌ <strong>不能直接展示</strong>（需要配合函数使用）</p>
+<h3 id="524-vs">5.2.4 即时向量 vs 范围向量 对比<a class="headerlink" href="#524-vs" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>即时向量</th>
+<th>范围向量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>语法</strong></td>
+<td><code>http_requests_total</code></td>
+<td><code>http_requests_total[5m]</code></td>
+</tr>
+<tr>
+<td><strong>数据点</strong></td>
+<td>每个时间序列 <strong>1 个值</strong></td>
+<td>每个时间序列 <strong>多个值</strong></td>
+</tr>
+<tr>
+<td><strong>比喻</strong></td>
+<td>快照（拍照）</td>
+<td>录像（摄像）</td>
+</tr>
+<tr>
+<td><strong>直接使用</strong></td>
+<td>✅ 可以直接查询展示</td>
+<td>❌ 需要配合函数使用</td>
+</tr>
+<tr>
+<td><strong>典型函数</strong></td>
+<td>无（直接查询）</td>
+<td><code>rate()</code>, <code>increase()</code>, <code>delta()</code></td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>当前状态、Gauge</td>
+<td>速率计算、趋势分析</td>
+</tr>
+</tbody>
+</table>
+<h3 id="525">5.2.5 重要规则<a class="headerlink" href="#525" title="Permanent link">¶</a></h3>
+<p><strong>规则 1：范围向量必须配合函数使用</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-20-1"><a href="#__codelineno-20-1" id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="c1"># ✅ 正确：使用 rate() 处理范围向量</span>
+</span><span id="__span-20-2"><a href="#__codelineno-20-2" id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-20-3"><a href="#__codelineno-20-3" id="__codelineno-20-3" name="__codelineno-20-3"></a>
+</span><span id="__span-20-4"><a href="#__codelineno-20-4" id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="c1"># ❌ 错误：范围向量不能直接展示</span>
+</span><span id="__span-20-5"><a href="#__codelineno-20-5" id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="err">会报错</span>
+</span></code></pre></div>
+<p><strong>规则 2：即时向量可以直接展示</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-21-1"><a href="#__codelineno-21-1" id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="c1"># ✅ 正确：即时向量可以直接查询</span>
+</span><span id="__span-21-2"><a href="#__codelineno-21-2" id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="nv">http_requests_total</span>
+</span><span id="__span-21-3"><a href="#__codelineno-21-3" id="__codelineno-21-3" name="__codelineno-21-3"></a>
+</span><span id="__span-21-4"><a href="#__codelineno-21-4" id="__codelineno-21-4" name="__codelineno-21-4"></a><span class="c1"># ✅ 正确：也可以配合聚合函数</span>
+</span><span id="__span-21-5"><a href="#__codelineno-21-5" id="__codelineno-21-5" name="__codelineno-21-5"></a><span class="k">sum</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>规则 3：Counter 类型必须用范围向量计算速率</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-22-1"><a href="#__codelineno-22-1" id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="c1"># ✅ 正确：Counter 使用 rate() 计算速率</span>
+</span><span id="__span-22-2"><a href="#__codelineno-22-2" id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-22-3"><a href="#__codelineno-22-3" id="__codelineno-22-3" name="__codelineno-22-3"></a>
+</span><span id="__span-22-4"><a href="#__codelineno-22-4" id="__codelineno-22-4" name="__codelineno-22-4"></a><span class="c1"># ❌ 不推荐：Counter 直接查询原始值（重启会归零）</span>
+</span><span id="__span-22-5"><a href="#__codelineno-22-5" id="__codelineno-22-5" name="__codelineno-22-5"></a><span class="nv">http_requests_total</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="53">5.3 基本查询语法<a class="headerlink" href="#53" title="Permanent link">¶</a></h2>
+<h3 id="531">5.3.1 查询所有时间序列<a class="headerlink" href="#531" title="Permanent link">¶</a></h3>
+<p><strong>语法</strong>：直接写指标名称</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-23-1"><a href="#__codelineno-23-1" id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="c1"># 查询所有 http_requests_total 的时间序列</span>
+</span><span id="__span-23-2"><a href="#__codelineno-23-2" id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="nv">http_requests_total</span>
+</span></code></pre></div>
+<p><strong>结果</strong>：返回该指标的所有时间序列（所有标签组合）</p>
+<h3 id="532">5.3.2 标签过滤<a class="headerlink" href="#532" title="Permanent link">¶</a></h3>
+<p><strong>语法</strong>：<code>指标名称{标签名="标签值"}</code></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-24-1"><a href="#__codelineno-24-1" id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="c1"># 精确匹配</span>
+</span><span id="__span-24-2"><a href="#__codelineno-24-2" id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}</span>
+</span><span id="__span-24-3"><a href="#__codelineno-24-3" id="__codelineno-24-3" name="__codelineno-24-3"></a>
+</span><span id="__span-24-4"><a href="#__codelineno-24-4" id="__codelineno-24-4" name="__codelineno-24-4"></a><span class="c1"># 多标签过滤（AND 关系）</span>
+</span><span id="__span-24-5"><a href="#__codelineno-24-5" id="__codelineno-24-5" name="__codelineno-24-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span>
+</span></code></pre></div>
+<p><strong>示例</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-25-1"><a href="#__codelineno-25-1" id="__codelineno-25-1" name="__codelineno-25-1"></a><span class="c1"># 只看 POST 请求</span>
+</span><span id="__span-25-2"><a href="#__codelineno-25-2" id="__codelineno-25-2" name="__codelineno-25-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}</span>
+</span><span id="__span-25-3"><a href="#__codelineno-25-3" id="__codelineno-25-3" name="__codelineno-25-3"></a>
+</span><span id="__span-25-4"><a href="#__codelineno-25-4" id="__codelineno-25-4" name="__codelineno-25-4"></a><span class="c1"># 只看生产环境</span>
+</span><span id="__span-25-5"><a href="#__codelineno-25-5" id="__codelineno-25-5" name="__codelineno-25-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">env</span><span class="o">=</span><span class="p">"</span><span class="s">production</span><span class="p">"}</span>
+</span><span id="__span-25-6"><a href="#__codelineno-25-6" id="__codelineno-25-6" name="__codelineno-25-6"></a>
+</span><span id="__span-25-7"><a href="#__codelineno-25-7" id="__codelineno-25-7" name="__codelineno-25-7"></a><span class="c1"># 组合条件</span>
+</span><span id="__span-25-8"><a href="#__codelineno-25-8" id="__codelineno-25-8" name="__codelineno-25-8"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">env</span><span class="o">=</span><span class="p">"</span><span class="s">production</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span>
+</span></code></pre></div>
+<h3 id="533">5.3.3 标签匹配操作符<a class="headerlink" href="#533" title="Permanent link">¶</a></h3>
+<p>Prometheus 支持 4 种标签匹配操作符：</p>
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>=</code></td>
+<td>等于</td>
+<td><code>{method="POST"}</code></td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>不等于</td>
+<td><code>{method!="POST"}</code></td>
+</tr>
+<tr>
+<td><code>=~</code></td>
+<td>正则匹配</td>
+<td><code>{status=~"5.."}</code></td>
+</tr>
+<tr>
+<td><code>!~</code></td>
+<td>正则不匹配</td>
+<td><code>{status!~"2.."}</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1">1. 等于匹配（=）<a class="headerlink" href="#1" title="Permanent link">¶</a></h4>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-26-1"><a href="#__codelineno-26-1" id="__codelineno-26-1" name="__codelineno-26-1"></a><span class="c1"># 查询 method 为 POST 的时间序列</span>
+</span><span id="__span-26-2"><a href="#__codelineno-26-2" id="__codelineno-26-2" name="__codelineno-26-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}</span>
+</span><span id="__span-26-3"><a href="#__codelineno-26-3" id="__codelineno-26-3" name="__codelineno-26-3"></a>
+</span><span id="__span-26-4"><a href="#__codelineno-26-4" id="__codelineno-26-4" name="__codelineno-26-4"></a><span class="c1"># 多标签等于</span>
+</span><span id="__span-26-5"><a href="#__codelineno-26-5" id="__codelineno-26-5" name="__codelineno-26-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">status</span><span class="o">=</span><span class="p">"</span><span class="s">200</span><span class="p">"}</span>
+</span></code></pre></div>
+<h4 id="2">2. 不等于匹配（!=）<a class="headerlink" href="#2" title="Permanent link">¶</a></h4>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-27-1"><a href="#__codelineno-27-1" id="__codelineno-27-1" name="__codelineno-27-1"></a><span class="c1"># 查询 method 不为 POST 的时间序列</span>
+</span><span id="__span-27-2"><a href="#__codelineno-27-2" id="__codelineno-27-2" name="__codelineno-27-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">!=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}</span>
+</span><span id="__span-27-3"><a href="#__codelineno-27-3" id="__codelineno-27-3" name="__codelineno-27-3"></a>
+</span><span id="__span-27-4"><a href="#__codelineno-27-4" id="__codelineno-27-4" name="__codelineno-27-4"></a><span class="c1"># 排除测试环境</span>
+</span><span id="__span-27-5"><a href="#__codelineno-27-5" id="__codelineno-27-5" name="__codelineno-27-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">env</span><span class="o">!=</span><span class="p">"</span><span class="s">test</span><span class="p">"}</span>
+</span><span id="__span-27-6"><a href="#__codelineno-27-6" id="__codelineno-27-6" name="__codelineno-27-6"></a>
+</span><span id="__span-27-7"><a href="#__codelineno-27-7" id="__codelineno-27-7" name="__codelineno-27-7"></a><span class="c1"># 排除成功响应</span>
+</span><span id="__span-27-8"><a href="#__codelineno-27-8" id="__codelineno-27-8" name="__codelineno-27-8"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">!=</span><span class="p">"</span><span class="s">200</span><span class="p">"}</span>
+</span></code></pre></div>
+<h4 id="3">3. 正则匹配（=~）<a class="headerlink" href="#3" title="Permanent link">¶</a></h4>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-28-1"><a href="#__codelineno-28-1" id="__codelineno-28-1" name="__codelineno-28-1"></a><span class="c1"># 查询所有 5xx 错误</span>
+</span><span id="__span-28-2"><a href="#__codelineno-28-2" id="__codelineno-28-2" name="__codelineno-28-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">"</span><span class="s">5..</span><span class="p">"}</span>
+</span><span id="__span-28-3"><a href="#__codelineno-28-3" id="__codelineno-28-3" name="__codelineno-28-3"></a>
+</span><span id="__span-28-4"><a href="#__codelineno-28-4" id="__codelineno-28-4" name="__codelineno-28-4"></a><span class="c1"># 查询所有 4xx 和 5xx 错误</span>
+</span><span id="__span-28-5"><a href="#__codelineno-28-5" id="__codelineno-28-5" name="__codelineno-28-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">"</span><span class="s">[45]..</span><span class="p">"}</span>
+</span><span id="__span-28-6"><a href="#__codelineno-28-6" id="__codelineno-28-6" name="__codelineno-28-6"></a>
+</span><span id="__span-28-7"><a href="#__codelineno-28-7" id="__codelineno-28-7" name="__codelineno-28-7"></a><span class="c1"># 匹配多个值（OR 关系）</span>
+</span><span id="__span-28-8"><a href="#__codelineno-28-8" id="__codelineno-28-8" name="__codelineno-28-8"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">"</span><span class="s">200|201|204</span><span class="p">"}</span>
+</span><span id="__span-28-9"><a href="#__codelineno-28-9" id="__codelineno-28-9" name="__codelineno-28-9"></a>
+</span><span id="__span-28-10"><a href="#__codelineno-28-10" id="__codelineno-28-10" name="__codelineno-28-10"></a><span class="c1"># 匹配特定模式</span>
+</span><span id="__span-28-11"><a href="#__codelineno-28-11" id="__codelineno-28-11" name="__codelineno-28-11"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">handler</span><span class="o">=~</span><span class="p">"</span><span class="s">/api/.*</span><span class="p">"}</span>
+</span></code></pre></div>
+<h4 id="4">4. 正则不匹配（!~）<a class="headerlink" href="#4" title="Permanent link">¶</a></h4>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-29-1"><a href="#__codelineno-29-1" id="__codelineno-29-1" name="__codelineno-29-1"></a><span class="c1"># 排除所有 5xx 错误</span>
+</span><span id="__span-29-2"><a href="#__codelineno-29-2" id="__codelineno-29-2" name="__codelineno-29-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">!~</span><span class="p">"</span><span class="s">5..</span><span class="p">"}</span>
+</span><span id="__span-29-3"><a href="#__codelineno-29-3" id="__codelineno-29-3" name="__codelineno-29-3"></a>
+</span><span id="__span-29-4"><a href="#__codelineno-29-4" id="__codelineno-29-4" name="__codelineno-29-4"></a><span class="c1"># 排除测试和开发环境</span>
+</span><span id="__span-29-5"><a href="#__codelineno-29-5" id="__codelineno-29-5" name="__codelineno-29-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">env</span><span class="o">!~</span><span class="p">"</span><span class="s">test|dev</span><span class="p">"}</span>
+</span><span id="__span-29-6"><a href="#__codelineno-29-6" id="__codelineno-29-6" name="__codelineno-29-6"></a>
+</span><span id="__span-29-7"><a href="#__codelineno-29-7" id="__codelineno-29-7" name="__codelineno-29-7"></a><span class="c1"># 排除健康检查接口</span>
+</span><span id="__span-29-8"><a href="#__codelineno-29-8" id="__codelineno-29-8" name="__codelineno-29-8"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">handler</span><span class="o">!~</span><span class="p">"</span><span class="s">/health|/metrics</span><span class="p">"}</span>
+</span></code></pre></div>
+<h3 id="534">5.3.4 时间范围选择<a class="headerlink" href="#534" title="Permanent link">¶</a></h3>
+<p><strong>语法</strong>：<code>[时长]</code></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-30-1"><a href="#__codelineno-30-1" id="__codelineno-30-1" name="__codelineno-30-1"></a><span class="c1"># 过去 5 分钟</span>
+</span><span id="__span-30-2"><a href="#__codelineno-30-2" id="__codelineno-30-2" name="__codelineno-30-2"></a><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span>
+</span><span id="__span-30-3"><a href="#__codelineno-30-3" id="__codelineno-30-3" name="__codelineno-30-3"></a>
+</span><span id="__span-30-4"><a href="#__codelineno-30-4" id="__codelineno-30-4" name="__codelineno-30-4"></a><span class="c1"># 过去 1 小时</span>
+</span><span id="__span-30-5"><a href="#__codelineno-30-5" id="__codelineno-30-5" name="__codelineno-30-5"></a><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">1h</span><span class="p">]</span>
+</span><span id="__span-30-6"><a href="#__codelineno-30-6" id="__codelineno-30-6" name="__codelineno-30-6"></a>
+</span><span id="__span-30-7"><a href="#__codelineno-30-7" id="__codelineno-30-7" name="__codelineno-30-7"></a><span class="c1"># 过去 30 秒</span>
+</span><span id="__span-30-8"><a href="#__codelineno-30-8" id="__codelineno-30-8" name="__codelineno-30-8"></a><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">30s</span><span class="p">]</span>
+</span><span id="__span-30-9"><a href="#__codelineno-30-9" id="__codelineno-30-9" name="__codelineno-30-9"></a>
+</span><span id="__span-30-10"><a href="#__codelineno-30-10" id="__codelineno-30-10" name="__codelineno-30-10"></a><span class="c1"># 过去 1 天</span>
+</span><span id="__span-30-11"><a href="#__codelineno-30-11" id="__codelineno-30-11" name="__codelineno-30-11"></a><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">1d</span><span class="p">]</span>
+</span></code></pre></div>
+<p><strong>支持的时长单位</strong>：
+- <code>s</code> - 秒
+- <code>m</code> - 分钟
+- <code>h</code> - 小时
+- <code>d</code> - 天
+- <code>w</code> - 周</p>
+<p><strong>组合使用</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-31-1"><a href="#__codelineno-31-1" id="__codelineno-31-1" name="__codelineno-31-1"></a><span class="c1"># 1 小时 30 分钟</span>
+</span><span id="__span-31-2"><a href="#__codelineno-31-2" id="__codelineno-31-2" name="__codelineno-31-2"></a><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">1h30m</span><span class="p">]</span>
+</span><span id="__span-31-3"><a href="#__codelineno-31-3" id="__codelineno-31-3" name="__codelineno-31-3"></a>
+</span><span id="__span-31-4"><a href="#__codelineno-31-4" id="__codelineno-31-4" name="__codelineno-31-4"></a><span class="c1"># 1 天 6 小时</span>
+</span><span id="__span-31-5"><a href="#__codelineno-31-5" id="__codelineno-31-5" name="__codelineno-31-5"></a><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">1d6h</span><span class="p">]</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="54">5.4 聚合操作<a class="headerlink" href="#54" title="Permanent link">¶</a></h2>
+<h3 id="541">5.4.1 什么是聚合？<a class="headerlink" href="#541" title="Permanent link">¶</a></h3>
+<p><strong>聚合</strong>：将多个时间序列合并为更少的时间序列（通常是 1 个）。</p>
+<p><strong>类比理解</strong>：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-32-1"><a href="#__codelineno-32-1" id="__codelineno-32-1" name="__codelineno-32-1"></a>原始数据（4 个时间序列）：
+</span><span id="__span-32-2"><a href="#__codelineno-32-2" id="__codelineno-32-2" name="__codelineno-32-2"></a>- 北京店销售额：100 万
+</span><span id="__span-32-3"><a href="#__codelineno-32-3" id="__codelineno-32-3" name="__codelineno-32-3"></a>- 上海店销售额：150 万
+</span><span id="__span-32-4"><a href="#__codelineno-32-4" id="__codelineno-32-4" name="__codelineno-32-4"></a>- 广州店销售额：120 万
+</span><span id="__span-32-5"><a href="#__codelineno-32-5" id="__codelineno-32-5" name="__codelineno-32-5"></a>- 深圳店销售额：130 万
+</span><span id="__span-32-6"><a href="#__codelineno-32-6" id="__codelineno-32-6" name="__codelineno-32-6"></a>       ↓ 聚合（sum）
+</span><span id="__span-32-7"><a href="#__codelineno-32-7" id="__codelineno-32-7" name="__codelineno-32-7"></a>汇总数据（1 个时间序列）：
+</span><span id="__span-32-8"><a href="#__codelineno-32-8" id="__codelineno-32-8" name="__codelineno-32-8"></a>- 总销售额：500 万
+</span></code></pre></div>
+<h3 id="542">5.4.2 聚合语法<a class="headerlink" href="#542" title="Permanent link">¶</a></h3>
+<p><strong>基础语法</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-33-1"><a href="#__codelineno-33-1" id="__codelineno-33-1" name="__codelineno-33-1"></a><span class="err">聚合函数</span><span class="w"> </span><span class="o">(</span><span class="err">指标</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>按标签分组</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-34-1"><a href="#__codelineno-34-1" id="__codelineno-34-1" name="__codelineno-34-1"></a><span class="c1"># 按某些标签分组聚合</span>
+</span><span id="__span-34-2"><a href="#__codelineno-34-2" id="__codelineno-34-2" name="__codelineno-34-2"></a><span class="err">聚合函数</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="err">标签</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">标签</span><span class="w"> </span><span class="mi">2</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="err">指标</span><span class="o">)</span>
+</span><span id="__span-34-3"><a href="#__codelineno-34-3" id="__codelineno-34-3" name="__codelineno-34-3"></a>
+</span><span id="__span-34-4"><a href="#__codelineno-34-4" id="__codelineno-34-4" name="__codelineno-34-4"></a><span class="c1"># 去除某些标签（保留其他）</span>
+</span><span id="__span-34-5"><a href="#__codelineno-34-5" id="__codelineno-34-5" name="__codelineno-34-5"></a><span class="err">聚合函数</span><span class="w"> </span><span class="k">without</span><span class="w"> </span><span class="o">(</span><span class="err">标签</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">标签</span><span class="w"> </span><span class="mi">2</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="err">指标</span><span class="o">)</span>
+</span></code></pre></div>
+<h3 id="543">5.4.3 常用聚合函数<a class="headerlink" href="#543" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sum</code></td>
+<td>求和</td>
+<td><code>sum(http_requests_total)</code></td>
+</tr>
+<tr>
+<td><code>avg</code></td>
+<td>平均值</td>
+<td><code>avg(http_request_duration_seconds)</code></td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td>最大值</td>
+<td><code>max(node_cpu_usage)</code></td>
+</tr>
+<tr>
+<td><code>min</code></td>
+<td>最小值</td>
+<td><code>min(node_memory_free)</code></td>
+</tr>
+<tr>
+<td><code>count</code></td>
+<td>计数（时间序列数量）</td>
+<td><code>count(http_requests_total)</code></td>
+</tr>
+<tr>
+<td><code>stddev</code></td>
+<td>标准差</td>
+<td><code>stddev(response_time)</code></td>
+</tr>
+<tr>
+<td><code>stdvar</code></td>
+<td>标准方差</td>
+<td><code>stdvar(response_time)</code></td>
+</tr>
+<tr>
+<td><code>topk</code></td>
+<td>前 k 个</td>
+<td><code>topk(5, http_requests_total)</code></td>
+</tr>
+<tr>
+<td><code>bottomk</code></td>
+<td>后 k 个</td>
+<td><code>bottomk(5, http_requests_total)</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="544">5.4.4 按标签分组聚合<a class="headerlink" href="#544" title="Permanent link">¶</a></h3>
+<p><strong>场景 1：按单个标签分组</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-35-1"><a href="#__codelineno-35-1" id="__codelineno-35-1" name="__codelineno-35-1"></a><span class="c1"># 按 method 分组，计算每种方法的总请求数</span>
+</span><span id="__span-35-2"><a href="#__codelineno-35-2" id="__codelineno-35-2" name="__codelineno-35-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">method</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span><span id="__span-35-3"><a href="#__codelineno-35-3" id="__codelineno-35-3" name="__codelineno-35-3"></a>
+</span><span id="__span-35-4"><a href="#__codelineno-35-4" id="__codelineno-35-4" name="__codelineno-35-4"></a><span class="c1"># 结果：</span>
+</span><span id="__span-35-5"><a href="#__codelineno-35-5" id="__codelineno-35-5" name="__codelineno-35-5"></a><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">"}</span><span class="w">    </span><span class="err">=</span><span class="w"> </span><span class="mi">15230</span>
+</span><span id="__span-35-6"><a href="#__codelineno-35-6" id="__codelineno-35-6" name="__codelineno-35-6"></a><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}</span><span class="w">   </span><span class="err">=</span><span class="w"> </span><span class="mi">8420</span>
+</span><span id="__span-35-7"><a href="#__codelineno-35-7" id="__codelineno-35-7" name="__codelineno-35-7"></a><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">PUT</span><span class="p">"}</span><span class="w">    </span><span class="err">=</span><span class="w"> </span><span class="mi">3210</span>
+</span><span id="__span-35-8"><a href="#__codelineno-35-8" id="__codelineno-35-8" name="__codelineno-35-8"></a><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">DELETE</span><span class="p">"}</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">1560</span>
+</span></code></pre></div>
+<p><strong>场景 2：按多个标签分组</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-36-1"><a href="#__codelineno-36-1" id="__codelineno-36-1" name="__codelineno-36-1"></a><span class="c1"># 按 method 和 service 分组</span>
+</span><span id="__span-36-2"><a href="#__codelineno-36-2" id="__codelineno-36-2" name="__codelineno-36-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">method</span><span class="p">,</span><span class="w"> </span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span><span id="__span-36-3"><a href="#__codelineno-36-3" id="__codelineno-36-3" name="__codelineno-36-3"></a>
+</span><span id="__span-36-4"><a href="#__codelineno-36-4" id="__codelineno-36-4" name="__codelineno-36-4"></a><span class="c1"># 结果：</span>
+</span><span id="__span-36-5"><a href="#__codelineno-36-5" id="__codelineno-36-5" name="__codelineno-36-5"></a><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span><span class="w">    </span><span class="err">=</span><span class="w"> </span><span class="mi">8230</span>
+</span><span id="__span-36-6"><a href="#__codelineno-36-6" id="__codelineno-36-6" name="__codelineno-36-6"></a><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span><span class="w">   </span><span class="err">=</span><span class="w"> </span><span class="mi">4420</span>
+</span><span id="__span-36-7"><a href="#__codelineno-36-7" id="__codelineno-36-7" name="__codelineno-36-7"></a><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">GET</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">order-service</span><span class="p">"}</span><span class="w">   </span><span class="err">=</span><span class="w"> </span><span class="mi">7000</span>
+</span><span id="__span-36-8"><a href="#__codelineno-36-8" id="__codelineno-36-8" name="__codelineno-36-8"></a><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">order-service</span><span class="p">"}</span><span class="w">  </span><span class="err">=</span><span class="w"> </span><span class="mi">4000</span>
+</span></code></pre></div>
+<p><strong>场景 3：去除某些标签</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-37-1"><a href="#__codelineno-37-1" id="__codelineno-37-1" name="__codelineno-37-1"></a><span class="c1"># 去除 instance 和 job 标签，保留其他</span>
+</span><span id="__span-37-2"><a href="#__codelineno-37-2" id="__codelineno-37-2" name="__codelineno-37-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">without</span><span class="w"> </span><span class="o">(</span><span class="nv">instance</span><span class="p">,</span><span class="w"> </span><span class="nv">job</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span><span id="__span-37-3"><a href="#__codelineno-37-3" id="__codelineno-37-3" name="__codelineno-37-3"></a>
+</span><span id="__span-37-4"><a href="#__codelineno-37-4" id="__codelineno-37-4" name="__codelineno-37-4"></a><span class="c1"># 等价于按所有其他标签分组</span>
+</span></code></pre></div>
+<p><strong>场景 4：全局聚合（去除所有标签）</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-38-1"><a href="#__codelineno-38-1" id="__codelineno-38-1" name="__codelineno-38-1"></a><span class="c1"># 所有时间序列求和（结果只有 1 个值）</span>
+</span><span id="__span-38-2"><a href="#__codelineno-38-2" id="__codelineno-38-2" name="__codelineno-38-2"></a><span class="k">sum</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span><span id="__span-38-3"><a href="#__codelineno-38-3" id="__codelineno-38-3" name="__codelineno-38-3"></a>
+</span><span id="__span-38-4"><a href="#__codelineno-38-4" id="__codelineno-38-4" name="__codelineno-38-4"></a><span class="c1"># 所有时间序列求平均</span>
+</span><span id="__span-38-5"><a href="#__codelineno-38-5" id="__codelineno-38-5" name="__codelineno-38-5"></a><span class="k">avg</span><span class="o">(</span><span class="nv">http_request_duration_seconds</span><span class="o">)</span>
+</span></code></pre></div>
+<h3 id="545">5.4.5 聚合实战示例<a class="headerlink" href="#545" title="Permanent link">¶</a></h3>
+<p><strong>示例 1：计算总请求速率</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-39-1"><a href="#__codelineno-39-1" id="__codelineno-39-1" name="__codelineno-39-1"></a><span class="c1"># 所有服务的总请求速率（次/秒）</span>
+</span><span id="__span-39-2"><a href="#__codelineno-39-2" id="__codelineno-39-2" name="__codelineno-39-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span></code></pre></div>
+<p><strong>示例 2：按服务计算平均延迟</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-40-1"><a href="#__codelineno-40-1" id="__codelineno-40-1" name="__codelineno-40-1"></a><span class="c1"># 每个服务的平均延迟</span>
+</span><span id="__span-40-2"><a href="#__codelineno-40-2" id="__codelineno-40-2" name="__codelineno-40-2"></a><span class="k">avg</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">http_request_duration_seconds</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>示例 3：找出请求量最高的 5 个接口</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-41-1"><a href="#__codelineno-41-1" id="__codelineno-41-1" name="__codelineno-41-1"></a><span class="c1"># Top 5 最忙的接口</span>
+</span><span id="__span-41-2"><a href="#__codelineno-41-2" id="__codelineno-41-2" name="__codelineno-41-2"></a><span class="k">topk</span><span class="o">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">handler</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)))</span>
+</span></code></pre></div>
+<p><strong>示例 4：计算错误率</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-42-1"><a href="#__codelineno-42-1" id="__codelineno-42-1" name="__codelineno-42-1"></a><span class="c1"># 全局错误率</span>
+</span><span id="__span-42-2"><a href="#__codelineno-42-2" id="__codelineno-42-2" name="__codelineno-42-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">"</span><span class="s">5..</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span><span class="w"> </span>
+</span><span id="__span-42-3"><a href="#__codelineno-42-3" id="__codelineno-42-3" name="__codelineno-42-3"></a><span class="o">/</span><span class="w"> </span>
+</span><span id="__span-42-4"><a href="#__codelineno-42-4" id="__codelineno-42-4" name="__codelineno-42-4"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span></code></pre></div>
+<p><strong>示例 5：按环境统计</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-43-1"><a href="#__codelineno-43-1" id="__codelineno-43-1" name="__codelineno-43-1"></a><span class="c1"># 每个环境的请求总数</span>
+</span><span id="__span-43-2"><a href="#__codelineno-43-2" id="__codelineno-43-2" name="__codelineno-43-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">env</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="55">5.5 实践环节<a class="headerlink" href="#55" title="Permanent link">¶</a></h2>
+<h3 id="51-expression-browser">实践 5.1：使用 Expression Browser 基础查询<a class="headerlink" href="#51-expression-browser" title="Permanent link">¶</a></h3>
+<p><strong>任务</strong>：
+1. 启动 Prometheus（如果尚未启动）
+2. 访问 Expression Browser（http://localhost:9090）
+3. 执行基础查询练习</p>
+<p><strong>步骤</strong>：</p>
+<p><strong>步骤 1：查询所有指标</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-44-1"><a href="#__codelineno-44-1" id="__codelineno-44-1" name="__codelineno-44-1"></a><span class="c1"># 在 Expression Browser 中输入</span>
+</span><span id="__span-44-2"><a href="#__codelineno-44-2" id="__codelineno-44-2" name="__codelineno-44-2"></a><span class="nv">up</span>
+</span><span id="__span-44-3"><a href="#__codelineno-44-3" id="__codelineno-44-3" name="__codelineno-44-3"></a>
+</span><span id="__span-44-4"><a href="#__codelineno-44-4" id="__codelineno-44-4" name="__codelineno-44-4"></a><span class="c1"># 观察结果：</span>
+</span><span id="__span-44-5"><a href="#__codelineno-44-5" id="__codelineno-44-5" name="__codelineno-44-5"></a><span class="c1"># - 有多少个时间序列？</span>
+</span><span id="__span-44-6"><a href="#__codelineno-44-6" id="__codelineno-44-6" name="__codelineno-44-6"></a><span class="c1"># - 每个时间序列的值是多少？</span>
+</span><span id="__span-44-7"><a href="#__codelineno-44-7" id="__codelineno-44-7" name="__codelineno-44-7"></a><span class="c1"># - 有哪些标签？</span>
+</span></code></pre></div>
+<p><strong>步骤 2：查询 Prometheus 自身的指标</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-45-1"><a href="#__codelineno-45-1" id="__codelineno-45-1" name="__codelineno-45-1"></a><span class="c1"># 查询 Prometheus 抓取的样本总数</span>
+</span><span id="__span-45-2"><a href="#__codelineno-45-2" id="__codelineno-45-2" name="__codelineno-45-2"></a><span class="nv">prometheus_tsdb_head_samples_appended_total</span>
+</span><span id="__span-45-3"><a href="#__codelineno-45-3" id="__codelineno-45-3" name="__codelineno-45-3"></a>
+</span><span id="__span-45-4"><a href="#__codelineno-45-4" id="__codelineno-45-4" name="__codelineno-45-4"></a><span class="c1"># 观察：</span>
+</span><span id="__span-45-5"><a href="#__codelineno-45-5" id="__codelineno-45-5" name="__codelineno-45-5"></a><span class="c1"># - 这是 Counter 还是 Gauge？</span>
+</span><span id="__span-45-6"><a href="#__codelineno-45-6" id="__codelineno-45-6" name="__codelineno-45-6"></a><span class="c1"># - 值是如何变化的？</span>
+</span></code></pre></div>
+<p><strong>步骤 3：使用标签过滤</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-46-1"><a href="#__codelineno-46-1" id="__codelineno-46-1" name="__codelineno-46-1"></a><span class="c1"># 只看 job="prometheus" 的指标</span>
+</span><span id="__span-46-2"><a href="#__codelineno-46-2" id="__codelineno-46-2" name="__codelineno-46-2"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">=</span><span class="p">"</span><span class="s">prometheus</span><span class="p">"}</span>
+</span><span id="__span-46-3"><a href="#__codelineno-46-3" id="__codelineno-46-3" name="__codelineno-46-3"></a>
+</span><span id="__span-46-4"><a href="#__codelineno-46-4" id="__codelineno-46-4" name="__codelineno-46-4"></a><span class="c1"># 排除某些实例</span>
+</span><span id="__span-46-5"><a href="#__codelineno-46-5" id="__codelineno-46-5" name="__codelineno-46-5"></a><span class="nv">up</span><span class="p">{</span><span class="nl">instance</span><span class="o">!=</span><span class="p">"</span><span class="s">localhost:9090</span><span class="p">"}</span>
+</span></code></pre></div>
+<p><strong>步骤 4：使用正则匹配</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-47-1"><a href="#__codelineno-47-1" id="__codelineno-47-1" name="__codelineno-47-1"></a><span class="c1"># 查询所有 prometheus 开头的指标</span>
+</span><span id="__span-47-2"><a href="#__codelineno-47-2" id="__codelineno-47-2" name="__codelineno-47-2"></a><span class="p">{</span><span class="nl">__name__</span><span class="o">=~</span><span class="p">"</span><span class="s">prometheus.*</span><span class="p">"}</span>
+</span><span id="__span-47-3"><a href="#__codelineno-47-3" id="__codelineno-47-3" name="__codelineno-47-3"></a>
+</span><span id="__span-47-4"><a href="#__codelineno-47-4" id="__codelineno-47-4" name="__codelineno-47-4"></a><span class="c1"># 查询所有 5xx 错误（如果有的话）</span>
+</span><span id="__span-47-5"><a href="#__codelineno-47-5" id="__codelineno-47-5" name="__codelineno-47-5"></a><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">"</span><span class="s">5..</span><span class="p">"}</span>
+</span></code></pre></div>
+<h3 id="52-vs_1">实践 5.2：即时向量 vs 范围向量<a class="headerlink" href="#52-vs_1" title="Permanent link">¶</a></h3>
+<p><strong>任务</strong>：
+1. 对比即时向量和范围向量的区别
+2. 理解函数的使用</p>
+<p><strong>步骤</strong>：</p>
+<p><strong>步骤 1：查询即时向量</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-48-1"><a href="#__codelineno-48-1" id="__codelineno-48-1" name="__codelineno-48-1"></a><span class="c1"># 即时向量（可以直接展示）</span>
+</span><span id="__span-48-2"><a href="#__codelineno-48-2" id="__codelineno-48-2" name="__codelineno-48-2"></a><span class="nv">prometheus_tsdb_head_samples_appended_total</span>
+</span><span id="__span-48-3"><a href="#__codelineno-48-3" id="__codelineno-48-3" name="__codelineno-48-3"></a>
+</span><span id="__span-48-4"><a href="#__codelineno-48-4" id="__codelineno-48-4" name="__codelineno-48-4"></a><span class="c1"># 观察：</span>
+</span><span id="__span-48-5"><a href="#__codelineno-48-5" id="__codelineno-48-5" name="__codelineno-48-5"></a><span class="c1"># - 每个时间序列显示几个值？（答案：1 个）</span>
+</span><span id="__span-48-6"><a href="#__codelineno-48-6" id="__codelineno-48-6" name="__codelineno-48-6"></a><span class="c1"># - 能看到历史变化吗？（答案：不能）</span>
+</span></code></pre></div>
+<p><strong>步骤 2：查询范围向量</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-49-1"><a href="#__codelineno-49-1" id="__codelineno-49-1" name="__codelineno-49-1"></a><span class="c1"># 范围向量（不能直接展示，会报错）</span>
+</span><span id="__span-49-2"><a href="#__codelineno-49-2" id="__codelineno-49-2" name="__codelineno-49-2"></a><span class="nv">prometheus_tsdb_head_samples_appended_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span>
+</span><span id="__span-49-3"><a href="#__codelineno-49-3" id="__codelineno-49-3" name="__codelineno-49-3"></a>
+</span><span id="__span-49-4"><a href="#__codelineno-49-4" id="__codelineno-49-4" name="__codelineno-49-4"></a><span class="c1"># 错误信息：Error: no instant vector selected</span>
+</span></code></pre></div>
+<p><strong>步骤 3：配合函数使用范围向量</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-50-1"><a href="#__codelineno-50-1" id="__codelineno-50-1" name="__codelineno-50-1"></a><span class="c1"># 使用 rate() 处理范围向量</span>
+</span><span id="__span-50-2"><a href="#__codelineno-50-2" id="__codelineno-50-2" name="__codelineno-50-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">prometheus_tsdb_head_samples_appended_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-50-3"><a href="#__codelineno-50-3" id="__codelineno-50-3" name="__codelineno-50-3"></a>
+</span><span id="__span-50-4"><a href="#__codelineno-50-4" id="__codelineno-50-4" name="__codelineno-50-4"></a><span class="c1"># 观察：</span>
+</span><span id="__span-50-5"><a href="#__codelineno-50-5" id="__codelineno-50-5" name="__codelineno-50-5"></a><span class="c1"># - 计算的是什么？（答案：每秒增长率）</span>
+</span><span id="__span-50-6"><a href="#__codelineno-50-6" id="__codelineno-50-6" name="__codelineno-50-6"></a><span class="c1"># - 值的含义是什么？</span>
+</span></code></pre></div>
+<p><strong>步骤 4：对比不同时间范围</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-51-1"><a href="#__codelineno-51-1" id="__codelineno-51-1" name="__codelineno-51-1"></a><span class="c1"># 过去 1 分钟的速率</span>
+</span><span id="__span-51-2"><a href="#__codelineno-51-2" id="__codelineno-51-2" name="__codelineno-51-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">prometheus_tsdb_head_samples_appended_total</span><span class="p">[</span><span class="s">1m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-51-3"><a href="#__codelineno-51-3" id="__codelineno-51-3" name="__codelineno-51-3"></a>
+</span><span id="__span-51-4"><a href="#__codelineno-51-4" id="__codelineno-51-4" name="__codelineno-51-4"></a><span class="c1"># 过去 5 分钟的速率</span>
+</span><span id="__span-51-5"><a href="#__codelineno-51-5" id="__codelineno-51-5" name="__codelineno-51-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">prometheus_tsdb_head_samples_appended_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-51-6"><a href="#__codelineno-51-6" id="__codelineno-51-6" name="__codelineno-51-6"></a>
+</span><span id="__span-51-7"><a href="#__codelineno-51-7" id="__codelineno-51-7" name="__codelineno-51-7"></a><span class="c1"># 过去 15 分钟的速率</span>
+</span><span id="__span-51-8"><a href="#__codelineno-51-8" id="__codelineno-51-8" name="__codelineno-51-8"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">prometheus_tsdb_head_samples_appended_total</span><span class="p">[</span><span class="s">15m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-51-9"><a href="#__codelineno-51-9" id="__codelineno-51-9" name="__codelineno-51-9"></a>
+</span><span id="__span-51-10"><a href="#__codelineno-51-10" id="__codelineno-51-10" name="__codelineno-51-10"></a><span class="c1"># 观察：</span>
+</span><span id="__span-51-11"><a href="#__codelineno-51-11" id="__codelineno-51-11" name="__codelineno-51-11"></a><span class="c1"># - 哪个更平滑？</span>
+</span><span id="__span-51-12"><a href="#__codelineno-51-12" id="__codelineno-51-12" name="__codelineno-51-12"></a><span class="c1"># - 哪个对变化更敏感？</span>
+</span></code></pre></div>
+<h3 id="53_1">实践 5.3：标签过滤练习<a class="headerlink" href="#53_1" title="Permanent link">¶</a></h3>
+<p><strong>任务</strong>：
+1. 使用不同的标签匹配操作符
+2. 组合多个过滤条件</p>
+<p><strong>步骤</strong>：</p>
+<p><strong>步骤 1：等于过滤</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-52-1"><a href="#__codelineno-52-1" id="__codelineno-52-1" name="__codelineno-52-1"></a><span class="c1"># 查询特定 job 的指标</span>
+</span><span id="__span-52-2"><a href="#__codelineno-52-2" id="__codelineno-52-2" name="__codelineno-52-2"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">=</span><span class="p">"</span><span class="s">prometheus</span><span class="p">"}</span>
+</span><span id="__span-52-3"><a href="#__codelineno-52-3" id="__codelineno-52-3" name="__codelineno-52-3"></a>
+</span><span id="__span-52-4"><a href="#__codelineno-52-4" id="__codelineno-52-4" name="__codelineno-52-4"></a><span class="c1"># 查询特定 instance 的指标</span>
+</span><span id="__span-52-5"><a href="#__codelineno-52-5" id="__codelineno-52-5" name="__codelineno-52-5"></a><span class="nv">up</span><span class="p">{</span><span class="nl">instance</span><span class="o">=</span><span class="p">"</span><span class="s">localhost:9090</span><span class="p">"}</span>
+</span></code></pre></div>
+<p><strong>步骤 2：不等于过滤</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-53-1"><a href="#__codelineno-53-1" id="__codelineno-53-1" name="__codelineno-53-1"></a><span class="c1"># 排除 prometheus job</span>
+</span><span id="__span-53-2"><a href="#__codelineno-53-2" id="__codelineno-53-2" name="__codelineno-53-2"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">!=</span><span class="p">"</span><span class="s">prometheus</span><span class="p">"}</span>
+</span><span id="__span-53-3"><a href="#__codelineno-53-3" id="__codelineno-53-3" name="__codelineno-53-3"></a>
+</span><span id="__span-53-4"><a href="#__codelineno-53-4" id="__codelineno-53-4" name="__codelineno-53-4"></a><span class="c1"># 排除 localhost</span>
+</span><span id="__span-53-5"><a href="#__codelineno-53-5" id="__codelineno-53-5" name="__codelineno-53-5"></a><span class="nv">up</span><span class="p">{</span><span class="nl">instance</span><span class="o">!=</span><span class="p">"</span><span class="s">localhost:9090</span><span class="p">"}</span>
+</span></code></pre></div>
+<p><strong>步骤 3：正则匹配</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-54-1"><a href="#__codelineno-54-1" id="__codelineno-54-1" name="__codelineno-54-1"></a><span class="c1"># 查询所有 node_ 开头的指标</span>
+</span><span id="__span-54-2"><a href="#__codelineno-54-2" id="__codelineno-54-2" name="__codelineno-54-2"></a><span class="p">{</span><span class="nl">__name__</span><span class="o">=~</span><span class="p">"</span><span class="s">node_.*</span><span class="p">"}</span>
+</span><span id="__span-54-3"><a href="#__codelineno-54-3" id="__codelineno-54-3" name="__codelineno-54-3"></a>
+</span><span id="__span-54-4"><a href="#__codelineno-54-4" id="__codelineno-54-4" name="__codelineno-54-4"></a><span class="c1"># 查询所有 2xx 状态码</span>
+</span><span id="__span-54-5"><a href="#__codelineno-54-5" id="__codelineno-54-5" name="__codelineno-54-5"></a><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">"</span><span class="s">2..</span><span class="p">"}</span>
+</span><span id="__span-54-6"><a href="#__codelineno-54-6" id="__codelineno-54-6" name="__codelineno-54-6"></a>
+</span><span id="__span-54-7"><a href="#__codelineno-54-7" id="__codelineno-54-7" name="__codelineno-54-7"></a><span class="c1"># 查询多个 job</span>
+</span><span id="__span-54-8"><a href="#__codelineno-54-8" id="__codelineno-54-8" name="__codelineno-54-8"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">=~</span><span class="p">"</span><span class="s">prometheus|node</span><span class="p">"}</span>
+</span></code></pre></div>
+<p><strong>步骤 4：正则不匹配</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-55-1"><a href="#__codelineno-55-1" id="__codelineno-55-1" name="__codelineno-55-1"></a><span class="c1"># 排除所有 go_ 开头的指标</span>
+</span><span id="__span-55-2"><a href="#__codelineno-55-2" id="__codelineno-55-2" name="__codelineno-55-2"></a><span class="p">{</span><span class="nl">__name__</span><span class="o">!~</span><span class="p">"</span><span class="s">go_.*</span><span class="p">"}</span>
+</span><span id="__span-55-3"><a href="#__codelineno-55-3" id="__codelineno-55-3" name="__codelineno-55-3"></a>
+</span><span id="__span-55-4"><a href="#__codelineno-55-4" id="__codelineno-55-4" name="__codelineno-55-4"></a><span class="c1"># 排除成功响应</span>
+</span><span id="__span-55-5"><a href="#__codelineno-55-5" id="__codelineno-55-5" name="__codelineno-55-5"></a><span class="p">{</span><span class="nl">status</span><span class="o">!~</span><span class="p">"</span><span class="s">2..</span><span class="p">"}</span>
+</span></code></pre></div>
+<p><strong>步骤 5：组合条件</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-56-1"><a href="#__codelineno-56-1" id="__codelineno-56-1" name="__codelineno-56-1"></a><span class="c1"># job 为 prometheus 且 instance 为 localhost</span>
+</span><span id="__span-56-2"><a href="#__codelineno-56-2" id="__codelineno-56-2" name="__codelineno-56-2"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">=</span><span class="p">"</span><span class="s">prometheus</span><span class="p">",</span><span class="w"> </span><span class="nl">instance</span><span class="o">=</span><span class="p">"</span><span class="s">localhost:9090</span><span class="p">"}</span>
+</span><span id="__span-56-3"><a href="#__codelineno-56-3" id="__codelineno-56-3" name="__codelineno-56-3"></a>
+</span><span id="__span-56-4"><a href="#__codelineno-56-4" id="__codelineno-56-4" name="__codelineno-56-4"></a><span class="c1"># job 为 prometheus 或 node（使用正则）</span>
+</span><span id="__span-56-5"><a href="#__codelineno-56-5" id="__codelineno-56-5" name="__codelineno-56-5"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">=~</span><span class="p">"</span><span class="s">prometheus|node</span><span class="p">"}</span>
+</span></code></pre></div>
+<h3 id="54_1">实践 5.4：聚合操作练习<a class="headerlink" href="#54_1" title="Permanent link">¶</a></h3>
+<p><strong>任务</strong>：
+1. 使用不同的聚合函数
+2. 按不同维度分组</p>
+<p><strong>步骤</strong>：</p>
+<p><strong>步骤 1：全局聚合</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-57-1"><a href="#__codelineno-57-1" id="__codelineno-57-1" name="__codelineno-57-1"></a><span class="c1"># 所有时间序列求和</span>
+</span><span id="__span-57-2"><a href="#__codelineno-57-2" id="__codelineno-57-2" name="__codelineno-57-2"></a><span class="k">sum</span><span class="o">(</span><span class="nv">up</span><span class="o">)</span>
+</span><span id="__span-57-3"><a href="#__codelineno-57-3" id="__codelineno-57-3" name="__codelineno-57-3"></a>
+</span><span id="__span-57-4"><a href="#__codelineno-57-4" id="__codelineno-57-4" name="__codelineno-57-4"></a><span class="c1"># 所有时间序列计数</span>
+</span><span id="__span-57-5"><a href="#__codelineno-57-5" id="__codelineno-57-5" name="__codelineno-57-5"></a><span class="k">count</span><span class="o">(</span><span class="nv">up</span><span class="o">)</span>
+</span><span id="__span-57-6"><a href="#__codelineno-57-6" id="__codelineno-57-6" name="__codelineno-57-6"></a>
+</span><span id="__span-57-7"><a href="#__codelineno-57-7" id="__codelineno-57-7" name="__codelineno-57-7"></a><span class="c1"># 所有时间序列求平均</span>
+</span><span id="__span-57-8"><a href="#__codelineno-57-8" id="__codelineno-57-8" name="__codelineno-57-8"></a><span class="k">avg</span><span class="o">(</span><span class="nv">prometheus_tsdb_head_samples_appended_total</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>步骤 2：按单个标签分组</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-58-1"><a href="#__codelineno-58-1" id="__codelineno-58-1" name="__codelineno-58-1"></a><span class="c1"># 按 job 分组求和</span>
+</span><span id="__span-58-2"><a href="#__codelineno-58-2" id="__codelineno-58-2" name="__codelineno-58-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">job</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">up</span><span class="o">)</span>
+</span><span id="__span-58-3"><a href="#__codelineno-58-3" id="__codelineno-58-3" name="__codelineno-58-3"></a>
+</span><span id="__span-58-4"><a href="#__codelineno-58-4" id="__codelineno-58-4" name="__codelineno-58-4"></a><span class="c1"># 按 job 分组计数</span>
+</span><span id="__span-58-5"><a href="#__codelineno-58-5" id="__codelineno-58-5" name="__codelineno-58-5"></a><span class="k">count</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">job</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">up</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>步骤 3：按多个标签分组</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-59-1"><a href="#__codelineno-59-1" id="__codelineno-59-1" name="__codelineno-59-1"></a><span class="c1"># 按 job 和 instance 分组</span>
+</span><span id="__span-59-2"><a href="#__codelineno-59-2" id="__codelineno-59-2" name="__codelineno-59-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">job</span><span class="p">,</span><span class="w"> </span><span class="nv">instance</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">up</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>步骤 4：去除标签</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-60-1"><a href="#__codelineno-60-1" id="__codelineno-60-1" name="__codelineno-60-1"></a><span class="c1"># 去除 instance 标签</span>
+</span><span id="__span-60-2"><a href="#__codelineno-60-2" id="__codelineno-60-2" name="__codelineno-60-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">without</span><span class="w"> </span><span class="o">(</span><span class="nv">instance</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">up</span><span class="o">)</span>
+</span><span id="__span-60-3"><a href="#__codelineno-60-3" id="__codelineno-60-3" name="__codelineno-60-3"></a>
+</span><span id="__span-60-4"><a href="#__codelineno-60-4" id="__codelineno-60-4" name="__codelineno-60-4"></a><span class="c1"># 去除 job 和 instance 标签</span>
+</span><span id="__span-60-5"><a href="#__codelineno-60-5" id="__codelineno-60-5" name="__codelineno-60-5"></a><span class="k">sum</span><span class="w"> </span><span class="k">without</span><span class="w"> </span><span class="o">(</span><span class="nv">job</span><span class="p">,</span><span class="w"> </span><span class="nv">instance</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">up</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>步骤 5：TopK 查询</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-61-1"><a href="#__codelineno-61-1" id="__codelineno-61-1" name="__codelineno-61-1"></a><span class="c1"># 找出样本数最多的前 3 个时间序列</span>
+</span><span id="__span-61-2"><a href="#__codelineno-61-2" id="__codelineno-61-2" name="__codelineno-61-2"></a><span class="k">topk</span><span class="o">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nv">prometheus_tsdb_head_samples_appended_total</span><span class="o">)</span>
+</span><span id="__span-61-3"><a href="#__codelineno-61-3" id="__codelineno-61-3" name="__codelineno-61-3"></a>
+</span><span id="__span-61-4"><a href="#__codelineno-61-4" id="__codelineno-61-4" name="__codelineno-61-4"></a><span class="c1"># 找出样本数最少的后 3 个时间序列</span>
+</span><span id="__span-61-5"><a href="#__codelineno-61-5" id="__codelineno-61-5" name="__codelineno-61-5"></a><span class="k">bottomk</span><span class="o">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nv">prometheus_tsdb_head_samples_appended_total</span><span class="o">)</span>
+</span></code></pre></div>
+<h3 id="55_1">实践 5.5：综合查询练习<a class="headerlink" href="#55_1" title="Permanent link">¶</a></h3>
+<p><strong>场景</strong>：假设你有一个电商系统，包含以下指标：
+- <code>http_requests_total</code>：HTTP 请求总数（Counter）
+- <code>http_request_duration_seconds</code>：请求延迟（Histogram）
+- <code>http_connections_active</code>：活跃连接数（Gauge）</p>
+<p><strong>任务</strong>：</p>
+<p><strong>任务 1：查询当前总请求数</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-62-1"><a href="#__codelineno-62-1" id="__codelineno-62-1" name="__codelineno-62-1"></a><span class="c1"># 答案</span>
+</span><span id="__span-62-2"><a href="#__codelineno-62-2" id="__codelineno-62-2" name="__codelineno-62-2"></a><span class="k">sum</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>任务 2：计算每秒请求速率</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-63-1"><a href="#__codelineno-63-1" id="__codelineno-63-1" name="__codelineno-63-1"></a><span class="c1"># 答案</span>
+</span><span id="__span-63-2"><a href="#__codelineno-63-2" id="__codelineno-63-2" name="__codelineno-63-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span></code></pre></div>
+<p><strong>任务 3：按方法统计请求速率</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-64-1"><a href="#__codelineno-64-1" id="__codelineno-64-1" name="__codelineno-64-1"></a><span class="c1"># 答案</span>
+</span><span id="__span-64-2"><a href="#__codelineno-64-2" id="__codelineno-64-2" name="__codelineno-64-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">method</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span></code></pre></div>
+<p><strong>任务 4：计算错误率（5xx 错误占比）</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-65-1"><a href="#__codelineno-65-1" id="__codelineno-65-1" name="__codelineno-65-1"></a><span class="c1"># 答案</span>
+</span><span id="__span-65-2"><a href="#__codelineno-65-2" id="__codelineno-65-2" name="__codelineno-65-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">status</span><span class="o">=~</span><span class="p">"</span><span class="s">5..</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span><span class="w"> </span>
+</span><span id="__span-65-3"><a href="#__codelineno-65-3" id="__codelineno-65-3" name="__codelineno-65-3"></a><span class="o">/</span><span class="w"> </span>
+</span><span id="__span-65-4"><a href="#__codelineno-65-4" id="__codelineno-65-4" name="__codelineno-65-4"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span></code></pre></div>
+<p><strong>任务 5：找出最慢的 5 个接口</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-66-1"><a href="#__codelineno-66-1" id="__codelineno-66-1" name="__codelineno-66-1"></a><span class="c1"># 答案</span>
+</span><span id="__span-66-2"><a href="#__codelineno-66-2" id="__codelineno-66-2" name="__codelineno-66-2"></a><span class="k">topk</span><span class="o">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-66-3"><a href="#__codelineno-66-3" id="__codelineno-66-3" name="__codelineno-66-3"></a><span class="w">  </span><span class="k">avg</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">handler</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-66-4"><a href="#__codelineno-66-4" id="__codelineno-66-4" name="__codelineno-66-4"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_request_duration_seconds_sum</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-66-5"><a href="#__codelineno-66-5" id="__codelineno-66-5" name="__codelineno-66-5"></a><span class="w">    </span><span class="o">/</span>
+</span><span id="__span-66-6"><a href="#__codelineno-66-6" id="__codelineno-66-6" name="__codelineno-66-6"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_request_duration_seconds_count</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-66-7"><a href="#__codelineno-66-7" id="__codelineno-66-7" name="__codelineno-66-7"></a><span class="w">  </span><span class="o">)</span>
+</span><span id="__span-66-8"><a href="#__codelineno-66-8" id="__codelineno-66-8" name="__codelineno-66-8"></a><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>任务 6：统计每个服务的活跃连接数</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-67-1"><a href="#__codelineno-67-1" id="__codelineno-67-1" name="__codelineno-67-1"></a><span class="c1"># 答案</span>
+</span><span id="__span-67-2"><a href="#__codelineno-67-2" id="__codelineno-67-2" name="__codelineno-67-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">http_connections_active</span><span class="o">)</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="56">5.6 查询优化技巧<a class="headerlink" href="#56" title="Permanent link">¶</a></h2>
+<h3 id="561">5.6.1 使用标签索引加速<a class="headerlink" href="#561" title="Permanent link">¶</a></h3>
+<p><strong>技巧</strong>：优先使用标签过滤，减少扫描范围</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-68-1"><a href="#__codelineno-68-1" id="__codelineno-68-1" name="__codelineno-68-1"></a><span class="c1"># ❌ 慢查询：先查询所有，再过滤</span>
+</span><span id="__span-68-2"><a href="#__codelineno-68-2" id="__codelineno-68-2" name="__codelineno-68-2"></a><span class="p">{</span><span class="nl">__name__</span><span class="o">=~</span><span class="p">"</span><span class="s">http_requests.*</span><span class="p">",</span><span class="w"> </span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}</span>
+</span><span id="__span-68-3"><a href="#__codelineno-68-3" id="__codelineno-68-3" name="__codelineno-68-3"></a>
+</span><span id="__span-68-4"><a href="#__codelineno-68-4" id="__codelineno-68-4" name="__codelineno-68-4"></a><span class="c1"># ✅ 快查询：直接使用标签索引</span>
+</span><span id="__span-68-5"><a href="#__codelineno-68-5" id="__codelineno-68-5" name="__codelineno-68-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}</span>
+</span></code></pre></div>
+<h3 id="562">5.6.2 避免高基数查询<a class="headerlink" href="#562" title="Permanent link">¶</a></h3>
+<p><strong>技巧</strong>：避免返回过多时间序列</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-69-1"><a href="#__codelineno-69-1" id="__codelineno-69-1" name="__codelineno-69-1"></a><span class="c1"># ❌ 可能返回大量数据</span>
+</span><span id="__span-69-2"><a href="#__codelineno-69-2" id="__codelineno-69-2" name="__codelineno-69-2"></a><span class="nv">http_requests_total</span>
+</span><span id="__span-69-3"><a href="#__codelineno-69-3" id="__codelineno-69-3" name="__codelineno-69-3"></a>
+</span><span id="__span-69-4"><a href="#__codelineno-69-4" id="__codelineno-69-4" name="__codelineno-69-4"></a><span class="c1"># ✅ 限制范围</span>
+</span><span id="__span-69-5"><a href="#__codelineno-69-5" id="__codelineno-69-5" name="__codelineno-69-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span>
+</span><span id="__span-69-6"><a href="#__codelineno-69-6" id="__codelineno-69-6" name="__codelineno-69-6"></a>
+</span><span id="__span-69-7"><a href="#__codelineno-69-7" id="__codelineno-69-7" name="__codelineno-69-7"></a><span class="c1"># ✅ 先聚合</span>
+</span><span id="__span-69-8"><a href="#__codelineno-69-8" id="__codelineno-69-8" name="__codelineno-69-8"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span></code></pre></div>
+<h3 id="563">5.6.3 选择合适的时间范围<a class="headerlink" href="#563" title="Permanent link">¶</a></h3>
+<p><strong>技巧</strong>：根据需求选择时间范围</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-70-1"><a href="#__codelineno-70-1" id="__codelineno-70-1" name="__codelineno-70-1"></a><span class="c1"># 实时监控（短时间范围）</span>
+</span><span id="__span-70-2"><a href="#__codelineno-70-2" id="__codelineno-70-2" name="__codelineno-70-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">1m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-70-3"><a href="#__codelineno-70-3" id="__codelineno-70-3" name="__codelineno-70-3"></a>
+</span><span id="__span-70-4"><a href="#__codelineno-70-4" id="__codelineno-70-4" name="__codelineno-70-4"></a><span class="c1"># 趋势分析（中等时间范围）</span>
+</span><span id="__span-70-5"><a href="#__codelineno-70-5" id="__codelineno-70-5" name="__codelineno-70-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-70-6"><a href="#__codelineno-70-6" id="__codelineno-70-6" name="__codelineno-70-6"></a>
+</span><span id="__span-70-7"><a href="#__codelineno-70-7" id="__codelineno-70-7" name="__codelineno-70-7"></a><span class="c1"># 长期趋势（长时间范围）</span>
+</span><span id="__span-70-8"><a href="#__codelineno-70-8" id="__codelineno-70-8" name="__codelineno-70-8"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">1h</span><span class="p">]</span><span class="o">)</span>
+</span></code></pre></div>
+<h3 id="564">5.6.4 使用记录规则预计算<a class="headerlink" href="#564" title="Permanent link">¶</a></h3>
+<p><strong>技巧</strong>：复杂查询使用记录规则</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-71-1"><a href="#__codelineno-71-1" id="__codelineno-71-1" name="__codelineno-71-1"></a><span class="c1"># 记录规则</span>
+</span><span id="__span-71-2"><a href="#__codelineno-71-2" id="__codelineno-71-2" name="__codelineno-71-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">record</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">service:http_requests:rate5m</span>
+</span><span id="__span-71-3"><a href="#__codelineno-71-3" id="__codelineno-71-3" name="__codelineno-71-3"></a><span class="w">  </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum by (service) (rate(http_requests_total[5m]))</span>
+</span></code></pre></div>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-72-1"><a href="#__codelineno-72-1" id="__codelineno-72-1" name="__codelineno-72-1"></a><span class="c1"># 查询时直接使用预计算结果</span>
+</span><span id="__span-72-2"><a href="#__codelineno-72-2" id="__codelineno-72-2" name="__codelineno-72-2"></a><span class="nv">service</span><span class="err">:</span><span class="nv">http_requests</span><span class="err">:</span><span class="nv">rate5m</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="57">5.7 常见问题与排查<a class="headerlink" href="#57" title="Permanent link">¶</a></h2>
+<h3 id="571">5.7.1 查询无结果<a class="headerlink" href="#571" title="Permanent link">¶</a></h3>
+<p><strong>问题</strong>：查询返回空结果</p>
+<p><strong>排查步骤</strong>：</p>
+<p><strong>步骤 1：检查指标名称</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-73-1"><a href="#__codelineno-73-1" id="__codelineno-73-1" name="__codelineno-73-1"></a><span class="c1"># 使用自动补全确认指标名称</span>
+</span><span id="__span-73-2"><a href="#__codelineno-73-2" id="__codelineno-73-2" name="__codelineno-73-2"></a><span class="err">输入前几个字母，查看是否有匹配的指标</span>
+</span></code></pre></div>
+<p><strong>步骤 2：检查标签</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-74-1"><a href="#__codelineno-74-1" id="__codelineno-74-1" name="__codelineno-74-1"></a><span class="c1"># 先查询所有，确认有哪些标签</span>
+</span><span id="__span-74-2"><a href="#__codelineno-74-2" id="__codelineno-74-2" name="__codelineno-74-2"></a><span class="nv">http_requests_total</span>
+</span><span id="__span-74-3"><a href="#__codelineno-74-3" id="__codelineno-74-3" name="__codelineno-74-3"></a>
+</span><span id="__span-74-4"><a href="#__codelineno-74-4" id="__codelineno-74-4" name="__codelineno-74-4"></a><span class="c1"># 再逐步添加过滤条件</span>
+</span><span id="__span-74-5"><a href="#__codelineno-74-5" id="__codelineno-74-5" name="__codelineno-74-5"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}</span>
+</span><span id="__span-74-6"><a href="#__codelineno-74-6" id="__codelineno-74-6" name="__codelineno-74-6"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">",</span><span class="w"> </span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span>
+</span></code></pre></div>
+<p><strong>步骤 3：检查时间范围</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-75-1"><a href="#__codelineno-75-1" id="__codelineno-75-1" name="__codelineno-75-1"></a># 调整时间范围为 "Last 5 minutes"
+</span><span id="__span-75-2"><a href="#__codelineno-75-2" id="__codelineno-75-2" name="__codelineno-75-2"></a># 确认数据存在
+</span></code></pre></div>
+<h3 id="572">5.7.2 查询过慢<a class="headerlink" href="#572" title="Permanent link">¶</a></h3>
+<p><strong>问题</strong>：查询执行时间很长</p>
+<p><strong>排查步骤</strong>：</p>
+<p><strong>步骤 1：查看返回的时间序列数量</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-76-1"><a href="#__codelineno-76-1" id="__codelineno-76-1" name="__codelineno-76-1"></a><span class="c1"># 查看有多少个时间序列</span>
+</span><span id="__span-76-2"><a href="#__codelineno-76-2" id="__codelineno-76-2" name="__codelineno-76-2"></a><span class="k">count</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="o">)</span>
+</span></code></pre></div>
+<p><strong>步骤 2：添加标签过滤</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-77-1"><a href="#__codelineno-77-1" id="__codelineno-77-1" name="__codelineno-77-1"></a><span class="c1"># 缩小范围</span>
+</span><span id="__span-77-2"><a href="#__codelineno-77-2" id="__codelineno-77-2" name="__codelineno-77-2"></a><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">service</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">"}</span>
+</span></code></pre></div>
+<p><strong>步骤 3：使用聚合</strong></p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-78-1"><a href="#__codelineno-78-1" id="__codelineno-78-1" name="__codelineno-78-1"></a><span class="c1"># 先聚合再计算</span>
+</span><span id="__span-78-2"><a href="#__codelineno-78-2" id="__codelineno-78-2" name="__codelineno-78-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span></code></pre></div>
+<h3 id="573">5.7.3 范围向量使用错误<a class="headerlink" href="#573" title="Permanent link">¶</a></h3>
+<p><strong>问题</strong>：使用范围向量时报错</p>
+<p><strong>常见错误</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-79-1"><a href="#__codelineno-79-1" id="__codelineno-79-1" name="__codelineno-79-1"></a><span class="c1"># ❌ 错误：范围向量不能直接展示</span>
+</span><span id="__span-79-2"><a href="#__codelineno-79-2" id="__codelineno-79-2" name="__codelineno-79-2"></a><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span>
+</span><span id="__span-79-3"><a href="#__codelineno-79-3" id="__codelineno-79-3" name="__codelineno-79-3"></a><span class="c1"># 错误：Error: no instant vector selected</span>
+</span><span id="__span-79-4"><a href="#__codelineno-79-4" id="__codelineno-79-4" name="__codelineno-79-4"></a>
+</span><span id="__span-79-5"><a href="#__codelineno-79-5" id="__codelineno-79-5" name="__codelineno-79-5"></a><span class="c1"># ✅ 正确：配合函数使用</span>
+</span><span id="__span-79-6"><a href="#__codelineno-79-6" id="__codelineno-79-6" name="__codelineno-79-6"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="58">5.8 最佳实践<a class="headerlink" href="#58" title="Permanent link">¶</a></h2>
+<h3 id="581">5.8.1 查询命名规范<a class="headerlink" href="#581" title="Permanent link">¶</a></h3>
+<p><strong>在 Grafana 中</strong>：</p>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-80-1"><a href="#__codelineno-80-1" id="__codelineno-80-1" name="__codelineno-80-1"></a><span class="c1"># ✅ 好的别名</span>
+</span><span id="__span-80-2"><a href="#__codelineno-80-2" id="__codelineno-80-2" name="__codelineno-80-2"></a><span class="p">{</span><span class="err">{service</span><span class="p">}</span><span class="err">}</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">{</span><span class="err">{method</span><span class="p">}</span><span class="err">}</span><span class="w"> </span><span class="err">请求速率</span>
+</span><span id="__span-80-3"><a href="#__codelineno-80-3" id="__codelineno-80-3" name="__codelineno-80-3"></a>
+</span><span id="__span-80-4"><a href="#__codelineno-80-4" id="__codelineno-80-4" name="__codelineno-80-4"></a><span class="c1"># ❌ 坏的别名</span>
+</span><span id="__span-80-5"><a href="#__codelineno-80-5" id="__codelineno-80-5" name="__codelineno-80-5"></a><span class="p">{</span><span class="nl">job</span><span class="o">=</span><span class="p">"</span><span class="s">user-service</span><span class="p">",</span><span class="w"> </span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}</span>
+</span></code></pre></div>
+<h3 id="582">5.8.2 查询结构优化<a class="headerlink" href="#582" title="Permanent link">¶</a></h3>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-81-1"><a href="#__codelineno-81-1" id="__codelineno-81-1" name="__codelineno-81-1"></a><span class="c1"># ✅ 清晰的查询结构</span>
+</span><span id="__span-81-2"><a href="#__codelineno-81-2" id="__codelineno-81-2" name="__codelineno-81-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-81-3"><a href="#__codelineno-81-3" id="__codelineno-81-3" name="__codelineno-81-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-81-4"><a href="#__codelineno-81-4" id="__codelineno-81-4" name="__codelineno-81-4"></a><span class="o">)</span>
+</span><span id="__span-81-5"><a href="#__codelineno-81-5" id="__codelineno-81-5" name="__codelineno-81-5"></a>
+</span><span id="__span-81-6"><a href="#__codelineno-81-6" id="__codelineno-81-6" name="__codelineno-81-6"></a><span class="c1"># ❌ 难以阅读</span>
+</span><span id="__span-81-7"><a href="#__codelineno-81-7" id="__codelineno-81-7" name="__codelineno-81-7"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">service</span><span class="o">)(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">http_requests_total</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">"</span><span class="s">POST</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span></code></pre></div>
+<h3 id="583">5.8.3 避免的查询模式<a class="headerlink" href="#583" title="Permanent link">¶</a></h3>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-82-1"><a href="#__codelineno-82-1" id="__codelineno-82-1" name="__codelineno-82-1"></a><span class="c1"># ❌ 避免：返回过多时间序列</span>
+</span><span id="__span-82-2"><a href="#__codelineno-82-2" id="__codelineno-82-2" name="__codelineno-82-2"></a><span class="p">{</span><span class="nl">__name__</span><span class="o">=~</span><span class="p">"</span><span class="s">.*</span><span class="p">"}</span>
+</span><span id="__span-82-3"><a href="#__codelineno-82-3" id="__codelineno-82-3" name="__codelineno-82-3"></a>
+</span><span id="__span-82-4"><a href="#__codelineno-82-4" id="__codelineno-82-4" name="__codelineno-82-4"></a><span class="c1"># ✅ 替代：明确指定指标</span>
+</span><span id="__span-82-5"><a href="#__codelineno-82-5" id="__codelineno-82-5" name="__codelineno-82-5"></a><span class="nv">http_requests_total</span>
+</span><span id="__span-82-6"><a href="#__codelineno-82-6" id="__codelineno-82-6" name="__codelineno-82-6"></a>
+</span><span id="__span-82-7"><a href="#__codelineno-82-7" id="__codelineno-82-7" name="__codelineno-82-7"></a><span class="c1"># ❌ 避免：过于复杂的正则</span>
+</span><span id="__span-82-8"><a href="#__codelineno-82-8" id="__codelineno-82-8" name="__codelineno-82-8"></a><span class="p">{</span><span class="nl">handler</span><span class="o">=~</span><span class="p">"</span><span class="s">/api/(user|order|payment)/(create|update|delete)/.*</span><span class="p">"}</span>
+</span><span id="__span-82-9"><a href="#__codelineno-82-9" id="__codelineno-82-9" name="__codelineno-82-9"></a>
+</span><span id="__span-82-10"><a href="#__codelineno-82-10" id="__codelineno-82-10" name="__codelineno-82-10"></a><span class="c1"># ✅ 替代：简化或使用多个查询</span>
+</span><span id="__span-82-11"><a href="#__codelineno-82-11" id="__codelineno-82-11" name="__codelineno-82-11"></a><span class="p">{</span><span class="nl">handler</span><span class="o">=~</span><span class="p">"</span><span class="s">/api/.*</span><span class="p">"}</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="59">5.9 知识检查<a class="headerlink" href="#59" title="Permanent link">¶</a></h2>
+<h3 id="_2">选择题<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>以下哪个是即时向量查询？</strong></li>
+<li>A. <code>rate(http_requests_total[5m])</code></li>
+<li>B. <code>http_requests_total</code></li>
+<li>C. <code>http_requests_total[5m]</code></li>
+<li>
+<p>D. <code>increase(http_errors_total[1h])</code></p>
+</li>
+<li>
+<p><strong>范围向量的语法是？</strong></p>
+</li>
+<li>A. <code>http_requests_total{method="POST"}</code></li>
+<li>B. <code>http_requests_total[5m]</code></li>
+<li>C. <code>sum(http_requests_total)</code></li>
+<li>
+<p>D. <code>rate(http_requests_total)</code></p>
+</li>
+<li>
+<p><strong>以下哪个操作符用于正则匹配？</strong></p>
+</li>
+<li>A. <code>=</code></li>
+<li>B. <code>!=</code></li>
+<li>C. <code>=~</code></li>
+<li>
+<p>D. <code>!~</code></p>
+</li>
+<li>
+<p><strong>如何按 method 标签分组求和？</strong></p>
+</li>
+<li>A. <code>sum(http_requests_total) by (method)</code></li>
+<li>B. <code>sum by (method) (http_requests_total)</code></li>
+<li>C. <code>sum(method) (http_requests_total)</code></li>
+<li>
+<p>D. <code>by (method) sum(http_requests_total)</code></p>
+</li>
+<li>
+<p><strong>以下哪个函数用于计算速率？</strong></p>
+</li>
+<li>A. <code>increase()</code></li>
+<li>B. <code>delta()</code></li>
+<li>C. <code>rate()</code></li>
+<li>D. <code>avg()</code></li>
+</ol>
+<h3 id="_3">简答题<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<ol>
+<li>解释即时向量和范围向量的区别。</li>
+<li>为什么范围向量不能直接展示？</li>
+<li>列举 4 种标签匹配操作符并说明各自的作用。</li>
+<li><code>sum by (method)</code> 和 <code>sum without (instance)</code> 有什么区别？</li>
+<li>如何计算错误率（5xx 错误占比）？</li>
+</ol>
+<h3 id="_4">实操题<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>基础查询</strong>：</li>
+<li>查询所有 Counter 类型的指标</li>
+<li>使用标签过滤查询特定指标</li>
+<li>
+<p>使用正则匹配查询多个指标</p>
+</li>
+<li>
+<p><strong>聚合练习</strong>：</p>
+</li>
+<li>计算所有服务的总请求速率</li>
+<li>按服务分组计算平均延迟</li>
+<li>
+<p>找出请求量最高的 5 个接口</p>
+</li>
+<li>
+<p><strong>综合应用</strong>：</p>
+</li>
+<li>设计查询计算每个环境的错误率</li>
+<li>设计查询找出最慢的 10 个接口</li>
+<li>设计查询统计每个团队的资源使用情况</li>
+</ol>
+<hr/>
+<h2 id="510">5.10 延伸阅读<a class="headerlink" href="#510" title="Permanent link">¶</a></h2>
+<h3 id="_5">必读<a class="headerlink" href="#_5" title="Permanent link">¶</a></h3>
+<ul>
+<li><a href="https://prometheus.io/docs/prometheus/latest/querying/basics/">PromQL 官方文档</a></li>
+<li><a href="https://prometheus.io/docs/prometheus/latest/querying/operators/#aggregation-operators">聚合操作文档</a></li>
+<li><a href="https://prometheus.io/docs/prometheus/latest/querying/operators/#vector-matching">向量匹配文档</a></li>
+</ul>
+<h3 id="_6">选读<a class="headerlink" href="#_6" title="Permanent link">¶</a></h3>
+<ul>
+<li><a href="https://prometheus.io/docs/prometheus/latest/querying/operators/#range-vectors">范围向量详解</a></li>
+<li><a href="https://prometheus.io/docs/prometheus/latest/querying/best_practices/">查询优化指南</a></li>
+<li><a href="https://prometheus.io/docs/prometheus/latest/querying/examples/">PromQL 示例</a></li>
+</ul>
+<h3 id="_7">工具<a class="headerlink" href="#_7" title="Permanent link">¶</a></h3>
+<ul>
+<li><a href="http://localhost:9090/graph">Prometheus Expression Browser</a></li>
+<li><a href="https://promql.io/">PromQL 在线测试工具</a></li>
+</ul>
+<hr/>
+<h2 id="511">5.11 下节预告<a class="headerlink" href="#511" title="Permanent link">¶</a></h2>
+<p><strong>第 6 课：PromQL 进阶操作</strong></p>
+<p>在下一课中，你将：
+- 学习数学运算和比较操作
+- 掌握时间范围函数（<code>rate</code>、<code>irate</code>、<code>increase</code>）
+- 深入学习聚合函数的高级用法
+- 了解子查询的语法和场景
+- 编写复杂的查询表达式并绘制图表</p>
+<p><strong>预习任务</strong>：
+- 复习本节课的向量概念
+- 思考如何计算"过去 5 分钟的平均值"
+- 了解 <code>rate()</code> 和 <code>irate()</code> 的区别</p>
+<hr/>
+<h2 id="_8">总结<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<p>通过本课学习，你应该已经掌握：</p>
+<p>✅ 即时向量（Instant Vector）的概念和使用<br/>
+✅ 范围向量（Range Vector）的概念和使用<br/>
+✅ PromQL 的基本查询语法<br/>
+✅ 4 种标签匹配操作符（=、!=、=<sub>、!</sub>）<br/>
+✅ 常用聚合函数（sum、avg、max、min、count 等）<br/>
+✅ 按标签分组聚合的方法（by 和 without）  </p>
+<p><strong>关键收获</strong>：
+- 理解 PromQL 查询的核心概念（向量）
+- 能够编写基础的查询表达式
+- 掌握标签过滤和聚合的方法
+- 为学习进阶 PromQL 打下坚实基础</p>
+<p><strong>下一步</strong>：
+- 完成实践环节的所有练习
+- 在 Grafana 中尝试创建简单的仪表盘
+- 准备学习第 6 课的 PromQL 进阶操作</p>
+<hr/>
+<p><strong>学习提示</strong>：PromQL 是 Prometheus 的核心技能，需要多练习才能熟练掌握。建议在实际环境中多尝试不同的查询，观察结果的变化，这样才能真正理解每个操作符和函数的作用。</p>
+<p>祝你学习愉快！📚</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

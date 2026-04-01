@@ -1,0 +1,720 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/prometheus-tech/%E7%AC%AC%2015%20%E8%AF%BE-TSDB%20%E6%B7%B1%E5%85%A5%20-%20%E6%8C%81%E4%B9%85%E5%8C%96%20Block/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第 15 课：TSDB 深入 - 持久化 Block - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#15-tsdb-block" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第 15 课：TSDB 深入 - 持久化 Block
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#151-block-tsdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 Block 在 TSDB 里的位置
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#152-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 Block 目录长什么样
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#153-metajson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 meta.json：这包数据的“说明书”
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#154-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 index：为什么查询必须先读它
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#155-chunks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.5 chunks/：样本真正存在哪里
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#156-tombstones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.6 tombstones：删除为什么是“逻辑删除”
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#157-block-head-compaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.7 Block 怎么从 Head 产生：Compaction 的直觉流程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#158" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.8 查询视角：为什么历史查询更“贵”
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#159-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.9 实践：打开一个 Block，按顺序看懂它
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1510" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.10 源码阅读建议（想对照实现）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        课后小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="15-tsdb-block">第 15 课：TSDB 深入 - 持久化 Block<a class="headerlink" href="#15-tsdb-block" title="Permanent link">¶</a></h1>
+<p><strong>学习时长</strong>：3-4 小时<br/>
+<strong>难度等级</strong>：⭐⭐⭐⭐ 深入<br/>
+<strong>先修要求</strong>：完成第 14 课 - TSDB 深入 - WAL 与恢复</p>
+<hr/>
+<h2 id="_1">学习目标<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>完成本课程后，你将能够：</p>
+<ul>
+<li>✅ 说清持久化 Block 在 TSDB 里的职责（存历史数据、服务历史查询）</li>
+<li>✅ 看懂一个 Block 目录里最重要的文件：<code>chunks/</code>、<code>index</code>、<code>meta.json</code>、<code>tombstones</code></li>
+<li>✅ 理解 Block 是怎么从 Head 产生的（切块 + compaction）</li>
+<li>✅ 理解查询为什么需要 index（按标签找 series）和 chunks（取样本）</li>
+<li>✅ 理解 tombstones 的作用（逻辑删除）以及它对查询/压缩的影响</li>
+</ul>
+<hr/>
+<h2 id="151-block-tsdb">15.1 Block 在 TSDB 里的位置<a class="headerlink" href="#151-block-tsdb" title="Permanent link">¶</a></h2>
+<p>TSDB 的数据分两层：</p>
+<ul>
+<li>Head：最新数据（主要在内存里）</li>
+<li>Blocks：历史数据（落盘后的持久化块）</li>
+</ul>
+<p>你可以把 Block 理解为：一段时间范围内的“历史归档包”，查询历史数据主要读 Block。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>flowchart TD
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  A[Scrape 写入] --&gt; B[Head]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  B --&gt; C[后台切块/压缩 Compaction]
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>  C --&gt; D[持久化 Block 目录（多个）]
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>  D --&gt; E[PromQL 查询读取 Blocks]
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>  B --&gt; E
+</span></code></pre></div>
+<hr/>
+<h2 id="152-block">15.2 Block 目录长什么样<a class="headerlink" href="#152-block" title="Permanent link">¶</a></h2>
+<p>Prometheus 的 <code>data/</code> 目录下通常会有多个 Block 目录，目录名是一串 ULID（看起来像随机字符串），例如：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>data/
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>  01J0...3K/          # 一个 Block（ULID）
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>    chunks/
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>    index
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>    meta.json
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>    tombstones        # 可选：有删除时才会出现或变更
+</span></code></pre></div>
+<p>你只需要抓住一个要点：</p>
+<blockquote>
+<p>Block = index（找谁）+ chunks（读值）+ meta（说明书）+ tombstones（删除记录）。</p>
+</blockquote>
+<hr/>
+<h2 id="153-metajson">15.3 meta.json：这包数据的“说明书”<a class="headerlink" href="#153-metajson" title="Permanent link">¶</a></h2>
+<p><code>meta.json</code> 是理解 Block 的最快入口，通常包含：</p>
+<ul>
+<li>这个 Block 的时间范围（minTime / maxTime）</li>
+<li>compaction 的层级信息（这个 Block 是怎么合并来的）</li>
+<li>统计信息（series 数、samples 数、chunk 数等）</li>
+</ul>
+<p>实践建议：</p>
+<ul>
+<li>打开任意一个 <code>meta.json</code>，先确认时间范围</li>
+<li>再看统计信息，理解这个 Block 的规模</li>
+</ul>
+<hr/>
+<h2 id="154-index">15.4 index：为什么查询必须先读它<a class="headerlink" href="#154-index" title="Permanent link">¶</a></h2>
+<p>PromQL 查询通常先做“选出匹配的时间序列（series）”，再去读样本。</p>
+<p>例如：</p>
+<p><code>rate(http_requests_total{job="web",method="GET"}[5m])</code></p>
+<p>这里的关键问题是：怎么快速找出所有满足 <code>job="web" AND method="GET"</code> 的 series？</p>
+<p>Block 的 <code>index</code> 文件提供的就是这类能力：</p>
+<ul>
+<li>标签名/标签值到 series 的映射（常见实现是倒排索引）</li>
+<li>postings 列表（满足某个 label pair 的一组 series 引用）</li>
+<li>让引擎可以对 postings 做交集/并集，快速得到目标 series 集合</li>
+</ul>
+<p>直觉总结：</p>
+<blockquote>
+<p>index 负责把“标签过滤”变成一次高效的查找，而不是扫描所有 series。</p>
+</blockquote>
+<hr/>
+<h2 id="155-chunks">15.5 chunks/：样本真正存在哪里<a class="headerlink" href="#155-chunks" title="Permanent link">¶</a></h2>
+<p><code>chunks/</code> 目录里存的是样本数据（压缩后的 chunk）。</p>
+<p>你可以把 chunk 理解为：</p>
+<ul>
+<li>每条 series 的样本会被切成多个小段（chunk）</li>
+<li>每个 chunk 覆盖一段时间范围</li>
+<li>chunk 会压缩，减少磁盘与 IO</li>
+</ul>
+<p>查询时的目标是：</p>
+<ul>
+<li>先从 index 找到 series</li>
+<li>再根据 series 的 chunk metas（时间范围、引用）去读 chunks</li>
+<li>只读取落在查询时间范围内的 chunk，避免全量读取</li>
+</ul>
+<hr/>
+<h2 id="156-tombstones">15.6 tombstones：删除为什么是“逻辑删除”<a class="headerlink" href="#156-tombstones" title="Permanent link">¶</a></h2>
+<p>Prometheus 支持删除时间序列或时间范围的数据，但通常不是立刻把 chunks 物理抹掉，而是先记录删除信息：</p>
+<ul>
+<li>tombstones 记录“哪些 series 的哪些时间段被标记删除”</li>
+<li>查询时会应用 tombstones，避免返回被删除的数据</li>
+</ul>
+<p>这带来一个直觉：</p>
+<ul>
+<li>删除后磁盘不一定立刻变小</li>
+<li>后台 compaction/清理阶段会逐步把删除真正反映到磁盘占用上</li>
+</ul>
+<hr/>
+<h2 id="157-block-head-compaction">15.7 Block 怎么从 Head 产生：Compaction 的直觉流程<a class="headerlink" href="#157-block-head-compaction" title="Permanent link">¶</a></h2>
+<p>把 Compaction 想成“把 Head 里的一段数据打包成 Block，并不断合并小包为大包”：</p>
+<p>1) Head 累积到一定时间范围<br/>
+2) 把这段范围内的数据切成 chunks，写入 <code>chunks/</code><br/>
+3) 为这些 chunks 写 <code>index</code> 与 <code>meta.json</code><br/>
+4) 后台把多个小 Block 合并成更大 Block（减少文件数量，提高压缩率）  </p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>flowchart LR
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>  A[Head 时间窗口] --&gt; B[写出 Block#1]
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>  A --&gt; C[写出 Block#2]
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>  B --&gt; D[Compaction 合并]
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>  C --&gt; D
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a>  D --&gt; E[更大的 Block]
+</span></code></pre></div>
+<hr/>
+<h2 id="158">15.8 查询视角：为什么历史查询更“贵”<a class="headerlink" href="#158" title="Permanent link">¶</a></h2>
+<p>历史查询通常更重，原因很简单：</p>
+<ul>
+<li>时间范围更大，需要读更多 Blocks</li>
+<li>每个 Block 都要做一次“按标签选 series → 读 chunk → 计算”</li>
+<li>高基数会放大 postings 与 chunk 读取量</li>
+</ul>
+<p>因此排障时常见的直觉策略是：</p>
+<ul>
+<li>缩小时间范围</li>
+<li>增大 step（range query 的计算次数减少）</li>
+<li>减少高基数维度（避免引擎处理过多 series）</li>
+</ul>
+<hr/>
+<h2 id="159-block">15.9 实践：打开一个 Block，按顺序看懂它<a class="headerlink" href="#159-block" title="Permanent link">¶</a></h2>
+<p>目标：不读源码也能定位“这包历史数据里有什么”。</p>
+<p>1) 在 <code>data/</code> 下找到一个 ULID 目录<br/>
+2) 打开 <code>meta.json</code>：确认时间范围与规模<br/>
+3) 看到 <code>index</code>：知道“标签过滤靠它”<br/>
+4) 看到 <code>chunks/</code>：知道“样本值在这里”<br/>
+5) 如果有 <code>tombstones</code>：说明历史上发生过删除或清理动作  </p>
+<hr/>
+<h2 id="1510">15.10 源码阅读建议（想对照实现）<a class="headerlink" href="#1510" title="Permanent link">¶</a></h2>
+<p>建议按“Block 读取 → index/chunks → 生成 Block（写）”的顺序读：</p>
+<ul>
+<li><code>tsdb/block.go</code>：BlockReader/IndexReader/ChunkReader 的核心抽象</li>
+<li><code>tsdb/index/</code>：index 的读写与 postings 相关逻辑</li>
+<li><code>tsdb/chunks/</code>：chunk 的读写与引用组织</li>
+<li><code>tsdb/blockwriter.go</code>：生成 Block 的写入路径</li>
+<li><code>tsdb/tombstones/</code>：tombstones 的读写</li>
+</ul>
+<hr/>
+<h2 id="_2">课后小结<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>Block 是 TSDB 的历史存储单元：index 负责找 series，chunks 负责存样本，meta 描述时间范围与统计，tombstones 负责逻辑删除</li>
+<li>Block 由 Head 经 compaction 写出，并不断合并以提升压缩率与查询效率</li>
+<li>历史查询更贵的根因是“时间范围更大 + 读更多 Blocks + 处理更多 series”</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
