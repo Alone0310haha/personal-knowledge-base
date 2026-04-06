@@ -5,9 +5,6 @@ tags:
   - transformer
   - attention
   - multi-head-attention
-  - qkv
-  - softmax
-  - masking
 ---
 
 # 多头注意力 Multi-Head Attention 机制详解

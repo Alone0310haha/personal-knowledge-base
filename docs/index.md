@@ -46,6 +46,8 @@
   [Token 与 Embedding](<Token 与 Embedding：LLM 与 RAG 的数据处理机制.md>)
   [Transformer](<Transformer 如何成为 AI 模型的地基.md>)
   [LoRA](<LoRA 是什么 & 大模型微调怎么回事.md>)
+  [Harness Engineering](<Harness Engineering.md>)
+  [TDD](<TDD.md>)
 
 </div>
 
@@ -123,6 +125,8 @@
     - [零拷贝是什么？如何减少 CPU 拷贝与上下文切换（p60）](<零拷贝是什么？如何减少 CPU 拷贝与上下文切换（p60）.md>)
     - [AI 知识图谱 GraphRAG 是怎么回事？](AI 知识图谱 GraphRAG 是怎么回事？.md)
     - [AI 编程实践：从 Claude Code 实践到团队协作的优化思考](AI 编程实践：从 Claude Code 实践到团队协作的优化思考.md)
+    - [Harness Engineering](<Harness Engineering.md>)
+    - [TDD](<TDD.md>)
     - [count(＊) vs count(1) vs count(字段)](<count(＊) vs count(1) vs count(字段).md>)
     - [LoRA 是什么 & 大模型微调怎么回事](LoRA 是什么 & 大模型微调怎么回事.md)
     - [Token 与 Embedding：LLM 与 RAG 的数据处理机制](Token 与 Embedding：LLM 与 RAG 的数据处理机制.md)

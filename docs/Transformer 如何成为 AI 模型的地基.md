@@ -1,24 +1,10 @@
 ---
-title: Transformer 如何成为 AI 模型的地基
-bvid: BV1k6yWBEEmH
-type: video-note
 source: https://www.bilibili.com/video/BV1k6yWBEEmH/
-transcript: file:///d:/code/self/tmp/BV1k6yWBEEmH_文字稿.md
 tags:
   - ai
   - llm
   - transformer
   - encoder-decoder
-  - decoder-only
-  - encoder-only
-  - gpt
-  - bert
-  - sampling
-  - temperature
-  - top-k
-related:
-  - "[[多头注意力 Multi-Head Attention 机制详解]]"
-  - "[[Token 与 Embedding：LLM 与 RAG 的数据处理机制]]"
 ---
 
 # Transformer 如何成为 AI 模型的地基
