@@ -38,6 +38,7 @@
   [Spring Boot 百万数据插入优化](<Spring Boot 百万数据插入优化.md>)
   [JPA vs MyBatis](<JPA vs MyBatis（架构视角）.md>)
   [Mockito 单测阅读方法](Mockito 单测阅读方法.md)
+  [Spring 事件监听机制详解](../doc/Spring 事件监听机制详解.md)
 
 - :material-brain: **AI / LLM**
   ---
