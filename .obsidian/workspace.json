@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/WebSocket 是什么？Nginx 如何支持？集群怎么做（p59）.md",
+                "file": "docs/AI时代下，如何放大自己的能力到10倍甚至百倍.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "WebSocket 是什么？Nginx 如何支持？集群怎么做（p59）"
+              "title": "AI时代下，如何放大自己的能力到10倍甚至百倍"
             }
           }
         ]
@@ -186,6 +186,20 @@
   },
   "active": "d6ef4bde5b4b3b09",
   "lastOpenFiles": [
+    "docs/提示词库/Agent Prompt 2.0_zh.md",
+    "docs/提示词库/Quest Design_zh.md",
+    "docs/提示词库/Quest Action_zh.md",
+    "docs/提示词库/prompt_zh.md",
+    "docs/提示词库",
+    "docs/AI Coding流水线是怎么从需求跑到验收.md",
+    "docs/AI时代下，如何放大自己的能力到10倍甚至百倍.md",
+    "docs/如何写好提示词2.md",
+    "docs/如何写好提示词1.md",
+    "docs/最近爆火的 Harness Engineering 到底是啥？.md",
+    "docs/注意力残差是什么.md",
+    "docs/利用 Harness Engineering 解决复杂问题.md",
+    "docs/Agent Skills 设计哲学和实战进化.md",
+    "docs/WebSocket 是什么？Nginx 如何支持？集群怎么做（p59）.md",
     "docs/WebSocket 是什么？Nginx 如何支持？集群怎么做（p57）.md",
     "docs/UP主是如何接商单的？视频质量ai分析.md",
     "docs/Transformer 如何成为 AI 模型的地基.md",
@@ -199,19 +213,6 @@
     "docs/MVCC（多版本并发控制）如何实现无锁一致性读？.md",
     "docs/Mockito 单测阅读方法.md",
     "docs/LoRA 是什么 & 大模型微调怎么回事.md",
-    "docs/jwt如何通过双token保证安全和体验兼得.md",
-    "docs/InnoDB Buffer Pool 工作过程（更新语句视角）.md",
-    "docs/index.md",
-    "docs/HTTP 长连接与短连接：慢在哪？Nginx 如何管理（p61）.md",
-    "docs/Git 如何修复线上突发 bug（本地还有未完成需求）.md",
-    "docs/Dubbo 负载均衡策略选型（p62）.md",
-    "docs/DDoS 是什么？如何防御（p54）.md",
-    "docs/count(＊) vs count(1) vs count(字段).md",
-    "docs/binlog 刷盘机制.md",
-    "docs/前模糊索引失效（LIKE '%xxx'）.md",
-    "docs/内存200M读取1G文件并统计重复内容.md",
-    "docs/跨域是什么？如何解决（p56）.md",
-    "docs/了解陌生行业方法论.md",
     "rules",
     "site/search/search_index.json",
     "site/search",
@@ -221,7 +222,6 @@
     "site/prometheus-tech/第 9 课-抓取管理（Scrape Manager）",
     "site/prometheus-tech/第 8 课-服务发现机制（Service Discovery）/index.html",
     "site/prometheus-tech/第 8 课-服务发现机制（Service Discovery）",
-    "site/prometheus-tech/第 7 课-Prometheus 整体架构/index.html",
     "site/assets/images/favicon.png",
     "未命名.canvas"
   ]
