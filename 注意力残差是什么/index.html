@@ -1,0 +1,441 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="笔记与技术文档分享" name="description"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%AE%8B%E5%B7%AE%E6%98%AF%E4%BB%80%E4%B9%88/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>注意力残差是什么 - Alone的知识库</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../js/unpkg.com/d3@7.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-lib@0.18.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-view@0.18.js" type="text/javascript"></script><style type="text/css">div.mkdocs-markmap {
+    width: 100%;
+    min-height: 1em;
+    border: 1px solid grey;
+}
+.mkdocs-markmap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#_1">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="Alone的知识库" class="md-header__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Alone的知识库
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              注意力残差是什么
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Alone的知识库" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Alone的知识库
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+<span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        讨论视角（作者从什么角度切入）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-token">
+<span class="md-ellipsis">
+      
+        分论点 1：注意力机制的作用是让模型在 token 层面具备上下文能力
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        分论点 2：残差连接用于缓解深层网络的梯度消失，但其“纯相加”会成为新瓶颈
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+<span class="md-ellipsis">
+      
+        分论点 3：经典残差连接带来两大问题：数值膨胀 + 信息稀释
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4attention-residuals">
+<span class="md-ellipsis">
+      
+        分论点 4：Attention Residuals 用“层间注意力”替代“无差别相加”
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5block-wise">
+<span class="md-ellipsis">
+      
+        分论点 5：代价与折中：分块（block-wise）混合残差
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        关键数据、案例与结论
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（markmap）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1>注意力残差是什么</h1>
+<p><a href="https://www.bilibili.com/video/BV1MRX2B2ECg/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7">注意力残差是什么？ [白话读论文]</a></p>
+<h2 id="_1">讨论视角（作者从什么角度切入）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>作者以“白话读论文”的方式，围绕 Kimi 的论文 Attention Residuals（注意力残差）做工程/原理拆解：先回顾 Transformer 里注意力与残差连接为何出现、解决了什么，再指出经典残差连接在深层模型中的新瓶颈，最后解释 Attention Residuals 如何把“注意力的思想”从 token 之间迁移到 layer 之间，以解决残差累积带来的数值与信息问题，并讨论计算/显存开销与折中方案。</p>
+<h2 id="_2">核心论点与分论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<h3 id="_3">核心论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<p>传统“逐层相加”的残差连接虽然解决了梯度消失，但在深层大模型里会引入数值膨胀与信息稀释。Attention Residuals 通过“对历史层输出做注意力加权汇聚”替代“无差别相加”，让每层输入保持稳定量级，同时让不同层能更有侧重地吸收特定历史层的信息。</p>
+<h3 id="1-token">分论点 1：注意力机制的作用是让模型在 token 层面具备上下文能力<a class="headerlink" href="#1-token" title="Permanent link">¶</a></h3>
+<ul>
+<li>早期前馈网络（FFN）擅长无状态任务；聊天等任务需要利用上下文。</li>
+<li>注意力通过计算当前 token 对上下文各 token 的关联度，做加权求和得到 contextualized embedding，再交给 FFN 处理；堆叠多层形成大语言模型雏形。</li>
+</ul>
+<h3 id="2">分论点 2：残差连接用于缓解深层网络的梯度消失，但其“纯相加”会成为新瓶颈<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<p>残差连接让每层输出以“输入 + 各层增量”的形式直接贡献到最终结果，使梯度能更直接传回每一层，从而缓解“层数越深越难训练”的梯度消失问题，成为现代 LLM 的基础范式。</p>
+<h3 id="3">分论点 3：经典残差连接带来两大问题：数值膨胀 + 信息稀释<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<ol>
+<li>数值膨胀：越往后层的输入是前面所有层输出总和，量级变大；后层若想产生影响需输出同量级增量，导致训练过程不稳定、数值波动剧烈。</li>
+<li>信息稀释：某层输入是“前面所有层的大杂烩”，难以区分各层贡献；与“希望不同层分工处理不同特征/逻辑”的目标相冲突。</li>
+</ol>
+<h3 id="4attention-residuals">分论点 4：Attention Residuals 用“层间注意力”替代“无差别相加”<a class="headerlink" href="#4attention-residuals" title="Permanent link">¶</a></h3>
+<ul>
+<li>为每一层引入一个可训练的伪查询向量（pseudo query，属于模型参数）。</li>
+<li>当前层用自己的伪查询与历史各层伪查询做相似度（点积）得到关注度分数，再经 softmax 转成权重百分比。</li>
+<li>用这些权重对历史各层输出做加权求和，作为当前层输入（第一层直接用原始输入）。</li>
+<li>softmax 权重和为 1，使输入量级受控，缓解数值膨胀；同时权重让输入对历史层“有侧重”，缓解信息稀释，促进层间分工的形成（作者用“人物识别层→关系处理层”的正反馈作直观解释）。</li>
+</ul>
+<h3 id="5block-wise">分论点 5：代价与折中：分块（block-wise）混合残差<a class="headerlink" href="#5block-wise" title="Permanent link">¶</a></h3>
+<p>Attention Residuals 需要对所有历史层做点积、softmax、加权求和，并保存/读取历史层输出，会带来显著计算与显存/带宽开销。论文给出的折中是分块：</p>
+<ul>
+<li>块内：仍用普通残差连接（局部相加）。</li>
+<li>块间：用注意力残差连接（全局按权重提取）。</li>
+<li>用“局部大杂烩 + 全局精细提取”在效果与开销之间取平衡。</li>
+</ul>
+<h2 id="_4">关键数据、案例与结论<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<ul>
+<li>论文与舆论背景：作者提到该论文发布后引发关注，并引用“马斯克评价印象深刻”的传播口径。</li>
+<li>关键结论（视频主线）：</li>
+<li>LLM 架构演进是“问题驱动的连锁反应”：FFN 无法处理上下文 → 引入注意力；深层训练困难（梯度消失）→ 引入残差；残差累积成为新瓶颈 → 把注意力思想借回到残差上（Attention Residuals）。</li>
+<li>许多突破是对既有思想的迁移与延伸：用已验证的机制（注意力）解决新场景里的老问题（残差的无差别相加）。</li>
+</ul>
+<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyDms6jmhI/lipvmrovlt67vvIhBdHRlbnRpb24gUmVzaWR1YWxz77yJ55m96K+d5ouG6KejCiMjIOiDjOaZr++8muaooeWei+aooeWdlwojIyMgRkZO77yI5YmN6aaI572R57uc77yJCiMjIyMg5peg54q25oCB5Lu75YqhIE9L77yI5aaC5Zu+5YOP6K+G5Yir55qE566A5YyW6KeG6KeS77yJCiMjIyMg5pyJ54q25oCBL+S4iuS4i+aWh+S7u+WKoeS4jeWkn+eUqAojIyMgQXR0ZW50aW9u77yI5rOo5oSP5Yqb77yJCiMjIyMgdG9rZW4g6Ze05YWz6IGU5bqmIC0+IOWKoOadg+axguWSjCAtPiBjb250ZXh0dWFsaXplZCBlbWJlZGRpbmcKIyMjIyDorqnmqKHlnovlhbflpIfkuIrkuIvmloflpITnkIbog73lipsKIyMg5rex5bGC6K6t57uD6Zeu6aKYCiMjIyDmoq/luqbmtojlpLEKIyMjIyDotorpnaDov5HovpPlhaXnmoTlsYLotorpmr7ooqvmnInmlYjmm7TmlrAKIyMjIFJlc2lkdWFsIGNvbm5lY3Rpb25z77yI5q6L5beu6L+e5o6l77yJCiMjIyMg6L6T5Ye6ID0g6L6T5YWlICsg5ZCE5bGC5aKe6YeP77yI55u06YCa6YCa6YGT77yJCiMjIyMg57yT6Kej5qKv5bqm5raI5aSx77yM5oiQ5Li6IExMTSDln7rnoYDojIPlvI8KIyMg57uP5YW45q6L5beu55qE5paw55O26aKICiMjIyAxIOaVsOWAvOiGqOiDgAojIyMjIOWQjuWxgui+k+WFpSA9IOWJjemdouaJgOacieWxgui+k+WHuuaAu+WSjCAtPiDph4/nuqfotormnaXotorlpKcKIyMjIyDorq3nu4Pmm7TkuI3nqLPlrpoKIyMjIDIg5L+h5oGv56iA6YeKCiMjIyMg5q+P5bGC6L6T5YWl5piv5aSn5p2C54Op77yM6Zq+5Yy65YiG5ZCE5bGC6LSh54yuCiMjIyMg5LiN5Yip5LqO5bGC5YiG5bel5LiO54m55b6B5Yqg5belCiMjIEF0dGVudGlvbiBSZXNpZHVhbHMg5qC45b+D5oCd6LevCiMjIyDmiorms6jmhI/lipvku44gdG9rZW4g6Ze06L+B56e75YiwIGxheWVyIOmXtAojIyMg5q+P5bGC5LiA5LiqIHBzZXVkbyBxdWVyee+8iOWPr+iuree7g+WPguaVsO+8iQojIyMg5b2T5YmN5bGC5LiO5Y6G5Y+y5bGCIHBzZXVkbyBxdWVyeSDngrnnp68gLT4gc29mdG1heCDmnYPph40KIyMjIOWOhuWPsuWxgui+k+WHuuaMieadg+mHjeWKoOadg+axguWSjCAtPiDlvZPliY3lsYLovpPlhaUKIyMjIyDmnYPph43lkozkuLogMSAtPiDph4/nuqflj5fmjqfvvIjnvJPop6PmlbDlgLzohqjog4DvvIkKIyMjIyDmnYPph43mnInkvqfph40gLT4g5L+D6L+b5bGC5YiG5bel77yI57yT6Kej5L+h5oGv56iA6YeK77yJCiMjIOS7o+S7t+S4juaKmOS4rQojIyMg6K6h566XL+aYvuWtmC/luKblrr3lvIDplIDlpKfvvIjpnIDkv53lrZjlubbor7vlj5bljoblj7LlsYLovpPlh7rvvIkKIyMjIOWIhuWdl+aWueahiAojIyMjIOWdl+WGheaZrumAmuaui+W3rgojIyMjIOWdl+mXtOazqOaEj+WKm+aui+W3rgojIyMjIOWxgOmDqOWkp+adgueDqSArIOWFqOWxgOeyvue7huaPkOWPlgojIyDnu5PorroKIyMjIOaetuaehOa8lOi/m++8mumXrumimOmpseWKqOeahOi/numUgeaUuemAoAojIyMg5Yib5paw5bi45piv5YmN5Lq65pm65oWn55qE6L+B56e75LiO5bu25Ly4</markmap-data></div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="text/javascript">(function initializeMarkmap() {
+    const transformer = new markmap.Transformer();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
+    const assets = transformer.getAssets();
+    const loading = Promise.all([
+        assets.styles && markmap.loadCSS(assets.styles),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
+    ]);
+
+    function parseData(content) {
+        const { root, frontmatter } = transformer.transform(content);
+        let options = markmap.deriveOptions(frontmatter?.markmap);
+        options = Object.assign(
+            {
+                fitRatio: 0.85,
+            },
+            options
+        );
+        return { root, options };
+    }
+
+    function resetMarkmap(m, el) {
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
+        el.style.height = height + "px";
+        m.fit();
+    }
+
+    function decodeBase64(encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+    }
+
+    function renderMarkmap(el) {
+        const dataEl = el.querySelector("markmap-data");
+        if (!dataEl) return;
+        let content = el.textContent;
+        if (dataEl.getAttribute("encoding") === "base64") {
+            content = decodeBase64(content);
+        }
+        el.innerHTML = "<svg>";
+        svg = el.firstChild;
+        const { root, options } = parseData(content);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
+            resetMarkmap(m, el);
+        });
+    }
+
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll(".mkdocs-markmap")) {
+            renderMarkmap(el);
+        }
+    }
+
+    loading.then(() => {
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === "childList") {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        updateMarkmaps(document);
+    });
+})();
+</script></body>
+</html>

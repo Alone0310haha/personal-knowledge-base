@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="笔记与技术文档分享" name="description"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%A6%82%E4%BD%95%E5%86%99%E5%A5%BD%E6%8F%90%E7%A4%BA%E8%AF%8D2/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>如何写好提示词2 - Alone的知识库</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../js/unpkg.com/d3@7.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-lib@0.18.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-view@0.18.js" type="text/javascript"></script><style type="text/css">div.mkdocs-markmap {
+    width: 100%;
+    min-height: 1em;
+    border: 1px solid grey;
+}
+.mkdocs-markmap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#_1">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="Alone的知识库" class="md-header__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Alone的知识库
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              如何写好提示词2
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Alone的知识库" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Alone的知识库
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+<span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        你要解决的核心问题
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        讨论视角（作者从什么角度出发进行讨论）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1">
+<span class="md-ellipsis">
+      
+        分论点 1：先认清大模型本质与失误模式，才能推导出有效策略
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2-1">
+<span class="md-ellipsis">
+      
+        分论点 2：策略 1——写清晰指令，让模型先“知道你要什么”
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-2">
+<span class="md-ellipsis">
+      
+        分论点 3：策略 2——给模型“思考时间”，让推理可见以提高正确率
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4-3">
+<span class="md-ellipsis">
+      
+        分论点 4：策略 3——把复杂任务拆成简单任务，让概率收敛、让上下文变短
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5-4">
+<span class="md-ellipsis">
+      
+        分论点 5：策略 4——借助外部工具/外部资料，绕过模型的“事实/计算/更新”短板
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#6-prompt-engineering-prompt-tricks">
+<span class="md-ellipsis">
+      
+        分论点 6：为什么叫 Prompt Engineering，而不是 Prompt Tricks
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        一套可复用的“提示词策略推演流程”
+      
+    </span>
+</a>
+<nav aria-label="一套可复用的“提示词策略推演流程”" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1_1">
+<span class="md-ellipsis">
+      
+        第 1 步：先判定任务类型（决定后续策略）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        第 2 步：识别模型在这个任务里的“天然缺点”（选策略的起点）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+<span class="md-ellipsis">
+      
+        第 3 步：把缺点映射为策略（从策略自然导出技巧）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4">
+<span class="md-ellipsis">
+      
+        第 4 步：把策略落到一个固定模板（让你每次都能复用）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        你可以直接照做的练习（从“记技巧”转为“推策略”）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      
+        常见错误与解决方案（快速排障）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      
+        关键数据、案例与结论
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（markmap）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1>如何写好提示词2</h1>
+<p><a href="https://www.bilibili.com/video/BV1BDyoY3EVC/?spm_id_from=333.1387.search.video_card.click&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7">如何写好提示词2</a></p>
+<h2 id="_1">你要解决的核心问题<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>提示词技巧太多记不住并不可怕。真正高效的做法是：先理解大模型的本质、优缺点与失误模式，再推导出“写提示词的策略”，最后按策略自然长出 one-shot / few-shot / 思维链 / 伪代码 / 角色 等技巧，而不是死记硬背。</p>
+<h2 id="_2">讨论视角（作者从什么角度出发进行讨论）<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>作者从“提示词技巧太多记不住”的学习痛点切入，主张不要背技巧清单，而要回到大模型的本质（概率预测生成）与典型优缺点（语言强、事实/推理/记忆/上下文受限），用“策略→技巧”的推演方式来掌握提示词：先理解模型会在哪些环节失败，再用策略提高命中概率与稳定性，最后自然长出 one-shot/few-shot、思维链、伪代码、角色等具体技巧。</p>
+<h2 id="_3">核心论点与分论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">核心论点<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<p>提示词写作的关键不是掌握更多“招式”，而是用策略系统性地提升模型生成期望结果的概率：让模型准确理解你的意图、让概率收敛到更少的可行路径，并用外部工具/分解流程弥补模型先天短板（幻觉、推理有限、上下文窗口有限、无记忆）。</p>
+<h3 id="1">分论点 1：先认清大模型本质与失误模式，才能推导出有效策略<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<ul>
+<li>本质：根据输入预测下一个 token 的概率生成（类比“锄禾日当午”的接龙）。</li>
+<li>强项：语言理解与生成强、知识覆盖广（但为压缩后的知识）。</li>
+<li>短板：事实可能不准（幻觉/编造）、推理尤其是复杂数学不稳、知识更新滞后、上下文窗口有限、严格意义上无记忆（每次请求都要把历史再发一遍/由产品做摘要滑窗）。</li>
+</ul>
+<h3 id="2-1">分论点 2：策略 1——写清晰指令，让模型先“知道你要什么”<a class="headerlink" href="#2-1" title="Permanent link">¶</a></h3>
+<p>作者强调：如果模型没理解指令，后面再多技巧也很难补救。清晰指令的核心是减少歧义、设边界，避免模型“脑补”。</p>
+<p>代表性技巧（由策略自然衍生）：</p>
+<ul>
+<li>把目标说成可执行任务（你要它做什么、做到什么程度）。</li>
+<li>明确约束与边界（哪些不做、哪些必须做）。</li>
+<li>在提示中写出你已知的关键路径/步骤（为后面的“概率收敛”做铺垫）。</li>
+</ul>
+<h3 id="3-2">分论点 3：策略 2——给模型“思考时间”，让推理可见以提高正确率<a class="headerlink" href="#3-2" title="Permanent link">¶</a></h3>
+<ul>
+<li>作者引用“思维链”观点：要求模型把思考过程输出出来，能显著提升推理结果与输出质量（尤其在数学/多步推理场景）。</li>
+<li>实操表达：在提示里明确“先写步骤/计划，再给结论”，而不是一句话就要它一步到位。</li>
+</ul>
+<h3 id="4-3">分论点 4：策略 3——把复杂任务拆成简单任务，让概率收敛、让上下文变短<a class="headerlink" href="#4-3" title="Permanent link">¶</a></h3>
+<p>作者把“概率收敛”类比为登山找路：排除掉错误路径，留下少数可行路径，找到正确结果的概率就更高。</p>
+<p>分解带来的收益：</p>
+<ul>
+<li>每个子任务更简单，失败概率更低。</li>
+<li>任务拆小后提示更短，缓解上下文窗口限制，也提升质量。</li>
+<li>可从最简单版本开始迭代：先做出可用结果，再逐步加约束、加质量要求。</li>
+</ul>
+<h3 id="5-4">分论点 5：策略 4——借助外部工具/外部资料，绕过模型的“事实/计算/更新”短板<a class="headerlink" href="#5-4" title="Permanent link">¶</a></h3>
+<p>作者给出的典型做法：</p>
+<ul>
+<li>降幻觉：接入搜索/引用外部资料，把关键事实作为上下文提供（尤其是公司内部资料、最新事件等模型本身拿不到的）。</li>
+<li>提升计算正确率：遇到复杂数学，不强行让模型心算；让它调用计算器、或生成代码执行计算，再把结果回填让模型负责解释与总结。</li>
+<li>选对模型：不同任务适合不同模型（写作/翻译/推理/数学），不要迷信“最新一定最好”。</li>
+</ul>
+<h3 id="6-prompt-engineering-prompt-tricks">分论点 6：为什么叫 Prompt Engineering，而不是 Prompt Tricks<a class="headerlink" href="#6-prompt-engineering-prompt-tricks" title="Permanent link">¶</a></h3>
+<p>作者认为之所以常说“提示工程”，是因为完成任务往往需要流程设计与组合拳：分解任务、分阶段提示、引入工具与验证，而不是单条提示词解决所有问题；工程强调“过程”和“系统性扬长补短”。</p>
+<h2 id="_5">一套可复用的“提示词策略推演流程”<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<h3 id="1_1">第 1 步：先判定任务类型（决定后续策略）<a class="headerlink" href="#1_1" title="Permanent link">¶</a></h3>
+<ul>
+<li>生成类：写文章、写方案、写文案、写代码</li>
+<li>变换类：翻译、改写、润色、结构化整理</li>
+<li>分析类：抽取要点、对比优劣、风险评估、找因果</li>
+<li>决策类：方案选择、排序、权衡取舍</li>
+</ul>
+<p>输出要求写在第一句：产物是什么、用于什么场景、最终交付形态（报告/表格/JSON/代码）。</p>
+<h3 id="2">第 2 步：识别模型在这个任务里的“天然缺点”（选策略的起点）<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<p>把“会出错的地方”提前列出来：</p>
+<ul>
+<li>需求不清会脑补：指令模糊时会自动补全你没说的假设</li>
+<li>上下文缺失会瞎猜：缺业务数据/偏好/约束时容易偏航</li>
+<li>细节一致性差：长文本/长项目容易前后矛盾</li>
+<li>复杂推理不稳：一步到位容易跳步或漏条件</li>
+<li>格式不稳定：没约束时表格/JSON/接口形态容易飘</li>
+</ul>
+<h3 id="3">第 3 步：把缺点映射为策略（从策略自然导出技巧）<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<ul>
+<li>为了防脑补：把指令写具体 + 明确边界 + 写验收标准</li>
+<li>技巧落地：明确受众/风格/结构；列出“必须包含/禁止包含”</li>
+<li>为了补上下文：提供必要材料 + 允许 AI 反问补信息</li>
+<li>技巧落地：给参考样例；让 AI 先问 3–5 个问题再开始</li>
+<li>为了稳推理：拆步骤 + 让过程可见 + 中途自检</li>
+<li>技巧落地：思维链（让它输出步骤）；计划→执行→检查</li>
+<li>为了稳格式：先规定结构 + 给样例 + 给 schema</li>
+<li>技巧落地：one-shot / few-shot；伪代码/类型定义/JSON schema</li>
+<li>为了稳风格：指定角色与写作视角</li>
+<li>技巧落地：设定“资深XX工程师/苏格拉底导师/审稿人”等</li>
+</ul>
+<h3 id="4">第 4 步：把策略落到一个固定模板（让你每次都能复用）<a class="headerlink" href="#4" title="Permanent link">¶</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>【任务】
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>请你……（一句话目标）
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>【输入/上下文】
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>1) 背景：……
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>2) 数据/素材：……
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>3) 约束：……
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>【输出要求】
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>格式：……（Markdown/表格/JSON）
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>必须包含：……
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>禁止包含：……
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a>【过程要求】
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a>先列计划，再执行；每一步输出证据/理由；最后自检是否满足“必须包含/禁止包含”。
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a>
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a>【信息不足时】
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a>如果信息不足，请先问我 3-5 个问题。
+</span></code></pre></div>
+<h2 id="_6">你可以直接照做的练习（从“记技巧”转为“推策略”）<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<ol>
+<li>选一个你常做的任务（写周报/写需求/写代码修 bug/翻译）</li>
+<li>写下这任务中模型最常犯的 3 个错（脑补/漏条件/格式飘等）</li>
+<li>为每个错误写一个对应策略（补边界/补上下文/加自检/给样例）</li>
+<li>把策略嵌到模板里，保存成你的“默认提示词骨架”</li>
+<li>连续用 3 次：每次只改上下文与验收标准，不改骨架</li>
+</ol>
+<h2 id="_7">常见错误与解决方案（快速排障）<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<ul>
+<li>结果“看起来对但不是你想要的”</li>
+<li>先检查：指令是否具体、边界是否写清、验收标准是否存在</li>
+<li>结果前后矛盾/细节漂移</li>
+<li>先做：要求先给计划；输出中途自检；最后按清单复核</li>
+<li>格式不稳定（表格/JSON/字段缺失）</li>
+<li>先做：给一个样例；再给 schema/type；必要时要求严格按 schema 输出</li>
+</ul>
+<h2 id="_8">关键数据、案例与结论<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<ul>
+<li>类比案例：用醋除水垢 → 背后原理是酸碱中和；理解原理后，你能衍生出更多等价技巧（苹果皮/柠檬水等）而不是背配方。作者用此类比“策略→技巧”。</li>
+<li>模型选择案例（作者口径）：有些任务用更强模型先“实现”更重要，之后再用成本更低的模型替换优化；作者举例把翻译等任务从更贵的模型替换为成本约为原先十分之一的选择（口述示例）。</li>
+<li>结论落点：</li>
+<li>提示词学习的最短路径：掌握模型短板 → 推导策略 → 用策略选择技巧。</li>
+<li>提示词的核心目标：提高期望结果的生成概率，并降低不确定性与返工。</li>
+</ul>
+<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyDlpoLkvZXlhpnlpb3mj5DnpLror43vvIgy77yJ4oCU55So562W55Wl5o6o5ryU5oqA5ben77yI57u85ZCI54mI77yJCiMjIOeXm+eCuQojIyMg5oqA5ben5aSq5aSa77yIb25lLXNob3QvZmV3LXNob3Qv5oCd57u06ZO+L+S8quS7o+eggS/op5LoibLigKbvvInorrDkuI3kvY8KIyMg5qC45b+D6KeC54K5CiMjIyDkuI3og4zmioDlt6fvvJrnkIbop6PmqKHlnovmnKzotKjkuI7nn63mnb8gLT4g5o6o5a+8562W55WlIC0+IOiHqueEtumVv+WHuuaKgOW3pwojIyDmqKHlnovmnKzotKjkuI7nibnmgKcKIyMjIOamgueOh+mihOa1i+eUn+aIkO+8iHRva2Vu5o6l6b6Z77yJCiMjIyDkvJjngrkKIyMjIyDor63oqIDnkIbop6Mv55Sf5oiQ5by6CiMjIyMg55+l6K+G6KaG55uW5bm/77yI5L2G5Y6L57yp77yJCiMjIyDnvLrngrkKIyMjIyDlubvop4kv5LqL5a6e5LiN5YeG77yI5LiN5oeC6KOF5oeC77yJCiMjIyMg5o6o55CGL+WkjeadguaVsOWtpuS4jeeoswojIyMjIOefpeivhuabtOaWsOa7nuWQju+8iOmcgOiBlOe9kS/lpJbpg6jotYTmlpnvvIkKIyMjIyDkuIrkuIvmlofnqpflj6PmnInpmZDvvIjovpPlhaXovpPlh7rlhbHnlKjvvIkKIyMjIyDml6DorrDlv4bvvIjmr4/mrKHor7fmsYLpnIDluKbljoblj7Iv5pGY6KaB5ruR56qX77yJCiMjIDQg5Liq562W55WlCiMjIyAxIOa4heaZsOaMh+S7pAojIyMjIOiuqUFJ5YeG56Gu55CG6Kej5oSP5Zu+CiMjIyMg5piO56Gu6L6555WML+e6puadny/pqozmlLYKIyMjIDIg57uZ5oCd6ICD5pe26Ze0CiMjIyMg5oCd57u06ZO+77ya6L6T5Ye65q2l6aqkL+iuoeWIkuWGjee7k+iuugojIyMjIOaPkOWNh+aOqOeQhuato+ehrueOh+S4jueos+WumuaApwojIyMgMyDmi4bop6PlpI3mnYLku7vliqEKIyMjIyDliIbogIzmsrvkuYvvvJrlpI3mnYItPueugOWNleWtkOS7u+WKoQojIyMjIOamgueOh+aUtuaVm++8iOaOkumZpOmUmeivr+i3r+W+hO+8iQojIyMjIOS4iuS4i+aWh+abtOefrSAtPiDotKjph4/mm7Tpq5gKIyMjIDQg5aSW6YOo5bel5YW35LiO6LWE5paZCiMjIyMg6ZmN5bm76KeJ77ya5pCc57SiL+W8leeUqOi1hOaWmS/mj5DkvpvlhoXpg6jkv6Hmga8KIyMjIyDnrpfkuI3lh4bvvJrnlKjorqHnrpflmajmiJblhpnku6PnoIHorqHnrpcKIyMjIyDpgInmqKHlnovvvJrkuI3lkIzku7vliqHnlKjkuI3lkIzmqKHlnosKIyMg6JC95Zyw5rWB56iL77yI6KGM5Yqo5oyH5Y2X77yJCiMjIyAxIOWIpOWumuS7u+WKoeexu+Wei++8iOeUn+aIkC/lj5jmjaIv5YiG5p6QL+WGs+etlu+8iQojIyMgMiDliJflh7rlpKnnhLbnvLrngrnvvIjohJHooaUv57y65LiK5LiL5paHL+a8guenuy/mjqjnkIbkuI3nqLMv5qC85byP6aOY77yJCiMjIyAzIOe8uueCuSAtPiDnrZbnlaUgLT4g5oqA5benCiMjIyA0IOWbuuWumuaooeadv+WkjeeUqO+8iOS7u+WKoS/kuIrkuIvmlocv6L6T5Ye6L+i/h+eoiy/ooaXpl67vvIkKIyMg5Li65LuA5LmI5Y+r5o+Q56S65bel56iLCiMjIyDkuI3mmK/ljZXmnaHmj5DnpLror40KIyMjIOmcgOimgea1geeoi+iuvuiuoSvlt6Xlhbcr6aqM6K+B55qE57uE5ZCI5ouz</markmap-data></div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="text/javascript">(function initializeMarkmap() {
+    const transformer = new markmap.Transformer();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
+    const assets = transformer.getAssets();
+    const loading = Promise.all([
+        assets.styles && markmap.loadCSS(assets.styles),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
+    ]);
+
+    function parseData(content) {
+        const { root, frontmatter } = transformer.transform(content);
+        let options = markmap.deriveOptions(frontmatter?.markmap);
+        options = Object.assign(
+            {
+                fitRatio: 0.85,
+            },
+            options
+        );
+        return { root, options };
+    }
+
+    function resetMarkmap(m, el) {
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
+        el.style.height = height + "px";
+        m.fit();
+    }
+
+    function decodeBase64(encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+    }
+
+    function renderMarkmap(el) {
+        const dataEl = el.querySelector("markmap-data");
+        if (!dataEl) return;
+        let content = el.textContent;
+        if (dataEl.getAttribute("encoding") === "base64") {
+            content = decodeBase64(content);
+        }
+        el.innerHTML = "<svg>";
+        svg = el.firstChild;
+        const { root, options } = parseData(content);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
+            resetMarkmap(m, el);
+        });
+    }
+
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll(".mkdocs-markmap")) {
+            renderMarkmap(el);
+        }
+    }
+
+    loading.then(() => {
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === "childList") {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        updateMarkmaps(document);
+    });
+})();
+</script></body>
+</html>
