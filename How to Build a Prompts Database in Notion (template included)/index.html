@@ -1,0 +1,767 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/How%20to%20Build%20a%20Prompts%20Database%20in%20Notion%20%28template%20included%29/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>How to Build a Prompts Database in Notion (template included) - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#notion" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              How to Build a Prompts Database in Notion (template included)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#notion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标：在 Notion 搭一个“提示词数据库”，让收集与复用变成习惯
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        最终你会得到什么（结构概览）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1）先把数据库字段设计好（这是系统能不能用起来的关键）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1）先把数据库字段设计好（这是系统能不能用起来的关键）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        必备字段（建议照抄）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        默认排序
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2quick-actions-pinned-ops-center" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2）做主页布局（Quick Actions + Pinned + Ops Center）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2）做主页布局（Quick Actions + Pinned + Ops Center）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-aquick-actions-pinned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step A：Quick Actions / Pinned 两栏
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-bnew-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step B：创建“New prompt”按钮（核心：一键捕获）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-cinbox-captured" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step C：Inbox 视图（只显示 captured）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-dessentials-pinned-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step D：Essentials 视图（Pinned 区的高频通用 prompt）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-eops-center-personalbusinessworkplace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step E：Ops Center（按 personal/business/workplace 分流）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3）日常使用：捕获流程（10 秒完成）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-captured" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4）每周复盘：把 captured 变成可复用资产（核心闭环）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5）让提示词更好用的两个小技巧
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5）让提示词更好用的两个小技巧">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-code-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        技巧 1：变量高亮（比 code block 更直观）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        技巧 2：相似 prompt 合并到同一页（减少数据库膨胀）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6）归档与维护（让系统长期可持续）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>How to Build a Prompts Database in Notion (template included)</h1>
+
+<p><a href="https://www.youtube.com/watch?v=Oo_GGWV9Hys"># How to Build a Prompts Database in Notion (template included)!</a></p>
+<h2 id="notion">目标：在 Notion 搭一个“提示词数据库”，让收集与复用变成习惯<a class="headerlink" href="#notion" title="Permanent link">¶</a></h2>
+<p>这个系统解决两件事：</p>
+<ul>
+<li>捕获（Capture）：看到好 prompt 不打断当前工作流，10 秒内存进去。</li>
+<li>复用（Retrieve）：每周复盘筛选、打标签、沉淀为“随用随取”的提示词库。</li>
+</ul>
+<h2 id="_1">最终你会得到什么（结构概览）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<ul>
+<li>一个 Prompt 数据库（原始表）</li>
+<li>一个主页（Dashboard）</li>
+<li>Quick Actions：新建 Prompt 按钮</li>
+<li>Pinned：常用视图（如 Inbox、Essentials）</li>
+<li>Ops Center：按个人/业务/工作分类浏览</li>
+<li>外部 Prompt Libraries：外部资源链接</li>
+<li>Archived：归档区</li>
+</ul>
+<h2 id="1">1）先把数据库字段设计好（这是系统能不能用起来的关键）<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<h3 id="_2">必备字段（建议照抄）<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<ul>
+<li>Name：提示词名称（必须“可读可搜”）</li>
+<li>Prompt：提示词正文（建议用 callout/普通文本，便于高亮变量）</li>
+<li>Type：提示词所处状态/归属（视频里的核心字段）</li>
+<li>captured：刚捕获、未验证</li>
+<li>personal：个人</li>
+<li>my business：业务/副业</li>
+<li>workplace：工作</li>
+<li>all：通用高频</li>
+<li>archived：归档</li>
+<li>Use case：用途分类（如 copywriting / business ops / data analysis）</li>
+<li>Output format：输出类型（text / image / video）</li>
+<li>App：适用工具（为空表示通用；仅在某工具好用就填，如 Claude / Midjourney）</li>
+<li>Source：来源链接/出处（URL 或“来自哪封邮件/哪篇文章”）</li>
+<li>Example output（可选）：示例输出（尤其是 image prompt）</li>
+<li>Created time：创建时间</li>
+<li>Last edited time：最后编辑时间（用于排序）</li>
+</ul>
+<h3 id="_3">默认排序<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<ul>
+<li>Last edited time ↓（让最新加入/更新的 prompt 永远在最上面）</li>
+</ul>
+<h2 id="2quick-actions-pinned-ops-center">2）做主页布局（Quick Actions + Pinned + Ops Center）<a class="headerlink" href="#2quick-actions-pinned-ops-center" title="Permanent link">¶</a></h2>
+<h3 id="step-aquick-actions-pinned">Step A：Quick Actions / Pinned 两栏<a class="headerlink" href="#step-aquick-actions-pinned" title="Permanent link">¶</a></h3>
+<ol>
+<li>在主页插入 Callout（<code>/callout</code>），命名为 Quick Actions。</li>
+<li>复制一个 Callout 放右侧，命名为 Pinned（两栏布局）。</li>
+</ol>
+<h3 id="step-bnew-prompt">Step B：创建“New prompt”按钮（核心：一键捕获）<a class="headerlink" href="#step-bnew-prompt" title="Permanent link">¶</a></h3>
+<ol>
+<li>在主页插入按钮（<code>/button</code>），命名 <code>New prompt</code>，图标用 <code>+</code>。</li>
+<li>Button action 选择：Add page to → 你的 prompts 数据库。</li>
+<li>让新建页面使用预设模板（New prompt template）。</li>
+<li>新建时自动把 Type 设置为 <code>captured</code>（用于 Inbox 过滤）。</li>
+<li>新建后自动在 Side peek 打开新页面（减少跳转成本）。</li>
+</ol>
+<h3 id="step-cinbox-captured">Step C：Inbox 视图（只显示 captured）<a class="headerlink" href="#step-cinbox-captured" title="Permanent link">¶</a></h3>
+<ol>
+<li>在主页插入 linked database（<code>/linked view of database</code>）。</li>
+<li>选择 prompts 数据库的 all view。</li>
+<li>Layout 选 list，隐藏数据库标题。</li>
+<li>Properties 只显示 Type。</li>
+<li>Filter：Type = <code>captured</code>。</li>
+<li>将这个视图重命名为 <code>Inbox</code>（图标用托盘）。</li>
+</ol>
+<h3 id="step-dessentials-pinned-prompt">Step D：Essentials 视图（Pinned 区的高频通用 prompt）<a class="headerlink" href="#step-dessentials-pinned-prompt" title="Permanent link">¶</a></h3>
+<ol>
+<li>复制 Inbox 视图到 Pinned 区。</li>
+<li>重命名为 <code>Essentials</code>（图标用魔杖）。</li>
+<li>Properties 改为显示 <code>Use case</code>。</li>
+<li>Filter：Type = <code>all</code>（只保留“全局高频”）。</li>
+</ol>
+<h3 id="step-eops-center-personalbusinessworkplace">Step E：Ops Center（按 personal/business/workplace 分流）<a class="headerlink" href="#step-eops-center-personalbusinessworkplace" title="Permanent link">¶</a></h3>
+<p>做法：从 all view 复制出 3 个 view，只改 filter 与展示方式。</p>
+<ol>
+<li><code>personal</code> 视图</li>
+<li>Layout：gallery</li>
+<li>Card preview：none，card size：small</li>
+<li>Properties：只显示 App（便于知道用哪个工具跑）</li>
+<li>Group：按 Use case 分组</li>
+<li>Filter：Type = <code>personal</code></li>
+<li>复制 <code>personal</code> 视图改成 <code>my business</code>（Filter：Type = my business）</li>
+<li>再复制改成 <code>workplace</code>（Filter：Type = workplace）</li>
+<li>保留一个 <code>all</code> 视图用于全局搜索（放大镜搜索很快定位）</li>
+</ol>
+<h2 id="310">3）日常使用：捕获流程（10 秒完成）<a class="headerlink" href="#310" title="Permanent link">¶</a></h2>
+<ol>
+<li>看到好 prompt → 全选复制</li>
+<li>点击 <code>New prompt</code></li>
+<li>填 Name（有意义的短标题）</li>
+<li>把 prompt 粘到 Prompt 区（可选：无格式粘贴）</li>
+<li>先不填 App（没测试前保持空）</li>
+<li>Type 自动是 <code>captured</code> → 自动进 Inbox</li>
+</ol>
+<h2 id="4-captured">4）每周复盘：把 captured 变成可复用资产（核心闭环）<a class="headerlink" href="#4-captured" title="Permanent link">¶</a></h2>
+<p>对 Inbox 里每条 captured prompt 做：</p>
+<ol>
+<li>测试：在你常用 AI 工具里跑一次，看是否真有用。</li>
+<li>迭代：修改前先复制一份作为历史版本（保留原始 prompt）</li>
+<li>原始放到 “previous iterations”</li>
+<li>当前版变成“latest iteration”</li>
+<li>补齐元数据：Use case、Output format、Source</li>
+<li>标注适用 App：只在“只对某工具好用”时填（例如 Claude + CSV 文件更稳）</li>
+<li>Type 分类归档：personal / my business / workplace / all</li>
+<li>Helpful hints：写两行“使用提醒”（例如输入文件格式、变量需要替换的位置）</li>
+</ol>
+<h2 id="5">5）让提示词更好用的两个小技巧<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<h3 id="1-code-block">技巧 1：变量高亮（比 code block 更直观）<a class="headerlink" href="#1-code-block" title="Permanent link">¶</a></h3>
+<ul>
+<li>在 prompt 里遇到 <code>{{dataset}}</code>、<code>&lt;insert …&gt;</code> 这种变量，用 Notion 的高亮（视频用快捷键突出显示）标出来。</li>
+<li>好处：复制到 AI 工具后，你一眼就知道哪些地方必须替换。</li>
+</ul>
+<h3 id="2-prompt">技巧 2：相似 prompt 合并到同一页（减少数据库膨胀）<a class="headerlink" href="#2-prompt" title="Permanent link">¶</a></h3>
+<ul>
+<li>例如“名字生成器 prompt”和“域名生成器 prompt”做同一类事，可以放同一页面中分块管理。</li>
+<li>好处：减少重复条目，让数据库更“干净可维护”。</li>
+</ul>
+<h2 id="6">6）归档与维护（让系统长期可持续）<a class="headerlink" href="#6" title="Permanent link">¶</a></h2>
+<ul>
+<li>不再需要的 prompt：Type 改为 <code>archived</code>，出现在 Archived 区，不污染日常视图。</li>
+<li>保持 2 个常规习惯：</li>
+<li>每天只做捕获（不纠结分类）</li>
+<li>每周一次复盘（分类、测试、迭代、沉淀）</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

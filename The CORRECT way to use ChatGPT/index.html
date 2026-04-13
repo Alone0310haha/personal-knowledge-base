@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="笔记与技术文档分享" name="description"/>
+<link href="https://Alone0310haha.github.io/personal-knowledge-base/The%20CORRECT%20way%20to%20use%20ChatGPT/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>The CORRECT way to use ChatGPT - Alone的知识库</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../js/unpkg.com/d3@7.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-lib@0.18.js" type="text/javascript"></script><script src="../js/unpkg.com/markmap-view@0.18.js" type="text/javascript"></script><style type="text/css">div.mkdocs-markmap {
+    width: 100%;
+    min-height: 1em;
+    border: 1px solid grey;
+}
+.mkdocs-markmap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#_1">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="Alone的知识库" class="md-header__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Alone的知识库
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              The CORRECT way to use ChatGPT
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Alone的知识库" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Alone的知识库">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Alone的知识库
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../prometheus-tech/Prometheus%E6%95%99%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+<span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        讨论视角（作者从什么角度出发进行讨论）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        核心论点与分论点
+      
+    </span>
+</a>
+<nav aria-label="核心论点与分论点" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-chat-reasoning">
+<span class="md-ellipsis">
+      
+        分论点 1：先选对模型：低风险用 chat，高复杂/高风险用 reasoning
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2-3">
+<span class="md-ellipsis">
+      
+        分论点 2：推理模型的 3 个提示词技巧
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3google-vs-chatgpt-web-search">
+<span class="md-ellipsis">
+      
+        分论点 3：搜索功能：Google vs ChatGPT Web Search 的分工
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4deep-research-agent">
+<span class="md-ellipsis">
+      
+        分论点 4：Deep Research：把“开很多标签页的研究”外包给 Agent
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5canvas">
+<span class="md-ellipsis">
+      
+        分论点 5：Canvas：需要反复编辑的任务，用“可版本化的编辑面板”更高效
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        关键案例与结论（视频中的例子）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#markmap">
+<span class="md-ellipsis">
+      
+        思维导图（markmap）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1>The CORRECT way to use ChatGPT</h1>
+<p><a href="https://www.youtube.com/watch?v=p3840QxlYzc">The CORRECT way to use ChatGPT</a></p>
+<h2 id="_1">讨论视角（作者从什么角度出发进行讨论）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>作者以“功能更新太快、概念营销太多”的用户视角切入，目标不是讲术语，而是给出一套可直接执行的使用准则：在真实任务中如何选择模型、何时用搜索/深度研究/画布（Canvas）等功能，让 ChatGPT 产出更稳定、返工更少、速度更快。</p>
+<h2 id="_2">核心论点与分论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<h3 id="_3">核心论点<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<p>正确使用 ChatGPT 的关键不是记住所有新功能，而是根据“任务风险与复杂度”选择合适的模型和工作模式，并在输入结构（分隔符/格式）与工作流（检索→分析→编辑迭代）上做工程化设计。</p>
+<h3 id="1-chat-reasoning">分论点 1：先选对模型：低风险用 chat，高复杂/高风险用 reasoning<a class="headerlink" href="#1-chat-reasoning" title="Permanent link">¶</a></h3>
+<ul>
+<li>Chat（基础对话模型，视频用“GPT-”类作示意）：适合低风险、要快的任务。</li>
+<li>Reasoning（推理模型，视频用“O number”类作示意）：适合重要或复杂任务，你愿意多等一点换更好的答案。</li>
+<li>作者的经验规则：默认选“最新的推理模型”，除非你明确知道任务很轻、追求极致速度。</li>
+</ul>
+<h3 id="2-3">分论点 2：推理模型的 3 个提示词技巧<a class="headerlink" href="#2-3" title="Permanent link">¶</a></h3>
+<ol>
+<li>用分隔符把“任务指令”和“待分析材料”分开（例如 Task / Document 两段）。</li>
+<li>不要写 “think step by step”</li>
+<li>视频观点：这句话可能帮助 chat 模型，但会伤害推理模型；推理模型本来就会分步思考。</li>
+<li>示例不是必需（zero-shot 通常就够）</li>
+<li>只有当输出不对时，再加 one-shot/few-shot 示例纠偏。</li>
+</ol>
+<h3 id="3google-vs-chatgpt-web-search">分论点 3：搜索功能：Google vs ChatGPT Web Search 的分工<a class="headerlink" href="#3google-vs-chatgpt-web-search" title="Permanent link">¶</a></h3>
+<ul>
+<li>单一事实：优先用 Google（更快、也更让人安心）。</li>
+<li>“事实 + 简短解释/上下文”：用 ChatGPT 搜索（能把结果组织成可理解的叙述，支持追问）。</li>
+<li>两条使用建议：</li>
+<li>用于快速 fact check（作者称“还不错”）。</li>
+<li>在对话框用快捷命令快速开启搜索（视频类比 Notion 的 / 命令）。</li>
+</ul>
+<h3 id="4deep-research-agent">分论点 4：Deep Research：把“开很多标签页的研究”外包给 Agent<a class="headerlink" href="#4deep-research-agent" title="Permanent link">¶</a></h3>
+<ul>
+<li>定义：一个会花 10–20 分钟阅读大量链接并产出长报告的研究代理。</li>
+<li>适用：跨多来源的信息对比、行业/竞品研究、个人金融对比等。</li>
+<li>输入越详细越好；但可通过模板化方式降低写提示词成本（先用模板生成器/项目资料生成研究提示）。</li>
+<li>进一步增强：连接你有权限的数据源（例如 Google Drive），把内部资料与外部资料一起引用与对比。</li>
+</ul>
+<h3 id="5canvas">分论点 5：Canvas：需要反复编辑的任务，用“可版本化的编辑面板”更高效<a class="headerlink" href="#5canvas" title="Permanent link">¶</a></h3>
+<ul>
+<li>规则：如果你预计会对同一份输出改很多次，启用 Canvas。</li>
+<li>适用：写作/汇报材料/结构化文档，也适合 coding（作者主要用于文案写作）。</li>
+<li>三个技巧：</li>
+<li>用前进/后退在版本间跳转。</li>
+<li>用内置快捷操作对全文或选中片段做改写/建议。</li>
+<li>支持导出 Markdown，方便落盘到文档系统（例如再导入到 Google Docs）。</li>
+</ul>
+<h2 id="_4">关键案例与结论（视频中的例子）<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<ul>
+<li>选模型的例子：</li>
+<li>“哪些水果纤维最多？”（低风险）→ chat 即可。</li>
+<li>“做一个含 ≥15g 纤维且 ≥20g 蛋白的素食早餐”（约束多）→ reasoning 更合适。</li>
+<li>“成功从来不是最终”（模糊引用）→ chat 找出处即可；但“解释丘吉尔为何战后仍落选”（历史语境复杂）→ reasoning。</li>
+<li>写普通邮件（明确要点）→ chat；处理 20 条来回的冲突邮件并写“外交式回复”（高风险）→ 上传材料 + reasoning。</li>
+<li>搜索的例子：</li>
+<li>NVDA 股价（单一事实）→ Google 快；但“最新财报电话会时间、股价涨跌、原因”→ ChatGPT 搜索更有上下文。</li>
+<li>苏黎世天气（单一事实）→ Google；“12/1–12/7 去苏黎世带什么衣服”→ ChatGPT 搜索更像顾问回答。</li>
+<li>疫苗接种率：单点查询 Google；“过去 5 年全球接种率并要表格”→ ChatGPT 搜索更方便。</li>
+<li>Deep Research 的例子：</li>
+<li>对比 Nvidia/AMD/Intel AI 芯片路线图（基于最新财报与电话会）。</li>
+<li>对比美国高收益储蓄账户：费率、隐藏费用、按每月储蓄额做收益投影。</li>
+<li>企业用例：引用内部数据 + 外部行业报告做季度竞品对比报告。</li>
+<li>Canvas 的例子：</li>
+<li>写绩效自评：上传公司 rubric → 生成大纲 → 反复删改、局部改写 → 生成高管摘要。</li>
+<li>文本模型常用“命令词”：</li>
+<li>elaborate（扩写加细节）</li>
+<li>critique（提前挑问题、做反驳压力测试）</li>
+<li>rewrite（按语气/风格重写）</li>
+</ul>
+<h2 id="markmap">思维导图（markmap）<a class="headerlink" href="#markmap" title="Permanent link">¶</a></h2>
+<div class="language-markmap mkdocs-markmap"><markmap-data encoding="base64" hidden="true">IyBUaGUgQ09SUkVDVCB3YXkgdG8gdXNlIENoYXRHUFQgKGluIDIwMjYpCiMjIOebruaghwojIyMg5bCR6IOM5qaC5b+177yM5aSa55So6KeE5YiZ77ya5oyJ5Lu75Yqh5aSN5p2C5bqm6YCJ5oup5Yqf6IO9CiMjIDEg6YCJ5qih5Z6LCiMjIyBDaGF0IG1vZGVs77yI5b+rL+S9jumjjumZqe+8iQojIyMjIOS+i++8muawtOaenOe6pOe7tOacgOWkmu+8n+aZrumAmumCruS7tua2puiJsgojIyMgUmVhc29uaW5nIG1vZGVs77yI5oWi5LiA54K5L+mrmOi0qOmHjy/pq5jpo47pmanvvIkKIyMjIyDkvovvvJrmu6HotrPokKXlhbvnuqbmnZ/nmoTml6nppJDvvJvljoblj7Lor63looPop6Pph4rvvJvlhrLnqoHpgq7ku7blpJbkuqTlm57lpI0KIyMjIyDpu5jorqTvvJrlpJrmlbDkurrkvJjlhYggcmVhc29uaW5nCiMjIDIg5o6o55CG5qih5Z6L5o+Q56S65oqA5benCiMjIyDliIbpmpTnrKbvvIhUYXNrIHZzIERvY3VtZW5077yJCiMjIyDkuI3lhpkgdGhpbmsgc3RlcCBieSBzdGVwCiMjIyDnpLrkvovlj6/pgInvvIjlhYggemVyby1zaG9077yM6ZSZ5LqG5YaNIGZldy1zaG9077yJCiMjIDMgV2ViIFNlYXJjaCB2cyBHb29nbGUKIyMjIOWNleS4gOS6i+WuniAtPiBHb29nbGUKIyMjIOS6i+WuniArIOW/q+ino+mHii/kuIrkuIvmlocgLT4gQ2hhdEdQVCBTZWFyY2gKIyMjIFRpcHMKIyMjIyDlv6vpgJ8gZmFjdCBjaGVjawojIyMjIC8g5ZG95Luk5b+r6YCf5byA5YWz5pCc57SiCiMjIDQgRGVlcCBSZXNlYXJjaAojIyMgMTDigJMyMCDliIbpkp/or7vlpKfph4/pk77mjqUgLT4g5Lqn5Ye66ZW/5oql5ZGKCiMjIyDpgILnlKjvvJrnq57lk4Ev6KGM5Lia56CU56m244CB6YeR6J6N5a+55q+U44CB6Lev57q/5Zu+5a+55q+UCiMjIyDlvLrljJbvvJrov57mjqXnp4HmnInmlbDmja7mupDvvIjlpoIgRHJpdmXvvInkuIDotbflvJXnlKgKIyMjIOaPkOekuu+8mueUqOaooeadvy/pobnnm67otYTmlpnnlJ/miJDigJzor6bnu4bnoJTnqbYgcHJvbXB04oCdCiMjIDUgQ2FudmFzCiMjIyDpgILnlKjvvJrpnIDopoHlj43lpI3ov63ku6PnvJbovpHnmoTku7vliqEKIyMjIOWKn+iDve+8mueJiOacrOi3s+i9rOOAgeeJh+auteaUueWGmeOAgeW7uuiurue8lui+keOAgeWvvOWHuiBNYXJrZG93bgojIyMg5L6L77ya57up5pWI6Ieq6K+E77yIcnVicmljIC0+IOWkp+e6siAtPiDlpJrova7nvJbovpEgLT4g5oC757uT77yJCiMjIDYg5bi455So5ZG95Luk6K+NCiMjIyBlbGFib3JhdGUgLyBjcml0aXF1ZSAvIHJld3JpdGU=</markmap-data></div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="text/javascript">(function initializeMarkmap() {
+    const transformer = new markmap.Transformer();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
+    const assets = transformer.getAssets();
+    const loading = Promise.all([
+        assets.styles && markmap.loadCSS(assets.styles),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
+    ]);
+
+    function parseData(content) {
+        const { root, frontmatter } = transformer.transform(content);
+        let options = markmap.deriveOptions(frontmatter?.markmap);
+        options = Object.assign(
+            {
+                fitRatio: 0.85,
+            },
+            options
+        );
+        return { root, options };
+    }
+
+    function resetMarkmap(m, el) {
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
+        el.style.height = height + "px";
+        m.fit();
+    }
+
+    function decodeBase64(encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+    }
+
+    function renderMarkmap(el) {
+        const dataEl = el.querySelector("markmap-data");
+        if (!dataEl) return;
+        let content = el.textContent;
+        if (dataEl.getAttribute("encoding") === "base64") {
+            content = decodeBase64(content);
+        }
+        el.innerHTML = "<svg>";
+        svg = el.firstChild;
+        const { root, options } = parseData(content);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
+            resetMarkmap(m, el);
+        });
+    }
+
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll(".mkdocs-markmap")) {
+            renderMarkmap(el);
+        }
+    }
+
+    loading.then(() => {
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === "childList") {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        updateMarkmaps(document);
+    });
+})();
+</script></body>
+</html>
