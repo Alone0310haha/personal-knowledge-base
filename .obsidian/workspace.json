@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/AI时代下，如何放大自己的能力到10倍甚至百倍.md",
+                "file": "docs/The CORRECT way to use ChatGPT.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "AI时代下，如何放大自己的能力到10倍甚至百倍"
+              "title": "The CORRECT way to use ChatGPT"
             }
           }
         ]
@@ -186,13 +186,23 @@
   },
   "active": "d6ef4bde5b4b3b09",
   "lastOpenFiles": [
+    "docs/Master the Perfect ChatGPT Prompt Formula.md",
+    "docs/Harness Engineering（OpenAI Codex）.md",
+    "docs/How to Build a Prompts Database in Notion (template included).md",
+    "docs/The CORRECT way to use ChatGPT.md",
+    "docs/AI时代下，如何放大自己的能力到10倍甚至百倍.md",
+    "docs/提示词库/分析文章/视频用提示词.md",
+    "docs/提示词库/分析文章",
+    "docs/Lessons from Building Claude Code：如何用 Skills 加速开发（分类+最佳实践）.md",
+    "docs/Spring 事件监听机制详解.md",
+    "doc/Spring 事件监听机制详解.md",
+    "doc",
     "docs/提示词库/Agent Prompt 2.0_zh.md",
     "docs/提示词库/Quest Design_zh.md",
     "docs/提示词库/Quest Action_zh.md",
     "docs/提示词库/prompt_zh.md",
     "docs/提示词库",
     "docs/AI Coding流水线是怎么从需求跑到验收.md",
-    "docs/AI时代下，如何放大自己的能力到10倍甚至百倍.md",
     "docs/如何写好提示词2.md",
     "docs/如何写好提示词1.md",
     "docs/最近爆火的 Harness Engineering 到底是啥？.md",
@@ -205,14 +215,6 @@
     "docs/Transformer 如何成为 AI 模型的地基.md",
     "docs/TDD.md",
     "docs/Token 与 Embedding：LLM 与 RAG 的数据处理机制.md",
-    "docs/synchronized 怎么提升性能？.md",
-    "docs/Spring 自动装配：名称+类型注入歧义如何解决.md",
-    "docs/RestTemplate 如何优化连接池？.md",
-    "docs/MySQL／InnoDB 如何用 Redo Log 做崩溃恢复.md",
-    "docs/MySQL 一条 SELECT 的执行过程.md",
-    "docs/MVCC（多版本并发控制）如何实现无锁一致性读？.md",
-    "docs/Mockito 单测阅读方法.md",
-    "docs/LoRA 是什么 & 大模型微调怎么回事.md",
     "rules",
     "site/search/search_index.json",
     "site/search",
@@ -220,8 +222,6 @@
     "site/prometheus-tech/课程大纲",
     "site/prometheus-tech/第 9 课-抓取管理（Scrape Manager）/index.html",
     "site/prometheus-tech/第 9 课-抓取管理（Scrape Manager）",
-    "site/prometheus-tech/第 8 课-服务发现机制（Service Discovery）/index.html",
-    "site/prometheus-tech/第 8 课-服务发现机制（Service Discovery）",
     "site/assets/images/favicon.png",
     "未命名.canvas"
   ]
