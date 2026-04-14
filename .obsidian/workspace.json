@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/The CORRECT way to use ChatGPT.md",
+                "file": "docs/多AGENT体系化AI编程实践(1).md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "The CORRECT way to use ChatGPT"
+              "title": "多AGENT体系化AI编程实践(1)"
             }
           }
         ]
@@ -186,10 +186,10 @@
   },
   "active": "d6ef4bde5b4b3b09",
   "lastOpenFiles": [
+    "docs/The CORRECT way to use ChatGPT.md",
     "docs/Master the Perfect ChatGPT Prompt Formula.md",
     "docs/Harness Engineering（OpenAI Codex）.md",
     "docs/How to Build a Prompts Database in Notion (template included).md",
-    "docs/The CORRECT way to use ChatGPT.md",
     "docs/AI时代下，如何放大自己的能力到10倍甚至百倍.md",
     "docs/提示词库/分析文章/视频用提示词.md",
     "docs/提示词库/分析文章",
