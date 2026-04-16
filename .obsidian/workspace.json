@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "1a625ce7bb0e670f",
+        "id": "52cf40ef5c86651b",
         "type": "tabs",
         "children": [
           {
-            "id": "d6ef4bde5b4b3b09",
+            "id": "41c67f40f0143ddd",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "docs/多AGENT体系化AI编程实践(1).md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "多AGENT体系化AI编程实践(1)"
+              "title": "新标签页"
             }
           }
         ]
@@ -53,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#系统设计",
+                "query": "tag:#提示词",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -184,8 +180,15 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "d6ef4bde5b4b3b09",
+  "active": "861b984557004669",
   "lastOpenFiles": [
+    "skills/low-latency-trading-concurrency-code-review-checklist.md",
+    "skills/java-code-review-checklist.md",
+    "skills",
+    "未命名.canvas",
+    "2026-04-15.md",
+    "docs/如何写好提示词1.md",
+    "docs/多AGENT体系化AI编程实践(1).md",
     "docs/The CORRECT way to use ChatGPT.md",
     "docs/Master the Perfect ChatGPT Prompt Formula.md",
     "docs/Harness Engineering（OpenAI Codex）.md",
@@ -204,25 +207,18 @@
     "docs/提示词库",
     "docs/AI Coding流水线是怎么从需求跑到验收.md",
     "docs/如何写好提示词2.md",
-    "docs/如何写好提示词1.md",
     "docs/最近爆火的 Harness Engineering 到底是啥？.md",
     "docs/注意力残差是什么.md",
     "docs/利用 Harness Engineering 解决复杂问题.md",
     "docs/Agent Skills 设计哲学和实战进化.md",
     "docs/WebSocket 是什么？Nginx 如何支持？集群怎么做（p59）.md",
     "docs/WebSocket 是什么？Nginx 如何支持？集群怎么做（p57）.md",
-    "docs/UP主是如何接商单的？视频质量ai分析.md",
-    "docs/Transformer 如何成为 AI 模型的地基.md",
-    "docs/TDD.md",
-    "docs/Token 与 Embedding：LLM 与 RAG 的数据处理机制.md",
     "rules",
     "site/search/search_index.json",
     "site/search",
     "site/prometheus-tech/课程大纲/index.html",
     "site/prometheus-tech/课程大纲",
     "site/prometheus-tech/第 9 课-抓取管理（Scrape Manager）/index.html",
-    "site/prometheus-tech/第 9 课-抓取管理（Scrape Manager）",
-    "site/assets/images/favicon.png",
-    "未命名.canvas"
+    "site/assets/images/favicon.png"
   ]
 }
