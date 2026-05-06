@@ -1,0 +1,656 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/%E4%BD%BF%E7%94%A8BDD%E8%AE%A9AI%E7%B2%BE%E7%A1%AE%E5%9C%B0%E7%90%86%E8%A7%A3%E9%9C%80%E6%B1%82/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>使用BDD让AI精确地理解需求 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              使用BDD让AI精确地理解需求
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 听众画像（针对哪一类人）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 讨论角度与要解决的问题（从什么角度出发）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心论点与分论点
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心论点与分论点">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1bdd-tdd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分论点 1：BDD 与 TDD 的关键差异是“表达介质”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2bdd-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分论点 2：BDD 在传统团队里落地难，但在 AI 时代收益更大
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3givenwhenthen-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分论点 3：Given/When/Then 能显著减少需求歧义，压缩 AI 的自由发挥空间
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 关键数据、案例与结论
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 关键数据、案例与结论">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键数据/事实
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键案例（吸血鬼战棋例子）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 实践操作（视频的做法拆解成步骤）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 实际应用启示（落到工作/生活）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>使用BDD让AI精确地理解需求</h1>
+
+<p><a href="https://www.bilibili.com/video/BV1guRwB4Ejm/?spm_id_from=333.1007.tianma.1-2-2.click&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7">使用BDD让AI精确地理解需求</a></p>
+<h2 id="1">1. 听众画像（针对哪一类人）<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<ul>
+<li>经常用 AI 写代码、希望“一次写对”的工程师/独立开发者。</li>
+<li>做过/了解 TDD，但遇到“测试过了却不是我想要的”的人。</li>
+<li>需要把需求说清楚、减少沟通成本的人（包含产品/研发/与 AI 协作的任何角色）。</li>
+</ul>
+<h2 id="2">2. 讨论角度与要解决的问题（从什么角度出发）<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<p>作者从“AI 交付的代码逻辑正确、测试也通过，但最终产物并不是我想要的”的痛点切入：问题不在实现层面的 bug，而在需求表达存在歧义，AI 会在缝隙里自由发挥，导致“跑得通但跑偏了”。</p>
+<p>为了解决这个问题，作者引入 BDD（Behavior Driven Development）：用固定结构的自然语言把“预期行为”写清楚，让 AI 先对齐需求理解，再把这些描述翻译成代码/测试，从源头降低偏差。</p>
+<h2 id="3">3. 核心论点与分论点<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<h3 id="_1">核心论点<a class="headerlink" href="#_1" title="Permanent link">¶</a></h3>
+<p>AI 时代要让 AI 精确理解需求，应该用 BDD 的 Given/When/Then 把需求写成可验证的行为描述；再结合 TDD，把“行为描述”落成测试与实现，形成约束 AI 的双保险。</p>
+<h3 id="1bdd-tdd">分论点 1：BDD 与 TDD 的关键差异是“表达介质”<a class="headerlink" href="#1bdd-tdd" title="Permanent link">¶</a></h3>
+<ul>
+<li>共同点：都在描述“要求/预期”。</li>
+<li>差异点：TDD 倾向用代码（测试）描述；BDD 用自然语言的结构化文档描述，非程序员也能写、也更适合沟通与验收对齐。</li>
+</ul>
+<h3 id="2bdd-ai">分论点 2：BDD 在传统团队里落地难，但在 AI 时代收益更大<a class="headerlink" href="#2bdd-ai" title="Permanent link">¶</a></h3>
+<ul>
+<li>传统阻力：产品/研发之间缺少“共同写用例文档来对齐”的协作机制；对研发而言直接写单测更快。</li>
+<li>AI 时代变化：AI 生成 Given/When/Then 的速度极快（作者描述为“一秒几十上百字”），把人力成本大幅摊薄，使 BDD 的性价比上升。</li>
+</ul>
+<h3 id="3givenwhenthen-ai">分论点 3：Given/When/Then 能显著减少需求歧义，压缩 AI 的自由发挥空间<a class="headerlink" href="#3givenwhenthen-ai" title="Permanent link">¶</a></h3>
+<ul>
+<li>大作文式需求对人类“看起来通顺”，但对 AI 可能充满歧义点。</li>
+<li>一旦 Given/When/Then 被你确认，基本就没有可随意脑补的空间；随后把它直译成代码/测试也很直接。</li>
+</ul>
+<h2 id="4">4. 关键数据、案例与结论<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<h3 id="_2">关键数据/事实<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<ul>
+<li>BDD 的历史背景：作者提到 BDD 在“本世纪初”用于解决产品经理与程序员之间的精确沟通问题。</li>
+<li>生产效率变化：AI 能以“一秒几十上百字”的速度生成 Given/When/Then 文档。</li>
+</ul>
+<h3 id="_3">关键案例（吸血鬼战棋例子）<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<ul>
+<li>规则口述：攻击敌人后，恢复“造成伤害等量”的生命值。</li>
+<li>Given：棋盘上有两个棋子；吸血鬼攻击力为 2；吸血鬼满血 5，当前 1 点血；敌方主将 10 点血。</li>
+<li>When：吸血鬼攻击一次敌方主将。</li>
+<li>Then：吸血鬼变成 3 点血；敌方主将变成 8 点血。</li>
+</ul>
+<h3 id="_4">关键结论<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ul>
+<li>BDD 的价值在于“把需求说清楚”，让你验收的是行为而不是代码细节。</li>
+<li>BDD + TDD 是约束 AI 的双保险：BDD 防“做错东西”，TDD 防“改出 bug”。</li>
+</ul>
+<h2 id="5">5. 实践操作（视频的做法拆解成步骤）<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<p>作者给出的可操作路径可以拆成一条“先对齐行为，再翻译成代码”的协作链路：</p>
+<ol>
+<li>先写一句自然语言需求（例如“攻击敌人后，恢复造成伤害等量的生命值”）。</li>
+<li>让 AI 产出多条 Given/When/Then 的行为描述（覆盖典型场景）。</li>
+<li>人类 Review 并补齐歧义点与边界条件（作者举例：敌人血不够时会不会变负数、是否被消灭；此时吸血鬼回多少血等）。</li>
+<li>将确认后的 Given/When/Then 直译为代码层面的测试用例（TDD）。</li>
+<li>让 AI 按测试实现功能；持续运行测试回归，直到通过。</li>
+</ol>
+<h2 id="6">6. 实际应用启示（落到工作/生活）<a class="headerlink" href="#6" title="Permanent link">¶</a></h2>
+<ul>
+<li>遇到“对方/AI 理解偏差”时，不要加长说明书，而是换成更结构化的行为描述：给定条件、触发动作、期望结果。</li>
+<li>需求讨论优先对齐可观察结果：把抽象词（好用/好玩/稳定）拆成可验收的行为与例子。</li>
+<li>把边界条件显式化：先列出极端场景（超额伤害、为空、失败、权限、上限/下限），再决定业务规则，减少返工。</li>
+<li>结合 TDD 做双保险：先用 BDD 固化“要什么”，再用测试固化“怎么验收”，让后续迭代不走样。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

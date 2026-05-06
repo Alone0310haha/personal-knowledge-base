@@ -1,0 +1,1079 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/%E5%9C%BA%E6%99%AF%E9%A2%98%EF%BC%9A%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95%E8%AE%BE%E8%AE%A1%EF%BC%88%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0%E8%B5%84%E6%96%99%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>场景题：二维码扫码登录设计（面试复习资料） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              场景题：二维码扫码登录设计（面试复习资料）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        来源
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 题目与场景澄清
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 题目与场景澄清">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心问题（一句话）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        角色与边界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        需求分析
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="需求分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        功能性需求
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        非功能性需求
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 核心架构设计方案（重点）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 核心架构设计方案（重点）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        整体架构图景
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二维码状态机
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键流程（时序）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        存储与数据模型（建议答法）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        接口设计（按端划分）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="接口设计（按端划分）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pcweb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PC/Web
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mobileapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mobile/App
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键决策与权衡（Trade-off）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="关键决策与权衡（Trade-off）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-redis-ttl-vs-mysql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1) Redis TTL vs MySQL 持久化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-pc-vs-vs-websocket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2) PC 获取状态：轮询 vs 长轮询 vs WebSocket
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3) 是否绑定“请求二维码的 PC 设备信息”
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心难点攻克（高分点）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="核心难点攻克（高分点）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1) 把扫码登录抽象成“认证问题”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2) 二次确认与临时 token 的意义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3) 状态机一致性与幂等（并发/重复点击/过期竞态）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4) 轮询压力与前端停止条件
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 模拟面试满分回答（话术版）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 模拟面试满分回答（话术版）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        需求
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        估算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        接口设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数据库/缓存设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心架构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        瓶颈优化与安全补强
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 面试启示与考察点
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 面试启示与考察点">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        面试官在考察什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        举一反三（可迁移题型）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        避坑指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">场景题：二维码扫码登录设计（面试复习资料）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h1>
+<h2 id="_2">来源<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://www.bilibili.com/video/BV1cz421z7hn">场景题：二维码扫码登录设计</a></li>
+</ul>
+<h2 id="1">1. 题目与场景澄清<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<h3 id="_3">核心问题（一句话）<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<p>设计一套“PC 展示二维码、手机扫码并二次确认、PC 最终登录成功”的登录认证系统（包含状态机、端到端流程、接口与通信机制）。</p>
+<h3 id="_4">角色与边界<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ul>
+<li>待登录设备（PC/Web）：请求生成二维码、展示二维码、持续获取二维码状态、登录成功后建立会话</li>
+<li>已登录扫码设备（Mobile/App）：扫码解析二维码内容，携带自身已登录 token 发起授权与确认</li>
+<li>服务端（Auth/SSO）：生成二维码 key、维护状态机、校验移动端 token、签发 PC 登录态</li>
+</ul>
+<h3 id="_5">需求分析<a class="headerlink" href="#_5" title="Permanent link">¶</a></h3>
+<h4 id="_6">功能性需求<a class="headerlink" href="#_6" title="Permanent link">¶</a></h4>
+<ul>
+<li>PC 端进入扫码登录页后，向服务端请求生成二维码，拿到二维码 key（或包含 key 的 URL），并生成二维码图展示</li>
+<li>Mobile 扫码解析出二维码 key，携带 Mobile 已登录 token 请求服务端完成“扫码授权”，使二维码进入“已扫码待确认”状态</li>
+<li>Mobile 端必须二次确认（确认登录 / 取消），服务端根据确认结果推进状态机</li>
+<li>PC 端能够实时感知二维码状态：未扫码 → 已扫码待确认 → 成功 / 失败 / 过期</li>
+<li>二维码过期后，PC 端提示刷新重新生成新的二维码</li>
+</ul>
+<h4 id="_7">非功能性需求<a class="headerlink" href="#_7" title="Permanent link">¶</a></h4>
+<ul>
+<li>安全性：避免二维码截图/转发导致越权登录；防重放；二次确认；短时有效；确认阶段需要强认证</li>
+<li>低延迟：扫码与确认后，PC 端能快速感知状态变化（轮询/长轮询/推送）</li>
+<li>高可用：生成/查询/扫码/确认链路能抗高并发与局部故障，支持水平扩展与降级</li>
+<li>正确性：状态机迁移严格、幂等，处理并发确认与过期竞态，避免“过期后仍成功”</li>
+</ul>
+<h2 id="2">2. 核心架构设计方案（重点）<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<h3 id="_8">整体架构图景<a class="headerlink" href="#_8" title="Permanent link">¶</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>flowchart LR
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  PC[PC/Web] --&gt;|1. generate| Auth[Auth Service]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  PC --&gt;|poll / long-poll / ws| Channel[Status Channel]
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>  Channel --&gt; Auth
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>  Mobile[Mobile/App] --&gt;|scan + mobileToken| Auth
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>  Mobile --&gt;|confirm + tmpToken + mobileToken| Auth
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>  Auth --&gt; Redis[(Redis TTL)]
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>  Auth --&gt; Token[Token Service / Session]
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>  Token --&gt; Auth
+</span></code></pre></div>
+<h3 id="_9">二维码状态机<a class="headerlink" href="#_9" title="Permanent link">¶</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>stateDiagram-v2
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>  [*] --&gt; TO_SCAN: 生成二维码(待扫码)
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>  TO_SCAN --&gt; PENDING_CONFIRM: Mobile 扫码 + 发起授权
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>  PENDING_CONFIRM --&gt; SUCCESS: Mobile 二次确认 + 校验通过
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>  PENDING_CONFIRM --&gt; FAIL: 校验失败/取消
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>  TO_SCAN --&gt; EXPIRED: TTL 到期
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>  PENDING_CONFIRM --&gt; EXPIRED: TTL 到期
+</span></code></pre></div>
+<h3 id="_10">关键流程（时序）<a class="headerlink" href="#_10" title="Permanent link">¶</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>sequenceDiagram
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>  autonumber
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>  participant PC as PC/Web
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>  participant S as Auth Server
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>  participant R as Redis(TTL)
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a>  participant M as Mobile/App
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a>
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a>  PC-&gt;&gt;S: 请求生成二维码
+</span><span id="__span-2-9"><a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a>  S-&gt;&gt;R: 写入 qrKey=TO_SCAN + TTL
+</span><span id="__span-2-10"><a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a>  S--&gt;&gt;PC: 返回 qrKey / url
+</span><span id="__span-2-11"><a href="#__codelineno-2-11" id="__codelineno-2-11" name="__codelineno-2-11"></a>  PC--&gt;&gt;PC: 生成二维码图并展示
+</span><span id="__span-2-12"><a href="#__codelineno-2-12" id="__codelineno-2-12" name="__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a href="#__codelineno-2-13" id="__codelineno-2-13" name="__codelineno-2-13"></a>  par PC 获取状态
+</span><span id="__span-2-14"><a href="#__codelineno-2-14" id="__codelineno-2-14" name="__codelineno-2-14"></a>    PC-&gt;&gt;S: 查询状态(qrKey)
+</span><span id="__span-2-15"><a href="#__codelineno-2-15" id="__codelineno-2-15" name="__codelineno-2-15"></a>    S-&gt;&gt;R: 读状态
+</span><span id="__span-2-16"><a href="#__codelineno-2-16" id="__codelineno-2-16" name="__codelineno-2-16"></a>    S--&gt;&gt;PC: 返回状态
+</span><span id="__span-2-17"><a href="#__codelineno-2-17" id="__codelineno-2-17" name="__codelineno-2-17"></a>  end
+</span><span id="__span-2-18"><a href="#__codelineno-2-18" id="__codelineno-2-18" name="__codelineno-2-18"></a>
+</span><span id="__span-2-19"><a href="#__codelineno-2-19" id="__codelineno-2-19" name="__codelineno-2-19"></a>  M--&gt;&gt;M: 扫码解析出 qrKey
+</span><span id="__span-2-20"><a href="#__codelineno-2-20" id="__codelineno-2-20" name="__codelineno-2-20"></a>  M-&gt;&gt;S: qrKey + mobileToken 发起扫码授权
+</span><span id="__span-2-21"><a href="#__codelineno-2-21" id="__codelineno-2-21" name="__codelineno-2-21"></a>  S-&gt;&gt;R: 状态置为 PENDING_CONFIRM，写入用户/设备信息，生成 tmpToken
+</span><span id="__span-2-22"><a href="#__codelineno-2-22" id="__codelineno-2-22" name="__codelineno-2-22"></a>  S--&gt;&gt;M: 返回 tmpToken（用于二次确认）
+</span><span id="__span-2-23"><a href="#__codelineno-2-23" id="__codelineno-2-23" name="__codelineno-2-23"></a>
+</span><span id="__span-2-24"><a href="#__codelineno-2-24" id="__codelineno-2-24" name="__codelineno-2-24"></a>  M-&gt;&gt;S: confirm: qrKey + tmpToken + mobileToken
+</span><span id="__span-2-25"><a href="#__codelineno-2-25" id="__codelineno-2-25" name="__codelineno-2-25"></a>  S-&gt;&gt;R: 原子校验并置 SUCCESS
+</span><span id="__span-2-26"><a href="#__codelineno-2-26" id="__codelineno-2-26" name="__codelineno-2-26"></a>  S-&gt;&gt;Token: 签发 PC 登录 token / 创建会话
+</span><span id="__span-2-27"><a href="#__codelineno-2-27" id="__codelineno-2-27" name="__codelineno-2-27"></a>  S--&gt;&gt;PC: PC 端查询到 SUCCESS + token/跳转信息
+</span></code></pre></div>
+<h3 id="_11">存储与数据模型（建议答法）<a class="headerlink" href="#_11" title="Permanent link">¶</a></h3>
+<p>二维码是短生命周期凭证，适合放在 Redis 并通过 TTL 管理过期。</p>
+<ul>
+<li>Key：<code>qr:{qrKey}</code></li>
+<li>Value（示例）：</li>
+<li><code>status</code>: <code>TO_SCAN | PENDING_CONFIRM | SUCCESS | FAIL | EXPIRED</code></li>
+<li><code>expireAt</code>: 过期时间（同时用 TTL）</li>
+<li><code>pcBindInfo</code>（可选）：pcDeviceId / uaHash / ipHash</li>
+<li><code>scanUserId</code> / <code>scanDeviceId</code>：扫码后写入</li>
+<li><code>tmpTokenHash</code>：临时 token 的 hash（不直接存明文）</li>
+<li><code>lastUpdateAt</code></li>
+</ul>
+<h3 id="_12">接口设计（按端划分）<a class="headerlink" href="#_12" title="Permanent link">¶</a></h3>
+<h4 id="pcweb">PC/Web<a class="headerlink" href="#pcweb" title="Permanent link">¶</a></h4>
+<ul>
+<li><code>POST /qr/generate</code></li>
+<li>出参：<code>qrKey</code>, <code>expireAt</code>, <code>qrUrl</code>（可选）</li>
+<li><code>GET /qr/status?qrKey=...</code></li>
+<li>出参：<code>status</code>, <code>message</code>, <code>loginToken</code>（或 <code>redirectUrl</code>/一次性 code）</li>
+</ul>
+<h4 id="mobileapp">Mobile/App<a class="headerlink" href="#mobileapp" title="Permanent link">¶</a></h4>
+<ul>
+<li><code>POST /qr/scan</code></li>
+<li>入参：<code>qrKey</code> + <code>mobileToken</code></li>
+<li>出参：<code>tmpToken</code></li>
+<li>语义：完成扫码授权，把二维码推进到“待确认”</li>
+<li><code>POST /qr/confirm</code></li>
+<li>入参：<code>qrKey</code> + <code>tmpToken</code> + <code>mobileToken</code></li>
+<li>出参：<code>ok</code>（服务端同时推进 SUCCESS 并准备 PC 登录结果）</li>
+</ul>
+<h3 id="trade-off">关键决策与权衡（Trade-off）<a class="headerlink" href="#trade-off" title="Permanent link">¶</a></h3>
+<h4 id="1-redis-ttl-vs-mysql">1) Redis TTL vs MySQL 持久化<a class="headerlink" href="#1-redis-ttl-vs-mysql" title="Permanent link">¶</a></h4>
+<ul>
+<li>选 Redis：二维码是短时凭证，天然需要 TTL；读写频繁，key 直接用 <code>qrKey</code>，Redis 简洁高效</li>
+<li>选 MySQL：可以做但会引入过期数据清理、写放大与更多索引/查询成本；通常只在需要审计与强一致落库时引入</li>
+</ul>
+<h4 id="2-pc-vs-vs-websocket">2) PC 获取状态：轮询 vs 长轮询 vs WebSocket<a class="headerlink" href="#2-pc-vs-vs-websocket" title="Permanent link">¶</a></h4>
+<ul>
+<li>轮询：实现简单、兼容性强；缺点是读放大（视频举例：B 站就是轮询）</li>
+<li>长轮询：降低无效请求，但连接管理与超时控制更复杂</li>
+<li>WebSocket：体验最佳、服务端主动推送，但要维护长连接、网关与扩容复杂度更高</li>
+</ul>
+<h4 id="3-pc">3) 是否绑定“请求二维码的 PC 设备信息”<a class="headerlink" href="#3-pc" title="Permanent link">¶</a></h4>
+<ul>
+<li>绑定（更安全）：<code>qrKey</code> 绑定 <code>pcDeviceId/ua/ip</code>，降低截图转发导致的跨设备登录风险</li>
+<li>不绑定（更简单）：链路更轻，但更依赖二次确认与风控策略</li>
+</ul>
+<h3 id="_13">核心难点攻克（高分点）<a class="headerlink" href="#_13" title="Permanent link">¶</a></h3>
+<h4 id="1_1">1) 把扫码登录抽象成“认证问题”<a class="headerlink" href="#1_1" title="Permanent link">¶</a></h4>
+<p>登录永远是两件事：</p>
+<ul>
+<li>告诉系统我是谁（身份标识）</li>
+<li>向系统证明我是谁（凭证）</li>
+</ul>
+<p>在扫码登录里：</p>
+<ul>
+<li><code>mobileToken</code> 负责“证明我是谁”（手机端已登录态，服务端可解析出 userId、deviceId 等）</li>
+<li><code>qrKey</code> 负责“指向 PC 这次待登录会话”（把移动端授权动作映射到 PC 端登录）</li>
+</ul>
+<h4 id="2-token">2) 二次确认与临时 token 的意义<a class="headerlink" href="#2-token" title="Permanent link">¶</a></h4>
+<p>扫码后不直接登录，而是先进入“待确认”。服务端可下发 <code>tmpToken</code> 给移动端用于二次确认，但确认时不能只靠 <code>tmpToken</code>：</p>
+<ul>
+<li>二次确认必须携带 <code>mobileToken</code> 再做一次强认证</li>
+<li>避免 <code>tmpToken</code> 在链路中被劫持后，攻击者仅凭临时 token 即完成登录</li>
+</ul>
+<h4 id="3">3) 状态机一致性与幂等（并发/重复点击/过期竞态）<a class="headerlink" href="#3" title="Permanent link">¶</a></h4>
+<p>推荐把状态迁移做成“只允许合法迁移”的原子操作：</p>
+<ul>
+<li><code>TO_SCAN -&gt; PENDING_CONFIRM</code>：仅允许扫码授权推进一次</li>
+<li><code>PENDING_CONFIRM -&gt; SUCCESS/FAIL</code>：仅允许一次确认结果落地</li>
+<li>若 TTL 已过期，任何推进都应失败并返回 EXPIRED</li>
+</ul>
+<p>实现上可用 Redis 原子指令或 Lua 脚本做 compare-and-set，保证并发下不乱序、不重复。</p>
+<h4 id="4">4) 轮询压力与前端停止条件<a class="headerlink" href="#4" title="Permanent link">¶</a></h4>
+<p>视频抓包展示了一个关键细节：二维码过期后，PC 端停止轮询。</p>
+<p>工程上建议：</p>
+<ul>
+<li>成功/失败/过期后立即停轮询</li>
+<li>轮询间隔设置 + 抖动（jitter）避免“齐步打点”</li>
+<li>高峰期可升级长轮询或 WebSocket</li>
+</ul>
+<h2 id="3_1">3. 模拟面试满分回答（话术版）<a class="headerlink" href="#3_1" title="Permanent link">¶</a></h2>
+<h3 id="_14">需求<a class="headerlink" href="#_14" title="Permanent link">¶</a></h3>
+<p>我设计的是扫码登录：PC 生成并展示二维码，手机端扫码后必须二次确认，PC 才建立登录态；二维码需要短时有效并支持状态查询，状态包括未扫码、待确认、成功、失败、过期。</p>
+<h3 id="_15">估算<a class="headerlink" href="#_15" title="Permanent link">¶</a></h3>
+<p>核心压力在 PC 端状态查询：假设同时有 10 万用户停留在登录页，轮询 1 秒一次就是 10 万 QPS 的读请求，因此状态必须放在高性能缓存（Redis），并确保前端在成功/过期后停止轮询。若要进一步降压，可用长轮询或 WebSocket。</p>
+<h3 id="_16">接口设计<a class="headerlink" href="#_16" title="Permanent link">¶</a></h3>
+<ul>
+<li><code>POST /qr/generate</code>：PC 获取 <code>qrKey</code> 与过期时间</li>
+<li><code>GET /qr/status?qrKey=...</code>：PC 获取状态与登录结果（token/跳转信息）</li>
+<li><code>POST /qr/scan</code>：手机扫码授权，入参 <code>qrKey + mobileToken</code>，返回 <code>tmpToken</code>，并把状态置为待确认</li>
+<li><code>POST /qr/confirm</code>：手机确认登录，入参 <code>qrKey + tmpToken + mobileToken</code>，校验通过后置成功并生成 PC 登录结果</li>
+</ul>
+<h3 id="_17">数据库/缓存设计<a class="headerlink" href="#_17" title="Permanent link">¶</a></h3>
+<p>用 Redis 存 <code>qr:{qrKey}</code> 并设置 TTL，value 存状态、扫码后的 userId/deviceId、临时 token 的 hash、更新时间等。重点是状态迁移要原子化，防止并发与过期竞态。</p>
+<h3 id="_18">核心架构<a class="headerlink" href="#_18" title="Permanent link">¶</a></h3>
+<p>Auth 服务负责生成 <code>qrKey</code>、写入 Redis、校验 <code>mobileToken</code>、推进状态机并签发 PC 登录态。PC 端通过轮询/长轮询/WS 获取状态变化，成功后用返回的 token/一次性 code 建立会话。</p>
+<h3 id="_19">瓶颈优化与安全补强<a class="headerlink" href="#_19" title="Permanent link">¶</a></h3>
+<ul>
+<li>性能：轮询退避 + 抖动；成功/过期停轮询；必要时长轮询/WS；Redis 扛读</li>
+<li>正确性：Redis 原子状态迁移（CAS/Lua），接口幂等</li>
+<li>安全：二维码短 TTL；二次确认；确认必须带 <code>mobileToken</code> 二次认证；可选绑定 PC 设备信息与风控策略</li>
+</ul>
+<h2 id="4_1">4. 面试启示与考察点<a class="headerlink" href="#4_1" title="Permanent link">¶</a></h2>
+<h3 id="_20">面试官在考察什么<a class="headerlink" href="#_20" title="Permanent link">¶</a></h3>
+<ul>
+<li>能否把“扫码登录”抽象成：状态机 + 多端协作 + 认证授权</li>
+<li>安全意识：二次确认、临时 token、重放/劫持风险、设备绑定与风控</li>
+<li>性能与可演进：轮询带来的读放大，以及轮询→长轮询→WS 的演进路径</li>
+<li>正确性：并发与过期竞态下的状态迁移与幂等</li>
+</ul>
+<h3 id="_21">举一反三（可迁移题型）<a class="headerlink" href="#_21" title="Permanent link">¶</a></h3>
+<ul>
+<li>设备授权/网页登录授权（类似 device code 的思路）</li>
+<li>一次性凭证流程：短信验证码、邮箱登录链接、找回密码 token</li>
+<li>支付/订单状态机：待支付→已支付→失败/超时 与前端轮询/推送</li>
+<li>短生命周期任务：导出任务、审批任务的状态查询与通知</li>
+</ul>
+<h3 id="_22">避坑指南<a class="headerlink" href="#_22" title="Permanent link">¶</a></h3>
+<ul>
+<li>扫码后直接登录，忽略二次确认与“确认阶段需要再次携带 mobileToken 做认证”</li>
+<li>不设计状态机与合法迁移，导致重复确认、状态乱序、过期后仍成功</li>
+<li><code>qrKey</code> 可预测或 TTL 过长，导致枚举/重放风险</li>
+<li>轮询无停止条件与退避策略，高峰期无效请求打爆服务端</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

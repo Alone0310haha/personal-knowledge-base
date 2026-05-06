@@ -1,0 +1,739 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87/redis/Redis%20%E5%9F%BA%E7%A1%80%E9%80%9F%E5%88%B7%E9%97%AE%E7%AD%94/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Redis 基础速刷问答 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Redis 基础速刷问答
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#redis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redis 为什么快？“单线程”到底指什么？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis-6-io" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redis 6+ 的 I/O 多线程解决了什么问题？有什么坑？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redis 常见“阻塞点”有哪些？你怎么定位慢？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bigkey-hotkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bigkey / hotkey 是什么？怎么发现、怎么治理？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipelineluamultiexec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pipeline、Lua、事务（MULTI/EXEC）怎么选？
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p>Redis 基础速刷问答（3 年+ 后端高频）</p>
+<h1 id="_1">线程模型与性能<a class="headerlink" href="#_1" title="Permanent link">¶</a></h1>
+<h2 id="redis">Redis 为什么快？“单线程”到底指什么？<a class="headerlink" href="#redis" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：Redis 本质是“内存 KV + 事件循环”的网络服务；核心机制是单线程事件循环配合 I/O 多路复用处理大量连接；特性是延迟低、无锁竞争，但 CPU 密集或慢命令会拖垮整实例。</li>
+<li>3分钟详答：Redis 常被说成“单线程”，准确点是：它处理命令执行的主流程是单线程事件循环（Reactor 风格），通过 epoll/kqueue 这类 I/O 多路复用把很多连接的读写事件汇聚到一个线程里按序处理。快的根因通常有三类：一是绝大多数读写在内存完成，避免磁盘随机 I/O；二是单线程避免了多线程锁竞争与上下文切换，命令执行路径短；三是协议/数据结构做了大量工程优化（如 RESP、紧凑编码、渐进式 rehash 等）。但单线程也带来典型风险：任何阻塞点（慢查询、持久化 fork 抖动、大 key 删除、Lua 长脚本、网络拥塞导致输出缓冲区膨胀）都可能把实例的 P99 拉爆。因此面试里不仅要会讲“为什么快”，还要能说清“什么时候不快、怎么排查和兜底”。</li>
+<li>可能追问：</li>
+<li>追问：Redis 是单线程还是多线程？<br/>
+    15秒简答：命令执行主线程是单线程；新版引入了 I/O 线程（网络读写分摊）和后台线程（AOF rewrite、lazy free 等），但命令语义仍按单线程顺序执行。</li>
+<li>追问：为什么不用多线程把命令执行也并行？<br/>
+    15秒简答：命令之间共享数据结构，强并行会引入锁与一致性成本；多数场景瓶颈在网络/内存而非 CPU，多线程收益不稳且复杂度更高。</li>
+<li>追问：Redis 的性能瓶颈通常在哪？<br/>
+    15秒简答：高并发下常见是网络 I/O、慢命令/阻塞、bigkey/hotkey、持久化 fork 抖动、内存碎片与 swap（致命）。</li>
+</ul>
+<h2 id="redis-6-io">Redis 6+ 的 I/O 多线程解决了什么问题？有什么坑？<a class="headerlink" href="#redis-6-io" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：它本质是把“网络读写”并行化，命令执行仍单线程；核心机制是主线程分发 socket 读写给 I/O 线程；特性是提升高连接数/大包场景吞吐，但 CPU 低核或命令本身慢时收益有限。</li>
+<li>3分钟详答：Redis 6 引入 I/O threads 的主要背景是：随着连接数、TLS、请求包更大、pipeline 更长，网络读写和协议解析开销上升，单线程在“读写 socket”上会成为瓶颈。I/O 多线程把读请求、写响应的搬运与解析分给多个线程，主线程更专注于执行命令和维护数据结构。注意它不是“并行执行命令”，所以不会改变单命令的原子性与顺序语义。常见坑是误用：如果实例本身是慢命令/热点 key 导致的 CPU 计算瓶颈，开 I/O 线程并不能救；线程数设置过大还可能引入额外调度开销。工程上要结合压测与监控（CPU 核数、网络带宽、命令分布）决定是否开启、开多少。</li>
+<li>可能追问：</li>
+<li>追问：什么情况下开 I/O threads 最有收益？<br/>
+    15秒简答：连接多、pipeline 重、响应大、网络与解析开销明显、CPU 核数充足的场景。</li>
+<li>追问：开启后为什么 QPS 还没提升？<br/>
+    15秒简答：瓶颈可能在慢命令、热 key、内存抖动、磁盘持久化或网络带宽；先看 slowlog、命令分布、CPU/网卡利用率。</li>
+</ul>
+<h2 id="redis_1">Redis 常见“阻塞点”有哪些？你怎么定位慢？<a class="headerlink" href="#redis_1" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：Redis 是单线程事件循环，任何“长时间占用主线程”的事情都会阻塞；核心机制是 slowlog/latency 事件 + 命令统计定位；特性是定位快，但要区分 CPU 慢、网络慢、fork 抖动、内存问题。</li>
+<li>3分钟详答：阻塞点可以按来源分四类。第一类是命令本身慢：如 O(N) 扫描类、对大 key 的操作、集合聚合、长 Lua、KEYS/SMEMBERS/HGETALL 大量返回等。第二类是内存相关：大 key 删除造成释放耗时、rehash 扩容、内存碎片导致分配慢、触发 swap（基本宣判死刑）。第三类是持久化相关：BGSAVE/AOF rewrite 的 fork 会触发写时复制（COW），如果写流量大或内存大，会造成页复制与抖动；磁盘写满/抖也会间接影响。第四类是网络相关：客户端读写不及时导致输出缓冲区膨胀、网络抖动导致积压，最终拖慢事件循环。定位路径通常是：先用 INFO/命令统计看 qps、命令分布与复制 backlog；看 slowlog 抓慢命令；看 latency doctor/latency history 判断是否有 fork、command、aof、sync 等延迟事件；结合监控的 CPU、网卡、磁盘、内存 RSS 与碎片率，最终落到具体 key/具体命令/具体时段的异常。</li>
+<li>可能追问：</li>
+<li>追问：线上为什么禁用 KEYS？替代方案是什么？<br/>
+    15秒简答：KEYS 全量扫描会阻塞主线程；用 SCAN 渐进式遍历或维护业务索引 key（集合/前缀分桶）。</li>
+<li>追问：slowlog 能看到什么看不到什么？<br/>
+    15秒简答：能看到超过阈值的命令执行耗时；看不到网络排队/客户端阻塞导致的端到端延迟，需要配合 latency 与客户端指标。</li>
+</ul>
+<h2 id="bigkey-hotkey">bigkey / hotkey 是什么？怎么发现、怎么治理？<a class="headerlink" href="#bigkey-hotkey" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：bigkey 是“单个 key 数据量大”，hotkey 是“单个 key 访问超热点”；核心机制是 bigkey 影响内存与阻塞，hotkey 影响单点吞吐；特性是都能把单线程打爆，治理要么拆分要么分散流量。</li>
+<li>3分钟详答：bigkey 的风险主要是：操作复杂度变大（如 HGETALL 返回巨量）、网络传输大、删除/过期释放耗时导致阻塞、RDB/AOF rewrite 体积膨胀与 fork 抖动。hotkey 风险主要是：单 key 高并发集中到一个实例或一个槽/分片，导致 CPU/网络饱和；即使 key 不大也会把 P99 拉爆。发现方法上：bigkey 常用 redis-cli 的 bigkeys/scan + 采样统计、离线分析 RDB；hotkey 常用命令统计、客户端埋点、代理层热度统计、keyspace hits/misses 结合业务。治理思路：bigkey 通过拆 key（hash 分片、list 分段、bitmap 分桶）、限制 value 大小、压缩/TTL、使用异步删除（UNLINK）降低阻塞；hotkey 通过本地缓存/L1、加随机前缀做读扩散、热点隔离单独实例、读写分离、分片扩容，必要时做“热点预热+限流降级”。</li>
+<li>可能追问：</li>
+<li>追问：删除 bigkey 为什么会卡顿？怎么删更稳？<br/>
+    15秒简答：DEL 可能在主线程里释放大量内存；用 UNLINK 异步释放，或分批删除（按字段/分段 key）避免长时间占用主线程。</li>
+<li>追问：hotkey 为什么 cluster 也扛不住？<br/>
+    15秒简答：cluster 分片按 key 哈希，单个热点 key 仍落在一个分片/节点，热点不会自动“分裂”，需要业务层拆 key 或加 L1 分担。</li>
+</ul>
+<h2 id="pipelineluamultiexec">pipeline、Lua、事务（MULTI/EXEC）怎么选？<a class="headerlink" href="#pipelineluamultiexec" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：pipeline 解决“网络往返”，Lua 解决“多步原子”，事务解决“命令打包但不强原子”；核心机制是 pipeline 减 RTT、Lua 单脚本原子执行；特性是 pipeline 提吞吐、Lua 保一致但要短小，事务常用 WATCH 做 CAS。</li>
+<li>3分钟详答：三者解决的问题不同。pipeline 本质是把多个命令一次性发送、批量读取响应，减少 RTT 和系统调用，适合批量写入/批量查询但不保证中间不可见（命令仍逐条执行）。Lua 脚本在 Redis 里以“脚本执行期间不插入其他命令”的方式运行，常用于扣库存、分布式锁解锁校验、限流等需要多步操作原子化的场景，但要避免脚本太长导致阻塞。事务 MULTI/EXEC 更像“命令队列按顺序执行”，但不提供关系型数据库那种回滚；语法/运行期错误处理也需要说明清楚。WATCH 用于乐观锁：监视 key 变更，提交时检测冲突，失败则重试。工程上常见选择：只想提吞吐用 pipeline；想要原子性用 Lua；想要 CAS 语义可用 WATCH+事务（或直接 Lua）。</li>
+<li>可能追问：</li>
+<li>追问：Lua 脚本为什么也可能导致线上抖动？<br/>
+    15秒简答：脚本执行占用主线程，脚本复杂/循环或操作大 key 会阻塞事件循环，P99 直接炸。</li>
+<li>追问：pipeline 的坑是什么？<br/>
+    15秒简答：客户端堆积过多命令会占用内存、超时难定位；还可能加重 hotkey/输出缓冲区压力，需控制批大小与超时策略。</li>
+</ul>
+<h1 id="_2">数据结构与使用场景<a class="headerlink" href="#_2" title="Permanent link">¶</a></h1>
+<h2 id="string-incr">String 的实现要点是什么？计数器为什么推荐用 INCR？<a class="headerlink" href="#string-incr" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：String 本质是“二进制安全字节数组”，底层用 SDS 管理长度；核心机制是自带长度与预分配减少拷贝；特性是读写快、适合计数/缓存小对象，INCR 是原子递增避免并发丢失。</li>
+<li>3分钟详答：Redis 的 String 不是 C 语言的 \0 结尾字符串，而是 SDS（Simple Dynamic String），保存了 length、free 等元信息，支持二进制数据与 O(1) 取长度。对计数类场景（点赞数、库存、PV）通常推荐 INCR/INCRBY：一方面命令在单线程里执行天然原子，不需要客户端先 GET 再 SET；另一方面整数编码/内部优化让它更快更稳。实际设计时要注意溢出、热点、以及“写放大”带来的持久化压力。</li>
+<li>可能追问：</li>
+<li>追问：为什么 GET+SET 递增会出并发问题？<br/>
+    15秒简答：GET 与 SET 之间不是原子整体，多个客户端会读到同一个旧值然后覆盖写回，导致丢增量。</li>
+<li>追问：String 能存多大？大 value 有什么风险？<br/>
+    15秒简答：单 value 上限是 512MB；大 value 会放大网络传输、AOF/RDB 体积与阻塞风险，属于 bigkey 治理范围。</li>
+</ul>
+<h2 id="hash-vs-json">Hash 存对象 vs JSON 字符串存对象，怎么选？<a class="headerlink" href="#hash-vs-json" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：Hash 本质是“字段-值映射”，适合局部更新；核心机制是按 field 粒度读写减少带宽；特性是可部分更新、但字段多会变 bigkey，跨字段一致性需要额外保证。</li>
+<li>3分钟详答：用 Hash 存对象的典型动机是：对象字段经常局部更新（比如用户 profile），用 HSET/HGET 可以避免每次把整段 JSON 读出来再写回，节省网络与序列化成本；还可以按字段做 TTL 外的业务控制（不过 Redis TTL 是 key 级别）。而 JSON 字符串更适合“整体替换、读多写少、字段不拆”的场景，客户端序列化简单。面试中可以补充：如果字段非常多或单个 field 很大，Hash 也可能成为 bigkey；另外多字段更新的原子性可以用 Lua 脚本来保证。</li>
+<li>可能追问：</li>
+<li>追问：Hash 能对单个 field 设置 TTL 吗？<br/>
+    15秒简答：原生 TTL 是 key 级别，不是 field 级别；需要自己做时间戳字段或拆 key。</li>
+<li>追问：为什么 Hash 有时比 String 更省内存？<br/>
+    15秒简答：小 Hash 可能使用紧凑编码（版本差异），键值对存储更紧凑；但规模变大后会转为哈希表，内存占用会上升。</li>
+</ul>
+<h2 id="list-stream">List / Stream 做消息队列有什么区别？线上怎么用更稳？<a class="headerlink" href="#list-stream" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：List 更像简单队列（LPUSH/BRPOP），Stream 更像“可持久化日志 + 消费组”；核心机制是 Stream 有 ID、有 ACK、支持消费组；特性是 Stream 可追溯与重放更强，但仍不如专业 MQ 的生态与能力。</li>
+<li>3分钟详答：List 做队列一般是生产者 LPUSH、消费者 BRPOP（阻塞弹出），简单好用但缺点明显：消费确认能力弱（弹出即丢）、难做多消费者的“同一消息仅消费一次”的可靠语义，积压定位也不友好。Stream（5.0+）把消息变成带 ID 的 append log，支持 consumer group、pending list、ACK、重放，能更接近“至少一次”消费模型。工程上如果只是做轻量异步解耦（如异步通知、简单重试），Stream 可以；但需要严格投递语义、事务消息、复杂延迟/死信/监控体系，建议用 Kafka/RocketMQ 这类专业 MQ。</li>
+<li>可能追问：</li>
+<li>追问：List 队列怎么避免消费者挂了导致消息丢？<br/>
+    15秒简答：用 RPOPLPUSH/BRPOPLPUSH 把消息先放到处理中队列，处理成功再确认删除，实现简易的“可重试”。</li>
+<li>追问：Stream 的 pending list 是什么？<br/>
+    15秒简答：已投递给某个消费者但未 ACK 的消息集合，用于超时重投与故障恢复。</li>
+</ul>
+<h2 id="zset">Zset 为什么适合排行榜？底层为什么常说“跳表”？<a class="headerlink" href="#zset" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：Zset 本质是“score 可排序的集合”，核心机制是按 score 排序并支持范围查询；特性是更新/查询都高效，适合排行榜/延时调度，但内存比纯计数更贵。</li>
+<li>3分钟详答：排行榜需要两个能力：一是按分数排序，二是快速取 TopN 或某用户排名。Zset 用 score（double）做排序键，提供 ZADD 更新、ZRANGE/ZREVRANGE 取区间、ZRANK 取排名。底层实现通常是“哈希表 + 跳表”的组合：哈希表用于 O(1) 按 member 查 score，跳表用于按 score 有序遍历与范围查询，插入/删除/查找平均 O(logN)。面试里可以顺带讲：跳表比平衡树实现更简单、工程上更易维护，且支持范围遍历效率好。</li>
+<li>可能追问：</li>
+<li>追问：大量并发更新同一个排行榜会怎样？<br/>
+    15秒简答：热点集中会导致单实例 CPU/网络顶满；可分榜（按业务维度拆 key）、批量更新（pipeline）、热点隔离或做异步聚合再写入。</li>
+<li>追问：score 相同怎么排序？<br/>
+    15秒简答：通常按 member 的字典序作为 tie-breaker（具体以实现/命令语义为准），所以 member 设计要可控，避免意外排序。</li>
+</ul>
+<h2 id="bitmap-hyperloglog-geo">Bitmap / HyperLogLog / GEO 分别解决什么问题？怎么选？<a class="headerlink" href="#bitmap-hyperloglog-geo" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：Bitmap 本质是位数组，适合状态/签到；HLL 本质是概率算法，适合 UV 去重；GEO 本质是地理索引封装，适合附近的人/店；特性是空间效率高，但精度/能力边界要说清。</li>
+<li>3分钟详答：Bitmap 常用于“是否/状态”类问题：某用户某天是否登录、某活动是否领取、AB 实验分组等，用 SETBIT/GETBIT/BITCOUNT 能高效统计。HyperLogLog 用于大规模去重计数（UV），占用很小的内存但结果是近似值，适合运营指标而非金融对账。GEO 解决“附近”查询，Redis 提供 GEOADD/GEORADIUS 等命令（新版本命令名有调整），底层基于 geohash 与有序集合的组合实现。选型口诀：能用位就别用集合；要精确去重用 Set（但内存大），要近似去重用 HLL；要附近查询用 GEO（或更专业的地理检索引擎）。</li>
+<li>可能追问：</li>
+<li>追问：用 Set 做 UV 为什么不推荐？<br/>
+    15秒简答：精确但内存成本随人数线性增长，百万/千万级会很夸张；HLL 用固定小内存换近似。</li>
+<li>追问：Bitmap 有什么常见坑？<br/>
+    15秒简答：用户 ID 稀疏会浪费空间（位图长度按最大 offset）；需要做分桶/映射（如按天、按业务、按 userId%N）。</li>
+</ul>
+<h1 id="_3">持久化与内存<a class="headerlink" href="#_3" title="Permanent link">¶</a></h1>
+<h2 id="rdbaof">RDB、AOF、混合持久化怎么选？数据会丢多少？<a class="headerlink" href="#rdbaof" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：RDB 是“定期快照”，AOF 是“追加操作日志”，混合是“RDB 作为基线 + AOF 增量”；核心机制是恢复速度 vs 丢数据窗口权衡；特性是 RDB 恢复快但丢窗口大，AOF 更安全但体积与恢复慢。</li>
+<li>3分钟详答：RDB（snapshot）在某个时间点把内存数据写成二进制快照，优点是文件紧凑、恢复快、适合冷备；缺点是两次快照之间的写入可能丢失，且生成快照通常需要 fork 子进程，内存大/写频繁时会有抖动。AOF 记录写命令日志，通过 appendfsync 策略控制刷盘：always 最安全但慢，everysec 是常见折中（理论上丢 1 秒），no 交给 OS 风险更大。混合持久化用 RDB 做基线、再把增量用 AOF 追加，启动恢复更快。面试里要能落到业务：你能接受丢几秒？是缓存还是关键数据？磁盘性能如何？以及是否有主从/集群作为更高层的可用性兜底。</li>
+<li>可能追问：</li>
+<li>追问：AOF everysec 真就只丢 1 秒吗？<br/>
+    15秒简答：通常是“最多 1 秒级别”，但极端情况下 OS 刷盘/阻塞可能导致更大窗口，需要结合磁盘与配置评估。</li>
+<li>追问：RDB 为什么会抖？<br/>
+    15秒简答：fork 触发 COW，子进程写快照期间主线程写入会复制内存页，导致额外内存与 CPU 开销，P99 抖动明显。</li>
+</ul>
+<h2 id="aof-rewrite">AOF rewrite（重写）在干什么？为什么能变小？<a class="headerlink" href="#aof-rewrite" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：AOF 重写本质是“把历史写命令压缩成当前状态的最简序列”；核心机制是后台生成新 AOF，最后原子切换；特性是文件变小、恢复变快，但重写期间有额外资源消耗。</li>
+<li>3分钟详答：AOF 追加会无限增长，比如同一个 key 被 SET 100 次，日志会记录 100 条命令。AOF rewrite 会基于当前内存数据生成等价的新日志（只需一次 SET），从而显著缩小文件并加速恢复。实现上通常是后台子进程/线程生成新文件，主线程继续处理请求并把新增写操作写入缓冲区，重写结束后把缓冲区追加到新文件，再做一次原子 rename/切换。面试关注点是：重写触发条件（大小阈值）、对内存/CPU/磁盘的影响、以及在写入峰值期是否需要避免重写导致抖动。</li>
+<li>可能追问：</li>
+<li>追问：重写期间 Redis 会阻塞吗？<br/>
+    15秒简答：主流程不应长时间阻塞，但 fork/COW、磁盘 IO、最终切换阶段可能带来短暂停顿与额外抖动。</li>
+</ul>
+<h2 id="fork-cow-redis">fork + COW 对 Redis 有什么影响？怎么减轻？<a class="headerlink" href="#fork-cow-redis" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：fork 会把地址空间“复制”给子进程，靠 COW 延迟复制；核心机制是写入时才复制页；特性是写流量越大、实例越大，COW 成本越高，表现为抖动与内存暴涨。</li>
+<li>3分钟详答：Redis 做 RDB 或 AOF rewrite 往往要 fork 子进程。fork 本身主要复制页表，理论上很快，但它引入的 COW 语义会放大写入成本：fork 后主进程每次写会把涉及的内存页复制一份给自己（或子进程），这会带来额外内存占用与 CPU/memory bandwidth 开销。实例数据越大、写越密集，COW 越严重，甚至触发 OOM 或 swap。减轻思路：控制实例大小（分片/多实例）、在写低谷做持久化、选择合适的持久化策略（缓存场景可弱化）、优化写放大（合并写、减少大 value 更新）、保证机器内存充足且禁用 swap。</li>
+<li>可能追问：</li>
+<li>追问：为什么线上强调不要开 swap？<br/>
+    15秒简答：Redis 依赖内存低延迟，一旦 swap，访问延迟会从微秒级飙到毫秒级甚至更糟，单线程服务基本不可用。</li>
+</ul>
+<h2 id="_4">过期删除策略与内存淘汰策略分别是什么？怎么答到“可用”层面？<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：过期删除解决“到期 key 怎么清”，淘汰策略解决“内存满了怎么办”；核心机制是惰性删除+定期删除、以及 LRU/LFU/随机/TTL 等淘汰；特性是折中 CPU 与内存，选错会导致命中率崩或延迟抖。</li>
+<li>3分钟详答：Redis 的 key 过期首先是逻辑概念：到达 TTL 后应被视为不存在。实现上通常是惰性删除（访问时发现过期就删）配合定期删除（后台定时抽样扫描过期字典删除），以平衡 CPU 与内存。内存淘汰发生在达到 maxmemory 之后：不同策略决定“删谁”。常见是 allkeys-lru / allkeys-lfu（从全部 key 里按最近最少用/最不常用淘汰）或 volatile-*（只淘汰设置了 TTL 的 key），以及随机、按 TTL 等。面试里要能结合业务：如果 Redis 里混有“必须保留”的关键数据，volatile 策略更安全；如果纯缓存、追求命中率，allkeys-lfu 往往更贴合；并且要说明监控 maxmemory、evicted_keys、命中率与延迟，提前扩容而不是等淘汰触发后再救火。</li>
+<li>可能追问：</li>
+<li>追问：惰性删除为什么不够？<br/>
+    15秒简答：如果 key 不再被访问，惰性删除永远不会触发，过期 key 会占内存，所以需要定期删除做兜底。</li>
+<li>追问：volatile-lru 的前提是什么？<br/>
+    15秒简答：只有设置了 TTL 的 key 才参与淘汰；如果很多 key 没 TTL，可能导致“内存满但没法淘汰”的风险（视策略而定）。</li>
+</ul>
+<h2 id="rehash">内存碎片、rehash、渐进式扩容你怎么解释？线上怎么看？<a class="headerlink" href="#rehash" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：碎片是“分配出去的内存回不成连续块”，rehash 是哈希表扩容迁移；核心机制是渐进式 rehash 分摊搬迁；特性是碎片会浪费内存、rehash 会带来额外 CPU，需用指标监控与合理重启/重分片。</li>
+<li>3分钟详答：Redis 常用 jemalloc 分配内存，小对象频繁分配释放会形成碎片，表现为 RSS 远大于实际数据量（used_memory）。hash 类结构扩容需要 rehash，把旧表数据迁到新表；Redis 通常做渐进式 rehash：把迁移工作分散到后续的读写操作里，每次搬一小部分，避免一次性搬迁导致长时间阻塞，但这也意味着一段时间内维护两张表并增加开销。线上关注指标：used_memory、used_memory_rss、mem_fragmentation_ratio、rehash 状态、以及瞬时延迟。治理上：控制对象大小与数量、避免大规模抖动写入、通过分片降低单实例规模；必要时在低峰做“安全重启”以释放碎片（前提是有 HA），或者把热点实例迁移与重建。</li>
+<li>可能追问：</li>
+<li>追问：mem_fragmentation_ratio 很高就一定有问题吗？<br/>
+    15秒简答：不一定，要结合实例生命周期与写入模式；持续升高且 RSS 逼近物理内存上限、触发淘汰/抖动才是风险信号。</li>
+</ul>
+<h1 id="_5">高可用与集群<a class="headerlink" href="#_5" title="Permanent link">¶</a></h1>
+<h2 id="_6">主从复制流程是怎样的？全量/增量怎么切换？<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：复制本质是“从库追随主库的写流”；核心机制是首次全量同步（快照/数据传输）+ 后续增量复制（复制积压缓冲）；特性是读扩展与容灾，但存在复制延迟与一致性折中。</li>
+<li>3分钟详答：Redis 主从复制通常经历：从库发起同步请求；主库根据情况走全量或增量。全量同步一般会生成一份快照（或等价数据流）传给从库，从库加载后进入在线状态；之后主库把写命令流式发送给从库做增量复制。为了支持断线重连的增量续传，主库会维护复制积压缓冲区（backlog），从库带着 offset 重新连接时，如果 backlog 还覆盖那段 offset，就能增量补齐；否则只能再做一次全量同步。面试里要能讲清：复制延迟的来源（网络、从库应用速度、主库写入峰值、磁盘/CPU），以及读写分离时“一致性读”的策略（读主、读从的延迟容忍、或读写路由）。</li>
+<li>可能追问：</li>
+<li>追问：复制延迟怎么监控？<br/>
+    15秒简答：看主从 offset 差、lag 指标、以及从库处理速度；结合业务看读从是否出现“读到旧值”。</li>
+<li>追问：从库可以写吗？<br/>
+    15秒简答：通常配置为只读，避免数据分叉；要写需要特殊配置且会带来一致性与运维复杂度。</li>
+</ul>
+<h2 id="sentinel">Sentinel（哨兵）怎么做到自动故障转移？主观/客观下线是什么？<a class="headerlink" href="#sentinel" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：哨兵本质是“监控+选主+通知”的控制平面；核心机制是多哨兵投票形成客观下线并选 leader 执行 failover；特性是自动切主提升可用性，但仍可能短暂不可写与存在脑裂风险。</li>
+<li>3分钟详答：哨兵部署为独立进程集群，周期性 PING master/slave 判断存活。单个哨兵认为 master 不可达时会标记主观下线（SDOWN）；当达到法定数量（quorum）的哨兵都认为 master 不可达，形成客观下线（ODOWN），然后在哨兵间选举一个 leader 负责故障转移：挑选合适的从库提升为新 master、让其他从库改复制新 master，并通知客户端更新拓扑。面试里要补充：哨兵需要奇数个、至少 3 个保证投票与容灾；failover 期间会有写不可用窗口；客户端最好通过哨兵发现 master 而不是写死地址。</li>
+<li>可能追问：</li>
+<li>追问：哨兵怎么选一个从库当新主？<br/>
+    15秒简答：通常综合从库优先级、复制偏移量（越新越好）、运行状态等挑选，目标是选“数据最新且稳定”的从库。</li>
+<li>追问：哨兵能保证不丢数据吗？<br/>
+    15秒简答：不能，主从是异步复制为主，切主时可能丢失尚未复制到从库的写入；要降低风险需结合持久化、WAIT、或业务侧幂等补偿。</li>
+</ul>
+<h2 id="redis-cluster-movedask">Redis Cluster 怎么分片？MOVED/ASK 重定向是什么？<a class="headerlink" href="#redis-cluster-movedask" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：Cluster 本质是“分片集群”，按哈希槽把 key 分布到不同节点；核心机制是客户端按 slot 路由，迁移时用 MOVED/ASK 重定向；特性是水平扩展与自动故障转移，但多 key 操作受限且一致性是弱的。</li>
+<li>3分钟详答：Redis Cluster 把 key 映射到固定数量的哈希槽（slots），每个 master 负责一段槽区间，key-&gt;slot-&gt;node 路由可以由客户端计算（常见客户端会缓存槽映射）。当槽迁移或拓扑变化时，客户端访问旧节点会收到 MOVED（永久重定向到新节点）或 ASK（迁移中临时重定向，需先 ASKING）。面试要说明两点：一是多 key 命令必须在同一 slot，否则会报错；可以通过 hash tags（{...}）把相关 key 固定到同一 slot。二是 cluster 的故障转移与一致性：它更偏可用性，网络分区可能导致短暂不一致，需要业务幂等与补偿。</li>
+<li>可能追问：</li>
+<li>追问：为什么 cluster 多 key 操作受限？<br/>
+    15秒简答：key 分布在不同节点，单命令无法跨节点原子执行；要么把相关 key 放同槽，要么在应用层拆分并接受非原子。</li>
+<li>追问：hash tag 怎么用？<br/>
+    15秒简答：把相关 key 写成 prefix{group}suffix，slot 只对大括号里的内容做哈希，从而保证同组 key 落同一槽。</li>
+</ul>
+<h2 id="cluster">Cluster 的一致性与“脑裂”怎么回答？如何降低写丢失？<a class="headerlink" href="#cluster" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：Cluster 偏 AP，网络分区时可能出现写入丢失或双主；核心机制是节点间心跳+投票，但无法在所有场景保证强一致；特性是可用性高但要用参数与业务策略降低风险。</li>
+<li>3分钟详答：面试里“脑裂”通常指网络分区导致主节点与多数派失联，但仍对部分客户端可达并继续接收写入；另一侧多数派可能完成故障转移产生新主，最终分区恢复后旧主的写入可能被丢弃（回滚/覆盖）。Redis 提供一些机制降低风险，例如配置要求主在失去多数派时停止写入（典型是 min-replicas-to-write / min-replicas-max-lag 等思路），以及通过客户端路由尽量只写到多数派可见的主。最终要强调：Redis 不是强一致数据库，关键写入需要业务幂等、双写校验、或以 DB/日志为准做最终一致。</li>
+<li>可能追问：</li>
+<li>追问：怎么让主库在从库落后时拒绝写？<br/>
+    15秒简答：用“至少 N 个从库且延迟不超过阈值才允许写”的配置约束，降低单点写入丢失概率。</li>
+</ul>
+<h2 id="_7">读写分离下怎么保证“读到最新”？你会怎么设计？<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：读从会有复制延迟，本质是“一致性与性能取舍”；核心机制是按业务选择读主、读从或读后写路由；特性是能扩读但必须明确一致性级别。</li>
+<li>3分钟详答：主从复制通常是异步，读从天然可能读到旧值。设计上先定一致性需求：强一致场景（下单后立刻读订单、资金类）一般读主或用 DB；弱一致场景（资讯、用户画像）读从即可。常见折中是“读你的写”（Read-Your-Writes）：对同一用户在写操作后一段时间内强制读主，或在响应里携带主的 offset/token，下游在从库等到 offset 再读（类似 WAIT/offset 机制的思想，但要考虑成本）。工程上还要配合降级：从库延迟过大时自动切回读主或返回缓存兜底，避免读到过旧数据影响体验。</li>
+<li>可能追问：</li>
+<li>追问：WAIT 命令能做强一致吗？<br/>
+    15秒简答：它能让写入等待复制到指定数量从库，提高“写已复制”的概率，但不等同分布式强一致，仍要考虑超时与网络分区。</li>
+</ul>
+<h1 id="_8">缓存与并发控制（工程化）<a class="headerlink" href="#_8" title="Permanent link">¶</a></h1>
+<h2 id="_9">缓存穿透、击穿、雪崩分别是什么？一口气怎么答清楚？<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：穿透是“查不存在数据”，击穿是“热点 key 失效瞬间被打爆”，雪崩是“大量 key 同时失效/缓存整体不可用”；核心机制是减少无效访问与平滑失效；特性是都能打爆 DB，治理要分层：校验/布隆、互斥重建、限流降级与高可用。</li>
+<li>3分钟详答：穿透多发生在查询本就不存在的 key（恶意攻击、参数异常、数据未落库），导致每次都绕过缓存打到 DB。常见手段：参数校验、缓存空值（短 TTL）、布隆过滤器（提前过滤明显不存在）。击穿强调“热点 key”：平时命中率高，一旦过期瞬间高并发落 DB，常见解法是互斥锁/单飞（只有一个请求去回源重建）、逻辑过期（缓存永不过期但带版本/过期时间，后台异步刷新）、热点预热与本地缓存。雪崩是系统级：大量 key 同时过期或 Redis 整体故障，结果是 DB 被洪峰打死，解法包括随机 TTL、分批预热、双层缓存、限流熔断降级、Redis 高可用（哨兵/cluster）以及容量与演练。面试官想听的是：你能把三者的触发条件、影响范围、治理组合拳说成闭环，而不是只背“随机 TTL”。</li>
+<li>可能追问：</li>
+<li>追问：缓存空值会不会把 Redis 撑爆？<br/>
+    15秒简答：可能，所以空值要短 TTL、只对高频穿透 key 生效，结合布隆与限流更稳。</li>
+<li>追问：互斥锁重建怎么避免“锁过期导致并发重建”？<br/>
+    15秒简答：锁 TTL 要覆盖回源耗时并留余量，必要时续期；或用逻辑过期+异步刷新减少临界并发。</li>
+</ul>
+<h2 id="binlogmq">缓存一致性怎么做？“双删”与“binlog+MQ”怎么解释？<a class="headerlink" href="#binlogmq" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：缓存与 DB 一致性本质是“最终一致”的工程问题；核心机制是 Cache Aside（先写 DB 再删缓存）+ 重试兜底；特性是简单可用但会有短暂不一致，严格一致要引入消息/日志与补偿。</li>
+<li>3分钟详答：最常见模型是 Cache Aside：读时先查缓存，未命中回源 DB 后写缓存；写时先写 DB，再删除缓存（而不是更新缓存，避免并发覆盖旧值）。这样仍可能出现短暂不一致：比如并发读写交错导致旧值回填。常见工程化做法之一是“延迟双删”：写 DB 后删缓存，再延迟一小段时间再删一次，降低旧值回填窗口（但不是理论完美）。更稳的做法是“binlog/CDC + MQ”：把 DB 变更事件可靠投递到消息队列，由缓存刷新/失效服务订阅并更新缓存，配合幂等、顺序、重试与死信，形成最终一致闭环。面试中要把边界讲清：一致性级别、失败重试策略、删除失败如何补偿（定时扫、消息重放）、以及缓存 key 设计如何支持精确失效。</li>
+<li>可能追问：</li>
+<li>追问：为什么“更新缓存”比“删缓存”更容易出错？<br/>
+    15秒简答：并发下更新顺序难保证，可能把旧值覆盖新值；删缓存让下一次读回源获得新值，逻辑更简单。</li>
+<li>追问：删缓存失败怎么办？<br/>
+    15秒简答：要有重试与兜底：消息重投/延迟队列、定时扫描补偿、或把失败 key 记录到可靠存储后异步处理。</li>
+</ul>
+<h2 id="redis-redlock">用 Redis 做分布式锁，最小正确实现是什么？Redlock 怎么答？<a class="headerlink" href="#redis-redlock" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：锁本质是“带过期时间的互斥标记”，核心机制是 SET NX PX + 唯一 token + Lua 校验解锁；特性是简单高效，但要处理超时、续期、主从不一致与业务幂等。</li>
+<li>3分钟详答：最小正确实现包含三点：加锁用 SET key token NX PX ttl，保证“只在不存在时设置并带过期”；解锁不能直接 DEL，必须先校验 token 再删，通常用 Lua 脚本保证原子；业务执行时间可能超过 ttl，需要续期（watchdog）或确保业务在 ttl 内完成。还要明确：Redis 锁只提供互斥的一种工程实现，不等同强一致分布式锁，特别是在主从异步复制、网络分区、故障转移时可能出现锁丢失或多客户端同时认为拿到锁的极端情况，所以业务必须幂等、可重试、能容忍偶发并发。Redlock 是多实例投票式锁算法，面试里建议表述为：它试图在多个独立 Redis 节点上获取多数锁来提升安全性，但业界对其严格正确性有争议；工程上更常见是用成熟客户端（如 Redisson）并结合业务幂等与监控告警。</li>
+<li>可能追问：</li>
+<li>追问：为什么解锁必须校验 token？<br/>
+    15秒简答：避免 A 持有锁超时后被 B 获取，A 业务结束后误删了 B 的锁，导致互斥失效。</li>
+<li>追问：锁 TTL 该怎么设？<br/>
+    15秒简答：至少覆盖业务 P99 耗时并留余量；更稳是加续期机制或把锁粒度缩小到可控时长的临界区。</li>
+</ul>
+<h2 id="redis-lua">用 Redis 做限流怎么实现？为什么常用 Lua？<a class="headerlink" href="#redis-lua" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：限流本质是“对时间窗口内的配额做原子扣减”，核心机制是固定窗口/滑动窗口/令牌桶；特性是 Lua 保证多步读写原子，避免并发超发。</li>
+<li>3分钟详答：Redis 限流常见三种思路。固定窗口简单：用 INCR 计数并设置 EXPIRE，但窗口边界容易突刺。滑动窗口更平滑：用 Zset 记录时间戳请求，按范围清理再统计，但开销更大。令牌桶是工程上常用模型：按速率补充令牌，请求来扣减令牌，能限制平均速率并允许短突发。之所以常用 Lua，是因为限流需要“读取当前配额、计算、更新计数/令牌、设置 TTL”这类多步操作，Lua 能在 Redis 内部原子执行避免并发竞态，同时减少网络往返。落地还要考虑 key 设计（按用户/接口/租户维度）、本地预限流、以及 Redis 故障时的降级策略（放行/拒绝/静态限流）。</li>
+<li>可能追问：</li>
+<li>追问：固定窗口的“突刺”怎么解释？<br/>
+    15秒简答：窗口边界两侧各打满配额会形成瞬时 2 倍流量，平均满足但瞬时可能压垮下游。</li>
+<li>追问：Redis 挂了限流怎么办？<br/>
+    15秒简答：要预设降级策略：关键接口宁可拒绝，非关键接口可放行；并可加本地限流兜底，避免全依赖 Redis。</li>
+</ul>
+<h2 id="redis-multiexecwatch-lua">Redis 事务（MULTI/EXEC/WATCH）到底保证了什么？和 Lua 有何不同？<a class="headerlink" href="#redis-multiexecwatch-lua" title="Permanent link">¶</a></h2>
+<ul>
+<li>15秒简答：事务本质是“命令队列按序执行”，WATCH 提供乐观锁；核心机制是 EXEC 时一次性执行队列但不回滚；特性是能实现 CAS，但复杂原子逻辑更常用 Lua。</li>
+<li>3分钟详答：Redis 事务的语义重点有三块。第一，MULTI 之后的命令进入队列，EXEC 时按顺序执行，执行过程中不会插入其他客户端命令，因此“队列整体执行”具备一定原子性（不会被打断）。第二，Redis 事务不提供关系型数据库那种回滚：某条命令失败不会回滚之前已执行的命令；命令入队时的语法错误与执行期错误也要区分说明。第三，WATCH 是乐观锁：监视 key，如果在 EXEC 前 key 被改动，EXEC 失败返回 nil，客户端按业务重试，从而实现 CAS。与 Lua 的差别是：Lua 更适合把“多步读写 + 分支判断”封装成一次原子操作，接口更简洁、网络更少；事务+WATCH 更像通用的乐观并发控制原语，但需要客户端写重试逻辑。</li>
+<li>可能追问：</li>
+<li>追问：事务中某条命令执行失败会怎样？<br/>
+    15秒简答：不会自动回滚；队列会继续执行后续命令（具体取决于错误类型），因此不适合依赖回滚语义的场景。</li>
+<li>追问：WATCH 失败后怎么处理？<br/>
+    15秒简答：按业务做重试（带退避），或改用 Lua 让冲突检测与更新在服务端一次完成。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
