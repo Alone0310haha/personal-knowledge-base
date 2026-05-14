@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BA%93/%E5%88%86%E6%9E%90%E8%A7%86%E9%A2%91%E6%96%87%E5%AD%97%E7%A8%BF/">
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87%E6%92%AD%E5%AE%A2%E7%A8%BF/elasticsearch/09-text%E4%B8%8Ekeyword%E5%8C%BA%E5%88%AB%E4%BB%A5%E5%8F%8A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81multi-fields/">
       
       
       
@@ -18,19 +18,19 @@
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>分析视频文字稿 - Alone的知识库</title>
+        <title>09 text与keyword区别以及为什么要multi fields - Alone的知识库</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,7 +49,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -83,7 +83,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              分析视频文字稿
+              09 text与keyword区别以及为什么要multi fields
             
           </span>
         </div>
@@ -204,7 +204,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -223,7 +223,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
         
   
   
@@ -258,7 +258,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -276,7 +276,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -303,7 +303,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
         
   
   
@@ -356,17 +356,32 @@
 
 
 
-  <h1>分析视频文字稿</h1>
+  <h1>09 text与keyword区别以及为什么要multi fields</h1>
 
-<p>以下是一个视频的文字稿，不要调用skill，请你帮我总结分析一下这个视频的内容。需要分析以下内容： 
- 1. 视频的听众针对的是哪一类人或人群 
- 2. 视频是从什么角度出发进行的讨论，它要解决什么样的问题？ 
- 3. 视频的核心论点和分论点 
- 4. 列出视频中提到的关键数据，案例和结论 
- 5. 如果是带有实践性质的内容，请你阐述他具体是怎么操作的，第一步是什么，第二步是什么？ 
- 6. 在实际生活中应用的时候的启示，如果能形成一个具体的SOP的话，请你也一并输出 
- 7. 请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范
- 8. 视频文字稿： </p>
+<p>【开场：共情与痛点】
+小雅：【停顿1秒】老王，我又遇到那种“看起来很基础但特别容易说崩”的题。面试官问我：“<code>text</code> 和 <code>keyword</code> 有什么区别？为什么经常要做 multi-fields？”我当时脑子里就一句话：一个分词一个不分词。结果他说“那你线上 title 为啥要两个字段”，我就开始冒汗了。【笑】我怕我说不清楚“为什么”，只会说“大家都这么配”。</p>
+<p>老王：害，这题就专门抓“你是不是照抄配置”。你先别急，咱把它当成两个完全不同的使用场景：一个是“我想搜到”，一个是“我想算清楚”。【停顿1秒】你只要把这两个需求分开，答案就自己冒出来了。</p>
+<p>小雅：行，那你先说 <code>text</code>，但别一口气太多，我会插话确认的。【加重语气】</p>
+<p>【爆发：核心解析】
+老王：<code>text</code>[生活化类比：像你把一段话切成很多关键词贴在便签上，方便你按关键词快速翻到相关内容]它是用来做全文检索的。你写进去的原始字符串，会被分析器处理成一串词，然后用这些词去匹配和算相关性。</p>
+<p>小雅：【停顿1秒】你说“分析器”和“相关性”，我先不展开，我怕跑偏。那 <code>keyword</code> 呢？</p>
+<p>老王：<code>keyword</code>[生活化类比：像快递单号，原样保存，拿来精确匹配、分组统计、排序最靠谱]它不分词，保存原值。你要做精确过滤、聚合统计、排序、去重，通常都用它。能理解这个逻辑吗？</p>
+<p>小雅：能。那为什么 <code>text</code> 不适合聚合？面试官就爱追这一句。</p>
+<p>老王：因为 <code>text</code> 分词后变成一堆 token[生活化类比：像你把一整句话撕成碎纸片，每片上只有一个词]，聚合要的是“稳定的原值”来分组。你拿碎纸片去做“按原句分组”，它根本没有那个原句的形态了，除非你强行把碎纸片再拼起来，成本也高还容易出事。能理解这个逻辑吗？</p>
+<p>小雅：【恍然大悟】所以聚合要的是“整句”，不是“碎词”。那我再问个实际的：一个字段为什么要同时是 <code>text</code> 和 <code>keyword</code>？这就是 multi-fields 对吧？</p>
+<p>老王：对，multi-fields[生活化类比：像同一个人同时有“名字的拼音索引卡”和“身份证号”，你查人可以按拼音模糊查，也可以按身份证精确查]就是让同一个业务字段同时具备两种能力。比如 <code>title</code>，你希望用户能搜“华为 手机”这种关键词匹配，这用 <code>text</code>；同时你又希望运营能按标题做去重、按标题排序、按标题聚合统计，这就得有 <code>title.keyword</code>。</p>
+<p>小雅：【停顿1秒】那面试官如果问“我什么时候用 term，什么时候用 match”，是不是就可以顺着这个说？</p>
+<p>老王：对。<code>term</code> 更像对 <code>keyword/numeric/date</code> 做精确匹配[生活化类比：像拿身份证号对人，一对一个准]；<code>match</code> 更像对 <code>text</code> 做分词后的匹配[生活化类比：像你只记得对方名字里带个“雅”，在通讯录里按关键词搜出来一堆候选]。你不用背 API 名字，你抓住“精确 vs 全文”这个分界线就稳。能理解这个逻辑吗？</p>
+<p>小雅：懂。那还有一个坑我想提前问，线上有人把 <code>keyword</code> 当成全文搜，或者把 <code>text</code> 拿去排序，会有什么后果？</p>
+<p>老王：把 <code>keyword</code> 当全文搜，召回会很差，用户体验像你在字典里只允许“完整匹配”，少一个字都搜不到。[生活化类比：你在便利店报“可乐”，收银员只认“可口可乐 500ml 这串完整名字”，你说短了他就装听不见]把 <code>text</code> 拿去排序或聚合，往往会走一条很费内存的路，最终表现是查询抖、内存高、GC 折腾。你不用展开细节，面试里点到“资源代价”就够了。能理解这个逻辑吗？</p>
+<p>【反转：面试官在想啥】
+小雅：所以面试官问 multi-fields，其实不是想听我背一句“text 分词 keyword 不分词”？</p>
+<p>老王：对。生产里你确实不会天天改字段类型，但面试官问你，其实是在考察你的“查询意图意识”。也就是你能不能把需求拆成：我要召回、我要过滤、我要排序、我要聚合，然后知道每个需求该落在哪种字段上。给你一句能背的面试话术。</p>
+<p>小雅：来一句能背的，我要那种一说完就像做过搜索的。</p>
+<p>老王：你就说：“<code>text</code> 用于全文检索，会被分析器分词并参与相关性计算；<code>keyword</code> 保留原值，适合精确过滤、聚合、排序和去重；业务里同一个字段往往既要搜索又要统计，所以会用 multi-fields 同时提供 <code>text</code> 和 <code>.keyword</code> 子字段，让查询意图各走各的最优路径。”【停顿1秒】这句很稳。</p>
+<p>【收尾：三点总结】
+小雅：【停顿1秒】我总结一下，其实就是三件事：第一件事儿，<code>text</code> 是为了“能搜到”，它会分词并算相关性；第二件事儿，<code>keyword</code> 是为了“算得准”，它拿原值做过滤、排序、聚合和去重；第三件事儿，multi-fields 就是一个字段两条腿走路，既满足搜索又满足统计，不用在需求之间二选一。【笑】这题我感觉终于能答得像在讲业务了。</p>
+<p>老王：对，就按“需求→字段→代价”这条线说，面试官很难再把你绕晕。</p>
 
 
 
@@ -422,10 +437,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

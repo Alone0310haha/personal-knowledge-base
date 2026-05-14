@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BA%93/%E5%88%86%E6%9E%90%E8%A7%86%E9%A2%91%E6%96%87%E5%AD%97%E7%A8%BF/">
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87%E6%92%AD%E5%AE%A2%E7%A8%BF/elasticsearch/14-_score%E6%98%AF%E4%BB%80%E4%B9%88BM25%E4%B8%BA%E4%BD%95%E9%BB%98%E8%AE%A4%E4%BB%A5%E5%8F%8A%E5%A6%82%E4%BD%95%E5%81%9A%E4%B8%9A%E5%8A%A1%E6%8E%92%E5%BA%8F/">
       
       
       
@@ -18,19 +18,19 @@
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>分析视频文字稿 - Alone的知识库</title>
+        <title>14 score是什么BM25为何默认以及如何做业务排序 - Alone的知识库</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,7 +49,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -83,7 +83,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              分析视频文字稿
+              14  score是什么BM25为何默认以及如何做业务排序
             
           </span>
         </div>
@@ -204,7 +204,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -223,7 +223,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
         
   
   
@@ -258,7 +258,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -276,7 +276,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -303,7 +303,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
         
   
   
@@ -356,17 +356,36 @@
 
 
 
-  <h1>分析视频文字稿</h1>
+  <h1>14  score是什么BM25为何默认以及如何做业务排序</h1>
 
-<p>以下是一个视频的文字稿，不要调用skill，请你帮我总结分析一下这个视频的内容。需要分析以下内容： 
- 1. 视频的听众针对的是哪一类人或人群 
- 2. 视频是从什么角度出发进行的讨论，它要解决什么样的问题？ 
- 3. 视频的核心论点和分论点 
- 4. 列出视频中提到的关键数据，案例和结论 
- 5. 如果是带有实践性质的内容，请你阐述他具体是怎么操作的，第一步是什么，第二步是什么？ 
- 6. 在实际生活中应用的时候的启示，如果能形成一个具体的SOP的话，请你也一并输出 
- 7. 请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范
- 8. 视频文字稿： </p>
+<p>【开场：共情与痛点】
+小雅：【停顿1秒】老王，我发现我一聊搜索排序就容易露怯。面试官问我：“相关性评分 <code>_score</code> 是什么？BM25 为什么是默认？你线上怎么做业务排序？”我当时只能说“_score 就是相关性”，他说“那为什么搜‘苹果’出来先是手机不是水果？”我就开始慌了。【笑】因为我隐约感觉这不是“算法题”，是“产品体验题”，但我讲不出来。</p>
+<p>老王：害，你这个感觉很对。搜索排序本质是让用户觉得“这结果像人一样懂我”。【停顿1秒】你先把 <code>_score</code> 理解成“匹配度分数”，它不是对错，是一个排序信号。然后 BM25 只是默认的打分方式，业务上线还会把自己的信号揉进去。</p>
+<p>小雅：行，那 <code>_score</code> 是怎么来的？你别给我推公式，我会直接放空。【加重语气】</p>
+<p>【爆发：核心解析】
+老王：不推公式，用直觉。BM25[生活化类比：像相亲打分表，既看你们共同点多不多，也看这个共同点是不是“稀缺优点”，还会避免某个人疯狂重复一句话就把分刷爆]会综合几个因素算分。比如词在这篇文档里出现得多一点，会加分；但它不会让“出现一百次”比“出现十次”离谱地高太多，这是它的“饱和”设计。能理解这个逻辑吗？</p>
+<p>小雅：【停顿1秒】能。那你刚说“稀缺优点”对应啥？</p>
+<p>老王：对应 IDF[生活化类比：像你在人才市场找“会 Java”的人很多，这个标签不稀奇；但你要找“会某个冷门领域”的人很少，那这个标签更能区分人]。一个词越少见，命中它越能说明这条结果更“有辨识度”，所以会加更多分。能理解这个逻辑吗？</p>
+<p>小雅：那“文档长度”也会影响对吧？我听过什么长度归一化，但我不知道怎么讲。</p>
+<p>老王：对，长度归一化[生活化类比：像你写作文，写得特别长不代表更切题，老师会防止你靠堆字数拿高分]就是避免长文档因为词多就天然占便宜，它会把长度因素考虑进去，让排序更符合直觉。能理解这个逻辑吗？</p>
+<p>小雅：【恍然大悟】所以 BM25 默认，是因为它排序更“像人”，不会被刷分，对吧？</p>
+<p>老王：对，它相对稳。你可以说它在召回和排序的平衡上比较成熟，默认就够好用。然后我们聊你最关心的线上：业务排序怎么做。</p>
+<p>小雅：【停顿1秒】对对对。因为现实里我想让“热卖、新品、点击高”的东西靠前，不可能只靠相关性。</p>
+<p>老王：这就是业务信号。你可以把它分两派：一种是直接 boost 字段权重[生活化类比：像你找房子，地铁距离比朝向更重要，那就给“距离”更高权重]，比如标题比正文重要，就让标题权重大些。另一种是 function_score[生活化类比：像你在相关性基础上再加一层“人气加成”，热度高的多给点分，时间新的多给点分]，把热度、销量、时效这些数值信号融合进最终排序。能理解这个逻辑吗？</p>
+<p>小雅：【加重语气】我插一句确认。【停顿1秒】也就是说，_score 不是只能靠 BM25，业务可以在它上面再叠一层“加成”？</p>
+<p>老王：对。还有第三种更工程化的做法：只用相关性做召回，然后按业务字段 sort。[生活化类比：像你先筛出符合条件的候选人，再按工作年限或面试评分排序，规则清晰可控]这种在一些列表、报表里特别常见。</p>
+<p>小雅：【停顿1秒】那面试官问“什么时候不要用 _score”，我该怎么答？</p>
+<p>老王：你就说纯过滤列表、报表、确定性排序场景，直接 filter 加 sort 更稳。[生活化类比：像排队叫号，你按号码来就是公平可解释，不需要再搞什么“谁更像顾客”这种打分]这类场景用 _score 反而不稳定。能理解这个逻辑吗？</p>
+<p>小雅：那如果线上排序怪了，我怎么定位？面试官有时候会问“你怎么排查”。</p>
+<p>老王：你提 explain 就行。[生活化类比：像老师给你作文打分后把扣分点标出来，你能看到每一项怎么影响总分]explain 能告诉你某条结果为什么得这个分，哪个字段贡献大，哪里被稀释了。别展开到命令细节，点到为止就够。能理解这个逻辑吗？</p>
+<p>【反转：面试官在想啥】
+小雅：所以这题面试官到底在考啥？我感觉不像在考算法。</p>
+<p>老王：生产里你确实不天天调相似度算法，但面试官问你，其实是在考察你的“排序可控与可解释意识”。你能不能说清楚：默认相关性怎么来的、为什么默认用 BM25、业务需求怎么安全地混进去、出了问题怎么解释和排查。给你一句能背的面试话术。</p>
+<p>小雅：来一句能背的，尽量覆盖“BM25、boost、function_score、sort、explain”这些点。</p>
+<p>老王：你就说：“<code>_score</code> 是全文检索的相关性分数，默认用 BM25 综合词频、稀缺度和长度等因素来得到更稳定的排序；上线时会通过字段权重调整或 function_score 把热度、时效等业务信号融合进排序，或者只用相关性做召回再按业务字段做确定性 sort；排查排序问题会用 explain 看分数贡献项。”【停顿1秒】这句很稳。</p>
+<p>【收尾：三点总结】
+小雅：【停顿1秒】我总结一下，其实就是三件事：第一件事儿，<code>_score</code> 是匹配度分数，BM25 默认是因为它在“别让重复刷分”和“稀缺词更能区分”这两点上更稳；第二件事儿，线上排序通常要混业务信号，用字段权重或 function_score 把热度时效揉进去，或者干脆召回后按业务字段排序；第三件事儿，纯列表报表别硬用 _score，出了排序问题就用 explain 把原因讲清楚。【恍然大悟】这题我感觉终于能讲得像在做搜索产品了。</p>
+<p>老王：对，讲排序就是讲体验。你能把“信号、权衡、可解释”说出来，这题基本就拿下。</p>
 
 
 
@@ -422,10 +441,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

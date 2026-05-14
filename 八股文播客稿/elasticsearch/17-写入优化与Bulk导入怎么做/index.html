@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BA%93/%E5%88%86%E6%9E%90%E8%A7%86%E9%A2%91%E6%96%87%E5%AD%97%E7%A8%BF/">
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87%E6%92%AD%E5%AE%A2%E7%A8%BF/elasticsearch/17-%E5%86%99%E5%85%A5%E4%BC%98%E5%8C%96%E4%B8%8EBulk%E5%AF%BC%E5%85%A5%E6%80%8E%E4%B9%88%E5%81%9A/">
       
       
       
@@ -18,19 +18,19 @@
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>分析视频文字稿 - Alone的知识库</title>
+        <title>17 写入优化与Bulk导入怎么做 - Alone的知识库</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,7 +49,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -83,7 +83,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              分析视频文字稿
+              17 写入优化与Bulk导入怎么做
             
           </span>
         </div>
@@ -204,7 +204,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -223,7 +223,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
         
   
   
@@ -258,7 +258,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -276,7 +276,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -303,7 +303,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
         
   
   
@@ -356,17 +356,34 @@
 
 
 
-  <h1>分析视频文字稿</h1>
+  <h1>17 写入优化与Bulk导入怎么做</h1>
 
-<p>以下是一个视频的文字稿，不要调用skill，请你帮我总结分析一下这个视频的内容。需要分析以下内容： 
- 1. 视频的听众针对的是哪一类人或人群 
- 2. 视频是从什么角度出发进行的讨论，它要解决什么样的问题？ 
- 3. 视频的核心论点和分论点 
- 4. 列出视频中提到的关键数据，案例和结论 
- 5. 如果是带有实践性质的内容，请你阐述他具体是怎么操作的，第一步是什么，第二步是什么？ 
- 6. 在实际生活中应用的时候的启示，如果能形成一个具体的SOP的话，请你也一并输出 
- 7. 请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范
- 8. 视频文字稿： </p>
+<p>【开场：共情与痛点】
+小雅：【停顿1秒】老王，我有个特别现实的问题。我们之前做过一次 ES 导入，数据量不算小，结果导着导着集群就开始喘，写入延迟飙升，查询也跟着慢。面试官听完就问我：“你怎么优化索引写入性能？Bulk 导入怎么做？”我当时脑子里只剩“调大机器”。【笑】</p>
+<p>老王：害，这题问得就是你有没有“写入阶段的节奏感”。ES 写入慢，很多时候不是机器不行，是你让它不停做一些“本来可以攒一攒再做”的事。【停顿1秒】咱把写入当成做饭：你是一份份下锅，还是一锅一锅炒，效率差别很大。</p>
+<p>小雅：行，那你给我一个“能直接落地”的组合拳，我要能在面试里说得像真的做过。【加重语气】</p>
+<p>【爆发：核心解析】
+老王：第一个动作就是 Bulk[生活化类比：像你去超市结账，一件件扫当然慢，攒一筐一起结算才快]。把很多条写入合成一批，减少请求次数和网络往返，吞吐会明显上去。</p>
+<p>小雅：【停顿1秒】那批次到底多大合适？面试官有时候会追“你怎么选 batch size”。</p>
+<p>老王：你别报死数，你说压测。[生活化类比：像你搬家一趟拿多少箱，拿少了跑得多，拿多了人会闪腰]批次通常按“条数和字节大小”两条线一起看，找到吞吐最高但不会把内存顶爆、也不会超时的甜点区。能理解这个逻辑吗？</p>
+<p>小雅：行。第二个动作呢？</p>
+<p>老王：第二个动作是调 refresh 节奏。导入期把 <code>refresh_interval</code> 调大，甚至临时关掉 refresh[生活化类比：像你备菜阶段先集中切好，不要每切两刀就把菜端上桌给客人看]。因为 refresh 会让新数据变可搜，这个动作会抢 CPU 和 I/O，导入期你不需要“秒级可搜”，就别让它频繁打断写入。能理解这个逻辑吗？</p>
+<p>小雅：【恍然大悟】所以导入时关 refresh，是拿“可见性”换“吞吐”。那第三个动作是不是副本？</p>
+<p>老王：对。导入期可以把副本数临时设为 0[生活化类比：像你先把货快速上架，别每上一个货就立刻做一份备份抄录，等上完再统一备份]。因为副本写入也是写放大的一部分，导入期先别复制，速度会快很多。</p>
+<p>小雅：【停顿1秒】但副本=0 会不会很危险？面试官肯定要问这个。</p>
+<p>老王：你要主动说风险：导入期节点挂了，恢复能力差，所以要保证源数据可回放，导入后要做对账和重试。[生活化类比：像你先把照片从相机拷到电脑但还没备份到云盘，这段时间电脑坏了就麻烦，所以你得确保相机原片还在，随时能重拷]能理解这个逻辑吗？</p>
+<p>小雅：那除了这三个，还有什么容易被忽略的瓶颈？</p>
+<p>老王：还有磁盘和 merge 压力。写入会不断产生段，后台合并会吃 I/O。[生活化类比：像你一直往仓库里塞箱子，管理员还得不停整理货架，不整理就越来越乱，整理又会占用通道]所以硬件上 SSD、足够的内存给系统做缓存，都会明显改善。以及分片规划要匹配并发和数据量，分片太多也会增加管理和合并开销。能理解这个逻辑吗？</p>
+<p>小雅：【加重语气】我插一句确认。【停顿1秒】所以写入优化核心就是减少请求次数、减少 refresh 打断、减少复制写放大，同时盯着磁盘 I/O 和合并，对吧？</p>
+<p>老王：对，你已经把主线抓住了。</p>
+<p>【反转：面试官在想啥】
+小雅：那面试官问这题，到底在考啥？我总感觉他不是想听我背三个参数。</p>
+<p>老王：生产里你确实不会天天导入，但面试官问你，其实是在考察你的“吞吐与风险权衡意识”。你能不能明确说出：为了快我牺牲了什么、怎么兜底、导完怎么恢复正常配置。给你一句能背的面试话术。</p>
+<p>小雅：来一句能背的，把 Bulk、refresh、副本、对账都串起来。</p>
+<p>老王：你就说：“写入性能优化优先从减少请求和写放大入手：用 Bulk 合并写入并通过压测确定批次大小；导入期调大或关闭 refresh 以减少段刷新开销；导入期临时把副本数降到 0 提升吞吐，导入完成后恢复副本并手动刷新，最后通过重试与对账保证数据完整，前提是源数据可回放。”【停顿1秒】这句很稳。</p>
+<p>【收尾：三点总结】
+小雅：【停顿1秒】我总结一下，其实就是三件事：第一件事儿，用 Bulk 把“小碎步写入”变成“成批搬运”，减少网络和请求开销；第二件事儿，导入期放慢甚至暂停 refresh，让写入别被频繁“可见化”打断；第三件事儿，导入期副本可以先降到 0 换吞吐，但要准备可回放、重试和对账，导完再恢复副本和刷新。【恍然大悟】这题我终于能讲得像在带导入任务了。</p>
+<p>老王：对，就该这么讲。面试官最喜欢你能把“怎么快”和“怎么不翻车”一起说清楚。</p>
 
 
 
@@ -422,10 +439,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

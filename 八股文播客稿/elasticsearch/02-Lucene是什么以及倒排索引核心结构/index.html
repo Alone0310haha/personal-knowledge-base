@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BA%93/%E5%88%86%E6%9E%90%E8%A7%86%E9%A2%91%E6%96%87%E5%AD%97%E7%A8%BF/">
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87%E6%92%AD%E5%AE%A2%E7%A8%BF/elasticsearch/02-Lucene%E6%98%AF%E4%BB%80%E4%B9%88%E4%BB%A5%E5%8F%8A%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E6%A0%B8%E5%BF%83%E7%BB%93%E6%9E%84/">
       
       
       
@@ -18,19 +18,19 @@
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>分析视频文字稿 - Alone的知识库</title>
+        <title>02 Lucene是什么以及倒排索引核心结构 - Alone的知识库</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,7 +49,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -83,7 +83,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              分析视频文字稿
+              02 Lucene是什么以及倒排索引核心结构
             
           </span>
         </div>
@@ -204,7 +204,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -223,7 +223,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
         
   
   
@@ -258,7 +258,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -276,7 +276,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -303,7 +303,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
         
   
   
@@ -356,17 +356,32 @@
 
 
 
-  <h1>分析视频文字稿</h1>
+  <h1>02 Lucene是什么以及倒排索引核心结构</h1>
 
-<p>以下是一个视频的文字稿，不要调用skill，请你帮我总结分析一下这个视频的内容。需要分析以下内容： 
- 1. 视频的听众针对的是哪一类人或人群 
- 2. 视频是从什么角度出发进行的讨论，它要解决什么样的问题？ 
- 3. 视频的核心论点和分论点 
- 4. 列出视频中提到的关键数据，案例和结论 
- 5. 如果是带有实践性质的内容，请你阐述他具体是怎么操作的，第一步是什么，第二步是什么？ 
- 6. 在实际生活中应用的时候的启示，如果能形成一个具体的SOP的话，请你也一并输出 
- 7. 请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范
- 8. 视频文字稿： </p>
+<p>小雅：【停顿1秒】老王，我又来复盘昨天的社死瞬间了。面试官听我说完 Elasticsearch 之后，突然一拐弯问我：“Lucene 是什么？倒排索引里到底有什么结构？”我当时就一个感受：我好像被拉去口述一台挖掘机的内部零件。【笑】</p>
+<p>老王：害，正常，我当年也被问懵过。你别把它当“背名词”，你就当面试官在问：你用的这台“搜索机器”，里面到底靠啥跑起来的。【停顿1秒】Lucene[生活化类比：像电饭煲里那个发热盘，外面你看到是整台电饭煲，真正把米饭煮熟的是它]就是 Elasticsearch 里面负责“把内容变成可搜索东西”的核心。</p>
+<p>小雅：你这个比喻我能接受。【加重语气】但我最怕的是他接着说“那倒排索引是啥”，我脑子里会自动开始背课本。</p>
+<p>老王：倒排索引[生活化类比：像电影院门口那张“按演员查电影”的海报，你想找某个演员出演的所有片子，直接看这张表，不用把每部电影海报挨个翻]说白了就是把“从内容找词”这条路反过来，变成“从词直接找到有哪些内容”。能理解这个逻辑吗？</p>
+<p>小雅：【恍然大悟】就是把查询路径变短了。那他问“有哪些结构”，我怎么回答不显得我在背？</p>
+<p>老王：你就想象你要维护那张“按演员查电影”的海报，你至少得有个地方放演员名单，还得有个地方记清楚每个演员对应哪几部电影，对吧。【停顿1秒】这里面第一个很核心的叫 term dictionary[生活化类比：像通讯录的目录页，先告诉你有哪些名字，以及你要去翻哪一段]，它负责把所有词项整理好，让你能很快定位到某个词。</p>
+<p>小雅：【停顿1秒】老王你等一下，你刚说 term dictionary 我还没完全跟上。它就是“词的总目录”，对吧？</p>
+<p>老王：对，你抓住“目录”这俩字就行。然后你定位到某个词之后，就要知道它出现在哪些文档里，这块叫 posting list[生活化类比：像你点开外卖平台某个菜品，下面列出来“哪些店有卖”，一行一行都是店铺]，里面记录的就是“哪些文档命中了这个词”，有时候还会带一些更细的信息，帮排序用。能理解这个逻辑吗？</p>
+<p>小雅：能。目录负责找到词，列表负责找到文档。那面试官要是追一句“那我搜到了文档 id，怎么把原文拿回来”，我是不是又要卡？</p>
+<p>老王：这就轮到 stored fields[生活化类比：像你通过快递单号查到了包裹在某个柜子里，但你还得打开柜子把包裹本体取出来]，它负责把你真正要返回给用户的内容存着，像 <code>_source</code> 这种原始字段，通常就是从这路拿回来。能理解这个逻辑吗？</p>
+<p>小雅：【加重语气】那“排序”和“聚合”呢？我记得你老说 ES 的统计很猛，面试官也爱问这个。</p>
+<p>老王：对，这块经常接着追。排序和聚合通常更依赖 doc values[生活化类比：像你做报销汇总时，把所有“金额”单独拎成一列，算总和和排序时就不用把每张发票全文重新看一遍]，它是偏列式的存法，让你按字段做统计、排序的时候更省劲。能理解这个逻辑吗？</p>
+<p>小雅：【停顿1秒】我开始有画面了：目录、列表、取回原文、还有那列式的统计用数据。可面试官还问我一个怪问题：“Lucene 为什么更新删除不是直接改？”我当时真不知道怎么讲。</p>
+<p>老王：这就涉及到 segment[生活化类比：像你写日记，一页写满了就夹在本子里不撕不改，后面要补充就另开新页]。Lucene 的索引被切成一段一段的段，段一旦写好就尽量不改，这样读的时候很稳定，缓存也更好用。你更新删除往往是“老的先做个标记，新内容写到新段里”。能理解这个逻辑吗？</p>
+<p>小雅：能，但我怕你再往下讲就要连说一串，我会掉线。【笑】【停顿1秒】你把后果说清楚就行。</p>
+<p>老王：行，我收住。段多了会变碎，查起来像你翻很多页日记，会慢一点，所以后台会做 merge[生活化类比：像你把一堆零散小票按时间重新订成一本账册，翻起来更顺]，把小段合成大段，顺便把那些“标记删除”的东西清掉一部分。能理解这个逻辑吗？</p>
+<p>小雅：【恍然大悟】所以更新删除“看着没删干净”，其实是等合并的时候再回收空间。这个我终于能解释了。</p>
+<p>老王：对，你已经把关键串起来了。现在我们来反转一下，面试官问你这些结构，他其实在考察什么。</p>
+<p>小雅：他不会只是想听我把英文念一遍吧？【笑】</p>
+<p>老王：生产里你确实不天天跟这些名词打架，但面试官问你，其实是在考察你的“原理映射意识”。就是你能不能把“搜索为什么快、写入为什么这么干、更新删除为什么怪、排序聚合为什么吃资源”这些现象，映射回底层结构。你背一句能直接说出口的话术，现场稳得住。</p>
+<p>小雅：来一句能背的，别让我临场再组织语言。</p>
+<p>老王：你就说：“Lucene 是搜索库的核心，倒排索引把检索变成从词直接定位到文档；它用词项目录和命中文档列表支撑快速查找，用可取回的存储字段返回原文，用列式数据支撑排序聚合；索引按段组织，更新删除通过新写和标记完成，后台再合并整理。”【停顿1秒】这句说完，对面基本就知道你不是只会背结论。</p>
+<p>小雅：【停顿1秒】我总结一下，其实就是三件事：一是 Lucene 是 ES 里负责把内容变成“可搜结构”的核心；二是倒排索引的关键链路我能讲清楚，从词项目录到命中文档列表，再到把内容取回和做排序聚合；三是段不可变这条规则解释了更新删除的怪相，合并把碎片收拾干净。【加重语气】我按这个说，面试官再追，我也能顺着现象往回推了。</p>
+<p>老王：就这股“能顺着推”的感觉最值钱。下次你别慌，慌的时候就想一件事：面试官其实是在问，你脑子里有没有那张“从现象回到结构”的地图。</p>
 
 
 
@@ -422,10 +437,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

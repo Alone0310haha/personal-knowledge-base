@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BA%93/%E5%88%86%E6%9E%90%E8%A7%86%E9%A2%91%E6%96%87%E5%AD%97%E7%A8%BF/">
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87%E6%92%AD%E5%AE%A2%E7%A8%BF/elasticsearch/13-QueryDSL%E5%88%86%E5%B1%82term_vs_match_query_vs_filter/">
       
       
       
@@ -18,19 +18,19 @@
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>分析视频文字稿 - Alone的知识库</title>
+        <title>13 QueryDSL分层term vs match query vs filter - Alone的知识库</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,7 +49,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -83,7 +83,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              分析视频文字稿
+              13 QueryDSL分层term vs match query vs filter
             
           </span>
         </div>
@@ -204,7 +204,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -223,7 +223,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
         
   
   
@@ -258,7 +258,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -276,7 +276,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -303,7 +303,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
         
   
   
@@ -356,17 +356,34 @@
 
 
 
-  <h1>分析视频文字稿</h1>
+  <h1>13 QueryDSL分层term vs match query vs filter</h1>
 
-<p>以下是一个视频的文字稿，不要调用skill，请你帮我总结分析一下这个视频的内容。需要分析以下内容： 
- 1. 视频的听众针对的是哪一类人或人群 
- 2. 视频是从什么角度出发进行的讨论，它要解决什么样的问题？ 
- 3. 视频的核心论点和分论点 
- 4. 列出视频中提到的关键数据，案例和结论 
- 5. 如果是带有实践性质的内容，请你阐述他具体是怎么操作的，第一步是什么，第二步是什么？ 
- 6. 在实际生活中应用的时候的启示，如果能形成一个具体的SOP的话，请你也一并输出 
- 7. 请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范
- 8. 视频文字稿： </p>
+<p>【开场：共情与痛点】
+小雅：【停顿1秒】老王，我发现 ES 面试最容易把我问急的，就是 Query DSL。面试官问我：“你怎么分层理解 Query DSL？term 和 match 有啥区别？query 和 filter 又差在哪？”我当时一紧张，嘴里就剩“term 精确，match 模糊”。他说“那为什么你们线上把条件全放 must 里”，我瞬间感觉自己被看穿了。【笑】</p>
+<p>老王：害，这题问得好，说明他在看你会不会写“稳的查询”。【停顿1秒】你把 DSL 当成一棵树就行：每个节点都是一个条件，条件之间能组合。然后所有差异，最终都落到两件事：要不要分词、要不要算分。</p>
+<p>小雅：你先别上“树”，我怕我又晕。【加重语气】你先用最直观的方式讲 term 和 match。</p>
+<p>【爆发：核心解析】
+老王：term[生活化类比：像对身份证号，必须一字不差才能认出人]是精确匹配，不分词。它适合 <code>keyword</code>、数字、日期这种字段，比如状态、租户 id、类目、时间范围。</p>
+<p>小雅：【停顿1秒】那 match 呢？</p>
+<p>老王：match[生活化类比：像你在通讯录里搜“老王”，系统会把你输入的词拆一拆、归一化一下，再去找可能相关的人]是全文检索，会走分析器分词，然后算相关性，最后给你个 <code>_score</code>。</p>
+<p>小雅：【恍然大悟】所以 term 是“拿原值对”，match 是“先处理再匹配”。那 query 和 filter 又怎么讲？我总觉得它俩都在“查”。</p>
+<p>老王：它俩都在查，但 filter[生活化类比：像进小区的门禁，符合就进，不符合就拦，根本不打分]不算 <code>_score</code>，更像业务硬条件，结果也更容易复用缓存。query[生活化类比：像相亲打分，条件匹配只是入场券，最后还要根据契合度排个顺序]会算分，用在“我想按相关性排一排”的场景。能理解这个逻辑吗？</p>
+<p>小雅：【停顿1秒】那我线上那种“所有条件都放 must”，是不是就等于很多本该是门禁的东西也拿去打分了？</p>
+<p>老王：对，这就会又慢又不稳定。你记一个稳的套路：硬条件放 filter，关键词检索放 must。[生活化类比：像你点外卖先过滤“只看 3km 内、评分 4.5 以上”，这属于门禁；然后再按“你想吃辣的、想吃面”这种偏好去排序]这样查询结构会很清晰：先筛掉不可能的，再在剩下的里算相关性。能理解这个逻辑吗？</p>
+<p>小雅：【加重语气】我插一句确认。【停顿1秒】也就是说 filter 负责缩小候选集合，query 负责在候选里排序，对吧？</p>
+<p>老王：对，完全正确。</p>
+<p>小雅：那还有一个我总被追的点：“为什么 filter 更快？”我怕我答成“因为缓存”太敷衍。</p>
+<p>老王：你可以这么说：filter 不算分，执行路径更短；而且很多 filter 条件在不同请求里复用度高，更容易被缓存命中。[生活化类比：门禁刷卡这种动作每天重复，系统当然能优化得很快；相亲打分每个人都不一样，没法复用]你这样答就不空。能理解这个逻辑吗？</p>
+<p>小雅：match_phrase 呢？有时候面试官顺手一带。</p>
+<p>老王：match_phrase[生活化类比：像你找一段台词，要求词序基本一致，不能把“我爱你”搜成“你爱我”]是短语匹配，词序和距离更严格。你提一句“更严格、可以放宽距离”就够了，别展开到像念文档。能理解这个逻辑吗？</p>
+<p>【反转：面试官在想啥】
+小雅：所以这题面试官到底想考啥？真的是考我记不记得哪些 DSL 吗？</p>
+<p>老王：生产里你确实不天天背 DSL 名字，但面试官问你，其实是在考察你的“查询建模意识”。你能不能把业务条件分成硬过滤和相关性检索，写出稳定、可解释、性能可控的查询结构。给你一句能背的面试话术。</p>
+<p>小雅：来一句能背的，我要那种能把 term/match 和 query/filter 一口气串起来的。</p>
+<p>老王：你就说：“我会把 DSL 当成可组合的查询树，term 类查询用于 <code>keyword/数值/日期</code> 的精确过滤，match 类查询用于 <code>text</code> 字段的分词检索与相关性；业务硬条件放在 filter 里不参与评分且更易缓存，关键词检索放在 must 里参与评分，形成先过滤再按相关性排序的稳定结构。”【停顿1秒】这句非常面试友好。</p>
+<p>【收尾：三点总结】
+小雅：【停顿1秒】我总结一下，其实就是三件事：第一件事儿，term 不分词走精确匹配，match 会分词并算相关性；第二件事儿，filter 是门禁不打分更稳，query 是打分排序更贵；第三件事儿，线上常用结构是先用 filter 把硬条件卡住，再用 must 做关键词检索，性能和结果都更可控。【恍然大悟】我感觉我终于能解释“为什么这么写”了。</p>
+<p>老王：对，面试官要的就是“你写得稳”，而不是“你背得熟”。这题你按这个讲法，基本就拿下了。</p>
 
 
 
@@ -422,10 +439,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

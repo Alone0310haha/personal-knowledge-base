@@ -1,0 +1,754 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/%E5%A6%82%E4%BD%95%E4%B8%8EAI%E5%8D%8F%E4%BD%9C%E6%8A%8A%E6%A8%A1%E7%B3%8A%E6%83%B3%E6%B3%95%E5%8F%98%E6%88%90%E8%83%BD%E8%90%BD%E5%9C%B0%E7%9A%84PRD%EF%BC%88%E8%A7%86%E9%A2%91%E6%80%BB%E7%BB%93%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>如何与AI协作把模糊想法变成能落地的PRD（视频总结） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              如何与AI协作把模糊想法变成能落地的PRD（视频总结）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 听众画像（针对哪一类人）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 讨论角度与要解决的问题（从什么角度出发）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心论点和分论点
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心论点和分论点">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1prd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分论点 1：PRD 产出分两步，先精简版再落地版
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分论点 2：精简版用“三步法”把方向聊透并冻结范围
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-prd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分论点 3：落地版 PRD 的关键是补齐“五大盲区”
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 关键数据、案例和结论
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 关键数据、案例和结论">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键数据/结构化结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        视频中的示例案例（作者演示用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 实践方法：具体怎么操作（步骤拆解）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 实践方法：具体怎么操作（步骤拆解）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 1 步：先做“精简版”（对齐方向）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 2 步：冻结需求范围（二次确认）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-prd_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 3 步：产出“落地版 PRD”（可交付开发）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-sop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 启示与可复用 SOP（实际应用）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 启示与可复用 SOP（实际应用）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sop-prd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOP：把模糊想法变成可交付 PRD
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>如何与AI协作把模糊想法变成能落地的PRD（视频总结）</h1>
+
+<p><a href="https://www.bilibili.com/video/BV1Ba5g6wEwU/?spm_id_from=333.1391.0.0&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7"># 01-如何与Ai协作把模糊想法变成能落地的PRD</a></p>
+<h2 id="1">1. 听众画像（针对哪一类人）<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<ul>
+<li>想把一个模糊 idea 变成可交付 PRD 的人：独立开发者、研发负责人/工程师、产品经理。</li>
+<li>正在用 AI 辅助做需求对齐/写 PRD，但遇到“AI 迎合、细节缺失、写出来能跑但不可落地”的人。</li>
+<li>计划做 MVP、需要明确范围与交付边界的人（尤其是“先做出来上线验证”的小团队/个人）。</li>
+</ul>
+<h2 id="2">2. 讨论角度与要解决的问题（从什么角度出发）<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<p>作者从“web coding 的需求对齐环节”出发，讨论如何在跟 AI 聊需求时施加约束，避免 AI 把 PRD 写成：</p>
+<ul>
+<li>有幻觉（编造需求/细节），但看起来很完整；</li>
+<li>过度迎合（你说啥就是啥，不挑战、不追问）；</li>
+<li>细节模糊（缺少状态、字段规范、文案规范等，导致后续开发坑越来越大）。</li>
+</ul>
+<p>核心目标是：把对话拆成“先对齐方向、再补齐落地细节”的两段式流程，最终产出可直接交付开发的标准 PRD。</p>
+<h2 id="3">3. 核心论点和分论点<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<h3 id="_1">核心论点<a class="headerlink" href="#_1" title="Permanent link">¶</a></h3>
+<p>要让 AI 写出能落地的 PRD，关键不是“让它多写”，而是用固定流程先把方向对齐、范围冻结，再用结构化清单强制补齐细节盲区（流程/状态/字段/文案/异常）。</p>
+<h3 id="1prd">分论点 1：PRD 产出分两步，先精简版再落地版<a class="headerlink" href="#1prd" title="Permanent link">¶</a></h3>
+<ul>
+<li>精简版：把模糊想法变成明确概念，先对齐方向，避免一上来写“大而全”。</li>
+<li>落地版：在明确范围后，按规范补齐所有可开发细节，才是“能交付”的 PRD。</li>
+</ul>
+<h3 id="2_1">分论点 2：精简版用“三步法”把方向聊透并冻结范围<a class="headerlink" href="#2_1" title="Permanent link">¶</a></h3>
+<ul>
+<li>先用三个视角诊断（用户/商业/技术）排除伪需求与不可行假设。</li>
+<li>产出约 300 字的概念版，用固定字段收敛到 MVP。</li>
+<li>冻结需求范围：把已确认内容逐条列出，让你二次确认，避免 coding 后反复返工。</li>
+</ul>
+<h3 id="3-prd">分论点 3：落地版 PRD 的关键是补齐“五大盲区”<a class="headerlink" href="#3-prd" title="Permanent link">¶</a></h3>
+<p>AI 写 PRD 最容易跳过的五类细节：</p>
+<ul>
+<li>用户流程：正常路径、异常路径、用户如何走完整链路。</li>
+<li>状态机：所有状态、状态进入/退出条件、状态之间的转换。</li>
+<li>字段规范：是否必填、类型、长度、校验规则、报错提示。</li>
+<li>文案与空状态：加载中/成功/失败/无数据等状态的文案一致性，是否设定产品“人设”。</li>
+<li>异常场景：断网、超时、无权限、重复提交等的反馈与处理。</li>
+</ul>
+<h2 id="4">4. 关键数据、案例和结论<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<h3 id="_2">关键数据/结构化结论<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<ul>
+<li>精简版“三步法”：三个视角诊断 → 输出约 300 字概念版 → 冻结需求范围。</li>
+<li>落地版 PRD 的“五大盲区”：用户流程、状态机、字段规范、文案/空状态/人设、异常场景。</li>
+<li>MVP 原则：先做最小可用版本上线验证，不做大而全，否则容易“永远上不了线”。</li>
+</ul>
+<h3 id="_3">视频中的示例案例（作者演示用）<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<ul>
+<li>产品想法：16+8 轻断食相关 App。</li>
+<li>目标用户：普通上班族（加班不规律、坚持困难、断断续续的 16+8 用户）。</li>
+<li>约束与形态：第一版不做账号登录；先做安卓或 iOS 本地应用。</li>
+<li>变现想法：打赏/一元买断等。</li>
+<li>交付节奏：希望 4 周内上架 MVP；1 周内出交互/UI 图。</li>
+<li>产品调性：名字“轻卡”；吉祥物可爱的水獭；主色薄荷绿；文案轻松、温柔无力，带轻微吐槽/幽默。</li>
+</ul>
+<h3 id="_4">关键结论<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ul>
+<li>AI 不会自动把“你没说的细节”补齐到可开发程度，必须用清单把盲区列出来强制覆盖。</li>
+<li>冻结范围是成本控制点：出落地版 PRD 后再改需求，会导致流程图/状态机等整体重做，既费时间也费 token。</li>
+</ul>
+<h2 id="5">5. 实践方法：具体怎么操作（步骤拆解）<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<h3 id="1_1">第 1 步：先做“精简版”（对齐方向）<a class="headerlink" href="#1_1" title="Permanent link">¶</a></h3>
+<ul>
+<li>用三个视角跟 AI 深聊并让它追问：</li>
+<li>用户视角：目标用户是谁、场景、现有替代方案、能解决哪部分、使用频率等。</li>
+<li>商业视角：免费/付费、订阅/买断、增值/打赏、运营周期预期等。</li>
+<li>技术视角：形态（小程序/iOS/H5）、是否需要账号、数据本地/云端、第三方依赖、预期交付周期等。</li>
+<li>让 AI 输出约 300 字的“概念版 PRD”（固定字段、明确本期做什么/不做什么），把范围收敛到 MVP。</li>
+</ul>
+<h3 id="2_2">第 2 步：冻结需求范围（二次确认）<a class="headerlink" href="#2_2" title="Permanent link">¶</a></h3>
+<ul>
+<li>让 AI 把“前面讨论确认过的内容”逐条列出（范围/功能/约束/风格等）。</li>
+<li>你逐条确认或修改；确认后再进入落地版 PRD。</li>
+</ul>
+<h3 id="3-prd_1">第 3 步：产出“落地版 PRD”（可交付开发）<a class="headerlink" href="#3-prd_1" title="Permanent link">¶</a></h3>
+<ul>
+<li>给 AI 一个标准 PRD 规范作为参考，落地版至少包含：</li>
+<li>概述：背景/目标/范围（包含/不包含）。</li>
+<li>功能列表：本期功能与优先级。</li>
+<li>关键功能详述：必须覆盖五大盲区（流程/状态/字段/文案/异常）。</li>
+<li>对每个关键交互点，补齐失败分支与用户反馈（例如提交：成功只是一个分支，还要写断网/超时/无权限/重复提交等）。</li>
+</ul>
+<h2 id="6-sop">6. 启示与可复用 SOP（实际应用）<a class="headerlink" href="#6-sop" title="Permanent link">¶</a></h2>
+<h3 id="sop-prd">SOP：把模糊想法变成可交付 PRD<a class="headerlink" href="#sop-prd" title="Permanent link">¶</a></h3>
+<ul>
+<li>SOP-0 准备输入（减少 AI 幻觉源头）</li>
+<li>说清楚：你要解决的具体场景、你不做什么、时间/平台/成本约束、竞品体验要点（可借鉴/可摒弃）。</li>
+<li>SOP-1 三视角诊断（用户/商业/技术）</li>
+<li>目标：把隐含假设暴露出来，先把方向聊透。</li>
+<li>SOP-2 输出 300 字概念版（MVP）</li>
+<li>目标：明确“本期做什么/不做什么”，形成可讨论的最小概念。</li>
+<li>SOP-3 冻结范围（清单确认）</li>
+<li>目标：把已确认项固化，避免后续返工。</li>
+<li>SOP-4 落地版 PRD（按模板逐项补齐）</li>
+<li>对每个功能强制过一遍五大盲区检查清单：<ul>
+<li>用户流程：正常/异常路径齐全</li>
+<li>状态机：状态与转换完整</li>
+<li>字段规范：类型/必填/长度/校验/报错文案</li>
+<li>文案规范：空状态/加载/成功/失败/人设一致</li>
+<li>异常兜底：断网/超时/无权限/重复提交/无数据</li>
+</ul>
+</li>
+<li>SOP-5 由 PRD 派生交付计划（可选）</li>
+<li>让 AI 基于 PRD 输出：原型/UI/开发/测试/验收/上线的计划清单，并明确里程碑（例如 1 周出交互 UI、4 周 MVP 上架）。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
