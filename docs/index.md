@@ -53,8 +53,10 @@
   [Harness Engineering（OpenAI Codex）](<ai总结源文件/Harness Engineering（OpenAI Codex）.md>)
   [TDD](<ai总结源文件/TDD.md>)
   [使用BDD让AI精确地理解需求](<ai总结源文件/使用BDD让AI精确地理解需求.md>)
+  [如何与AI协作把模糊想法变成能落地的PRD（视频总结）](<ai总结源文件/如何与AI协作把模糊想法变成能落地的PRD（视频总结）.md>)
   [AI Coding 进阶：从 Vibe_Plan_Spec 到 Harness Engineering 与 Agent Teams（视频总结）](<ai总结源文件/AI Coding 进阶：从 Vibe_Plan_Spec 到 Harness Engineering 与 Agent Teams（视频总结）.md>)
   [当我们讨论 Agent Harness 时，我们究竟在讨论什么？（视频总结）](<ai总结源文件/当我们讨论 Agent Harness 时，我们究竟在讨论什么？（视频总结）.md>)
+  [智能体狂欢之后，谁还值钱？｜ 5月AI行业洞察（视频总结）](<ai总结源文件/智能体狂欢之后，谁还值钱？｜ 5月AI行业洞察（视频总结）.md>)
 
 </div>
 
@@ -80,6 +82,8 @@
     - [如何使用 Redis 记录上亿用户连续登录天数](<ai总结源文件/如何使用 Redis 记录上亿用户连续登录天数.md>)
     - [使用 redis 出现缓存击穿雪崩穿透应该怎么解决](ai总结源文件/使用redis出现缓存击穿雪崩穿透应该怎么解决.md)
     - [了解陌生行业方法论](ai总结源文件/了解陌生行业方法论.md)
+    - [如何快速自学一个新领域？](<如何快速自学一个新领域？.md>)
+    - [如何训练深度思考能力？3个思维模型，让你一眼看透本质（视频总结）](<ai总结源文件/如何训练深度思考能力？3个思维模型，让你一眼看透本质（视频总结）.md>)
     - [总裁助理分享：拿捏住你领导的基本盘](<ai总结源文件/总裁助理分享：拿捏住你领导的基本盘.md>)
     - [职场中，你给领导画过大饼吗？（视频总结）](<ai总结源文件/职场中，你给领导画过大饼吗？（视频总结）.md>)
     - [浅谈互联网公司的薪资构成（视频总结）](<ai总结源文件/浅谈互联网公司的薪资构成（视频总结）.md>)
@@ -147,6 +151,7 @@
     - [Harness Engineering（OpenAI Codex）](<ai总结源文件/Harness Engineering（OpenAI Codex）.md>)
     - [TDD](<ai总结源文件/TDD.md>)
     - [使用BDD让AI精确地理解需求](<ai总结源文件/使用BDD让AI精确地理解需求.md>)
+    - [如何与AI协作把模糊想法变成能落地的PRD（视频总结）](<ai总结源文件/如何与AI协作把模糊想法变成能落地的PRD（视频总结）.md>)
     - [count(＊) vs count(1) vs count(字段)](<ai总结源文件/count(＊) vs count(1) vs count(字段).md>)
     - [LoRA 是什么 & 大模型微调怎么回事](ai总结源文件/LoRA 是什么 & 大模型微调怎么回事.md)
     - [Token 与 Embedding：LLM 与 RAG 的数据处理机制](ai总结源文件/Token 与 Embedding：LLM 与 RAG 的数据处理机制.md)
@@ -161,6 +166,7 @@
     - [AI Coding流水线是怎么从需求跑到验收](<ai总结源文件/AI Coding流水线是怎么从需求跑到验收.md>)
     - [AI Coding 进阶：从 Vibe_Plan_Spec 到 Harness Engineering 与 Agent Teams（视频总结）](<ai总结源文件/AI Coding 进阶：从 Vibe_Plan_Spec 到 Harness Engineering 与 Agent Teams（视频总结）.md>)
     - [当我们讨论 Agent Harness 时，我们究竟在讨论什么？（视频总结）](<ai总结源文件/当我们讨论 Agent Harness 时，我们究竟在讨论什么？（视频总结）.md>)
+    - [智能体狂欢之后，谁还值钱？｜ 5月AI行业洞察（视频总结）](<ai总结源文件/智能体狂欢之后，谁还值钱？｜ 5月AI行业洞察（视频总结）.md>)
     - [AI时代下，如何放大自己的能力到10倍甚至百倍](ai总结源文件/AI时代下，如何放大自己的能力到10倍甚至百倍.md)
     - [普通人防淘汰指南：AI时代下你该学什么？怎么学？（实操版）](<ai总结源文件/普通人防淘汰指南：AI时代下你该学什么？怎么学？（实操版）.md>)
     - [Agent Skills 设计哲学和实战进化](<ai总结源文件/Agent Skills 设计哲学和实战进化.md>)
