@@ -1,0 +1,710 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="将你与大模型的聊天记录（JSON/Markdown/纯文本）转成“理解型、层层递进”的面试复习笔记：从直觉到原理到工程落地。输出两份 Markdown：①理解笔记（含自测题题目 + 追问引导）②自测题答案解析（与题目一一对应）。适用于准备面试、把零散对话沉淀为可回看的复习资料。">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BA%93/skills/chatlog-to-understanding-interview-notes/SKILL/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Chatlog → 理解型面试笔记（层层递进） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#chatlog" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Chatlog → 理解型面试笔记（层层递进）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        输入
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        工作流（必须按顺序执行）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="工作流（必须按顺序执行）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1) 先“清洗”对话：提炼可复用信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2) 搭建“层层递进”的认知阶梯（骨架先行）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3) 写“理解笔记”（第一份文档）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3) 写“理解笔记”（第一份文档）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        “落地层”写法（面试友好）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4) 生成“自测题答案解析”（第二份文档）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5) 面试题与追问如何设计（在写题时执行）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5) 面试题与追问如何设计（在写题时执行）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自测题（只给题目）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        追问引导（促进下一轮对话）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        输出与落盘规则
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="chatlog">Chatlog → 理解型面试笔记（层层递进）<a class="headerlink" href="#chatlog" title="Permanent link">¶</a></h1>
+<p>你要做的不是把聊天“总结成能背的句子”，而是把对话里零散的点组织成：<strong>能讲明白的认知框架</strong>。最终产物是两份文档：</p>
+<ul>
+<li><strong>理解笔记</strong>：从浅到深，帮助建立正确心智模型；文末包含“自测题（只给题目）”+“追问引导问题”</li>
+<li><strong>自测题答案解析</strong>：和题目一一对应，用“理解路径 + 关键要点 + 常见误区”给答案（不是死记硬背）</li>
+</ul>
+<h2 id="_1">输入<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>用户会提供其一或多种：</p>
+<ul>
+<li>聊天记录文件路径（常见为 JSON 数组：<code>[{user: "...", assistant: "..."}, ...]</code>）</li>
+<li>直接粘贴的聊天文本</li>
+<li>额外参考资料（链接/笔记/截图文字稿等，可选）</li>
+</ul>
+<p>如果用户没说主题/目标岗位/年限，就从聊天里推断；仍不明确时，用最保守的默认：</p>
+<ul>
+<li>默认岗位：Java 后端</li>
+<li>默认目标：面试复习（能讲清楚、能被追问）</li>
+<li>默认深度: 5年以上经验</li>
+</ul>
+<h2 id="_2">工作流（必须按顺序执行）<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<h3 id="1">1) 先“清洗”对话：提炼可复用信息<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<p>从聊天里抽取并归类（不要直接复述原文）：</p>
+<ul>
+<li><strong>结论句</strong>：对话里已经给出的明确结论</li>
+<li><strong>关键概念</strong>：名词、组件、指标、机制（例如：倒排索引、refresh、segment、shard）</li>
+<li><strong>关键对比</strong>：A vs B、误区纠正（例如：<code>match</code> vs <code>term</code>）</li>
+<li><strong>关键流程</strong>：一件事从头到尾怎么发生（写入/查询/一致性/故障）</li>
+<li><strong>工程化实践</strong>：落地做法、取舍、边界条件、排障路径</li>
+</ul>
+<p>同时记录：</p>
+<ul>
+<li>聊天里**不一致/含糊**的说法（作为“待澄清/追问”素材）</li>
+<li>聊天里**缺失但面试高频**的桥接点（例如：为什么近实时、为什么更新慢）</li>
+</ul>
+<h3 id="2">2) 搭建“层层递进”的认知阶梯（骨架先行）<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<p>按下面固定层级组织内容（每层都要能独立复习）：</p>
+<ol>
+<li><strong>直觉层：它是干什么的（带场景）</strong></li>
+<li><strong>模型层：它由哪些核心部件组成（名词图谱）</strong></li>
+<li><strong>机制层：它为什么能做到（1-3 个关键机制）</strong></li>
+<li><strong>流程层：一次典型操作怎么跑（写入/查询/一致性/性能）</strong></li>
+<li><strong>取舍层：它的代价与边界（什么时候别用、怎么选型）</strong></li>
+<li><strong>落地层：在 Java 项目里怎么用、怎么稳（同步、幂等、回滚、监控）</strong></li>
+<li><strong>排障层：常见问题怎么定位（症状→可能原因→验证手段→修复）</strong></li>
+</ol>
+<p>要求：</p>
+<ul>
+<li>每一层都要比上一层更“具体、更可操作”</li>
+<li>从“能理解”到“能复述”再到“能被追问”</li>
+</ul>
+<h3 id="3">3) 写“理解笔记”（第一份文档）<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<p>文档目标：让读者在回看时能顺着台阶爬上去，而不是靠背诵。</p>
+<p>必须包含的写法约束：</p>
+<ul>
+<li>每个小节开头用 <strong>一句话锚点</strong>（告诉读者“这一节你要记住什么”）</li>
+<li>每个关键点都给一个 <strong>理解钩子</strong>（类比/反例/常见误解纠正/最小例子）</li>
+<li>避免“堆名词”；宁可少写，也要写清楚“为什么”</li>
+</ul>
+<p>推荐结构（直接按此输出 Markdown 标题）：</p>
+<ul>
+<li><code># &lt;主题&gt;（理解型面试笔记）</code></li>
+<li><code>## 0. 你要先记住的一句话（定位 + 场景 + 不适用）</code></li>
+<li><code>## 1. 直觉层：它解决的痛点是什么</code></li>
+<li><code>## 2. 模型层：核心概念地图（用自己的话解释每个词）</code></li>
+<li><code>## 3. 机制层：它为什么有效（抓住 1-3 个关键机制讲透）</code></li>
+<li><code>## 4. 流程层：一次 &lt;关键操作&gt; 从请求到结果发生了什么</code></li>
+<li><code>## 5. 取舍层：优缺点、边界与选型（对比至少 2 个替代/互补方案）</code></li>
+<li><code>## 6. 落地层：Java 项目里我会怎么用（工程化套路）</code></li>
+<li><code>## 7. 排障层：最常见的 5 个问题（自查路径）</code></li>
+<li><code>## 8. 自测题（只给题目）</code></li>
+<li><code>## 9. 追问引导（用于继续和 AI 深挖）</code></li>
+</ul>
+<h4 id="_3">“落地层”写法（面试友好）<a class="headerlink" href="#_3" title="Permanent link">¶</a></h4>
+<p>即使用户没做过真实项目，也要给出“像做过一样的工程化表达”，但不要编造具体指标：</p>
+<ul>
+<li>数据来源与一致性：主库是谁？ES/缓存是什么角色？如何同步？如何补偿？</li>
+<li>幂等与重试：如何设计主键、去重、重放？</li>
+<li>灰度与回滚：如何发布、如何切流、如何快速回退？</li>
+<li>监控与告警：看哪些关键指标/日志来判断健康？</li>
+</ul>
+<h3 id="4">4) 生成“自测题答案解析”（第二份文档）<a class="headerlink" href="#4" title="Permanent link">¶</a></h3>
+<p>要求：答案不是背诵稿，而是“理解路径”。</p>
+<p>结构要求（每题必须同构，方便对照复习）：</p>
+<ul>
+<li>题目复述（保持与第一份文档完全一致）</li>
+<li><strong>先给结论</strong>：1-2 句</li>
+<li><strong>理解路径</strong>：为什么是这样（按机制/流程解释）</li>
+<li><strong>关键要点</strong>：3-6 条（可被追问的点）</li>
+<li><strong>常见误答</strong>：1-2 条（告诉读者为什么错）</li>
+</ul>
+<p>标题建议：</p>
+<ul>
+<li><code># &lt;主题&gt;（自测题答案解析）</code></li>
+<li>按与“自测题”完全相同的顺序输出每题（用二级标题 <code>## Q1...</code>）</li>
+</ul>
+<h3 id="5">5) 面试题与追问如何设计（在写题时执行）<a class="headerlink" href="#5" title="Permanent link">¶</a></h3>
+<h4 id="_4">自测题（只给题目）<a class="headerlink" href="#_4" title="Permanent link">¶</a></h4>
+<p>题目必须覆盖“从浅到深”：</p>
+<ul>
+<li>入门定位题（是什么/为什么需要）</li>
+<li>核心原理题（机制）</li>
+<li>易混对比题（A vs B）</li>
+<li>工程落地题（怎么用、怎么稳）</li>
+<li>排障题（给症状，让候选人说自查路径）</li>
+</ul>
+<p>题目数量建议 12-20，宁可少但覆盖面完整。</p>
+<h4 id="_5">追问引导（促进下一轮对话）<a class="headerlink" href="#_5" title="Permanent link">¶</a></h4>
+<p>追问要引导“补齐缺口/验证理解”，而不是重复主问题：</p>
+<ul>
+<li>“这个机制的代价是什么？在什么条件下会退化？”</li>
+<li>“如果数据量/写入量/查询模式变化，方案怎么调整？”</li>
+<li>“你会用什么证据判断你说的是对的？（指标/日志/profile/explain）”</li>
+<li>“给一个失败场景：怎么保证最终一致？怎么回放？怎么对账？”</li>
+</ul>
+<h2 id="_6">输出与落盘规则<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<p>当用户提供了聊天记录文件路径时：</p>
+<ol>
+<li>推断主题名（优先用用户显式给出的主题；其次用文件名/对话高频词）</li>
+<li>生成两份 Markdown 内容</li>
+<li>让用户指定输出目录；若用户未指定，默认输出到：</li>
+<li><code>personal-knowledge-base/docs/ai总结源文件/</code></li>
+</ol>
+<p>文件名建议（可根据主题替换）：</p>
+<ul>
+<li><code>YYYY-MM-DD-&lt;主题&gt;-理解型面试笔记.md</code></li>
+<li><code>YYYY-MM-DD-&lt;主题&gt;-自测题答案解析.md</code></li>
+</ul>
+<p>如果用户希望输出到其“八股文”目录，也可以改为：</p>
+<ul>
+<li><code>personal-knowledge-base/docs/八股文/&lt;主题&gt;/</code></li>
+</ul>
+<p>只在用户明确要求“写入文件/保存到目录”时才进行落盘；否则直接在聊天中输出两份 Markdown 正文。</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
