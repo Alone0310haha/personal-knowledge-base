@@ -1,0 +1,1104 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87/elasticsearch/2026-05-18-Elasticsearch-ES%E6%98%AF%E4%BB%80%E4%B9%88-%E7%90%86%E8%A7%A3%E5%9E%8B%E9%9D%A2%E8%AF%95%E7%AC%94%E8%AE%B0/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Elasticsearch（ES）是什么（理解型面试笔记） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#elasticsearches" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Elasticsearch（ES）是什么（理解型面试笔记）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 你要先记住的一句话（定位 + 场景 + 不适用）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 直觉层：它解决的痛点是什么
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 模型层：核心概念地图（用自己的话解释每个词）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 模型层：核心概念地图（用自己的话解释每个词）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 术语类比（帮助快速上手）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 核心组件与数据组织
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 概念关系图（理解用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-1-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 机制层：它为什么有效（抓住 1-3 个关键机制讲透）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 机制层：它为什么有效（抓住 1-3 个关键机制讲透）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-inverted-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 倒排索引（Inverted Index）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-near-real-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 近实时（Near Real-Time）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-shard-scattergather" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 分布式并行（Shard Scatter/Gather）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 流程层：一次典型操作从请求到结果发生了什么
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 流程层：一次典型操作从请求到结果发生了什么">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-index-bulk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 写入流程（Index / Bulk）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 查询流程（Search）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 更新与删除的本质（面试常追问）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 取舍层：优缺点、边界与选型（对比至少 2 个替代/互补方案）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 取舍层：优缺点、边界与选型（对比至少 2 个替代/互补方案）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 优点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 代价与边界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 选型对比（面试表达）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-java" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 落地层：Java 项目里我会怎么用（工程化套路）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 落地层：Java 项目里我会怎么用（工程化套路）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-es" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 数据来源与一致性：ES 作为旁路索引
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 索引设计：Mapping 与字段类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-bulk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 写入策略：Bulk、重试与限流
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-alias-reindex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 灰度与回滚：Alias + Reindex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 监控与告警：我会盯哪些信号
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 排障层：最常见的 5 个问题（自查路径）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 排障层：最常见的 5 个问题（自查路径）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 写入成功但搜不到
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 聚合很慢或直接报内存相关错误
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 查询结果“不符合预期”（相关性怪）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-429-threadpool-rejected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 写入被拒绝（429 / threadpool rejected）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 集群变黄/变红（副本或主分片分配异常）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 自测题（只给题目）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 追问引导（用于继续和 AI 深挖）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 参考文献（官网/源码优先）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="elasticsearches">Elasticsearch（ES）是什么（理解型面试笔记）<a class="headerlink" href="#elasticsearches" title="Permanent link">¶</a></h1>
+<h2 id="0">0. 你要先记住的一句话（定位 + 场景 + 不适用）<a class="headerlink" href="#0" title="Permanent link">¶</a></h2>
+<p>Elasticsearch 是一个基于 Lucene 的分布式搜索与分析引擎，擅长全文检索与聚合分析，但不适合作为强事务主库（强一致 + 复杂事务 + 频繁更新）。</p>
+<h2 id="1">1. 直觉层：它解决的痛点是什么<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<p>一句话锚点：当你想“像搜百度一样搜业务数据”，并且还要“按维度实时统计”，ES 往往比 MySQL 更合适。</p>
+<ul>
+<li>全文检索体验：分词、相关性排序、同义词、纠错、短语匹配、高亮。</li>
+<li>模糊查询性能：避免在大数据量下用 <code>LIKE '%xx%'</code> 造成的性能崩溃与索引失效。</li>
+<li>多维聚合分析：对日志/埋点/订单等做 <code>group by + 多层聚合 + 时间窗口</code> 的近实时分析。</li>
+<li>分布式扩展：容量与吞吐可以通过增加节点横向扩展，天然高可用（副本）。</li>
+</ul>
+<p>典型业务场景（面试友好表达）：
+- 电商/内容平台：商品/帖子/文档搜索（检索 + 排序 + 高亮 + 过滤）。
+- 日志与可观测：ELK/Elastic Stack 做检索与聚合（定位异常、看趋势、做报表）。
+- 风控/画像：按用户、地域、设备等维度聚合统计，支撑实时看板。</p>
+<h2 id="2">2. 模型层：核心概念地图（用自己的话解释每个词）<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<p>一句话锚点：把 ES 当成“面向文档的分布式索引系统”，核心是 Index/Document + Shard/Replica + Mapping/Analyzer。</p>
+<h3 id="21">2.1 术语类比（帮助快速上手）<a class="headerlink" href="#21" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>关系型概念</th>
+<th>ES 概念</th>
+<th>直觉解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>表</td>
+<td>Index</td>
+<td>一类数据的集合（逻辑容器）</td>
+</tr>
+<tr>
+<td>行</td>
+<td>Document</td>
+<td>一条 JSON 文档（最小数据单元）</td>
+</tr>
+<tr>
+<td>列</td>
+<td>Field</td>
+<td>JSON 的字段</td>
+</tr>
+<tr>
+<td>schema</td>
+<td>Mapping</td>
+<td>字段类型与索引方式（text/keyword/date 等）</td>
+</tr>
+<tr>
+<td>索引</td>
+<td>倒排索引</td>
+<td>关键词 → 文档列表，查“词”比查“行”快</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22">2.2 核心组件与数据组织<a class="headerlink" href="#22" title="Permanent link">¶</a></h3>
+<ul>
+<li>Cluster：集群，多个节点共同对外提供服务。</li>
+<li>Node：节点，一台 ES 实例；可能承担 master/data/ingest 等角色。</li>
+<li>Shard：分片，Index 的物理分割单位；Primary Shard 承担写入主责任。</li>
+<li>Replica：副本分片，提供高可用与读扩展；主分片挂了可提升为主。</li>
+<li>Segment：Lucene 的不可变数据段；写入会生成新 segment，更新本质是“删旧加新”。</li>
+<li>Refresh：把内存缓冲里的数据生成 segment 并打开搜索视图，让数据“可被搜索”（近实时）。</li>
+<li>Translog：写前日志，用于崩溃恢复与 durability（与 refresh/flush 相关）。</li>
+<li>Analyzer：分析器（分词 + 归一化），决定 text 字段如何被索引与查询。</li>
+<li>Query DSL：ES 的查询语言（JSON 结构），常见有 match、term、bool、range、aggs。</li>
+</ul>
+<h3 id="23">2.3 概念关系图（理解用）<a class="headerlink" href="#23" title="Permanent link">¶</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>flowchart TD
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  A[Client] --&gt; B[Cluster]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  B --&gt; C[Node]
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>  C --&gt; D[Index]
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>  D --&gt; E[Primary Shards]
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>  D --&gt; F[Replica Shards]
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>  E --&gt; G[Lucene Segments]
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>  F --&gt; G
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>  D --&gt; H[Mapping]
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>  H --&gt; I[Field Types: text/keyword/date...]
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>  I --&gt; J[Analyzer for text]
+</span></code></pre></div>
+<ul>
+<li>Index 是逻辑概念，Shard/Replica 是分布式物理落盘与并行计算的关键。</li>
+<li>Segment 不可变，决定了“更新/删除为什么贵”与“为什么近实时”。</li>
+<li>Mapping/Analyzer 决定“能不能搜到”和“相关性排序好不好”。</li>
+</ul>
+<h2 id="3-1-3">3. 机制层：它为什么有效（抓住 1-3 个关键机制讲透）<a class="headerlink" href="#3-1-3" title="Permanent link">¶</a></h2>
+<p>一句话锚点：ES 的快来自“倒排索引 + 分片并行 + 近实时 refresh”，代价是“写入与更新更复杂、资源占用更高、语义更接近最终一致”。</p>
+<h3 id="31-inverted-index">3.1 倒排索引（Inverted Index）<a class="headerlink" href="#31-inverted-index" title="Permanent link">¶</a></h3>
+<ul>
+<li>传统行存（MySQL）更像“按主键/索引找行”；全文检索需要在字段内容里找关键词，会变得很慢。</li>
+<li>倒排索引把“词 → 文档列表”提前算好，查询时从词直接定位到文档集合，再做过滤/排序/评分。</li>
+</ul>
+<h3 id="32-near-real-time">3.2 近实时（Near Real-Time）<a class="headerlink" href="#32-near-real-time" title="Permanent link">¶</a></h3>
+<ul>
+<li>写入不会立刻变成“可搜索”，而是依赖 refresh 周期把内存缓冲生成 segment 并对搜索打开视图。</li>
+<li>这就是为什么 ES 常说“近实时”，以及为什么会出现“写入成功但搜不到”的短暂窗口。</li>
+</ul>
+<h3 id="33-shard-scattergather">3.3 分布式并行（Shard Scatter/Gather）<a class="headerlink" href="#33-shard-scattergather" title="Permanent link">¶</a></h3>
+<ul>
+<li>查询通常由协调节点把请求分发到相关分片并行执行（scatter），再汇总结果（gather/reduce）。</li>
+<li>聚合也是并行计算：每个分片先做局部聚合，协调节点再做全局 reduce。</li>
+</ul>
+<h2 id="4">4. 流程层：一次典型操作从请求到结果发生了什么<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<p>一句话锚点：写入走“主分片确认 + 复制 + translog”，查询走“分发到分片并行查 + 汇总”，可见性由 refresh 控制。</p>
+<h3 id="41-index-bulk">4.1 写入流程（Index / Bulk）<a class="headerlink" href="#41-index-bulk" title="Permanent link">¶</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>sequenceDiagram
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>  participant C as Client
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>  participant CO as Coordinator Node
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>  participant P as Primary Shard
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>  participant R as Replica Shard
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>  C-&gt;&gt;CO: index/bulk request
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>  CO-&gt;&gt;P: route by _id (hash) to primary
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a>  P-&gt;&gt;P: validate mapping + analyze + buffer
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a>  P-&gt;&gt;P: append translog
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a>  P-&gt;&gt;R: replicate op
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a>  R-&gt;&gt;R: append translog + buffer
+</span><span id="__span-1-13"><a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a>  R--&gt;&gt;P: ack
+</span><span id="__span-1-14"><a href="#__codelineno-1-14" id="__codelineno-1-14" name="__codelineno-1-14"></a>  P--&gt;&gt;CO: ack
+</span><span id="__span-1-15"><a href="#__codelineno-1-15" id="__codelineno-1-15" name="__codelineno-1-15"></a>  CO--&gt;&gt;C: response
+</span><span id="__span-1-16"><a href="#__codelineno-1-16" id="__codelineno-1-16" name="__codelineno-1-16"></a>  Note over P,R: refresh later makes it searchable (NRT)
+</span></code></pre></div>
+<ul>
+<li>路由：默认用 <code>_id</code> 做 hash，决定落到哪个 shard；自定义 routing 会影响数据分布与查询并行度。</li>
+<li>durability：translog 保障崩溃后可恢复；是否 fsync 取决于配置与请求参数。</li>
+<li>可搜索性：ack 成功不等于“立刻可搜”，需要等 refresh（或显式 refresh）。</li>
+</ul>
+<h3 id="42-search">4.2 查询流程（Search）<a class="headerlink" href="#42-search" title="Permanent link">¶</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>sequenceDiagram
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>  participant C as Client
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>  participant CO as Coordinator Node
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>  participant S1 as Shard Copy 1
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>  participant S2 as Shard Copy 2
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a>  C-&gt;&gt;CO: search request (DSL)
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a>  CO-&gt;&gt;S1: query phase (scatter)
+</span><span id="__span-2-9"><a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a>  CO-&gt;&gt;S2: query phase (scatter)
+</span><span id="__span-2-10"><a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a>  S1--&gt;&gt;CO: topK docIDs + scores + aggs partial
+</span><span id="__span-2-11"><a href="#__codelineno-2-11" id="__codelineno-2-11" name="__codelineno-2-11"></a>  S2--&gt;&gt;CO: topK docIDs + scores + aggs partial
+</span><span id="__span-2-12"><a href="#__codelineno-2-12" id="__codelineno-2-12" name="__codelineno-2-12"></a>  CO-&gt;&gt;S1: fetch phase (by docIDs)
+</span><span id="__span-2-13"><a href="#__codelineno-2-13" id="__codelineno-2-13" name="__codelineno-2-13"></a>  S1--&gt;&gt;CO: _source fields
+</span><span id="__span-2-14"><a href="#__codelineno-2-14" id="__codelineno-2-14" name="__codelineno-2-14"></a>  CO--&gt;&gt;C: merge/sort + reduce aggs + response
+</span></code></pre></div>
+<ul>
+<li>Query/FETCH 两阶段：先找“候选与排序”，再回表取 <code>_source</code> 等字段。</li>
+<li>聚合：分片本地先算，协调节点 reduce 汇总；高基数字段聚合需要谨慎（内存与时间开销大）。</li>
+</ul>
+<h3 id="43">4.3 更新与删除的本质（面试常追问）<a class="headerlink" href="#43" title="Permanent link">¶</a></h3>
+<ul>
+<li>Update 在 Lucene 语义里通常是“标记删除旧文档 + 写入新文档”，所以频繁更新会带来更多 segment、更多 merge 压力。</li>
+<li>删除不会立刻物理回收，需要 segment merge 才能真正释放空间。</li>
+</ul>
+<h2 id="5-2">5. 取舍层：优缺点、边界与选型（对比至少 2 个替代/互补方案）<a class="headerlink" href="#5-2" title="Permanent link">¶</a></h2>
+<p>一句话锚点：ES 强在“检索/分析”，弱在“事务/强一致/复杂关系”，因此经常是 MySQL 的旁路索引而不是替代品。</p>
+<h3 id="51">5.1 优点<a class="headerlink" href="#51" title="Permanent link">¶</a></h3>
+<ul>
+<li>强大的全文检索能力：分词、相关性、组合查询。</li>
+<li>高性能聚合分析：面向海量数据的分布式计算模型。</li>
+<li>易于横向扩展：分片与副本机制天然支撑扩容与容灾。</li>
+</ul>
+<h3 id="52">5.2 代价与边界<a class="headerlink" href="#52" title="Permanent link">¶</a></h3>
+<ul>
+<li>一致性语义：更像最终一致（尤其是数据从主库同步到 ES 的链路上）。</li>
+<li>更新成本高：更新/删除会放大写放大与 merge 开销。</li>
+<li>关系建模弱：不擅长复杂 join；建模更偏“反范式、按查询建索引”。</li>
+<li>资源消耗大：磁盘、内存（heap + file cache）、CPU 都比较吃紧，参数与容量需要工程化治理。</li>
+</ul>
+<h3 id="53">5.3 选型对比（面试表达）<a class="headerlink" href="#53" title="Permanent link">¶</a></h3>
+<ul>
+<li>MySQL：强一致事务 + 关系建模；全文检索与复杂聚合在大数据量下会吃力。</li>
+<li>Redis：强在缓存与简单结构，全文检索不是强项（除非额外模块/方案）。</li>
+<li>OpenSearch/Solr：与 ES 相近的搜索引擎选择，更多是生态、许可证、运维体系差异。</li>
+</ul>
+<h2 id="6-java">6. 落地层：Java 项目里我会怎么用（工程化套路）<a class="headerlink" href="#6-java" title="Permanent link">¶</a></h2>
+<p>一句话锚点：把 ES 当作“搜索侧索引”，主库仍是 MySQL；重点是数据同步、幂等、灰度回滚与可观测。</p>
+<h3 id="61-es">6.1 数据来源与一致性：ES 作为旁路索引<a class="headerlink" href="#61-es" title="Permanent link">¶</a></h3>
+<p>常见链路（更稳、更可扩展）：
+- MySQL（主库）→ binlog/CDC → MQ（Kafka/RocketMQ）→ 消费者写 ES</p>
+<p>设计要点：
+- 主键设计：ES 文档 <code>_id</code> 通常用主库主键，保证幂等（重复写入是覆盖而非新增）。
+- 顺序与并发：同一业务主键的更新要避免乱序覆盖（可用版本号、时间戳、或业务幂等键控制）。
+- 补偿与重放：消费失败要可重试、可回放；必要时用对账任务比对主库与 ES 差异。</p>
+<h3 id="62-mapping">6.2 索引设计：Mapping 与字段类型<a class="headerlink" href="#62-mapping" title="Permanent link">¶</a></h3>
+<ul>
+<li>精确匹配与聚合：用 <code>keyword</code>（用于 term 查询、聚合、排序）。</li>
+<li>全文检索：用 <code>text</code> + 合适 analyzer（中文常需 IK 等插件或更合适的分词方案）。</li>
+<li>多字段策略：同一字段同时提供 <code>text</code>（检索）与 <code>keyword</code>（聚合/排序）子字段。</li>
+<li>上线前就确定好字段语义：避免把本该 <code>keyword</code> 的字段建成 <code>text</code>，导致聚合慢或不可用。</li>
+</ul>
+<h3 id="63-bulk">6.3 写入策略：Bulk、重试与限流<a class="headerlink" href="#63-bulk" title="Permanent link">¶</a></h3>
+<ul>
+<li>用 Bulk API 批量写入提升吞吐，批次大小按延迟/内存/拒绝率调优。</li>
+<li>遇到 429/Rejected：指数退避重试 + 限流，避免把集群打到雪崩。</li>
+<li>对写入延迟敏感场景：明确是否需要 <code>refresh=wait_for</code>，并评估对吞吐的影响。</li>
+</ul>
+<h3 id="64-alias-reindex">6.4 灰度与回滚：Alias + Reindex<a class="headerlink" href="#64-alias-reindex" title="Permanent link">¶</a></h3>
+<p>零停机常用套路：
+- 新建 index_v2（新 mapping）→ 全量导入（reindex / 离线任务）→ 增量同步追平 → 切 alias → 下线旧 index_v1</p>
+<h3 id="65">6.5 监控与告警：我会盯哪些信号<a class="headerlink" href="#65" title="Permanent link">¶</a></h3>
+<ul>
+<li>搜索侧：查询延迟、慢查询、top 查询、cache 命中率、线程池拒绝数。</li>
+<li>写入侧：bulk 延迟、429/拒绝率、refresh/merge 时间、translog 相关指标。</li>
+<li>集群侧：JVM heap 使用、GC、磁盘水位、unassigned shards、节点离线。</li>
+</ul>
+<h2 id="7-5">7. 排障层：最常见的 5 个问题（自查路径）<a class="headerlink" href="#7-5" title="Permanent link">¶</a></h2>
+<p>一句话锚点：先按“症状→链路→证据”排查：是数据没写进去、写进去但没 refresh、还是查询语义/mapping 不匹配。</p>
+<h3 id="71">7.1 写入成功但搜不到<a class="headerlink" href="#71" title="Permanent link">¶</a></h3>
+<ul>
+<li>可能原因：refresh 周期未到；查询字段用错（text/keyword）；routing 不一致；读了旧索引/alias。</li>
+<li>验证手段：查看 refresh 配置与时间；用 <code>_explain</code> / <code>_termvectors</code>；确认 alias 指向；检查 routing。</li>
+<li>修复手段：关键路径用 <code>refresh=wait_for</code> 或调整 refresh interval；修正查询字段与 mapping。</li>
+</ul>
+<h3 id="72">7.2 聚合很慢或直接报内存相关错误<a class="headerlink" href="#72" title="Permanent link">¶</a></h3>
+<ul>
+<li>可能原因：对高基数字段做 terms 聚合；字段类型不对（text 聚合）；size 过大。</li>
+<li>验证手段：看 profile、slowlog；看字段是否有 <code>.keyword</code>；评估 cardinality。</li>
+<li>修复手段：改用 keyword；限制 size；用 composite aggregation 做分页聚合；必要时预聚合。</li>
+</ul>
+<h3 id="73">7.3 查询结果“不符合预期”（相关性怪）<a class="headerlink" href="#73" title="Permanent link">¶</a></h3>
+<ul>
+<li>可能原因：match/term 用错；analyzer 不合适；should/must 逻辑写错；排序覆盖了评分。</li>
+<li>验证手段：用 <code>_analyze</code> 看分词；用 <code>_explain</code> 看评分原因；逐步简化 DSL。</li>
+<li>修复手段：调整 analyzer；区分 keyword 精确与 text 分词字段；修正 bool 逻辑。</li>
+</ul>
+<h3 id="74-429-threadpool-rejected">7.4 写入被拒绝（429 / threadpool rejected）<a class="headerlink" href="#74-429-threadpool-rejected" title="Permanent link">¶</a></h3>
+<ul>
+<li>可能原因：bulk 批次过大；写入并发过高；节点资源不足（CPU/IO/heap）。</li>
+<li>验证手段：看节点线程池与拒绝数、写入延迟、GC、磁盘 IO。</li>
+<li>修复手段：降并发/批次；启用退避重试；扩容或优化索引/分片规划。</li>
+</ul>
+<h3 id="75">7.5 集群变黄/变红（副本或主分片分配异常）<a class="headerlink" href="#75" title="Permanent link">¶</a></h3>
+<ul>
+<li>可能原因：节点宕机；磁盘水位过高；分片数量不合理；网络/权限问题。</li>
+<li>验证手段：查看 cluster health 与 allocation explain；检查磁盘与节点状态。</li>
+<li>修复手段：释放磁盘或扩容；调整副本数；修复节点并触发重新分配。</li>
+</ul>
+<h2 id="8">8. 自测题（只给题目）<a class="headerlink" href="#8" title="Permanent link">¶</a></h2>
+<ol>
+<li>Elasticsearch 的定位是什么？为什么很多系统是“MySQL 作为主库 + ES 作为旁路索引”？</li>
+<li>倒排索引是什么？它为什么能让全文检索更快？</li>
+<li>text 与 keyword 有什么区别？各自适合什么查询与场景？</li>
+<li>match 查询与 term 查询有什么区别？最常见的误用是什么？</li>
+<li>ES 为什么是“近实时”？refresh 在里面起什么作用？</li>
+<li>一次写入请求从客户端到数据落盘大致经历了哪些步骤？translog 的作用是什么？</li>
+<li>一次 search 请求为什么通常要走 query phase 与 fetch phase？</li>
+<li>shard 与 replica 各解决什么问题？副本对读写性能分别有什么影响？</li>
+<li>为什么 ES 的更新成本高？更新/删除与 segment/merge 的关系是什么？</li>
+<li>terms 聚合在什么情况下会很慢/很耗内存？你会怎么做选型或改写？</li>
+<li>深分页为什么慢？常见替代方案有哪些（scroll、search_after 等）？</li>
+<li>如何做到索引结构升级但不停机（alias + reindex）？切换时如何保证一致性？</li>
+<li>写入出现 429（rejected）时，你的工程化处理策略是什么？</li>
+<li>“写入成功但搜不到”的排查路径是什么？你会先看哪些证据？</li>
+</ol>
+<h2 id="9-ai">9. 追问引导（用于继续和 AI 深挖）<a class="headerlink" href="#9-ai" title="Permanent link">¶</a></h2>
+<ul>
+<li>如果业务要求“写入后立刻可搜”，你会如何设计？refresh=wait_for 的代价是什么？</li>
+<li>你的索引分片数怎么定？需要考虑哪些维度（容量、吞吐、迁移、恢复时间）？</li>
+<li>对同一业务主键的更新乱序怎么办？如何保证最终一致且可回放？</li>
+<li>相关性排序怎么调？你会用哪些证据（_explain、A/B、离线评估）证明调整有效？</li>
+<li>给一个故障场景：节点磁盘满导致集群变红，你的止血与修复步骤分别是什么？</li>
+</ul>
+<h2 id="10">10. 参考文献（官网/源码优先）<a class="headerlink" href="#10" title="Permanent link">¶</a></h2>
+<ol>
+<li>Elasticsearch Reference（版本未锁定，默认 latest）：https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html</li>
+<li>Elasticsearch Java API Client（版本未锁定，默认 latest）：https://www.elastic.co/guide/en/elasticsearch/client/java-api-client/current/index.html</li>
+<li>Elasticsearch Near real-time search（版本未锁定，默认 latest）：https://www.elastic.co/guide/en/elasticsearch/reference/current/near-real-time.html</li>
+<li>Elasticsearch Shards &amp; replicas（版本未锁定，默认 latest）：https://www.elastic.co/guide/en/elasticsearch/reference/current/scalability.html</li>
+<li>Apache Lucene（核心原理与倒排索引基础）：https://lucene.apache.org/core/</li>
+<li>Lucene Similarity / BM25（评分机制相关）：https://lucene.apache.org/core/</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

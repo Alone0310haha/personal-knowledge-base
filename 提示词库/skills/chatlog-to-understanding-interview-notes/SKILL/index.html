@@ -389,6 +389,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#15-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5) 可视化：用 Mermaid 画出“能看懂”的结构与流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -413,6 +424,28 @@
         
           <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        文档风格约束
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        参考文献与可追溯性（必须执行）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         “落地层”写法（面试友好）
@@ -451,7 +484,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         自测题（只给题目）
@@ -462,7 +495,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         追问引导（促进下一轮对话）
@@ -483,7 +516,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         输出与落盘规则
@@ -544,6 +577,26 @@
 <li>聊天里**不一致/含糊**的说法（作为“待澄清/追问”素材）</li>
 <li>聊天里**缺失但面试高频**的桥接点（例如：为什么近实时、为什么更新慢）</li>
 </ul>
+<h3 id="15-mermaid">1.5) 可视化：用 Mermaid 画出“能看懂”的结构与流程<a class="headerlink" href="#15-mermaid" title="Permanent link">¶</a></h3>
+<p>当讨论内容涉及流程、组件协作、数据结构、状态变化、调用链路时，在文档对应小节插入 Mermaid 图，帮助理解与记忆。</p>
+<p>约束：</p>
+<ul>
+<li>图要服务于“理解”，不追求把所有细节画全</li>
+<li>每张图配 3-6 条解读要点（告诉读者该看哪里）</li>
+<li>只用 Mermaid 标准语法，避免依赖特定渲染插件</li>
+</ul>
+<p>优先使用的图类型：</p>
+<ul>
+<li><code>flowchart TD</code>：整体流程、决策分支、排障路径</li>
+<li><code>sequenceDiagram</code>：请求链路、写入/查询的交互顺序</li>
+<li><code>classDiagram</code>：核心数据结构、对象关系（像 Lucene/ES 的概念映射也可用）</li>
+<li><code>stateDiagram-v2</code>：状态机、生命周期（例如 refresh/segment 状态变化、任务状态）</li>
+</ul>
+<p>输出格式（必须使用代码块）：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>flowchart TD
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  A[输入] --&gt; B[处理]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  B --&gt; C[输出]
+</span></code></pre></div>
 <h3 id="2">2) 搭建“层层递进”的认知阶梯（骨架先行）<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
 <p>按下面固定层级组织内容（每层都要能独立复习）：</p>
 <ol>
@@ -581,8 +634,29 @@
 <li><code>## 7. 排障层：最常见的 5 个问题（自查路径）</code></li>
 <li><code>## 8. 自测题（只给题目）</code></li>
 <li><code>## 9. 追问引导（用于继续和 AI 深挖）</code></li>
+<li><code>## 10. 参考文献（官网/源码优先）</code></li>
 </ul>
-<h4 id="_3">“落地层”写法（面试友好）<a class="headerlink" href="#_3" title="Permanent link">¶</a></h4>
+<h4 id="_3">文档风格约束<a class="headerlink" href="#_3" title="Permanent link">¶</a></h4>
+<ul>
+<li>不要在任何输出中使用 emoji</li>
+</ul>
+<h4 id="_4">参考文献与可追溯性（必须执行）<a class="headerlink" href="#_4" title="Permanent link">¶</a></h4>
+<p>在每份输出文档的最后追加“参考文献”，用于支撑关键结论的正确性与可追溯性。</p>
+<p>优先级（从高到低）：</p>
+<ol>
+<li>技术栈官网文档与规范（官方 Reference / RFC / JEP / JLS 等）</li>
+<li>源码（优先仓库官方地址；能定位到模块/类/函数更好）</li>
+<li>高质量二手资料（Stack Overflow 等）</li>
+<li>低优先级资料（CSDN、知乎、Reddit 等，仅用于补充视角，不作为唯一依据）</li>
+</ol>
+<p>写法要求：</p>
+<ul>
+<li>参考文献必须是一个编号列表，按“优先级 + 实际使用程度”排序</li>
+<li>文中出现的关键事实点，至少能在参考文献中找到对应出处</li>
+<li>如果对话未明确版本，引用“官方最新文档”并在参考文献条目里标注“版本未锁定（默认 latest）”</li>
+<li>如引用源码，优先给出仓库链接；若能给出具体文件路径/符号名则给出（不要求每条都精确到行号）</li>
+</ul>
+<h4 id="_5">“落地层”写法（面试友好）<a class="headerlink" href="#_5" title="Permanent link">¶</a></h4>
 <p>即使用户没做过真实项目，也要给出“像做过一样的工程化表达”，但不要编造具体指标：</p>
 <ul>
 <li>数据来源与一致性：主库是谁？ES/缓存是什么角色？如何同步？如何补偿？</li>
@@ -604,9 +678,10 @@
 <ul>
 <li><code># &lt;主题&gt;（自测题答案解析）</code></li>
 <li>按与“自测题”完全相同的顺序输出每题（用二级标题 <code>## Q1...</code>）</li>
+<li>末尾追加：<code>## 参考文献（官网/源码优先）</code></li>
 </ul>
 <h3 id="5">5) 面试题与追问如何设计（在写题时执行）<a class="headerlink" href="#5" title="Permanent link">¶</a></h3>
-<h4 id="_4">自测题（只给题目）<a class="headerlink" href="#_4" title="Permanent link">¶</a></h4>
+<h4 id="_6">自测题（只给题目）<a class="headerlink" href="#_6" title="Permanent link">¶</a></h4>
 <p>题目必须覆盖“从浅到深”：</p>
 <ul>
 <li>入门定位题（是什么/为什么需要）</li>
@@ -616,7 +691,7 @@
 <li>排障题（给症状，让候选人说自查路径）</li>
 </ul>
 <p>题目数量建议 12-20，宁可少但覆盖面完整。</p>
-<h4 id="_5">追问引导（促进下一轮对话）<a class="headerlink" href="#_5" title="Permanent link">¶</a></h4>
+<h4 id="_7">追问引导（促进下一轮对话）<a class="headerlink" href="#_7" title="Permanent link">¶</a></h4>
 <p>追问要引导“补齐缺口/验证理解”，而不是重复主问题：</p>
 <ul>
 <li>“这个机制的代价是什么？在什么条件下会退化？”</li>
@@ -624,7 +699,7 @@
 <li>“你会用什么证据判断你说的是对的？（指标/日志/profile/explain）”</li>
 <li>“给一个失败场景：怎么保证最终一致？怎么回放？怎么对账？”</li>
 </ul>
-<h2 id="_6">输出与落盘规则<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<h2 id="_8">输出与落盘规则<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
 <p>当用户提供了聊天记录文件路径时：</p>
 <ol>
 <li>推断主题名（优先用用户显式给出的主题；其次用文件名/对话高频词）</li>

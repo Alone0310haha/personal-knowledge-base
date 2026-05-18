@@ -1,0 +1,784 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="手帳野兽">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-05-18-%E8%83%BD%E9%87%8F%E5%9D%97%E6%A3%80%E6%B5%8B%EF%BC%9A%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E4%BD%A0%E7%9A%84%E2%80%9C%E7%9C%9F%E5%AE%9E%E7%94%B5%E9%87%8F%E2%80%9D%EF%BC%9F%EF%BC%88%E8%A7%86%E9%A2%91%E6%80%BB%E7%BB%93%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>能量块检测：如何判断你的“真实电量”？（视频总结） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              能量块检测：如何判断你的“真实电量”？（视频总结）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 这条视频在对谁说（目标听众）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 讨论角度与要解决的问题（从“累不累”到“三维电量”）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心观点与分论点（含概念解释）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心观点与分论点（含概念解释）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分论点 A：身体能量是“最不会说谎”的指标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分论点 B：心理能量决定执行力（兴趣与掌控感是关键变量）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分论点 C：认知能量是大脑的 CPU 资源（专注/决策/创造力有限）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        终极洞察：心流 vs 内耗，取决于三维能量是否同向
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 方法如何落地（从识别 → 匹配 → 执行）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 方法如何落地（从识别 → 匹配 → 执行）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第一步：记录你的身体能量基线（找到黄金时间 + 信号库）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第二步：扫描心理能量（兴趣 × 掌控感 × 压力）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第三步：评估认知耗电等级（专注/决策/创意）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第四步：匹配任务到合适能量段（高效开头原则）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-sop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 应用启示与可复用 SOP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 应用启示与可复用 SOP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sop-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOP：每日 5 分钟能量块检测 + 排程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sop-60-90" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOP：执行中每 60-90 分钟一次微复盘（换套餐）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sop10-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOP：被打断后的快速恢复（10-20 分钟重启）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">能量块检测：如何判断你的“真实电量”？（视频总结）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h1>
+<p><a href="https://www.bilibili.com/video/BV1i6Ln68EUi/">能量块检测：如何判断你的“真实电量”？</a></p>
+<h2 id="1">1. 这条视频在对谁说（目标听众）<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<ul>
+<li>经常出现“没干多少事但特别累/特别焦虑”的人：时间看似不少，但状态不稳定、容易内耗。</li>
+<li>需要自我管理的知识工作者/学生：每天要在深度任务、沟通事务、会议与琐事之间频繁切换。</li>
+<li>计划经常被打断的人：被消息/会议/临时需求扰乱后，想更快“找回节奏”的人。</li>
+</ul>
+<h2 id="2">2. 讨论角度与要解决的问题（从“累不累”到“三维电量”）<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<p>视频的切入点是：我们的能量不是单一的“累 / 不累”，而是三维构成：</p>
+<ul>
+<li>身体能量（body energy）</li>
+<li>心理能量（emotional energy）</li>
+<li>认知能量（cognitive energy）</li>
+</ul>
+<p>它要解决的核心问题是两类：</p>
+<ul>
+<li>识别问题：为什么会出现“身体不算累，但精神很疲惫/烦躁/拖延”的状态？如何更精准判断自己的真实电量？</li>
+<li>执行问题：如何避免“低电量硬扛”，把任务安排到匹配能量的时段，并在被打断后快速恢复节奏？</li>
+</ul>
+<h2 id="3">3. 核心观点与分论点（含概念解释）<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<h3 id="_2">核心论点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<p>真正决定效率与状态的不是“有没有时间”，而是三维能量是否匹配当下任务：三者同向运行更容易进入高产出的状态；三者互相拉扯就会产生内耗，表现为“啥也没干却很累”。</p>
+<h3 id="a">分论点 A：身体能量是“最不会说谎”的指标<a class="headerlink" href="#a" title="Permanent link">¶</a></h3>
+<p>身体能量指你的生理层面可用电量，主要通过清醒程度、疲劳信号、困意/烦躁等身体反馈来判断。</p>
+<p>视频给出三种识别方法：</p>
+<ul>
+<li>生理峰值时间（黄金时间）</li>
+<li>概念：你一天里“最清醒、最有气血”的时间段，通常更适合处理最难、最重要的任务。</li>
+<li>用法：把高耗电任务优先放在这个时段。</li>
+<li>疲劳警报信号</li>
+<li>概念：身体在“还没完全崩溃前”发出的预警，提示你已经持续消耗过久，需要中途切换。</li>
+<li>例子：眼干、脖子酸、腰疼、呼吸/心跳加速。</li>
+<li>用法：一旦出现，立刻起身动一动，通过“换套餐”调整状态。</li>
+<li>完全耗尽信号</li>
+<li>概念：身体明确在说“需要休息”，继续硬扛只会让认知与情绪更快崩盘。</li>
+<li>例子：别人多说一句都烦躁、不停打哈欠、强烈困意。</li>
+<li>用法：立刻休息，不再用意志力对抗生理。</li>
+</ul>
+<h3 id="b">分论点 B：心理能量决定执行力（兴趣与掌控感是关键变量）<a class="headerlink" href="#b" title="Permanent link">¶</a></h3>
+<p>心理能量指你处理任务时的情绪成本与动机强度，决定你“愿不愿意推进”和“推进时是否痛苦”。</p>
+<p>视频把心理能量拆成两组可自测的问题：</p>
+<ul>
+<li>兴趣程度</li>
+<li>概念：你对任务的热情/内在动机，决定能量消耗速度。</li>
+<li>关键结论：热情驱动的任务，能量消耗可能只有低兴趣任务的 1/10；兴趣是强能量催化剂。</li>
+<li>掌控感（控制感）</li>
+<li>概念：你对任务边界、节奏、预期结果的可控程度；可控越低，焦虑越高。</li>
+<li>关键结论：被动应对相比主动掌控，压力可能大 10 倍；压力是情绪能量的重要消耗源（尤其“微压力”的持续状态）。</li>
+</ul>
+<p>补充观点（引用式论据）：</p>
+<p>视频借“深度工作”的讨论强调：很多人并不厌恶工作本身，而是厌恶频繁开会、对齐颗粒度、邮件等“无意义工作”，这些会持续消耗心理能量。</p>
+<h3 id="c-cpu">分论点 C：认知能量是大脑的 CPU 资源（专注/决策/创造力有限）<a class="headerlink" href="#c-cpu" title="Permanent link">¶</a></h3>
+<p>认知能量 = 专注力 + 决策力 + 创造力。它类似大脑的 CPU 与电池容量，属于稀缺资源，最容易被忽略。</p>
+<ul>
+<li>专注力</li>
+<li>概念：持续把注意力投入到同一问题的能力；越稀缺，越需要保护连续时间块。</li>
+<li>决策力（决策成本）</li>
+<li>概念：面对取舍、判断、权衡时的大脑运算成本。</li>
+<li>关键结论：做出 3-5 个重要决策后容易出现“决策疲劳”。</li>
+<li>概念解释：决策疲劳指大脑在多次高强度取舍后出现的“CPU 降频”，表现为更容易冲动、拖延、回避复杂问题。</li>
+<li>创造力（创意生成）</li>
+<li>概念：生成新想法/新结构/新表达的能力；比重复性操作更耗电。</li>
+<li>关键结论：日常黄金专注时间可能只有 1-2 小时，用完后更容易出现“降速”。</li>
+</ul>
+<p>任务分类（用于匹配能量）：</p>
+<ul>
+<li>高耗电任务：策划、决策、解决问题、写文案、做设计。</li>
+<li>低耗电任务：整理、录入、复制粘贴（更像自动驾驶模式，可长时间运行但价值密度较低）。</li>
+</ul>
+<h3 id="vs">终极洞察：心流 vs 内耗，取决于三维能量是否同向<a class="headerlink" href="#vs" title="Permanent link">¶</a></h3>
+<ul>
+<li>心流</li>
+<li>概念：身体、心理、认知三者在同一方向上顺畅运转时出现的状态，特点是投入感强、阻力小、消耗更少但产出更高。</li>
+<li>内耗</li>
+<li>概念：三者互相拉扯（例如身体很累但心理很焦虑）导致的能量损耗，表现为“做什么都费劲、效率低、还很累”。</li>
+</ul>
+<h2 id="4">4. 方法如何落地（从识别 → 匹配 → 执行）<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<p>视频的方法可以按“先识别、再匹配、再安排”落地：</p>
+<h3 id="_3">第一步：记录你的身体能量基线（找到黄金时间 + 信号库）<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<ol>
+<li>写下你一天中身体最清醒的 3 个小时（不要求连续）。</li>
+<li>写下你身体发出的 3 个疲劳信号（警报信号）。</li>
+<li>写下你的 1-2 个完全耗尽信号（触发立即休息的阈值）。</li>
+</ol>
+<h3 id="_4">第二步：扫描心理能量（兴趣 × 掌控感 × 压力）<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ol>
+<li>这个任务我有多感兴趣（高/中/低）？</li>
+<li>我对过程与结果的掌控感强吗？哪里不可控？</li>
+<li>我是在高压/微压力状态下推进吗？压力来自哪（不确定、被评价、时间挤压、被打断）？</li>
+</ol>
+<h3 id="_5">第三步：评估认知耗电等级（专注/决策/创意）<a class="headerlink" href="#_5" title="Permanent link">¶</a></h3>
+<ol>
+<li>这件事需要多强专注力？是否必须连续时间块？</li>
+<li>这件事需要多少决策？今天我已经做了多少关键决策（防止决策疲劳叠加）？</li>
+<li>这件事需要创意生成还是重复执行？</li>
+</ol>
+<h3 id="_6">第四步：匹配任务到合适能量段（高效开头原则）<a class="headerlink" href="#_6" title="Permanent link">¶</a></h3>
+<ul>
+<li>概念：高效开头原则指一天的开始与黄金时段优先处理最重要的任务；在低能量时先做简单可完成任务，用“能量回收感”重启。</li>
+<li>操作：</li>
+<li>黄金时间：优先最重要、最难、最高耗电的任务。</li>
+<li>低能量时段：先挑一个好做、很快能完成的小任务，获得推进感，再决定是否回到高耗电任务。</li>
+</ul>
+<h2 id="5-sop">5. 应用启示与可复用 SOP<a class="headerlink" href="#5-sop" title="Permanent link">¶</a></h2>
+<h3 id="_7">启示<a class="headerlink" href="#_7" title="Permanent link">¶</a></h3>
+<ul>
+<li>不要用“意志力”对抗生理：把身体信号当作系统告警，及时切换比硬扛更省电。</li>
+<li>用三维能量解释“效率波动”：很多时候卡住不是能力问题，而是心理压力/掌控感不足或认知资源耗尽。</li>
+<li>保护稀缺的认知黄金段：把高耗电任务集中放在认知高峰期，减少被无意义事务切碎。</li>
+</ul>
+<h3 id="sop-5">SOP：每日 5 分钟能量块检测 + 排程<a class="headerlink" href="#sop-5" title="Permanent link">¶</a></h3>
+<ol>
+<li>身体扫描（1 分钟）：我现在是否有警报信号？是否接近完全耗尽？</li>
+<li>心理扫描（2 分钟）：今天最抗拒的任务是什么？压力来源是什么？我能把不可控点变成可控动作吗？</li>
+<li>认知扫描（2 分钟）：今天的高耗电任务是什么？需要多少专注/决策/创意？把它放到最清醒的时段，并预留连续时间块。</li>
+</ol>
+<h3 id="sop-60-90">SOP：执行中每 60-90 分钟一次微复盘（换套餐）<a class="headerlink" href="#sop-60-90" title="Permanent link">¶</a></h3>
+<ol>
+<li>出现警报信号（眼干/酸痛/心跳加速）：立刻停 3-5 分钟，起身走动/喝水/拉伸，再决定继续或换低耗电任务。</li>
+<li>出现完全耗尽信号（烦躁/强困/不停哈欠）：停止高耗电任务，进入恢复模式（小睡/休息/结束当天关键决策）。</li>
+</ol>
+<h3 id="sop10-20">SOP：被打断后的快速恢复（10-20 分钟重启）<a class="headerlink" href="#sop10-20" title="Permanent link">¶</a></h3>
+<ol>
+<li>不要立刻回到最难任务：先做一个低耗电、可快速收尾的小任务，获得“能量回收感”。</li>
+<li>完成后再评估三维能量：若专注回升，回到高耗电任务；若仍低电量，继续做低耗电任务或进入恢复。</li>
+</ol>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
