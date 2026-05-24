@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BA%93/%E5%88%86%E6%9E%90%E8%A7%86%E9%A2%91%E6%96%87%E5%AD%97%E7%A8%BF/">
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BA%93/%E7%94%9F%E6%88%90openspec%E7%9A%84config/">
       
       
       
@@ -23,7 +23,7 @@
     
     
       
-        <title>分析视频文字稿 - Alone的知识库</title>
+        <title>生成openspec的config - Alone的知识库</title>
       
     
     
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              分析视频文字稿
+              生成openspec的config
             
           </span>
         </div>
@@ -356,19 +356,65 @@
 
 
 
-  <h1>分析视频文字稿</h1>
+  <h1>生成openspec的config</h1>
 
-<p>以下是一个视频的文字稿，不要调用skill，请你帮我总结分析一下这个视频的内容。需要分析以下内容：
-1. 视频的听众针对的是哪一类人或人群
-2. 视频是从什么角度出发进行的讨论，它要解决什么样的问题？
-3. 视频的核心论点和分论点，在说分论点的时候，如果分论点中提到了某些概念，需要详细说明这些概念具体是什么
-4. 如果是带有实践性质的内容，请你阐述他具体是怎么操作的，第一步是什么，第二步是什么？
-5. 在实际生活中应用的时候的启示，如果能形成一个具体的SOP的话，请你也一并输出
-6. 在总结的时候，如果是分了场景的，不能将不同类别的场景混到一起，比如说，原视频中场景A对应的解决方案有1 2 3点，场景B对应的解决方案有 4 5 6点，在总结的时候也应该按原顺序列出，而不是说有两个场景A B，对应解决方案有 1 2 3 4 5 6点。
-7. 你的总结需要有条理和逻辑，我上面给出的1-6点只是你组织总结大纲时需要注意的方面，并不是干巴的就回答这几个问题
-8. 请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范
-9. 视频文字稿： </p>
-<p>列出视频中提到的关键数据，案例和结论 （这一点可以有，但是通常看着都不需要）</p>
+<p>你现在扮演 OpenSpec Architect。</p>
+<p>任务：</p>
+<p>扫描当前Workspace，
+自动生成适合长期维护的OpenSpec配置。</p>
+<p>分析顺序：</p>
+<p>Phase1:
+识别项目结构</p>
+<ul>
+<li>Git仓库</li>
+<li>Maven工程</li>
+<li>Gradle工程</li>
+<li>Docker工程</li>
+<li>Kubernetes配置</li>
+</ul>
+<p>Phase2:
+识别业务边界</p>
+<ul>
+<li>Domain</li>
+<li>Subdomain</li>
+<li>Bounded Context</li>
+</ul>
+<p>Phase3:
+识别上下游依赖</p>
+<ul>
+<li>API调用</li>
+<li>MQ事件</li>
+<li>数据同步</li>
+<li>FIX连接</li>
+<li>数据库共享</li>
+</ul>
+<p>Phase4:
+生成OpenSpec Context Model</p>
+<p>输出：</p>
+<p>contexts:
+  - name
+  - responsibility
+  - repositories
+  - upstream
+  - downstream</p>
+<p>Phase5:
+生成推荐的 .openspec/config.yaml</p>
+<p>要求：</p>
+<ol>
+<li>Context优先组织</li>
+<li>不按Repo组织Spec</li>
+<li>支持跨Repo需求</li>
+<li>支持跨Context需求</li>
+<li>支持增量演进</li>
+<li>支持AI后续自动生成Spec</li>
+</ol>
+<p>最后说明：</p>
+<ul>
+<li>哪些Context应该独立维护Spec</li>
+<li>哪些Context可以合并</li>
+<li>哪些Repo只是技术拆分</li>
+<li>哪些Repo代表真正业务边界</li>
+</ul>
 
 
 

@@ -1,0 +1,876 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="河北王校长">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-05-24-%E4%B8%80%E4%B8%AAjava%E8%AF%B7%E6%B1%82%EF%BC%8C%E4%BB%8E%E5%89%8D%E7%AB%AF%E5%88%B0%E5%90%8E%E7%AB%AF%E7%9A%84%E5%85%A8%E8%AE%BF%E9%97%AE%E9%93%BE%E8%B7%AF%EF%BC%88%E4%B8%8A%E4%B8%8B%E9%9B%86%EF%BC%89%EF%BC%88%E9%9D%A2%E8%AF%95%E4%B8%8E%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>一个 Java 请求，从前端到后端的全访问链路（上下集）（面试与实战笔记） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#java" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              一个 Java 请求，从前端到后端的全访问链路（上下集）（面试与实战笔记）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 核心架构/流程可视化（必选）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 核心主题与背景（它在讲什么？）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心知识点/解决方案拆解（它是怎么做的？）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心知识点/解决方案拆解（它是怎么做的？）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 内容属性判断
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-dns-nat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 前端到机房：网络旅程（DNS → 路由 → NAT）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-tcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 机房到内核：防火墙 → 网卡 → 中断 → TCP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-jvmsocket-tomcat-spring-mvc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 内核到 JVM：socket 缓冲区 → Tomcat 线程模型 → Spring MVC
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 内核到 JVM：socket 缓冲区 → Tomcat 线程模型 → Spring MVC">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-socket-payload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. 内核 socket 缓冲区与 payload
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-tomcatpoller-nio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Tomcat：Poller 线程 + 工作线程池（NIO 线程模型口径）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-spring-mvcfilter-dispatcherservlet-handlermappingadapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Spring MVC：Filter → DispatcherServlet → HandlerMapping/Adapter → 序列化返回
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 面试高频考点与追问（面试官会怎么考？）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 面试高频考点与追问（面试官会怎么考？）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q1-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1：一次 HTTP 请求从输入域名到建立连接，中间发生了什么？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2tcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2：TCP 三次握手“真正的核心”是什么？半连接队列/全连接队列有什么意义？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-dma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3：网卡收到包后为什么要 DMA、硬中断、软中断？各自解决什么问题？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q4tomcat-poller-worker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q4：Tomcat 的 Poller 线程和 Worker 线程分别干什么？为什么需要两类线程？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q5spring-mvc-filterinterceptorhandleradaptermessageconverter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q5：Spring MVC 里 Filter、Interceptor、HandlerAdapter、MessageConverter 分别在什么阶段发挥作用？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 亮点、坑点与最佳实践（如何体现经验？）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 亮点、坑点与最佳实践（如何体现经验？）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        亮点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        坑点/局限性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        最佳实践（面试能讲、实战能用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 总结与升华（一句话亮点）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="java">一个 Java 请求，从前端到后端的全访问链路（上下集）（面试与实战笔记）<a class="headerlink" href="#java" title="Permanent link">¶</a></h1>
+<h2 id="1">1. 核心架构/流程可视化（必选）<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>sequenceDiagram
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    autonumber
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>    participant UI as UI/Browser
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>    participant DNS as DNS/Hosts
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>    participant GW as Gateway/Router(NAT)
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>    participant ISP as ISP/Internet
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>    participant FW as DC Firewall
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>    participant NIC as Server NIC
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>    participant K as Linux Kernel(TCP/IP)
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>    participant P as Tomcat Poller(Selector)
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>    participant W as Tomcat Worker Pool
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>    participant F as Filter Chain
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a>    participant D as DispatcherServlet
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a>    participant C as Controller/Service
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a>    participant M as HttpMessageConverter
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a>
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a>    UI-&gt;&gt;DNS: Resolve host -&gt; IP
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a>    DNS--&gt;&gt;UI: IP (cache/hosts/DNS)
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a>    UI-&gt;&gt;GW: Send packet (private IP)
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a>    GW-&gt;&gt;ISP: NAT + route (public IP)
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a>    ISP-&gt;&gt;FW: Route to target DC
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a>    FW-&gt;&gt;NIC: Allow / drop / reject
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a>    NIC-&gt;&gt;K: DMA-&gt;ring buffer + IRQ/softirq
+</span><span id="__span-0-24"><a href="#__codelineno-0-24" id="__codelineno-0-24" name="__codelineno-0-24"></a>    K-&gt;&gt;K: TCP 3-way handshake (SYN/SYN-ACK/ACK)
+</span><span id="__span-0-25"><a href="#__codelineno-0-25" id="__codelineno-0-25" name="__codelineno-0-25"></a>    Note over K: 半连接队列(backlog) -&gt; 全连接队列(accept)
+</span><span id="__span-0-26"><a href="#__codelineno-0-26" id="__codelineno-0-26" name="__codelineno-0-26"></a>    K-&gt;&gt;K: socket lookup(host,port) -&gt; receive buffer(payload)
+</span><span id="__span-0-27"><a href="#__codelineno-0-27" id="__codelineno-0-27" name="__codelineno-0-27"></a>    P-&gt;&gt;K: Selector checks readable socket
+</span><span id="__span-0-28"><a href="#__codelineno-0-28" id="__codelineno-0-28" name="__codelineno-0-28"></a>    P-&gt;&gt;W: Enqueue SocketProcessor(task)
+</span><span id="__span-0-29"><a href="#__codelineno-0-29" id="__codelineno-0-29" name="__codelineno-0-29"></a>    W-&gt;&gt;K: Copy from kernel recv buffer -&gt; JVM ByteBuffer
+</span><span id="__span-0-30"><a href="#__codelineno-0-30" id="__codelineno-0-30" name="__codelineno-0-30"></a>    W-&gt;&gt;W: Parse HTTP -&gt; Request/Response
+</span><span id="__span-0-31"><a href="#__codelineno-0-31" id="__codelineno-0-31" name="__codelineno-0-31"></a>    W-&gt;&gt;F: doFilter(...)
+</span><span id="__span-0-32"><a href="#__codelineno-0-32" id="__codelineno-0-32" name="__codelineno-0-32"></a>    F-&gt;&gt;D: Forward to DispatcherServlet
+</span><span id="__span-0-33"><a href="#__codelineno-0-33" id="__codelineno-0-33" name="__codelineno-0-33"></a>    D-&gt;&gt;D: HandlerMapping/Interceptor/HandlerAdapter
+</span><span id="__span-0-34"><a href="#__codelineno-0-34" id="__codelineno-0-34" name="__codelineno-0-34"></a>    D-&gt;&gt;C: Invoke business method
+</span><span id="__span-0-35"><a href="#__codelineno-0-35" id="__codelineno-0-35" name="__codelineno-0-35"></a>    C--&gt;&gt;D: Return value
+</span><span id="__span-0-36"><a href="#__codelineno-0-36" id="__codelineno-0-36" name="__codelineno-0-36"></a>    D-&gt;&gt;M: Serialize (JSON) -&gt; response bytes
+</span><span id="__span-0-37"><a href="#__codelineno-0-37" id="__codelineno-0-37" name="__codelineno-0-37"></a>    M--&gt;&gt;UI: HTTP response
+</span></code></pre></div>
+<ul>
+<li>关键路径一句话：HTTP(S) 请求穿过“网络（DNS/NAT/路由）→ 数据中心（防火墙/网卡/内核协议栈）→ Web 容器（Tomcat 线程模型）→ Spring MVC（过滤器/分发/参数绑定/序列化）”，每一层都有自己的队列、缓冲区与调度机制。</li>
+</ul>
+<h2 id="2">2. 核心主题与背景（它在讲什么？）<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<ul>
+<li>一句话概括：用“从浏览器到 Spring MVC”的视角，把一次 Java Web 请求经过的网络、OS、Tomcat、Spring MVC 全链路串起来。</li>
+<li>技术体系位置：属于“计算机网络 + Linux I/O + Web 容器 + Spring MVC”交叉地带，是后端工程师理解性能、排障、线程与吞吐的基础心智模型。</li>
+<li>核心痛点：很多人只背“Spring MVC 流程”或“TCP 三次握手”，但不知道它们如何在一次真实请求里连起来，导致面试答得碎、实战排障也缺抓手。</li>
+</ul>
+<h2 id="3">3. 核心知识点/解决方案拆解（它是怎么做的？）<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<h3 id="31">3.1 内容属性判断<a class="headerlink" href="#31" title="Permanent link">¶</a></h3>
+<ul>
+<li>内容属性：底层原理讲解 + 请求链路流程串讲（偏面试与体系化认知）。</li>
+</ul>
+<h3 id="32-dns-nat">3.2 前端到机房：网络旅程（DNS → 路由 → NAT）<a class="headerlink" href="#32-dns-nat" title="Permanent link">¶</a></h3>
+<ul>
+<li>浏览器/调用方会先解析：</li>
+<li>协议：HTTP / HTTPS</li>
+<li>Host：域名或 IP（可能带端口）</li>
+<li>URL：具体 API 路径（如 /login）</li>
+<li>然后把这些封装成 HTTP(S) request 发出去</li>
+<li>DNS 解析的典型顺序（视频口径）：</li>
+<li>查本地缓存 + hosts 文件</li>
+<li>查配置的 DNS 服务器</li>
+<li>目标是拿到“能建立连接的 IP”</li>
+<li>本地网关/路由器：</li>
+<li>判断目标是内网地址还是公网地址</li>
+<li>公网地址则交给 ISP，沿着多级路由寻找“到目标机房/目标服务器”的最优路径</li>
+<li>NAT（Network Address Translation，网络地址转换）：</li>
+<li>背景：你在家/公司常用私有 IP 出网，但公网回包必须能定位到你</li>
+<li>作用：把私有 IP 映射为公有 IP（并维护映射），保证响应能回流到正确的内网主机</li>
+</ul>
+<h3 id="33-tcp">3.3 机房到内核：防火墙 → 网卡 → 中断 → TCP<a class="headerlink" href="#33-tcp" title="Permanent link">¶</a></h3>
+<ul>
+<li>防火墙（视频用“三件事”概括）：</li>
+<li>丢弃（drop）</li>
+<li>拒绝（reject）</li>
+<li>允许（allow）</li>
+<li>网卡与数据链路层（视频强调的关键点）：</li>
+<li>物理介质接收信号 → 数据链路层按以太网帧检查目标 MAC</li>
+<li>通过 DMA（Direct Memory Access，直接内存访问）把数据写入环形缓冲区（ring buffer）</li>
+<li>特点：DMA 过程不消耗 CPU</li>
+<li>硬中断/软中断（视频口径）：</li>
+<li>硬中断：网卡“来数据了”立刻打断 CPU 当前任务，要求快速响应</li>
+<li>软中断：把耗时的解析工作异步化，硬中断尽快返回，避免长时间占用 CPU</li>
+<li>TCP 三次握手与连接队列（视频强调“核心不是三次，而是状态转换”）：</li>
+<li>客户端发 SYN</li>
+<li>服务端回 SYN-ACK，并把连接放入半连接队列</li>
+<li>客户端回 ACK 后转入全连接队列</li>
+<li>面试要点：半连接队列/全连接队列是理解 backlog、SYN Flood 与连接建立失败的核心抓手</li>
+</ul>
+<h3 id="34-jvmsocket-tomcat-spring-mvc">3.4 内核到 JVM：socket 缓冲区 → Tomcat 线程模型 → Spring MVC<a class="headerlink" href="#34-jvmsocket-tomcat-spring-mvc" title="Permanent link">¶</a></h3>
+<h4 id="a-socket-payload">A. 内核 socket 缓冲区与 payload<a class="headerlink" href="#a-socket-payload" title="Permanent link">¶</a></h4>
+<ul>
+<li>TCP 层会用请求的 host + port 去内核的 socket 哈希表里找到对应的 socket 结构（socket struct）。</li>
+<li>socket struct 关联一个接收缓冲区（receive buffer），用于存放网络传输来的 payload。</li>
+<li>payload 概念（视频强调不要把它窄化为 request body）：</li>
+<li>payload 是更“全”的数据：HTTP 头、请求行、request body 等都包含在内。</li>
+</ul>
+<h4 id="b-tomcatpoller-nio">B. Tomcat：Poller 线程 + 工作线程池（NIO 线程模型口径）<a class="headerlink" href="#b-tomcatpoller-nio" title="Permanent link">¶</a></h4>
+<ul>
+<li>Tomcat 启动阶段（视频口径）：</li>
+<li>初始化工作线程池（maxThreads 决定上限）</li>
+<li>工作线程启动后从任务队列取任务；无任务时进入 WAITING/TIMED_WAITING（阻塞在 take/poll）</li>
+<li>启动一个 Poller 线程（基于 NIO selector/轮询机制）</li>
+<li>请求到来时的调度（视频口径）：</li>
+<li>Poller 线程检查 socket 缓冲区是否可读</li>
+<li>如果可读：把 socket 封装成 SocketProcessor（一个可执行对象/Runnable），投递到任务队列</li>
+<li>工作线程被唤醒，从 WAITING → RUNNING，执行 SocketProcessor.run()</li>
+<li>SocketProcessor.run() 的关键动作（视频口径）：</li>
+<li>从内核缓冲区把数据复制到 JVM 的 ByteBuffer</li>
+<li>后续才能进行 HTTP 协议解析</li>
+</ul>
+<h4 id="c-spring-mvcfilter-dispatcherservlet-handlermappingadapter">C. Spring MVC：Filter → DispatcherServlet → HandlerMapping/Adapter → 序列化返回<a class="headerlink" href="#c-spring-mvcfilter-dispatcherservlet-handlermappingadapter" title="Permanent link">¶</a></h4>
+<ul>
+<li>HTTP 解析完成后，会把内容封装成 Request/Response（视频用“我们熟悉的两个对象”来指代）。</li>
+<li>Filter 责任链（doFilter）：</li>
+<li>先走容器过滤器链，做鉴权、编码、日志等通用处理</li>
+<li>DispatcherServlet：</li>
+<li>标志着进入 Spring MVC 的核心分发流程</li>
+<li>典型关键组件（按视频提到的顺序）：<ul>
+<li>HandlerMapping：确定请求映射到哪个 Controller 方法（@RequestMapping）</li>
+<li>HandlerInterceptor：preHandle 返回 false 则请求直接结束</li>
+<li>HandlerAdapter：完成参数解析与绑定（@RequestBody / @PathVariable / @RequestParam 等），并把数据转成 Java 对象</li>
+</ul>
+</li>
+<li>返回阶段（视频口径）：</li>
+<li>HandlerMethodReturnValueHandler 处理返回值</li>
+<li>HttpMessageConverter 把 Java 对象序列化成 JSON 字节流，写入 response 输出流</li>
+<li>之后可能还有 postHandle 等后置处理</li>
+</ul>
+<h2 id="4">4. 面试高频考点与追问（面试官会怎么考？）<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<h3 id="q1-http">Q1：一次 HTTP 请求从输入域名到建立连接，中间发生了什么？<a class="headerlink" href="#q1-http" title="Permanent link">¶</a></h3>
+<ul>
+<li>参考回答（关键词）：DNS 解析（缓存/hosts/DNS 服务器）→ 路由转发（网关/ISP 路由）→ NAT（私网出网映射）→ 到达机房防火墙 → 网卡收包。</li>
+</ul>
+<h3 id="q2tcp">Q2：TCP 三次握手“真正的核心”是什么？半连接队列/全连接队列有什么意义？<a class="headerlink" href="#q2tcp" title="Permanent link">¶</a></h3>
+<ul>
+<li>参考回答（关键词）：核心是连接状态机与队列迁移，不是“来回三次”本身；服务端在 SYN-ACK 后进入半连接队列（syn backlog），收到 ACK 才进入全连接队列（accept queue）；队列容量与 backlog 配置、SYN Flood、防护策略强相关。</li>
+</ul>
+<h3 id="q3-dma">Q3：网卡收到包后为什么要 DMA、硬中断、软中断？各自解决什么问题？<a class="headerlink" href="#q3-dma" title="Permanent link">¶</a></h3>
+<ul>
+<li>参考回答（关键词）：DMA 把数据高效写入 ring buffer，减少 CPU 拷贝；硬中断用于快速通知 CPU 有包到达但必须尽快返回；软中断/异步处理把耗时解析下沉，避免长时间占用中断上下文拖垮系统吞吐。</li>
+</ul>
+<h3 id="q4tomcat-poller-worker">Q4：Tomcat 的 Poller 线程和 Worker 线程分别干什么？为什么需要两类线程？<a class="headerlink" href="#q4tomcat-poller-worker" title="Permanent link">¶</a></h3>
+<ul>
+<li>参考回答（关键词）：Poller/Selector 负责监听 socket 可读事件并封装任务；Worker 线程池负责真正处理请求（读取、解析、执行业务）；解耦 I/O 事件发现与业务处理，避免所有线程都阻塞在 I/O 上，提高并发与资源利用率。</li>
+</ul>
+<h3 id="q5spring-mvc-filterinterceptorhandleradaptermessageconverter">Q5：Spring MVC 里 Filter、Interceptor、HandlerAdapter、MessageConverter 分别在什么阶段发挥作用？<a class="headerlink" href="#q5spring-mvc-filterinterceptorhandleradaptermessageconverter" title="Permanent link">¶</a></h3>
+<ul>
+<li>参考回答（关键词）：Filter 属于 Servlet 容器责任链，早于 Spring MVC；DispatcherServlet 进入后，HandlerMapping 定位处理器，Interceptor 做前后置拦截（preHandle/postHandle），HandlerAdapter 做参数绑定与方法调用适配，MessageConverter 做请求/响应体的序列化/反序列化（如 JSON）。</li>
+</ul>
+<h2 id="5">5. 亮点、坑点与最佳实践（如何体现经验？）<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<h3 id="_1">亮点<a class="headerlink" href="#_1" title="Permanent link">¶</a></h3>
+<ul>
+<li>把“网络-内核-容器-框架”四层串成一条链：面试回答更整体，线上排障更快定位“卡在哪层”。</li>
+<li>强调握手的状态与队列：比背包序更接近真实系统的瓶颈与攻击面。</li>
+<li>点出 payload/receive buffer：能把“请求体在哪里、何时拷贝进 JVM”讲清楚。</li>
+</ul>
+<h3 id="_2">坑点/局限性<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<ul>
+<li>把 payload 等同 request body：会导致对抓包、日志、调试与协议解析理解偏窄。</li>
+<li>把三次握手背成固定话术，但说不清半连接/全连接队列与 backlog 的关系。</li>
+<li>误以为 Tomcat 只有“一个线程处理一个请求”：忽略 Poller/Selector、任务队列与线程池调度。</li>
+<li>把“可用性/性能”问题只归因到业务代码：实际上很多问题卡在 DNS、NAT、防火墙策略、内核队列或线程池配置。</li>
+</ul>
+<h3 id="_3">最佳实践（面试能讲、实战能用）<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<ul>
+<li>排障分层法：</li>
+<li>连不上：先查 DNS → 路由/NAT → 防火墙 → 端口监听</li>
+<li>连得上但慢：再看内核队列（backlog）、线程池（maxThreads）、应用耗时</li>
+<li>Tomcat/Spring 侧的经验口径（偏原则）：</li>
+<li>不在 I/O 事件线程里做重活（避免阻塞），把耗时留给工作线程池</li>
+<li>控制过滤器链复杂度，关键拦截逻辑放在更合适的层（Filter vs Interceptor）</li>
+<li>关注队列与缓冲区：任何“队列满”都会表现为超时、拒绝或吞吐骤降</li>
+</ul>
+<h2 id="6">6. 总结与升华（一句话亮点）<a class="headerlink" href="#6" title="Permanent link">¶</a></h2>
+<ul>
+<li>面试行话版：一次请求的吞吐与延迟，本质是“DNS/路由/NAT + 内核队列与缓冲区 + Tomcat 线程池调度 + Spring MVC 适配与序列化”这条链路上的队列、拷贝与调度是否健康。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

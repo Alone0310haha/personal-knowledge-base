@@ -1,0 +1,867 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="Qoder">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-05-22-%E4%BB%80%E4%B9%88%E6%98%AFHarness%EF%BC%8C%E5%A4%A7%E7%99%BD%E8%AF%9D%E8%81%8A%E8%81%8A%E4%BD%A0%E7%9A%84%20AI%20%E5%88%B0%E5%BA%95%E9%9C%80%E4%B8%8D%E9%9C%80%E8%A6%81%E9%85%8DHarness%EF%BC%88Harness%E8%8C%83%E5%BC%8F%E4%B8%B2%E8%AE%B2%EF%BC%89%EF%BC%88%E8%A7%86%E9%A2%91%E6%80%BB%E7%BB%93%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>什么是 Harness，大白话聊聊你的 AI 到底需不需要配 Harness（Harness 范式串讲）（视频总结） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#harness-ai-harnessharness" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              什么是 Harness，大白话聊聊你的 AI 到底需不需要配 Harness（Harness 范式串讲）（视频总结）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 这期内容写给谁（听众画像）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 讨论角度：把问题从“模型聪不聪明”换成“工程怎么兜底”
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心结论（先给答案）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 概念与分论点（把关键名词讲清楚）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 概念与分论点（把关键名词讲清楚）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-agent-model-harness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Agent / Model / Harness 分别是什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-harness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Harness 的“精神”：有限注意力下的上下文管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-harness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Harness 常见组件是什么（以及各自解决什么痛点）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 Harness 常见组件是什么（以及各自解决什么痛点）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-mcpmodel-context-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. MCP（Model Context Protocol）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-sub-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Sub-agent（子代理 / 隔离代理）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-sq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. SQ（视频口径：动态加载的提示词/技能模板）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-weak-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        D. Weak Rule（弱规则 / 条件触发的长期提示词）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#e-agent-team" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E. Agent Team（多代理团队）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f-hook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F. Hook（生命周期钩子）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-harness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 三种 Harness 范式（什么时候需要、需要到什么程度）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 三种 Harness 范式（什么时候需要、需要到什么程度）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 强模型 + 复杂单会话：尽量少折腾
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-harness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 中等模型 + 高质量交付：用 Harness 把稳定性“外置”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-harness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 三方工具/生态不成熟：先用成熟 Harness，再决定要不要自定义
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 实操：如果你要照着做，一套可落地的操作流程
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 实操：如果你要照着做，一套可落地的操作流程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#harness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第一步：先做“场景分型”（决定你要不要上重度 Harness）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#harness_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第二步：搭最小可用 Harness（不要一上来堆满组件）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第三步：再按痛点加模块（从“可用”迭代到“稳定”）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第四步：处理子代理“渐进漂移”的致命缺陷
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 现实应用启示（把它落到日常工作）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        相关笔记
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="harness-ai-harnessharness">什么是 Harness，大白话聊聊你的 AI 到底需不需要配 Harness（Harness 范式串讲）（视频总结）<a class="headerlink" href="#harness-ai-harnessharness" title="Permanent link">¶</a></h1>
+<h2 id="1">1. 这期内容写给谁（听众画像）<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<ul>
+<li>刚入门开始用 AI 工具干活的人：对“Agent / Model / Harness 到底差在哪、为什么会跑偏、为什么会烧 token”不够清晰，需要一套通俗但工程化的解释框架。</li>
+<li>日常用 AI 写代码的独立开发者/工程师：想知道在真实项目长链路开发中，如何把 AI 从“能写几段代码”变成“可交付、可验收、稳定推进”的生产力。</li>
+<li>预算有限、在用中等/国产模型的人：关心“模型不够强时，靠工程手段能补到什么程度”，以及怎么做最划算。</li>
+<li>对多 Agent、MCP、Hooks 等新概念好奇的人：需要把这些词落到“怎么用、解决什么痛点、有什么坑”。</li>
+</ul>
+<h2 id="2">2. 讨论角度：把问题从“模型聪不聪明”换成“工程怎么兜底”<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<p>视频从一个工程视角出发讨论：在长任务、复杂项目里，决定成败的不只是模型能力，而是你有没有一套 Harness，把上下文、工具调用、任务分解、质量验证、失败兜底这些“系统工程”补齐。</p>
+<p>作者给了一个总括性的定义：</p>
+<ul>
+<li>Agent ≈ Model + Harness</li>
+</ul>
+<p>也就是说：Model 负责“推理/生成”，Harness 负责“让它在真实工作流里稳定地做事”。</p>
+<p>视频要解决的核心问题是：不同强度的模型、不同质量要求的项目下，你到底需不需要做 Harness 工程？需要做到什么程度？哪些组件是刚需，哪些是噱头？</p>
+<h2 id="3">3. 核心结论（先给答案）<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<ul>
+<li>Harness 的价值不在“让模型更聪明”，而在“把模型能力释放到可交付的工程链路里”，尤其是在长链路开发中对抗上下文衰减、跑偏和不稳定。</li>
+<li>强模型往往不需要重度 Harness：过度拆 sub-agent 反而会导致 token 爆炸、整体效果下降。</li>
+<li>中等模型很吃 Harness：通过任务拆分、子代理、工具接入、规则/技能提示词与硬性 Hook 兜底，工程完工度可以逼近强模型在无约束单会话下的效果。</li>
+<li>Agent Team（多代理团队）当前更多是“补短板的实验性玩法”，token 损耗大（视频口径：5–10 倍），并非刚需。</li>
+<li>Hook 是最“确定性”的兜底手段：它通过脚本/规则强制执行，不吃模型状态，不会因为幻觉失效，像一层防火墙。</li>
+</ul>
+<h2 id="4">4. 概念与分论点（把关键名词讲清楚）<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<h3 id="41-agent-model-harness">4.1 Agent / Model / Harness 分别是什么<a class="headerlink" href="#41-agent-model-harness" title="Permanent link">¶</a></h3>
+<ul>
+<li>Model：大模型本体（如 Claude、GLM、DeepSeek 等），提供语言理解与生成能力。</li>
+<li>Harness：模型外面那层“框架/马具/脚手架”，负责把模型接到真实环境里并约束它的行为，包括工具编排、上下文管理、状态/记忆、校验与兜底机制等。</li>
+<li>Agent：对外表现为“能完成任务的系统”。它之所以能做事，是因为 Model 被 Harness 包装后可以：读文件、跑命令、调用 API、执行计划、验收结果。</li>
+</ul>
+<h3 id="42-harness">4.2 Harness 的“精神”：有限注意力下的上下文管理<a class="headerlink" href="#42-harness" title="Permanent link">¶</a></h3>
+<p>视频强调：即便模型宣称 1M 上下文，真正“效果最好”的有效注意力窗口可能远小于标称值（视频举例：约 256K 量级）。长任务中持续堆上下文会导致：</p>
+<ul>
+<li>压缩（compact）带来的信息损失</li>
+<li>漂移：任务目标/约束逐步偏离</li>
+<li>幻觉：在缺失事实/约束后自洽地编造</li>
+</ul>
+<p>因此 Harness 的目标之一是：在长任务里动态剪切、组装、注入上下文，让“关键约束”始终处在模型注意力更强的位置。</p>
+<h3 id="43-harness">4.3 Harness 常见组件是什么（以及各自解决什么痛点）<a class="headerlink" href="#43-harness" title="Permanent link">¶</a></h3>
+<h4 id="a-mcpmodel-context-protocol">A. MCP（Model Context Protocol）<a class="headerlink" href="#a-mcpmodel-context-protocol" title="Permanent link">¶</a></h4>
+<ul>
+<li>是一种让 Agent 接入外部系统/工具的标准协议格式。</li>
+<li>解决痛点：模型本身不直接拥有外部能力（浏览器、数据库、内部系统等），MCP 让你把能力以“可调用接口”的形式暴露给 Agent。</li>
+<li>典型用法：封装你业务后端接口、第三方 API、浏览器自动化等，让 Agent 在需要时动态取数/执行动作。</li>
+</ul>
+<h4 id="b-sub-agent">B. Sub-agent（子代理 / 隔离代理）<a class="headerlink" href="#b-sub-agent" title="Permanent link">¶</a></h4>
+<ul>
+<li>核心特征：在隔离沙箱里独立跑一个新的上下文，从零开始完成一块相对完整的子任务，然后把结果回传给主会话。</li>
+<li>解决痛点：主会话上下文越来越脏、越来越长时，用子代理把“耗上下文的大活”外包出去，保持主会话稳定。</li>
+<li>关键约束：子代理只拿到主会话传过去的任务描述，如果传递信息被省略/压缩，就会产生偏差。</li>
+</ul>
+<h4 id="c-sq">C. SQ（视频口径：动态加载的提示词/技能模板）<a class="headerlink" href="#c-sq" title="Permanent link">¶</a></h4>
+<p>视频里把它描述成“运行时动态加载的一段预制提示词”，类比为：</p>
+<ul>
+<li>人要做不熟悉的事，会临时去看书/看菜谱</li>
+</ul>
+<p>对应到 Agent：</p>
+<ul>
+<li>根据当前场景/目标，把特定的技能提示词注入上下文，指导模型沿着更可靠的步骤去做事。</li>
+</ul>
+<p>风险与坑（视频提及）：互联网上的技能模板增长快、难验证，可能存在“投毒”，诱导 Agent 执行危险命令。</p>
+<h4 id="d-weak-rule">D. Weak Rule（弱规则 / 条件触发的长期提示词）<a class="headerlink" href="#d-weak-rule" title="Permanent link">¶</a></h4>
+<ul>
+<li>类似“项目级规则文件”或“按文件类型触发的规则”。</li>
+<li>解决痛点：把某类任务的长期约束固化成规则，并在阅读到特定文件/目录/后缀时自动注入，让关键规范靠近上下文尾部以提高注意力权重。</li>
+</ul>
+<h4 id="e-agent-team">E. Agent Team（多代理团队）<a class="headerlink" href="#e-agent-team" title="Permanent link">¶</a></h4>
+<ul>
+<li>解决的真实问题：弥补单个子代理“每次都是一次性会话、没有长期记忆、跨任务交互管理弱”的缺陷；理论上可以给每个代理维持更长期的工作状态。</li>
+<li>现实问题（视频口径）：token 消耗巨大、协作能力不够成熟，容易出现“开了团队但忘了团队里有什么”，因此仍偏实验性。</li>
+</ul>
+<h4 id="f-hook">F. Hook（生命周期钩子）<a class="headerlink" href="#f-hook" title="Permanent link">¶</a></h4>
+<ul>
+<li>本质：在某些关键阶段强制执行脚本/规则（例如工具执行前、压缩上下文前后、会话结束时）。</li>
+<li>最大价值：确定性强，不依赖模型是否“记得/听话”，可把关键流程做成硬约束。</li>
+<li>典型用法（视频举例风格抽象）：压缩前缓存关键输入并在压缩后重新注入；会话结束前检查某个“测试已通过”的标记，否则不允许结束。</li>
+</ul>
+<h2 id="5-harness">5. 三种 Harness 范式（什么时候需要、需要到什么程度）<a class="headerlink" href="#5-harness" title="Permanent link">¶</a></h2>
+<h3 id="51">5.1 强模型 + 复杂单会话：尽量少折腾<a class="headerlink" href="#51" title="Permanent link">¶</a></h3>
+<p>视频观点：强模型更适合在一个复杂单会话长链路里工作，过度 sub-agent 可能造成：</p>
+<ul>
+<li>每个子代理都要从头读项目、重新加载上下文，token 爆炸</li>
+<li>效果反而不如“单会话持续推进”</li>
+</ul>
+<p>策略：只保留少量必要的规则与工具，不做重度编排。</p>
+<h3 id="52-harness">5.2 中等模型 + 高质量交付：用 Harness 把稳定性“外置”<a class="headerlink" href="#52-harness" title="Permanent link">¶</a></h3>
+<p>视频强调：中等模型在稳健性、长链路稳定性上不如顶级模型，但“还凑合能用”，因此更适合通过 Harness 来补齐：</p>
+<ul>
+<li>用 MCP 接入外部能力（浏览器、多模态补齐、业务接口等）</li>
+<li>用 Sub-agent 把任务拆碎、并行处理</li>
+<li>用对抗/审查思路做迭代（开发者代理 + 测试者代理互相拉扯，促进收敛）</li>
+<li>用 SQ/规则把“强模型蒸馏出的流程与规范”沉淀下来，复用给中等模型</li>
+<li>用 Hook 做硬性质量门槛，避免“写完就停”或“没测就交付”</li>
+</ul>
+<h3 id="53-harness">5.3 三方工具/生态不成熟：先用成熟 Harness，再决定要不要自定义<a class="headerlink" href="#53-harness" title="Permanent link">¶</a></h3>
+<p>视频观点：很多三方 CLI 工具在 Harness 方面并不成熟（例如对子代理/规则的支持不一致），容易让人困惑并把流程搞乱。</p>
+<p>策略：先选 Harness 成熟的工具链跑通基本闭环，再决定是否做个性化增强。</p>
+<h2 id="6">6. 实操：如果你要照着做，一套可落地的操作流程<a class="headerlink" href="#6" title="Permanent link">¶</a></h2>
+<h3 id="harness">第一步：先做“场景分型”（决定你要不要上重度 Harness）<a class="headerlink" href="#harness" title="Permanent link">¶</a></h3>
+<ul>
+<li>模型强度：强 / 中等 / 偏弱</li>
+<li>项目质量要求：高（需要稳定交付）/ 中（可用即可）/ 低（试验为主）</li>
+<li>任务形态：短任务（一次性）/ 长链路（多轮、多模块、持续迭代）</li>
+</ul>
+<p>结论：中等模型 + 高质量 + 长链路，是最值得投入 Harness 的组合。</p>
+<h3 id="harness_1">第二步：搭最小可用 Harness（不要一上来堆满组件）<a class="headerlink" href="#harness_1" title="Permanent link">¶</a></h3>
+<ol>
+<li>定义验收：写清楚完成标准（能跑、能测、能过哪些检查）。</li>
+<li>配工具：优先把“可验证反馈”接进来（测试、lint、构建、关键接口调用）。</li>
+<li>上规则：把项目约束固化为长期规则（编码规范、目录结构、输出格式、禁止项）。</li>
+</ol>
+<h3 id="_1">第三步：再按痛点加模块（从“可用”迭代到“稳定”）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h3>
+<ol>
+<li>上 MCP：让 Agent 能拿到外部事实与执行能力（浏览器/接口/业务系统）。</li>
+<li>上 Sub-agent：把大块任务拆成可复用子任务，让主会话保持干净与稳定。</li>
+<li>上 Hook：把关键检查做成硬门槛（例如未跑测试不允许结束、压缩前后保留关键输入）。</li>
+</ol>
+<h3 id="_2">第四步：处理子代理“渐进漂移”的致命缺陷<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<p>视频指出的典型坑：主会话把复杂 PRD 传给子代理时，往往会被压缩成很短的摘要，导致信息密度不足，子代理输出“看似对齐、实则偏差”，并在多轮传递中不断偏移。</p>
+<p>视频给出的修正思路（可选其一或组合）：</p>
+<ul>
+<li>用 Hook 截取并保存关键需求输入，在每次启动子代理时自动注入</li>
+<li>把需求写入一个固定文件，让所有子代理每次都强制读取该文件</li>
+</ul>
+<h2 id="7">7. 现实应用启示（把它落到日常工作）<a class="headerlink" href="#7" title="Permanent link">¶</a></h2>
+<ul>
+<li>把 Harness 当成“把 token 换成质量”的工程杠杆：当模型不够强时，与其反复手工纠错，不如把纠错与验收做成流程与硬约束。</li>
+<li>优先投资可验证的反馈闭环：能跑测试/能验证接口/能做静态检查，比堆提示词更可靠。</li>
+<li>避免“为了工程化而工程化”：强模型 + 单会话推进时，过度拆子代理可能得不偿失。</li>
+<li>把 Hook 当作最后防线：把最关键的质量门槛变成确定性脚本约束，而不是“相信模型会记得”。</li>
+<li>警惕外部技能模板投毒：动态加载的提示词一旦来源不可信，风险比收益更大，应优先做白名单与审计。</li>
+</ul>
+<h2 id="_3">相关笔记<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="../Harness%20Engineering/">Harness Engineering</a></li>
+<li><a href="../Harness%20Engineering%EF%BC%88OpenAI%20Codex%EF%BC%89/">Harness Engineering（OpenAI Codex）</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
