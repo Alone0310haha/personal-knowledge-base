@@ -1,0 +1,835 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="程序员发发">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-05-27-%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84AI%20Coding%E6%84%9F%E5%8F%97%E4%BB%A5%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%B0%8FTips%EF%BC%88%E8%A7%86%E9%A2%91%E6%80%BB%E7%BB%93%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>程序员的AI Coding感受以及一些小Tips（视频总结） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ai-codingtips" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              程序员的AI Coding感受以及一些小Tips（视频总结）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 听众画像：这期内容写给谁
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ai-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 讨论角度：从“让 AI 生成代码”切换到“管理 AI 开发”
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心论点：工程化落地不靠一次性生成，而靠工作流 + 任务拆分 + 先决策后编码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-web-coding-stack-coding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 分阶段拆解：Web Coding → Stack Coding（按视频顺序，不混场景）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 分阶段拆解：Web Coding → Stack Coding（按视频顺序，不混场景）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-aweb-coding-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 阶段 A：Web Coding（想到什么让 AI 写什么）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 阶段 A 的局限：真实工程里为什么会失效
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-bstack-coding-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 阶段 B：Stack Coding（用工作流限制 AI，把交付链路跑通）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 阶段 B：Stack Coding（用工作流限制 AI，把交付链路跑通）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-prd-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1：把最原始 PRD 交给 AI（不要自行加工）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-ai-prd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2：让 AI 输出“PRD 审视文档”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3：让 AI 梳理架构影响面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4：让 AI 输出可落地的技术文档
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5：Task 拆分（把大需求圈成更原子化的任务）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-ai-coding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6：让 AI 真正开始 Coding（实现 + 单测 + 修复）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7：方案与文档归档（形成复利工程）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 小 Tips（编码层面的约束技巧）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 小 Tips（编码层面的约束技巧）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tip-1-ai-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tip 1：不要直接改 AI 写的代码，让 AI 自己改
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tip-2task-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tip 2：Task 一定要拆细，避免一个 Task 混多类改动
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tip-3ai-coding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tip 3：AI Coding 前一定要先让它“说思路”
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-sop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 落地启示：把视频方法抽成可执行 SOP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 落地启示：把视频方法抽成可执行 SOP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sop-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOP A：需求到交付（面向一次需求）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sop-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOP B：控制代码质量（面向日常协作）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 一句话总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ai-codingtips">程序员的AI Coding感受以及一些小Tips（视频总结）<a class="headerlink" href="#ai-codingtips" title="Permanent link">¶</a></h1>
+<p><a href="https://www.bilibili.com/video/BV1u1LA6PEL7/">程序员的AI Coding感受以及一些小Tips</a></p>
+<h2 id="1">1. 听众画像：这期内容写给谁<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<ul>
+<li>已经在用 AI 写代码的人：能写 CRUD/模板代码，但在真实项目里容易“跑偏、堆代码、难 review”，想把 AI 变成可控生产力。</li>
+<li>团队/管理者/Tech Lead：需要把 AI Coding 从“个人爽用工具”升级为“团队工程化工作流”，并能控质量、控风险、可复盘。</li>
+<li>多服务/复杂系统的开发者：一个需求牵扯多个服务、数据库、调用链和历史逻辑，想解决“AI 不懂项目潜规则/规范”的问题。</li>
+</ul>
+<h2 id="2-ai-ai">2. 讨论角度：从“让 AI 生成代码”切换到“管理 AI 开发”<a class="headerlink" href="#2-ai-ai" title="Permanent link">¶</a></h2>
+<p>视频的出发点不是讨论“AI 写代码强不强”，而是讨论在真实工程里，程序员的角色正在从“主要写代码的人”变成：</p>
+<ul>
+<li>需求与方案的决策者</li>
+<li>AI 的任务拆分与约束制定者</li>
+<li>代码质量与风险的 reviewer</li>
+</ul>
+<p>它要解决的问题是：为什么很多人觉得 AI 很强，但一上真实项目就不稳定？以及如何用一套流程把 AI 变成“可交付”的开发能力。</p>
+<h2 id="3">3. 核心论点：工程化落地不靠一次性生成，而靠工作流 + 任务拆分 + 先决策后编码<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<p>视频核心观点可以概括为三句话：</p>
+<ul>
+<li>AI Coding 的成熟形态不是“让 AI 帮我写几段代码”，而是“用工作流管理 AI 完成需求交付”。</li>
+<li>真正重要的不是 AI Coding 本身，而是 AI Coding 前的决策（方案、边界、拆分、约束）。</li>
+<li>未来更值钱的能力不是“会不会写代码”，而是“能不能驾驭 AI”：架构能力、review 能力、Task 拆分能力、表达与决策能力。</li>
+</ul>
+<h2 id="4-web-coding-stack-coding">4. 分阶段拆解：Web Coding → Stack Coding（按视频顺序，不混场景）<a class="headerlink" href="#4-web-coding-stack-coding" title="Permanent link">¶</a></h2>
+<h3 id="41-aweb-coding-ai">4.1 阶段 A：Web Coding（想到什么让 AI 写什么）<a class="headerlink" href="#41-aweb-coding-ai" title="Permanent link">¶</a></h3>
+<p>视频描述的早期用法更像“即时对话式开发”：</p>
+<ul>
+<li>适合场景：CRUD、DO 层、Mapper、Service 这类模板化代码；以及内部系统的部分前端页面（丢 UI 图让工具生成页面）。</li>
+<li>体验：速度快、产出多、短期非常爽。</li>
+</ul>
+<h3 id="42-a">4.2 阶段 A 的局限：真实工程里为什么会失效<a class="headerlink" href="#42-a" title="Permanent link">¶</a></h3>
+<p>视频给出几类关键约束（本质都是“上下文与工程复杂度”的矛盾）：</p>
+<ul>
+<li>上下文有限：对话变长后容易出现“幻觉”（一本正经胡说）。</li>
+<li>会话切换成本高：换对话就要重新梳理上下文，容易遗漏关键约束。</li>
+<li>需求天然跨域：公司项目往往不是单体，一个需求会涉及多个服务、数据库、日志/中间件、历史链路。</li>
+<li>组织隐性知识缺失：项目规范、潜规则、军规等不在上下文里，AI 默认不知道。</li>
+</ul>
+<h3 id="43-bstack-coding-ai">4.3 阶段 B：Stack Coding（用工作流限制 AI，把交付链路跑通）<a class="headerlink" href="#43-bstack-coding-ai" title="Permanent link">¶</a></h3>
+<p>视频把成熟做法称为 “Stack Coding”：抽象一套工作流来约束 AI，先做方案，再做编码，并把过程沉淀归档。</p>
+<p>关键概念：工作流（Workflow）</p>
+<ul>
+<li>含义：把“需求 → 方案 → 拆分 → 编码 → 测试 → 归档”的链路固化成步骤，让 AI 每一步都有明确产物与验收点。</li>
+<li>价值：降低跑偏概率；减少一次性生成的代码量；降低 review 压力；让团队能复用与迭代这套方式。</li>
+</ul>
+<h4 id="step-1-prd-ai">Step 1：把最原始 PRD 交给 AI（不要自行加工）<a class="headerlink" href="#step-1-prd-ai" title="Permanent link">¶</a></h4>
+<ul>
+<li>目的：避免把“人自己的理解偏差”先注入进去，影响 AI 对需求的判断。</li>
+<li>产物：原始 PRD 作为单一事实来源。</li>
+</ul>
+<h4 id="step-2-ai-prd">Step 2：让 AI 输出“PRD 审视文档”<a class="headerlink" href="#step-2-ai-prd" title="Permanent link">¶</a></h4>
+<p>关键概念：审视文档（Review Doc）</p>
+<ul>
+<li>含义：不是复述需求，而是站在交付视角找边界、风险和待确认点。</li>
+<li>典型内容：边界条件、业务风险、待确认逻辑；并主动反问你缺失的信息。</li>
+</ul>
+<h4 id="step-3-ai">Step 3：让 AI 梳理架构影响面<a class="headerlink" href="#step-3-ai" title="Permanent link">¶</a></h4>
+<ul>
+<li>目标：在“多服务真实项目”里先对齐改造范围。</li>
+<li>产物内容举例：会影响哪些服务、调用链路是什么、数据流怎么走、哪些地方需要改造。</li>
+</ul>
+<h4 id="step-4-ai">Step 4：让 AI 输出可落地的技术文档<a class="headerlink" href="#step-4-ai" title="Permanent link">¶</a></h4>
+<ul>
+<li>对标：你平时写的细分后端技术文档。</li>
+<li>产物内容举例：实现流程图、时序图、用户用例、库表设计、RPC 接口协约。</li>
+</ul>
+<h4 id="step-5task">Step 5：Task 拆分（把大需求圈成更原子化的任务）<a class="headerlink" href="#step-5task" title="Permanent link">¶</a></h4>
+<p>关键概念：原子化 Task（Atomic Task）</p>
+<ul>
+<li>含义：把“一个大需求”拆成可以独立实现、独立 review、独立验收的小步提交。</li>
+<li>视频强调原因：一次性让 AI 把整个需求实现，生成代码量会非常恐怖，review 成本极高（视频口径：PR 超过 300 行就很难 review）。</li>
+<li>示例拆分顺序（视频示例口径）：
+  1) 先改数据库
+  2) 再改 DTO
+  3) 再改接口
+  4) 再改消费/业务逻辑
+  5) 最后补单测</li>
+</ul>
+<h4 id="step-6-ai-coding">Step 6：让 AI 真正开始 Coding（实现 + 单测 + 修复）<a class="headerlink" href="#step-6-ai-coding" title="Permanent link">¶</a></h4>
+<ul>
+<li>目标：在“已明确方案 + 已拆分任务”的前提下写代码，避免边写边补锅。</li>
+<li>覆盖范围：代码实现、单测编写、测试修复。</li>
+</ul>
+<h4 id="step-7">Step 7：方案与文档归档（形成复利工程）<a class="headerlink" href="#step-7" title="Permanent link">¶</a></h4>
+<p>关键概念：复利工程 / 长期记忆</p>
+<ul>
+<li>含义：把方案、文档、决策过程沉淀下来，下次做类似需求时，AI 更容易理解你的项目与约束。</li>
+<li>价值：你不是一次性“使用 AI”，而是在持续“培养 AI”理解你的工程语境。</li>
+</ul>
+<h2 id="5-tips">5. 小 Tips（编码层面的约束技巧）<a class="headerlink" href="#5-tips" title="Permanent link">¶</a></h2>
+<h3 id="tip-1-ai-ai">Tip 1：不要直接改 AI 写的代码，让 AI 自己改<a class="headerlink" href="#tip-1-ai-ai" title="Permanent link">¶</a></h3>
+<ul>
+<li>核心理由：这是一个“训练/对齐上下文”的过程。你手改代码，AI 未必能感知到你改了什么、为什么改。</li>
+<li>更好的做法：指出问题与期望，让 AI 自己修；你做 reviewer，确保改动符合规范与历史逻辑。</li>
+</ul>
+<h3 id="tip-2task-task">Tip 2：Task 一定要拆细，避免一个 Task 混多类改动<a class="headerlink" href="#tip-2task-task" title="Permanent link">¶</a></h3>
+<ul>
+<li>避免：同一个 task 里既改数据库、又改接口、还动老旧业务逻辑。</li>
+<li>原因：AI 一次性输出过多代码会把 review 压力推爆，也更难定位问题来源。</li>
+</ul>
+<h3 id="tip-3ai-coding">Tip 3：AI Coding 前一定要先让它“说思路”<a class="headerlink" href="#tip-3ai-coding" title="Permanent link">¶</a></h3>
+<p>关键概念：先对齐方向，再做实现</p>
+<ul>
+<li>含义：先让 AI 明确它的理解、方案、权衡与风险，再进入编码。</li>
+<li>原因：如果方向错了，后面容易出现“疯狂加 else 的兜底式修补”，技术债会越来越重。</li>
+</ul>
+<h2 id="6-sop">6. 落地启示：把视频方法抽成可执行 SOP<a class="headerlink" href="#6-sop" title="Permanent link">¶</a></h2>
+<p>下面的 SOP 直接对应视频的“Stack Coding”流程与 Tips，用于真实团队/个人项目的 AI Coding 落地。</p>
+<h3 id="sop-a">SOP A：需求到交付（面向一次需求）<a class="headerlink" href="#sop-a" title="Permanent link">¶</a></h3>
+<ol>
+<li>输入：把最原始 PRD 原文给 AI，同时声明“不要自行脑补需求”。</li>
+<li>审视：让 AI 输出 PRD 审视文档，列出边界条件、风险、待确认点，并要求它用问题列表向你补齐信息。</li>
+<li>影响面：让 AI 画清服务影响面：涉及服务清单、调用链、数据流、需要改造的模块。</li>
+<li>方案：让 AI 输出可落地技术文档：流程/时序、用例、库表、接口契约。</li>
+<li>拆分：让 AI 把方案拆成原子化 Task，并为每个 Task 写清“改动点 + 验收标准 + 回滚/风险点”。</li>
+<li>实施：每次只让 AI 做一个 Task；先要思路，再要实现；要求配套单测/自测点。</li>
+<li>Review：按 Task 做小 PR，控制改动体量；发现问题用“让 AI 自己修”替代“人直接改”。</li>
+<li>归档：把 PRD、审视文档、方案、Task 列表、关键决策与复盘统一归档，供下次复用。</li>
+</ol>
+<h3 id="sop-b">SOP B：控制代码质量（面向日常协作）<a class="headerlink" href="#sop-b" title="Permanent link">¶</a></h3>
+<ol>
+<li>固定规则：每个 Task 只做一类改动（Schema/DTO/API/消费逻辑/测试），避免串改。</li>
+<li>固定节奏：编码前先产出思路与风险清单，review 后再产出代码。</li>
+<li>固定阈值：以“小 PR 易 review”为默认目标（视频口径：PR 超过 300 行 review 压力很大）。</li>
+<li>固定闭环：每个 Task 都要补“验证方式”，并把验证结果写回归档材料里。</li>
+</ol>
+<h2 id="7">7. 一句话总结<a class="headerlink" href="#7" title="Permanent link">¶</a></h2>
+<p>AI 会写代码不稀奇，稀奇的是你能不能用一套工程化工作流把它变成“可控、可 review、可复用、可交付”的生产力。</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
