@@ -731,27 +731,36 @@
 </ul>
 <h2 id="mysql-innodb-rr">MySQL 的隔离级别怎么选？InnoDB 默认 RR 为什么还能避免“幻读”？<a class="headerlink" href="#mysql-innodb-rr" title="Permanent link">¶</a></h2>
 <ul>
-<li>15秒简答：隔离级别本质是“并发读写可见性规则”；核心机制是 RC/RR 主要靠 MVCC，RR 通过一致性读 + 当前读时的 next-key lock 抑制幻读；特性是 RR 更稳但锁冲突可能更高，RC 并发更好但可能不可重复读。</li>
-<li>3分钟详答：出现频次：★★★★★（面试高频且容易深挖锁）。</li>
-<li>开场：隔离级别是“读看到什么”的规则，代价是并发与锁冲突。</li>
-<li>四级别要点：<ul>
-<li>RU：能读未提交，几乎不用。</li>
-<li>RC：每次读取最新已提交版本，避免脏读，但可能不可重复读。</li>
-<li>RR（默认）：同一事务内多次读一致，靠 Read View 固化快照。</li>
-<li>Serializable：强制串行，代价最大。</li>
+<li>15秒简答：隔离级别本质是“并发事务下读能看到哪些已提交版本/哪些读需要加锁的规则”；核心机制是 InnoDB 读靠 MVCC（RC 是语句级 Read View、RR 是事务级 Read View），写/当前读靠锁（RR 下范围当前读用 next-key lock 抑制插入幻行）；特性是隔离越高一致性越强但并发越差，通常 RR 更稳、RC 更快。</li>
+<li>3分钟详答：出现频次：★★★★★（面试高频，常从“现象→机制→选型”深挖）。</li>
+<li>开场：隔离级别我会按“它解决哪些并发现象、靠什么机制、代价是什么”来答。</li>
+<li>四种隔离级别到底是什么（对应三类典型现象：脏读 / 不可重复读 / 幻读）：<ul>
+<li>RU（Read Uncommitted）：能读到别人的未提交数据 ⇒ 可能脏读/不可重复读/幻读，基本不用。</li>
+<li>RC（Read Committed）：每次读只看已提交版本（语句级 Read View）⇒ 避免脏读，但同一事务两次读可能不同（不可重复读），范围查询也可能出现“新插入行”（幻读语义），更依赖显式加锁或原子更新来保证业务正确性。</li>
+<li>RR（Repeatable Read，默认）：事务内快照读复用同一个 Read View ⇒ 避免脏读/不可重复读；而对 <code>select ... for update</code> / <code>update</code> / <code>delete</code> 这类当前读，会用 next-key lock（记录锁+间隙锁）把命中的索引范围锁住，从而把“插入型幻读”压住。</li>
+<li>Serializable：把并发强行串行化（读也需要更强的锁）⇒ 三种现象都能避免，但吞吐与锁冲突代价最大。</li>
 </ul>
 </li>
-<li>RR 如何处理幻读：<ul>
-<li>快照读（普通 select）靠 MVCC，看到事务开始时的一致性视图。</li>
-<li>当前读（select ... for update / update / delete）会加 next-key lock（行锁+间隙锁）锁住范围，阻止其他事务插入“幻行”。</li>
+<li>RR 为什么还能避免“幻读”（用一个典型并发场景把流程说清楚）：<ul>
+<li>事务 A：<code>BEGIN; select * from t where id &gt; 5;</code>（快照读，拿到一致性视图）</li>
+<li>事务 B：<code>BEGIN; insert into t values(6, ...); COMMIT;</code></li>
+<li>事务 A：再 <code>select * from t where id &gt; 5;</code> 仍按同一 Read View 返回（快照读不受新插入影响）</li>
+<li>事务 A：改成 <code>select * from t where id &gt; 5 for update;</code>（当前读）时，InnoDB 会对 <code>id &gt; 5</code> 的索引范围加 next-key lock，B 再想往这个范围插入会被阻塞，于是当前读语义下的幻行被抑制。</li>
 </ul>
 </li>
-<li>实战：我通常默认 RR；但在“锁冲突严重且可接受不可重复读”的业务（比如报表读取）可能改 RC + 明确加锁策略。</li>
+<li>为什么这样设计：<ul>
+<li>普通读走 MVCC，尽量不加锁提高并发；涉及修改/显式加锁的读必须锁住“范围不变式”，否则会在“先查后改/范围更新”里出现并发漏洞。</li>
+</ul>
+</li>
+<li>实战怎么选：<ul>
+<li>OLTP（订单/库存/账户）我默认 RR，配合短事务与正确索引减少范围锁；报表/列表这类更看重吞吐、能接受不可重复读时用 RC，并把关键写路径改成原子条件更新（<code>update ... where ...</code>）或显式 <code>for update</code>。</li>
+</ul>
+</li>
 <li>可能追问：</li>
 <li>追问：RR 下普通 select 会加锁吗？<br/>
     15秒简答：一般不会（快照读），除非显式 <code>for update/lock in share mode</code> 或处于特殊语义。</li>
 <li>追问：RC 下还会有间隙锁吗？<br/>
-    15秒简答：多数情况下比 RR 少，但在需要保持约束一致性时仍可能出现；具体看语句类型与索引范围。</li>
+    15秒简答：通常比 RR 少（很多场景只加记录锁不锁间隙），但在外键/唯一性检查、以及部分范围更新/删除等需要保证约束或范围语义时仍可能出现；具体取决于语句形态与是否命中合适索引范围。</li>
 </ul>
 <h2 id="mvcc-read-view">MVCC 的核心原理是什么？Read View/版本链你怎么讲得“可视化”？<a class="headerlink" href="#mvcc-read-view" title="Permanent link">¶</a></h2>
 <ul>

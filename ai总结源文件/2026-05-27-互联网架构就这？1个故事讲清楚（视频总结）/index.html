@@ -1,0 +1,864 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="架构师阿Q">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-05-27-%E4%BA%92%E8%81%94%E7%BD%91%E6%9E%B6%E6%9E%84%E5%B0%B1%E8%BF%99%EF%BC%9F1%E4%B8%AA%E6%95%85%E4%BA%8B%E8%AE%B2%E6%B8%85%E6%A5%9A%EF%BC%88%E8%A7%86%E9%A2%91%E6%80%BB%E7%BB%93%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>互联网架构就这？1个故事讲清楚（视频总结） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              互联网架构就这？1个故事讲清楚（视频总结）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 这期内容写给谁（听众画像）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 讨论角度：用“业务增长 → 暴露瓶颈 → 打补丁”的演进闭环讲架构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 一段话概括这期讲了什么
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 按故事阶段拆解（按视频顺序，不混场景）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 按故事阶段拆解（按视频顺序，不混场景）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 A：单机架构（起步期：小网站、低流量）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 B：应用与数据库分离（资源争抢期）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 C：应用集群 + 负载均衡（高并发期：应用层瓶颈）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 D：多级缓存（热点读瓶颈期：数据库读压力）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 E：读写分离（读多写少场景：写锁与读压力）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 F：分库分表（海量数据期：容量与并发上限）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcdn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 G：CDN + 反向代理（体验与安全期）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h-nosql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 H：搜索引擎 + NoSQL（复杂查询/非结构化数据期）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 I：分布式架构（业务膨胀期：巨石应用的研发与扩容问题）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jrpc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 J：RPC + 注册与发现 + 消息队列（服务协作期：通信、解耦与稳定性）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#k" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 K：微服务 + 治理体系（极致拆分期：协作与可运维性）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 L：容器化（运维复杂度期：环境一致性与交付效率）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mk8s" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 M：K8S（容器编排期：规模化调度）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 N：上云与云原生（资源弹性期：按需付费）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 关键技术名词/概念解释（通俗版）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 视频里提到的关键技术细节（可复述要点）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 结尾三句话（架构思维）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="1">互联网架构就这？1个故事讲清楚（视频总结）<a class="headerlink" href="#1" title="Permanent link">¶</a></h1>
+<p><a href="https://www.bilibili.com/video/BV1M15Q6eEhL/">互联网架构就这？1个故事讲清楚</a></p>
+<h2 id="1_1">1. 这期内容写给谁（听众画像）<a class="headerlink" href="#1_1" title="Permanent link">¶</a></h2>
+<ul>
+<li>想把“互联网架构高频名词”一次串起来的人：单机、集群、缓存、读写分离、分库分表、微服务、容器、K8S、云原生等。</li>
+<li>后端/全栈初中级开发：知道名词但不知道“为什么会出现、解决什么问题、先后顺序是什么”。</li>
+<li>面试/系统设计复习者：需要用“问题驱动的演进链路”把概念讲成一条能复述的故事线。</li>
+</ul>
+<h2 id="2">2. 讨论角度：用“业务增长 → 暴露瓶颈 → 打补丁”的演进闭环讲架构<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<p>视频不是从厂商技术栈或抽象理论切入，而是从一个小网站的增长路径出发，用一条主线回答：</p>
+<ul>
+<li>这些架构手段到底在解决什么问题？</li>
+<li>为什么通常是按某个顺序逐步出现，而不是一开始就上“最先进架构”？</li>
+</ul>
+<h2 id="3">3. 一段话概括这期讲了什么<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<p>视频用“一个网站从小到大”的故事，把互联网系统常见的架构演进串成一条链路：从单机到应用/数据库分离，再到集群与负载均衡；随后用缓存、读写分离、分库分表解决数据库瓶颈；用 CDN 与反向代理提升访问速度与安全；再引入搜索引擎/NoSQL应对复杂查询；当单体应用膨胀后按业务拆分演进到分布式与微服务，并配套 RPC、注册发现、消息队列、链路追踪、限流熔断等治理手段；最终用容器化与 K8S 降低运维复杂度，再上云走向云原生与弹性伸缩。</p>
+<h2 id="4">4. 按故事阶段拆解（按视频顺序，不混场景）<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<h3 id="a">阶段 A：单机架构（起步期：小网站、低流量）<a class="headerlink" href="#a" title="Permanent link">¶</a></h3>
+<ul>
+<li>典型形态：一台服务器同时跑应用 + 数据库。</li>
+<li>解决的问题：快速上线、成本低、复杂度最低。</li>
+<li>新暴露的问题：业务起色后，应用与数据库抢资源（CPU/IO/内存），单机扛不住。</li>
+</ul>
+<h3 id="b">阶段 B：应用与数据库分离（资源争抢期）<a class="headerlink" href="#b" title="Permanent link">¶</a></h3>
+<ul>
+<li>做法：加机器，把应用服务器与数据库服务器拆开，各司其职。</li>
+<li>收益：资源隔离，可用性更好。</li>
+<li>新暴露的问题：用户继续增长，单台应用服务器的吞吐有上限；大量查询把数据库打成瓶颈。</li>
+</ul>
+<h3 id="c">阶段 C：应用集群 + 负载均衡（高并发期：应用层瓶颈）<a class="headerlink" href="#c" title="Permanent link">¶</a></h3>
+<ul>
+<li>做法 1：同一套应用代码部署多台，形成应用集群。</li>
+<li>做法 2：在入口增加负载均衡，把流量均匀分配到多台应用实例。</li>
+<li>关键能力：水平扩展（扛不住就加机器）、应用高可用（某台挂了自动摘掉流量）。</li>
+<li>新暴露的问题：请求仍会穿透到数据库，数据库成为核心瓶颈。</li>
+</ul>
+<h3 id="d">阶段 D：多级缓存（热点读瓶颈期：数据库读压力）<a class="headerlink" href="#d" title="Permanent link">¶</a></h3>
+<ul>
+<li>背景认知：数据库先读内存缓冲区，没命中再读磁盘；内存读比磁盘快几个数量级，但数据库内存缓冲区容量有限。</li>
+<li>做法：把“更大的内存层”独立出来专门放热点/常用结果，形成缓存体系。</li>
+<li>视频给的分层顺序：
+  1) 浏览器缓存
+  2) 应用服务器本地缓存
+  3) 分布式缓存
+  4) 最后才访问数据库</li>
+<li>收益：绝大多数读请求被缓存拦截，查询从毫秒级压到微秒级，数据库压力骤降；数据库短暂故障时缓存还能顶一阵。</li>
+<li>新暴露的问题：写请求、非热点读仍然要打数据库；高并发写会锁表/锁行导致排队。</li>
+</ul>
+<h3 id="e">阶段 E：读写分离（读多写少场景：写锁与读压力）<a class="headerlink" href="#e" title="Permanent link">¶</a></h3>
+<ul>
+<li>做法：主库负责写，从库负责读，通过主从同步保证数据最终一致。</li>
+<li>适用前提：互联网系统常见“读多写少”，可以一主多从分摊读压力。</li>
+<li>收益：读写互相阻塞问题明显缓解。</li>
+<li>新暴露的问题：数据量持续增长，单库单表容量到顶。</li>
+</ul>
+<h3 id="f">阶段 F：分库分表（海量数据期：容量与并发上限）<a class="headerlink" href="#f" title="Permanent link">¶</a></h3>
+<ul>
+<li>垂直分库（按业务拆）：用户库、商品库、订单库等互不干扰。</li>
+<li>水平分表（按数据维度拆）：一张大表拆多张小表，例如按 UID 哈希分表分散压力。</li>
+<li>配套：数据库中间件对应用“尽量透明”，减少业务代码改造量。</li>
+<li>收益：数据库从单点走向分布式，存储与并发能力继续扩展。</li>
+<li>新暴露的问题：全国用户访问体验差异大；应用服务器直暴露公网不安全。</li>
+</ul>
+<h3 id="gcdn">阶段 G：CDN + 反向代理（体验与安全期）<a class="headerlink" href="#gcdn" title="Permanent link">¶</a></h3>
+<ul>
+<li>CDN：</li>
+<li>做法：把静态资源提前分发到离用户更近的边缘节点，通过域名解析就近访问。</li>
+<li>收益：跨地域访问速度提升。</li>
+<li>反向代理：</li>
+<li>做法：公网流量先到代理，再转发到内网应用；隐藏真实应用服务器。</li>
+<li>收益：提升安全性，可做流量清洗与权限校验等。</li>
+<li>新暴露的问题：传统关系型数据库在全文搜索、模糊查询、统计分析上吃力。</li>
+</ul>
+<h3 id="h-nosql">阶段 H：搜索引擎 + NoSQL（复杂查询/非结构化数据期）<a class="headerlink" href="#h-nosql" title="Permanent link">¶</a></h3>
+<ul>
+<li>搜索引擎：</li>
+<li>做法：用倒排索引实现快速全文检索（如电商搜商品、新闻热搜）。</li>
+<li>收益：避免在数据库里用 like 扫描导致“慢到死”。</li>
+<li>NoSQL：</li>
+<li>做法：承载非结构化/半结构化数据，支持高并发与易扩展。</li>
+<li>收益：系统能力从“简单增删改查”扩展到更复杂的检索与分析。</li>
+<li>新暴露的问题：业务越来越大，单体应用“巨石化”，开发与扩容成本陡增。</li>
+</ul>
+<h3 id="i">阶段 I：分布式架构（业务膨胀期：巨石应用的研发与扩容问题）<a class="headerlink" href="#i" title="Permanent link">¶</a></h3>
+<ul>
+<li>典型痛点：</li>
+<li>改一行代码要全量发布，风险大。</li>
+<li>多人协作冲突频繁。</li>
+<li>只想给订单/支付扩容，却不得不整体扩容，资源浪费。</li>
+<li>做法：按业务边界切开，用户、商品、订单等做成独立系统，独立部署/发布/扩容。</li>
+<li>新暴露的问题：系统拆开后，服务之间怎么调用与通信？</li>
+</ul>
+<h3 id="jrpc">阶段 J：RPC + 注册与发现 + 消息队列（服务协作期：通信、解耦与稳定性）<a class="headerlink" href="#jrpc" title="Permanent link">¶</a></h3>
+<ul>
+<li>RPC（远程调用）：</li>
+<li>目标：让跨机器服务调用像“调本地函数”一样。</li>
+<li>服务注册与发现：</li>
+<li>目标：集中管理服务地址；新增服务注册，调用方按需发现并路由调用。</li>
+<li>消息队列：</li>
+<li>动机：服务同步调用链过长时，一个节点卡住会拖死整条链路，形成雪崩。</li>
+<li>做法：用“超大容量收件箱”异步解耦，发送方投递消息后继续处理自己的事务。</li>
+<li>收益：解耦、降低互相等待；服务临时挂掉消息不丢；流量突增时先堆积再消费（削峰填谷）。</li>
+<li>新暴露的问题：拆得还不够细，一个系统内部仍是“大模块”，技术栈/扩容粒度仍被绑定。</li>
+</ul>
+<h3 id="k">阶段 K：微服务 + 治理体系（极致拆分期：协作与可运维性）<a class="headerlink" href="#k" title="Permanent link">¶</a></h3>
+<ul>
+<li>微服务：</li>
+<li>原则：一个服务只干一件事，能独立开发、发布、扩容；不同团队可用不同技术栈。</li>
+<li>收益：热点服务可单独扩十倍；单点 bug 影响面更小；研发效率提升。</li>
+<li>服务变多后的配套治理（视频提到的能力清单）：</li>
+<li>全链路追踪：快速定位调用链上的问题点。</li>
+<li>限流：流量过大时保护系统不被冲垮。</li>
+<li>熔断降级：防止连锁崩盘，自动保护核心链路。</li>
+<li>服务治理：统一监控、日志、权限等。</li>
+<li>新暴露的问题：微服务数量上百后，部署/扩容/环境一致性让运维崩溃。</li>
+</ul>
+<h3 id="l">阶段 L：容器化（运维复杂度期：环境一致性与交付效率）<a class="headerlink" href="#l" title="Permanent link">¶</a></h3>
+<ul>
+<li>动机：每个服务上线都要配环境、装依赖、调参数，“我电脑能跑，服务器跑不起来”的问题频发；大促前要扩几百台机器，一台台配环境来不及。</li>
+<li>做法：把服务 + 运行环境打包成镜像，一次打包到处运行。</li>
+<li>收益：环境一致性提升、交付与扩缩容效率提升。</li>
+<li>新暴露的问题：容器数量成百上千，需要统一调度与管理。</li>
+</ul>
+<h3 id="mk8s">阶段 M：K8S（容器编排期：规模化调度）<a class="headerlink" href="#mk8s" title="Permanent link">¶</a></h3>
+<ul>
+<li>解决的问题：统一管理容器资源与生命周期。</li>
+<li>视频提到的能力：</li>
+<li>流量高自动扩容，流量低自动缩容</li>
+<li>容器挂了自动重启</li>
+<li>让运维从“手工干活”变成“声明式管理”</li>
+<li>新暴露的问题：即使有 K8S 仍要自建机房/买服务器，大促囤机器、平时闲置浪费钱。</li>
+</ul>
+<h3 id="n">阶段 N：上云与云原生（资源弹性期：按需付费）<a class="headerlink" href="#n" title="Permanent link">¶</a></h3>
+<ul>
+<li>云平台：像一个无限资源池，CPU/内存/带宽随时申请、随时释放、按需付费，底层机房对业务透明。</li>
+<li>云原生：在云上进一步强调弹性与自动化，从“一台小服务器”演进到“可伸缩、自动化、高可用的现代架构”。</li>
+</ul>
+<h2 id="5">5. 关键技术名词/概念解释（通俗版）<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<ul>
+<li>单机架构：所有东西都在一台机器上跑，简单但上限低。</li>
+<li>集群：同一服务跑多份实例，靠“多台一起扛”提高吞吐与可用性。</li>
+<li>负载均衡：入口分流器，把请求均匀/按策略分配给后端多台服务。</li>
+<li>水平扩展：不提升单机配置，而是通过“加机器/加实例”扩容。</li>
+<li>高可用：某个节点故障时系统仍能对外服务（常见做法是健康检查 + 自动摘除/恢复）。</li>
+<li>缓存：把常用/热点结果放在更快的存储里（通常是内存），减少访问慢的数据库/磁盘。</li>
+<li>读写分离：写走主库、读走从库，用复制同步分摊读压力。</li>
+<li>分库分表：</li>
+<li>垂直分库：按业务把不同数据拆到不同库。</li>
+<li>水平分表：按某个维度（如 UID 哈希）把同一张表拆成多张。</li>
+<li>CDN：静态资源分发到离用户更近的边缘节点，就近访问更快。</li>
+<li>反向代理：用户访问代理，代理再访问后端服务，起到隔离与安全保护作用。</li>
+<li>搜索引擎：专门做快速检索的系统（核心通常是倒排索引），适合全文搜索。</li>
+<li>NoSQL：非关系型数据库家族，常用于非结构化/半结构化数据或高并发场景。</li>
+<li>单体/巨石：所有业务代码挤在一个应用里，发布与扩容粒度太粗。</li>
+<li>分布式架构：按业务边界拆成多个系统/服务，分别部署与扩容。</li>
+<li>RPC：让服务间远程调用更像本地调用的一套通信机制。</li>
+<li>注册与发现：集中登记“有哪些服务、地址在哪”，调用方按需发现并调用。</li>
+<li>消息队列：异步通信与缓冲系统，解耦服务、削峰填谷、提高可用性。</li>
+<li>微服务：把服务拆得更细、更小、更独立，并配套治理体系支撑规模化。</li>
+<li>全链路追踪：把一次请求在多个服务间的调用串起来，方便定位慢点/故障点。</li>
+<li>限流：限制进入系统的请求速率，保护系统在过载时仍可用。</li>
+<li>熔断降级：下游不稳定时快速失败/切换简化逻辑，避免拖垮全链路。</li>
+<li>容器/镜像（Docker）：把应用与依赖环境封装成可移植的运行单元。</li>
+<li>K8S：容器编排系统，统一调度、扩缩容、故障自愈。</li>
+<li>云原生：围绕云的弹性与自动化来设计与运行应用，强调可伸缩、可观测、自动化交付与治理。</li>
+</ul>
+<h2 id="6">6. 视频里提到的关键技术细节（可复述要点）<a class="headerlink" href="#6" title="Permanent link">¶</a></h2>
+<ul>
+<li>性能瓶颈的“迁移规律”：应用层解决后，瓶颈常转移到数据库；数据库优化后，又会暴露容量/地域/安全/运维问题。</li>
+<li>数据库读路径认知：先查内存缓冲区，miss 才落磁盘；缓存本质是在数据库之外扩大“更快的那一层”。</li>
+<li>缓存分层的命中顺序：浏览器缓存 → 本地缓存 → 分布式缓存 → 数据库。</li>
+<li>读写分离的前提假设：互联网业务往往读多写少，因此可以“一主多从”扩展读能力。</li>
+<li>分表常见策略：按 UID 哈希拆表，把数据与压力打散；配合中间件减少业务侵入。</li>
+<li>反向代理的价值不只转发：隐藏真实后端，做安全校验与流量清洗。</li>
+<li>MQ 的两类收益：</li>
+<li>解耦：生产者不等消费者实时响应</li>
+<li>缓冲：流量突增先堆积再处理（削峰填谷），并提升故障恢复能力</li>
+<li>微服务规模化必须上治理：追踪、限流、熔断降级、统一监控日志权限等，否则“拆得越细越难运维”。</li>
+<li>容器化解决“环境不一致”与“扩缩容效率”问题；K8S 解决“容器规模化管理”问题；上云解决“自建资源闲置浪费”问题。</li>
+</ul>
+<h2 id="7">7. 结尾三句话（架构思维）<a class="headerlink" href="#7" title="Permanent link">¶</a></h2>
+<ul>
+<li>没有最好的架构，只有最适合业务的架构；初创公司别一上来就微服务。</li>
+<li>架构演进的本质：用空间换时间，用复杂度换性能（加机器/加组件/加分层都是为了扛更大流量）。</li>
+<li>永远围绕五大目标做权衡：高性能、高可用、可伸缩、可扩展、够安全。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
