@@ -1,0 +1,1231 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="三只棒棒糖">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-06-08-%E3%80%90Tech%20Podcast%E3%80%91%E4%BB%8E%20hype%20%E5%88%B0%E7%8E%B0%E5%AE%9E%EF%BC%9A%E4%B8%80%E4%BB%BD%E5%85%B3%E4%BA%8EAI%E8%BE%85%E5%8A%A9%E7%BC%96%E7%A8%8B%E7%9A%84%E5%86%B7%E9%9D%99%E8%A7%82%E5%AF%9F%EF%BC%88%E7%BB%93%E6%9E%84%E5%8C%96%E5%A4%8D%E7%9B%98%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>【Tech Podcast】从 hype 到现实：一份关于AI辅助编程的冷静观察（结构化复盘） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tech-podcast-hype-ai" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              【Tech Podcast】从 hype 到现实：一份关于AI辅助编程的冷静观察（结构化复盘）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 这期内容适合谁看
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 视频从什么角度出发，想解决什么问题
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 视频从什么角度出发，想解决什么问题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 讨论角度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 它试图解决的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心论点
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 分论点拆解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 分论点拆解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 分论点 A：舆论热度远高于真实采用率
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 分论点 B：低使用率不代表不会用，而是很多人选择了克制
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 分论点 B：低使用率不代表不会用，而是很多人选择了克制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景 1：老开发者的审慎
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景 2：技术倦怠
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景 3：遗留系统不适合粗暴地塞入 AI 代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-c-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 分论点 C：越懂 AI 的人，反而未必越安心
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-dai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 分论点 D：AI 编程的主要问题，已经从“会不会用”变成“值不值得信”
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 分论点 D：AI 编程的主要问题，已经从“会不会用”变成“值不值得信”">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题 1：幻觉始终存在
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题 2：代码质量有所改善，但不能等于“可直接上线”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题 3：成本问题正在快速抬头
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-eai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 分论点 E：AI 的真正代价，很多是“看不见的”
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5 分论点 E：AI 的真正代价，很多是“看不见的”">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景 1：审查焦虑替代了手写焦虑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景 2：代码库膨胀
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-fagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 分论点 F：行业焦点正在从“提示工程”转向“agent 编排”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-g" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 分论点 G：更深层的变化，可能发生在组织层
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 按原视频顺序做场景化梳理
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 按原视频顺序做场景化梳理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 场景 A：调查揭示认知偏差
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 场景 B：低使用率的三重真相
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 场景 C：越用越焦虑的悖论
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 场景 D：隐形代价与范式转移
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 场景 E：开发者的清醒自处之道
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 这期内容如果用于实践，应该怎么做
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 这期内容如果用于实践，应该怎么做">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景 A：个人开发者刚开始接触 AI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景 B：已经在用 AI，但越来越焦虑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景 C：团队想长期落地 AI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 现实启示
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 现实启示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 对个人
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 对工程实践
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 对管理者
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-sop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 可直接复用的 SOP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. 可直接复用的 SOP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sop-a-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOP A：个人判断“要不要让 AI 介入这项任务”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sop-b-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOP B：团队稳态引入 AI 的流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 一句话总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tech-podcast-hype-ai">【Tech Podcast】从 hype 到现实：一份关于AI辅助编程的冷静观察（结构化复盘）<a class="headerlink" href="#tech-podcast-hype-ai" title="Permanent link">¶</a></h1>
+<p><a href="https://www.bilibili.com/video/BV1f7EM6iEbv/?spm_id_from=333.1391.0.0&amp;vd_source=c7bea6fb9f92988f548051c4ed7de1e7">【Tech Podcast】从 hype 到现实：一份关于AI辅助编程的冷静观察</a></p>
+<h2 id="1">1. 这期内容适合谁看<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<p>这期视频最适合三类人：</p>
+<ul>
+<li>Web 开发者，尤其是 JavaScript、TypeScript、CSS 生态里的前端、全栈和应用层工程师。因为视频引用的调查样本，本身就主要来自网页开发者，而不是机器学习工程师。</li>
+<li>对 AI 编程有焦虑的人。比如刷到一堆“几句话写完应用”“agent 连续干活几天”的案例后，担心自己已经落后的人。</li>
+<li>在复杂项目里工作的人，尤其是维护遗留系统、要考虑成本、质量和团队协作的人。因为视频讨论的不是 demo 场景，而是真实工程场景。</li>
+</ul>
+<h2 id="2">2. 视频从什么角度出发，想解决什么问题<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<h3 id="21">2.1 讨论角度<a class="headerlink" href="#21" title="Permanent link">¶</a></h3>
+<p>视频并不是从“AI 写代码是不是已经足够强”出发，而是从“现实里的采用情况、代价和边界到底是什么”来讨论。</p>
+<p>它的视角有三个特点：</p>
+<ul>
+<li>用调查数据纠偏。先拆掉“所有人都在大量用 AI 编程”的舆论错觉。</li>
+<li>用工作现实落地。把话题从演示效果拉回到遗留系统、代码审查、预算和维护成本。</li>
+<li>用长期视角判断。不是只看眼前效率，而是同时看心理负担、组织协作、成本结构和技术范式变化。</li>
+</ul>
+<h3 id="22">2.2 它试图解决的问题<a class="headerlink" href="#22" title="Permanent link">¶</a></h3>
+<p>视频核心想回答的是：</p>
+<ol>
+<li>为什么外部舆论里的 AI 编程热度，和真实开发者的采用现状差这么大？</li>
+<li>为什么不少开发者即使用上了 AI，也没有变得更轻松，反而更焦虑？</li>
+<li>AI 编程现在到底适合什么场景，不适合什么场景？</li>
+<li>普通开发者和团队，应该用什么态度面对这轮 AI 浪潮？</li>
+</ol>
+<h2 id="3">3. 核心论点<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<p>视频的核心论点可以压缩成一句话：</p>
+<p>AI 辅助编程已经是不可忽视的基础设施，但它离“全面替代开发工作”还很远。现实中的采用比例没那么高，风险与代价也没那么轻。真正成熟的做法不是盲目追热，也不是完全拒绝，而是先看场景、再看成本、最后看边界。</p>
+<h2 id="4">4. 分论点拆解<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<h3 id="41-a">4.1 分论点 A：舆论热度远高于真实采用率<a class="headerlink" href="#41-a" title="Permanent link">¶</a></h3>
+<p>视频先做的第一件事，是纠正认知偏差。</p>
+<ul>
+<li>社交媒体天然会放大极端样本。大家更愿意转发“AI 一句话生成项目”的案例，而不会展示“我今天只让 AI 帮我补了几段代码”的日常。</li>
+<li>调查数据显示，多数网页开发者并没有把 AI 用到很高比例的生产代码里。</li>
+<li>所以很多人的焦虑，首先来自对行业现状的错觉，而不是来自真正的能力差距。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>认知偏差：不是事实本身错了，而是你接收到的信息分布失真了，导致你对整体现实做出错误判断。</li>
+<li>样本偏差：同样是“开发者调研”，如果对象是机器学习工程师和 Python 从业者，结论会与 Web 开发者群体完全不同。</li>
+<li>State of Web Dev AI：视频提到的调查可理解为网页开发者群体对 AI 使用现状的一次切面观察，因此更接近普通前后端工程师的工作现实。</li>
+</ul>
+<h3 id="42-b">4.2 分论点 B：低使用率不代表不会用，而是很多人选择了克制<a class="headerlink" href="#42-b" title="Permanent link">¶</a></h3>
+<p>视频把低采用率拆成三类原因，而且是按现实场景展开的。</p>
+<h4 id="1_1">场景 1：老开发者的审慎<a class="headerlink" href="#1_1" title="Permanent link">¶</a></h4>
+<ul>
+<li>见过多轮技术浪潮的人，往往不会在第一时间全量押注新工具。</li>
+<li>他们知道过早跟风，常常意味着要替不成熟的工具填坑。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>跟风上车：因为外部舆论和趋势压力而快速采用新工具，却没有充分评估其成熟度和适用边界。</li>
+<li>风险收益比：是否值得采用，不看热度，要看带来的效率和引入的额外维护成本是否成正比。</li>
+</ul>
+<h4 id="2_1">场景 2：技术倦怠<a class="headerlink" href="#2_1" title="Permanent link">¶</a></h4>
+<ul>
+<li>很多工程师不是不认可 AI，而是已经没有精力再学一套新工作流。</li>
+<li>对他们来说，真正消耗精力的不是点开一个工具，而是学习、配置、持续跟进和融入团队流程。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>技术倦怠：长期被新框架、新工具、新范式推动学习后，出现的一种心理疲劳和认知透支。</li>
+<li>工作流切换成本：工具接入真实工作，不只是学会用，还包括 IDE 配置、权限、规范、协作、测试和回滚策略。</li>
+</ul>
+<h4 id="3-ai">场景 3：遗留系统不适合粗暴地塞入 AI 代码<a class="headerlink" href="#3-ai" title="Permanent link">¶</a></h4>
+<ul>
+<li>AI 很擅长从零开始搭原型、写样板、补通用逻辑。</li>
+<li>但真实世界的大多数开发者，面对的是充满历史逻辑、临时补丁和隐性约束的遗留系统。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>遗留代码库：不是单纯指“老代码”，而是指多年演化后带着业务历史、文档缺失、命名混乱和技术债的系统。</li>
+<li>技术债：为了赶进度先做了能跑的实现，后续要用更多维护成本去偿还。</li>
+<li>可维护性恶化：短期看新增功能更快，长期看代码边界更乱、逻辑更散、后续修改更难。</li>
+</ul>
+<h3 id="43-c-ai">4.3 分论点 C：越懂 AI 的人，反而未必越安心<a class="headerlink" href="#43-c-ai" title="Permanent link">¶</a></h3>
+<p>视频提到一个很反直觉的现象：重度用户也可能非常焦虑。</p>
+<ul>
+<li>不管用不用 AI，很多人都担心自己的岗位价值被削弱。</li>
+<li>但重度用户因为更清楚 AI 的能力边界和真实表现，反而会更清晰地感受到“哪些工作已经进入可替代区”。</li>
+<li>所以 AI 与过去 React、Vue 这类技术浪潮不一样，它带来的不是单纯的兴奋，而是效率与威胁同时存在。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>工作安全感：个体对自己岗位稳定性和长期价值的主观判断。</li>
+<li>可替代性感知：当你看到 AI 能写代码、改 bug、解释逻辑时，你会重新评估自己正在做的工作中，有多少只是执行性劳动。</li>
+</ul>
+<h3 id="44-dai">4.4 分论点 D：AI 编程的主要问题，已经从“会不会用”变成“值不值得信”<a class="headerlink" href="#44-dai" title="Permanent link">¶</a></h3>
+<p>视频认为，当下 AI 编程的核心矛盾已经不是新鲜感，而是信任成本。</p>
+<h4 id="1_2">问题 1：幻觉始终存在<a class="headerlink" href="#1_2" title="Permanent link">¶</a></h4>
+<ul>
+<li>AI 可以写得很像、说得很像，但并不保证逻辑和事实真的正确。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>幻觉：模型生成了形式上合理、语气上确定、实际上却不正确的内容。编程中常表现为捏造 API、误解需求、写出错误逻辑。</li>
+</ul>
+<h4 id="2_2">问题 2：代码质量有所改善，但不能等于“可直接上线”<a class="headerlink" href="#2_2" title="Permanent link">¶</a></h4>
+<ul>
+<li>模型在进步，代码质量比以前更好。</li>
+<li>但“能跑”并不等于“适合进入复杂项目”。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>代码质量：不仅指程序能不能执行，还包括可读性、边界清晰度、测试友好性、一致性和后期维护难度。</li>
+</ul>
+<h4 id="3_1">问题 3：成本问题正在快速抬头<a class="headerlink" href="#3_1" title="Permanent link">¶</a></h4>
+<ul>
+<li>视频强调，成本已经从次要担忧变成越来越靠前的问题。</li>
+<li>这说明 AI 的低价蜜月期正在过去，开发者不得不把它当成一项正式预算来管理。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>商业化压力：模型服务商无法长期靠补贴生存，最终会把成本传递给用户。</li>
+<li>token 管理：通过控制上下文长度、调用频率和输入冗余，降低模型调用费用。</li>
+<li>本地部署：把模型放到自有机器或服务器运行，以换取更可控的长期费用和数据边界。</li>
+</ul>
+<h3 id="45-eai">4.5 分论点 E：AI 的真正代价，很多是“看不见的”<a class="headerlink" href="#45-eai" title="Permanent link">¶</a></h3>
+<p>视频认为，很多人只看到了账单，却没有算清隐形成本。</p>
+<h4 id="1_3">场景 1：审查焦虑替代了手写焦虑<a class="headerlink" href="#1_3" title="Permanent link">¶</a></h4>
+<ul>
+<li>以前自己写代码，慢一点，但可控。</li>
+<li>现在交给 AI 生成后，需要花大量时间去 review、测试、补漏洞、查隐藏 bug。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>审查焦虑：既想享受 AI 的高速度，又不敢完全相信它，因此在 review 和验证阶段持续消耗注意力。</li>
+</ul>
+<h4 id="2_3">场景 2：代码库膨胀<a class="headerlink" href="#2_3" title="Permanent link">¶</a></h4>
+<ul>
+<li>当“加一个功能”变得非常便宜，团队就更容易不断做加法。</li>
+<li>结果不是产品更优雅，而是系统越来越臃肿，维护复杂度持续上升。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>代码库膨胀：新增功能的边际成本降低后，需求筛选门槛也随之降低，系统规模和依赖复杂度快速扩张。</li>
+<li>过度复杂化：系统复杂度的增长，不再完全来自业务必要性，而来自“加功能太容易”。</li>
+</ul>
+<h3 id="46-fagent">4.6 分论点 F：行业焦点正在从“提示工程”转向“agent 编排”<a class="headerlink" href="#46-fagent" title="Permanent link">¶</a></h3>
+<p>视频认为，AI 开发的讨论重点正在变化。</p>
+<ul>
+<li>过去讨论的是“prompt 怎么写更好”。</li>
+<li>现在越来越多团队在关注 agent 如何协同、上下文怎么管理、状态如何追踪。</li>
+<li>更进一步，是让 AI 自动发现 bug、自动提 PR、自动做审查，逐步形成“自我修复”的代码流程。</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>提示工程：通过设计输入方式、约束和输出格式，提高模型单轮输出质量。</li>
+<li>agent：能围绕目标持续执行多个步骤、调用工具并保留状态的 AI 代理。</li>
+<li>agent 编排：把多个 agent、多个步骤和多个工具组合成可执行工作流。</li>
+<li>上下文管理：决定 AI 在某一轮任务里能看到哪些信息，以及哪些信息应该被过滤掉。</li>
+<li>状态追踪：记录任务到了哪一步、依赖了哪些产出、下一步该基于什么继续。</li>
+<li>代码库免疫系统：一种比喻，指软件未来可能像生物体一样，能够自动发现异常并完成修复。</li>
+</ul>
+<h3 id="47-g">4.7 分论点 G：更深层的变化，可能发生在组织层<a class="headerlink" href="#47-g" title="Permanent link">¶</a></h3>
+<ul>
+<li>AI 改变的不只是编码方式，也可能改变团队沟通、代码审查和决策链路。</li>
+<li>比如人和人之间的沟通，会不会先经过 agent 过滤？代码 review 的责任边界会不会变化？</li>
+</ul>
+<p>关键概念：</p>
+<ul>
+<li>组织层影响：AI 介入后，工作分工、汇报路径、责任归属和协同方式都可能重构。</li>
+<li>沟通屏障：如果信息被自动化流程层层过滤，人类之间的直接理解可能反而减少。</li>
+</ul>
+<h2 id="5">5. 按原视频顺序做场景化梳理<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<h3 id="51-a">5.1 场景 A：调查揭示认知偏差<a class="headerlink" href="#51-a" title="Permanent link">¶</a></h3>
+<p>对应问题：</p>
+<ul>
+<li>为什么你觉得自己掉队了？</li>
+</ul>
+<p>对应答案：</p>
+<ol>
+<li>因为社交媒体放大了极端成功案例。</li>
+<li>因为你把 AI 狂热圈的样本误当成了行业平均水平。</li>
+<li>真实世界里，多数网页开发者并没有大规模把 AI 接入生产代码。</li>
+</ol>
+<h3 id="52-b">5.2 场景 B：低使用率的三重真相<a class="headerlink" href="#52-b" title="Permanent link">¶</a></h3>
+<p>对应问题：</p>
+<ul>
+<li>为什么很多人没有重度使用 AI？</li>
+</ul>
+<p>对应答案：</p>
+<ol>
+<li>经验丰富的人更审慎，不愿提前给不成熟工具填坑。</li>
+<li>技术倦怠让很多人没有精力再学一套新流程。</li>
+<li>遗留系统的复杂约束，让 AI 很容易变成添乱者而不是帮手。</li>
+</ol>
+<h3 id="53-c">5.3 场景 C：越用越焦虑的悖论<a class="headerlink" href="#53-c" title="Permanent link">¶</a></h3>
+<p>对应问题：</p>
+<ul>
+<li>为什么重度用户也不轻松？</li>
+</ul>
+<p>对应答案：</p>
+<ol>
+<li>因为他们更清楚 AI 的真实能力。</li>
+<li>因为他们既享受提效，又更直观感受到可替代压力。</li>
+<li>因为成本、信任和质量问题并没有随着使用变多而自动消失。</li>
+</ol>
+<h3 id="54-d">5.4 场景 D：隐形代价与范式转移<a class="headerlink" href="#54-d" title="Permanent link">¶</a></h3>
+<p>对应问题：</p>
+<ul>
+<li>AI 编程除了提效，还有什么副作用和变化？</li>
+</ul>
+<p>对应答案：</p>
+<ol>
+<li>心理负担从“自己写”转成“替 AI 兜底”。</li>
+<li>功能添加门槛下降，代码库更容易膨胀。</li>
+<li>讨论重点从 prompt 转向 agent 工作流。</li>
+<li>真正深远的变化，可能出现在组织协作方式上。</li>
+</ol>
+<h3 id="55-e">5.5 场景 E：开发者的清醒自处之道<a class="headerlink" href="#55-e" title="Permanent link">¶</a></h3>
+<p>对应问题：</p>
+<ul>
+<li>那普通开发者到底该怎么办？</li>
+</ul>
+<p>对应答案：</p>
+<ol>
+<li>不要无视 AI，因为它已经成为行业基础设施。</li>
+<li>也不要过度焦虑，因为多数人并没有远远跑在你前面。</li>
+<li>要同时看见效率收益和隐性代价，保持平衡判断。</li>
+</ol>
+<h2 id="6">6. 这期内容如果用于实践，应该怎么做<a class="headerlink" href="#6" title="Permanent link">¶</a></h2>
+<p>虽然这期视频不是教程，但它可以提炼出一套非常明确的实践顺序。</p>
+<h3 id="a-ai">场景 A：个人开发者刚开始接触 AI<a class="headerlink" href="#a-ai" title="Permanent link">¶</a></h3>
+<p>第一步：先做现实校准</p>
+<ul>
+<li>不把社交媒体极端案例当成行业平均值。</li>
+<li>先判断自己的项目类型和工作内容是否适合高强度引入 AI。</li>
+</ul>
+<p>第二步：从低风险任务开始</p>
+<ul>
+<li>先把 AI 用在资料补课、样板代码、脚手架、文档整理、思路比较等任务上。</li>
+</ul>
+<p>第三步：每次使用都算账</p>
+<ul>
+<li>记录它节省了什么时间。</li>
+<li>记录它增加了哪些 review、修正和理解成本。</li>
+</ul>
+<h3 id="b-ai">场景 B：已经在用 AI，但越来越焦虑<a class="headerlink" href="#b-ai" title="Permanent link">¶</a></h3>
+<p>第一步：区分效率问题和岗位焦虑</p>
+<ul>
+<li>把“它帮我快了多少”和“我会不会被替代”分开评估，不要混成一种模糊情绪。</li>
+</ul>
+<p>第二步：把总成本算清楚</p>
+<ul>
+<li>不要只看生成速度，要看从生成到上线的总成本，包括测试、review、安全检查和返工。</li>
+</ul>
+<p>第三步：压缩适用边界</p>
+<ul>
+<li>对核心、高风险、上下文复杂的模块保持人工主导。</li>
+<li>对重复、低风险、模板化任务让 AI 充分参与。</li>
+</ul>
+<h3 id="c-ai">场景 C：团队想长期落地 AI<a class="headerlink" href="#c-ai" title="Permanent link">¶</a></h3>
+<p>第一步：把 AI 当预算项管理</p>
+<ul>
+<li>给 token、调用频率、上下文长度设定明确约束。</li>
+</ul>
+<p>第二步：治理上下文</p>
+<ul>
+<li>规定哪些规范、背景、接口和历史约束必须提供给 AI。</li>
+<li>减少无效输入和噪音输入。</li>
+</ul>
+<p>第三步：把 AI 纳入工作流，而不是单次对话</p>
+<ul>
+<li>让 AI 分阶段完成任务，不要一次性生成整块复杂改动。</li>
+</ul>
+<p>第四步：长期监控副作用</p>
+<ul>
+<li>观察代码库是否臃肿、团队沟通是否更复杂、质量是否真的提升。</li>
+</ul>
+<h2 id="7">7. 现实启示<a class="headerlink" href="#7" title="Permanent link">¶</a></h2>
+<h3 id="71">7.1 对个人<a class="headerlink" href="#71" title="Permanent link">¶</a></h3>
+<ul>
+<li>真正重要的不是“会不会用 AI”，而是“会不会判断什么时候该用、什么时候不能用”。</li>
+<li>你的核心能力，仍然是理解问题、定义边界、识别风险，而不是单纯提问。</li>
+</ul>
+<h3 id="72">7.2 对工程实践<a class="headerlink" href="#72" title="Permanent link">¶</a></h3>
+<ul>
+<li>AI 最适合在高重复、低歧义、低风险的任务里放大产能。</li>
+<li>越是历史包袱重、约束复杂、业务隐性知识多的系统，越不能把 AI 当自动驾驶。</li>
+</ul>
+<h3 id="73">7.3 对管理者<a class="headerlink" href="#73" title="Permanent link">¶</a></h3>
+<ul>
+<li>AI 引入不是一个“买工具”的决定，而是一个成本结构和协作方式重构的问题。</li>
+<li>如果只看编码速度，不看返工率、缺陷率和维护成本，很容易高估 AI 的真实价值。</li>
+</ul>
+<h2 id="8-sop">8. 可直接复用的 SOP<a class="headerlink" href="#8-sop" title="Permanent link">¶</a></h2>
+<h3 id="sop-a-ai">SOP A：个人判断“要不要让 AI 介入这项任务”<a class="headerlink" href="#sop-a-ai" title="Permanent link">¶</a></h3>
+<ol>
+<li>先判断任务属于低风险还是高风险。</li>
+<li>再判断任务上下文是否清晰，是否存在大量隐性约束。</li>
+<li>如果是低风险、重复性高、边界清晰的任务，让 AI 先做初稿。</li>
+<li>如果是高风险、上下文复杂的任务，由人先定义方案，再让 AI 参与局部实现。</li>
+<li>最后统一做人工校验，不能把“生成完成”视为“任务完成”。</li>
+</ol>
+<h3 id="sop-b-ai">SOP B：团队稳态引入 AI 的流程<a class="headerlink" href="#sop-b-ai" title="Permanent link">¶</a></h3>
+<ol>
+<li>先选试点场景，只挑低耦合、可回滚、易评估的任务。</li>
+<li>定义规范，明确 AI 可用边界、review 规则和安全底线。</li>
+<li>建立上下文包，把规范、接口契约、项目约束整理成可投喂材料。</li>
+<li>采用分段工作流，不让 AI 一次性产出大块复杂改动。</li>
+<li>把返工率、缺陷率、账单和维护成本一并纳入评估。</li>
+<li>根据实际效果，动态收缩或扩张 AI 的使用范围。</li>
+</ol>
+<h2 id="9">9. 一句话总结<a class="headerlink" href="#9" title="Permanent link">¶</a></h2>
+<p>这期视频真正想说的不是“AI 编程到底强不强”，而是“不要被 hype 牵着走”。真正成熟的开发者和团队，既不会因为热度而失去判断，也不会因为焦虑而错过工具，而是会在清楚边界、成本和代价之后，把 AI 放到它真正应该待的位置上。</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
