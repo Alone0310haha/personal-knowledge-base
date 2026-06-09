@@ -2,7 +2,14 @@
 
 这套安排按“先把单机用顺（能建模、能写、能查、能算、能调）→ 再把集群跑稳（能扩容、能容灾、能运维）→ 最后上生产级最佳实践”的链路组织。
 
+下面给每一课补上“最短官方文档学习路径（建议顺序）”，每课只保留 2-3 个最值得先看的链接，优先按“概念页 -> API / 专题页”的顺序阅读，这样和课程主线更一致。
+
 #### 第 1 课：单机启动与 ES 作为“搜索 + 分析引擎”的定位
+
+- **最短官方文档学习路径（建议顺序）**：
+    - [What is Elasticsearch?](https://www.elastic.co/guide/en/elasticsearch/reference/current/elasticsearch-intro-what-is-es.html)
+    - [Run Elasticsearch locally](https://www.elastic.co/guide/en/elasticsearch/reference/current/run-elasticsearch-locally.html)
+    - [Index fundamentals](https://www.elastic.co/docs/manage-data/data-store/index-basics)
 
 - **学习目标**：把 ES 在单机上跑起来，明确它解决的问题边界与核心对象。
 - **核心内容**：
@@ -17,6 +24,11 @@
 
 #### 第 2 课：单机数据写入：文档 CRUD、批量写入与幂等
 
+- **最短官方文档学习路径（建议顺序）**：
+    - [Manage data using APIs](https://www.elastic.co/docs/manage-data/data-store/manage-data-from-the-command-line)
+    - [Document APIs](https://www.elastic.co/docs/api/doc/elasticsearch/v8/group/endpoint-document)
+    - [Bulk API](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-bulk)
+
 - **学习目标**：能把数据稳定写进 ES，并理解写入的幂等、冲突与吞吐。
 - **核心内容**：
     - 单文档 CRUD：`index/get/delete/update` 的语义与响应结构。
@@ -30,6 +42,11 @@
 
 #### 第 3 课：单机建模 1：Mapping 设计、dynamic 风险与字段治理
 
+- **最短官方文档学习路径（建议顺序）**：
+    - [Mapping](https://www.elastic.co/docs/manage-data/data-store/mapping)
+    - [Dynamic mapping](https://www.elastic.co/docs/manage-data/data-store/mapping/dynamic-mapping)
+    - [Dynamic templates](https://www.elastic.co/docs/manage-data/data-store/mapping/dynamic-templates)
+
 - **学习目标**：把“字段类型选对”这件事做扎实，避免后期返工。
 - **核心内容**：
     - Dynamic mapping 的便利与风险（类型误判、字段爆炸）。
@@ -41,6 +58,11 @@
     - 什么是字段爆炸？如何通过动态模板/限制字段数等手段规避？
 
 #### 第 4 课：单机建模 2：文本分析链路与中文分词
+
+- **最短官方文档学习路径（建议顺序）**：
+    - [Text analysis](https://www.elastic.co/docs/manage-data/data-store/text-analysis)
+    - [Text field type](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text)
+    - [Multi-fields](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/multi-fields)
 
 - **学习目标**：理解“索引时怎么切词、查询时怎么切词”，能解释召回/误召回问题。
 - **核心内容**：
@@ -54,6 +76,11 @@
 
 #### 第 5 课：单机查询 1：Query DSL 基础（检索 + 过滤）
 
+- **最短官方文档学习路径（建议顺序）**：
+    - [Query DSL](https://www.elastic.co/docs/explore-analyze/query-filter/languages/querydsl)
+    - [Search API](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-search)
+    - [Bool query](https://www.elastic.co/docs/reference/query-languages/query-dsl/query-dsl-bool-query)
+
 - **学习目标**：能写出覆盖 80% 业务的检索 DSL，并把“相关性”和“过滤”分清楚。
 - **核心内容**：
     - Query context vs Filter context：评分、缓存与性能含义。
@@ -65,6 +92,11 @@
     - `should` 在有/没有 `must` 时默认行为有什么不同？什么时候要 `minimum_should_match`？
 
 #### 第 6 课：单机查询 2：排序、分页、高亮与深分页替代方案
+
+- **最短官方文档学习路径（建议顺序）**：
+    - [Sort search results](https://www.elastic.co/docs/reference/elasticsearch/rest-apis/sort-search-results)
+    - [Paginate search results](https://www.elastic.co/docs/reference/elasticsearch/rest-apis/paginate-search-results)
+    - [Highlighting](https://www.elastic.co/docs/reference/elasticsearch/rest-apis/highlighting)
 
 - **学习目标**：能把“用户看到的搜索体验”做完整：排序、分页、高亮，并避开深分页坑。
 - **核心内容**：
@@ -78,6 +110,11 @@
 
 #### 第 7 课：单机分析：Aggregations（从统计到报表）
 
+- **最短官方文档学习路径（建议顺序）**：
+    - [Aggregations](https://www.elastic.co/docs/explore-analyze/query-filter/aggregations)
+    - [Terms aggregation](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html)
+    - [Date histogram aggregation](https://www.elastic.co/docs/reference/aggregations/search-aggregations-bucket-datehistogram-aggregation)
+
 - **学习目标**：把 ES 的“分析能力”用起来，能做常见统计报表并读懂返回结构。
 - **核心内容**：
     - Metrics：`sum/avg/min/max/value_count/cardinality`。
@@ -89,6 +126,11 @@
     - `terms` 的 `size/shard_size/order` 会如何影响准确性与性能？
 
 #### 第 8 课：单机内核视角：写入/可见性/持久化的真实链路
+
+- **最短官方文档学习路径（建议顺序）**：
+    - [Near real-time search](https://www.elastic.co/guide/en/elasticsearch/reference/current/near-real-time.html)
+    - [Translog settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-translog.html)
+    - [Flush API](https://www.elastic.co/docs/api/doc/elasticsearch/v9/operation/operation-indices-flush)
 
 - **学习目标**：从内核角度解释“写入成功后为何不立刻可搜”“为什么 refresh/flush 影响性能”。
 - **核心内容**：
@@ -102,6 +144,11 @@
 
 #### 第 9 课：从单机到集群：分片/副本/路由与一次请求的分布式路径
 
+- **最短官方文档学习路径（建议顺序）**：
+    - [Clusters, nodes, and shards](https://www.elastic.co/docs/deploy-manage/distributed-architecture/clusters-nodes-shards)
+    - [Shard allocation, relocation, and recovery](https://www.elastic.co/docs/deploy-manage/distributed-architecture/shard-allocation-relocation-recovery)
+    - [Reading and writing documents](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-replication.html)
+
 - **学习目标**：把“扩容与容灾”的核心机制讲清楚，能推导查询/写入在集群中的流转。
 - **核心内容**：
     - 分片与副本：容量、并行、容灾；主分片数为何不可随意改。
@@ -114,6 +161,11 @@
     - 主节点的职责是什么？为什么需要选主与集群状态（元数据）管理？
 
 #### 第 10 课：集群上生产：容量规划、运维监控、生命周期与最佳实践清单
+
+- **最短官方文档学习路径（建议顺序）**：
+    - [Size your shards](https://www.elastic.co/docs/deploy-manage/production-guidance/optimize-performance/size-shards)
+    - [Red or yellow cluster health status](https://www.elastic.co/docs/troubleshoot/elasticsearch/red-yellow-cluster-status)
+    - [Index lifecycle management (ILM)](https://www.elastic.co/docs/manage-data/lifecycle/index-lifecycle-management)
 
 - **学习目标**：能把集群跑稳、跑省、可恢复：监控、扩缩容、备份与权限到位。
 - **核心内容**：
