@@ -1,0 +1,1251 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="写代码的透明人">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-06-10-%E7%9C%9F%E6%AD%A3%E4%BC%9A%E5%88%B7%20LeetCode%20%E7%9A%84%E4%BA%BA%EF%BC%8C%E7%AC%AC%E4%B8%80%E7%9C%BC%E9%83%BD%E5%9C%A8%E7%9C%8B%E4%BB%80%E4%B9%88%EF%BC%9F%E3%80%90LeetCode%E5%B8%A6%E8%83%8C%E7%B3%BB%E5%88%9701%E3%80%91%EF%BC%88%E8%A7%86%E9%A2%91%E6%80%BB%E7%BB%93%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>真正会刷 LeetCode 的人，第一眼都在看什么？【LeetCode带背系列01】（视频总结） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#leetcode-leetcode01" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              真正会刷 LeetCode 的人，第一眼都在看什么？【LeetCode带背系列01】（视频总结）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 这期内容主要写给谁
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 讨论角度与要解决的问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心论点与分论点
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心论点与分论点">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 核心论点：真正会刷题的人，先看“题型、复杂度、关键词、目标”，而不是直接想答案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 分论点一：刷题前要做“三补”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#321-acm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.1 第一补：补 ACM 模式能力和最基础代码能力
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2.1 第一补：补 ACM 模式能力和最基础代码能力">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#acm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：ACM 模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#322" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2 第二补：补经典题和通用逻辑
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2.2 第二补：补经典题和通用逻辑">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：经典题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：通用逻辑
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#323" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.3 第三补：补岗位面试信息和目标岗位常考题
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2.3 第三补：补岗位面试信息和目标岗位常考题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：面经题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：手撕题
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 分论点二：刷题时要做“三看”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#331" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.1 第一看：看数据范围与时间复杂度
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3.1 第一看：看数据范围与时间复杂度">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：数据范围
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：时间复杂度
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#332" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.2 第二看：看关键词
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3.2 第二看：看关键词">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：滑动窗口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：前缀和
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dfs-bfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：DFS / BFS / 回溯
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：动态规划（DP）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#333" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.3 第三看：看题目的目标要求
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3.3 第三看：看题目的目标要求">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：看目标
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 分论点三：刷题后要做“三背”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#341" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.1 第一背：背题型模板与触发条件
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4.1 第一背：背题型模板与触发条件">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：题型模板
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念：触发条件
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#342" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.2 第二背：背模板里的关键动作，而不是只背结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#343-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.3 第三背：用 AI 辅助整理和复习
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 这套方法具体怎么操作
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 这套方法具体怎么操作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 场景 A：刷题前怎么做
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 场景 B：刷题时怎么做
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 场景 C：刷题后怎么做
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 实际应用时的启示
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 实际应用时的启示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 启示一：刷题效率不取决于做了多少题，而取决于是否建立了“识别系统”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-leetcode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 启示二：LeetCode 成绩不等于面试表现
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 启示三：要把刷题和岗位绑定，而不是把刷题当成纯竞赛
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-sop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 可直接套用的 SOP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 可直接套用的 SOP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-sop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 阶段一：刷题前 SOP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-sop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 阶段二：刷题中 SOP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-sop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 阶段三：刷题后 SOP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 一句话总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="leetcode-leetcode01">真正会刷 LeetCode 的人，第一眼都在看什么？【LeetCode带背系列01】（视频总结）<a class="headerlink" href="#leetcode-leetcode01" title="Permanent link">¶</a></h1>
+<p>这期内容不是单题题解，而是一套面向校招、实习、考研复试场景的刷题总纲。作者想纠正一个常见误区：LeetCode 不是让你死背答案，而是让你背题型、背套路、背复杂度边界、背触发条件，最后形成可迁移的解题反应。</p>
+<p><a href="https://www.bilibili.com/video/BV1G4oSBMETC">真正会刷 LeetCode 的人，第一眼都在看什么？【LeetCode带背系列01】</a></p>
+<h2 id="1">1. 这期内容主要写给谁<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<ul>
+<li>校招生、实习生、准备考研复试的人：视频明确说，本系列主要服务于需要准备算法题面试的人群。</li>
+<li>已经具备基础代码能力的人：作者强调，观众至少要理解哈希表、栈、队列等基础数据结构，否则后续内容会跟不上。</li>
+<li>想提升“面试刷题效率”而不是单纯“多做题”的人：适合已经开始刷 LeetCode，但做题时仍然靠感觉、缺少系统框架的人。</li>
+</ul>
+<h2 id="2">2. 讨论角度与要解决的问题<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<p>视频是从“面试导向的高效刷题方法论”出发讨论的，核心不是教你某一道题怎么做，而是教你刷题时第一眼应该看什么，刷题前、中、后分别该准备什么、关注什么、沉淀什么。</p>
+<p>它主要要解决 3 个问题：</p>
+<ul>
+<li>为什么很多人刷了很多题，面试里还是不会做：因为只记答案，没有记题型、套路和边界。</li>
+<li>为什么 LeetCode 能做，笔试和手撕题却写不出来：因为缺少 ACM 模式输入输出能力，以及缺少面试场景下的模板化表达。</li>
+<li>为什么刷题效率低：因为做题时没有先看数据范围、关键词、目标复杂度，导致方法选择混乱。</li>
+</ul>
+<h2 id="3">3. 核心论点与分论点<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<h3 id="31">3.1 核心论点：真正会刷题的人，先看“题型、复杂度、关键词、目标”，而不是直接想答案<a class="headerlink" href="#31" title="Permanent link">¶</a></h3>
+<p>作者反复强调，刷 LeetCode 不是背代码本身，而是背下面这些更稳定、可迁移的东西：</p>
+<ul>
+<li>题型：这题本质属于哪一类问题，例如动态规划、二分、双指针、滑动窗口。</li>
+<li>数据结构与算法：这题常用什么工具来解，例如哈希表、队列、单调栈。</li>
+<li>时间复杂度边界：在给定数据范围下，哪些方法根本不可用。</li>
+<li>题目模式：这类题真正需要记住的“触发信号”和“标准解法骨架”是什么。</li>
+</ul>
+<p>视频把这种思路先压缩成“四个问题”：</p>
+<ol>
+<li>这道题属于什么类型？</li>
+<li>应该用什么数据结构和算法？</li>
+<li>它允许的时间复杂度大概是多少？</li>
+<li>这道题真正需要记住的模式是什么？</li>
+</ol>
+<p>这四问是整期视频最核心的总纲，后面的“三补、三看、三背”其实都是围绕这四问展开。</p>
+<h3 id="32">3.2 分论点一：刷题前要做“三补”<a class="headerlink" href="#32" title="Permanent link">¶</a></h3>
+<p>“三补”指的是，真正开始刷题前，要先把必要能力补齐，否则后面的训练很容易流于表面。</p>
+<h3 id="321-acm">3.2.1 第一补：补 ACM 模式能力和最基础代码能力<a class="headerlink" href="#321-acm" title="Permanent link">¶</a></h3>
+<p>作者指出，LeetCode 平台大多是函数题模式，平台已经帮你定义好了函数签名，很多时候链表节点、树节点也直接给好了；但真实笔试和很多面试手撕题并不是这样，往往是 ACM 模式。</p>
+<h4 id="acm">概念：ACM 模式<a class="headerlink" href="#acm" title="Permanent link">¶</a></h4>
+<p>ACM 模式指的是题目只给输入输出要求，需要你自己：</p>
+<ol>
+<li>写输入输出逻辑；</li>
+<li>引入需要的头文件或库；</li>
+<li>定义必要的数据结构；</li>
+<li>自己组织主程序和函数调用。</li>
+</ol>
+<p>这和 LeetCode 模式的差别在于，LeetCode 更像“补全函数”，ACM 更像“从零写完整程序”。</p>
+<p>作者给出的准备重点包括：</p>
+<ul>
+<li>常用输入输出模板；</li>
+<li>常见头文件或库的引入方式；</li>
+<li>常用节点定义，例如链表节点、二叉树节点；</li>
+<li>最基础的数据结构概念。</li>
+</ul>
+<p>结论是：如果连输入输出和基本结构都写不出来，哪怕题型记得很多，面试里也很难发挥出来。</p>
+<h3 id="322">3.2.2 第二补：补经典题和通用逻辑<a class="headerlink" href="#322" title="Permanent link">¶</a></h3>
+<p>作者认为，有些题第一次见会觉得难，但看过题解后会发现它们的套路非常固定，这类题与其反复硬想，不如直接当作“经典模板题”背下来。</p>
+<p>视频举了几个典型例子：</p>
+<ul>
+<li>两数之和：核心是“哈希表查找已出现值”的经典模板。</li>
+<li>接雨水：核心套路基本固定在“单调栈”或“双指针”。</li>
+<li>LRU 缓存：核心套路基本固定为“双向链表 + 哈希表”。</li>
+</ul>
+<h4 id="_1">概念：经典题<a class="headerlink" href="#_1" title="Permanent link">¶</a></h4>
+<p>这里的“经典题”不是指题目有名，而是指它们承担了某种标准解法的“代表题”角色。你看到题目时，应该能迅速联想到对应的数据结构组合或解法模板。</p>
+<h4 id="_2">概念：通用逻辑<a class="headerlink" href="#_2" title="Permanent link">¶</a></h4>
+<p>通用逻辑指的是跨很多题都会反复出现的思维框架，例如：</p>
+<ul>
+<li>出现过/是否存在过某个值，优先想到哈希表；</li>
+<li>两端向中间逼近，优先想到双指针；</li>
+<li>维护最近最常用、最久未使用，优先想到“链表维护顺序 + 哈希表加速查找”。</li>
+</ul>
+<h3 id="323">3.2.3 第三补：补岗位面试信息和目标岗位常考题<a class="headerlink" href="#323" title="Permanent link">¶</a></h3>
+<p>作者强调，刷题不能脱离岗位。不同岗位、不同公司，常考题分布并不一样，所以除了刷通用题库，还要做“岗位定向准备”。</p>
+<p>他建议重点关注：</p>
+<ul>
+<li>目标公司的面经题；</li>
+<li>目标岗位的常考手撕题；</li>
+<li>同岗位求职者分享的高频题。</li>
+</ul>
+<h4 id="_3">概念：面经题<a class="headerlink" href="#_3" title="Permanent link">¶</a></h4>
+<p>面经题是别人真实面试后总结出来的题目和问题，价值在于它更接近真实场景，不只是平台上的通用题单。</p>
+<h4 id="_4">概念：手撕题<a class="headerlink" href="#_4" title="Permanent link">¶</a></h4>
+<p>手撕题是面试官现场要求候选人写出的算法题或代码题，重点不只是思路，还包括：</p>
+<ul>
+<li>输入输出组织；</li>
+<li>代码书写完整度；</li>
+<li>边界处理；</li>
+<li>表达过程。</li>
+</ul>
+<p>作者的意思是：刷题不应该只对着 Hot100 闷头刷，还要对齐目标岗位的真实考法。</p>
+<h3 id="33">3.3 分论点二：刷题时要做“三看”<a class="headerlink" href="#33" title="Permanent link">¶</a></h3>
+<p>“三看”是视频最有实操价值的部分，讲的是拿到一道题之后，第一时间应该看哪三类信息。</p>
+<h3 id="331">3.3.1 第一看：看数据范围与时间复杂度<a class="headerlink" href="#331" title="Permanent link">¶</a></h3>
+<p>作者认为，这是很多人最容易忽视但最关键的一步。</p>
+<h4 id="_5">概念：数据范围<a class="headerlink" href="#_5" title="Permanent link">¶</a></h4>
+<p>数据范围就是题目给你的输入规模，例如 <code>n &lt;= 20</code>、<code>n &lt;= 10^5</code>、<code>n &lt;= 10^9</code>。它直接决定了哪些算法可以用，哪些算法一定会超时。</p>
+<h4 id="_6">概念：时间复杂度<a class="headerlink" href="#_6" title="Permanent link">¶</a></h4>
+<p>时间复杂度是算法随输入规模增长的耗时趋势，例如：</p>
+<ul>
+<li><code>O(n)</code></li>
+<li><code>O(n log n)</code></li>
+<li><code>O(n^2)</code></li>
+<li><code>O(2^n)</code></li>
+</ul>
+<p>作者给出的核心判断逻辑是：</p>
+<ul>
+<li>如果题目通常要求 1 秒左右完成，经验上总操作量大致不能明显超过 <code>10^8</code>。</li>
+<li>如果 <code>n = 10^5</code>，那 <code>O(n^2)</code> 大概率会超时，因为已经接近 <code>10^10</code> 级别。</li>
+<li>如果 <code>n</code> 很小，例如小于 20，回溯、状态压缩、暴力搜索等方法反而可能可行。</li>
+</ul>
+<p>这一步的意义在于：先用复杂度筛掉不可能的方法，再去想具体解法。</p>
+<h3 id="332">3.3.2 第二看：看关键词<a class="headerlink" href="#332" title="Permanent link">¶</a></h3>
+<p>作者认为，很多题目会在题面中给出明显的“提示词”，这些词其实在暗示你可能使用的模板。</p>
+<p>视频里提到的关键词与常见映射关系包括：</p>
+<ul>
+<li>“某个值是否出现过”：
+  暗示可以考虑哈希表。</li>
+<li>“连续子串 / 连续子数组”：
+  暗示可以考虑滑动窗口，或者前缀和一类方法。</li>
+<li>“两端同时移动”：
+  暗示可以考虑双指针。</li>
+<li>“枚举所有方案 / 所有路径 / 所有选择”：
+  暗示可以考虑 DFS、BFS、回溯。</li>
+<li>“选或不选 / 最优收益 / 最优方案”：
+  暗示可以考虑动态规划，有时也要比较贪心是否成立。</li>
+</ul>
+<h4 id="_7">概念：滑动窗口<a class="headerlink" href="#_7" title="Permanent link">¶</a></h4>
+<p>滑动窗口是一种在连续区间上动态维护状态的方法。通常通过移动左右边界，在 <code>O(n)</code> 或接近线性的时间里解决连续子数组、连续子串相关问题。</p>
+<h4 id="_8">概念：前缀和<a class="headerlink" href="#_8" title="Permanent link">¶</a></h4>
+<p>前缀和是把前面若干项的累计结果提前算好，从而快速得到任意区间和或某些区间性质的技巧。</p>
+<h4 id="dfs-bfs">概念：DFS / BFS / 回溯<a class="headerlink" href="#dfs-bfs" title="Permanent link">¶</a></h4>
+<ul>
+<li>DFS：深度优先搜索，适合一条路先走到底再回退。</li>
+<li>BFS：广度优先搜索，适合一层层扩展，常用于最短步数、层序遍历。</li>
+<li>回溯：本质上是带约束的 DFS，核心是“试探、撤销、再试下一种可能”。</li>
+</ul>
+<h4 id="dp">概念：动态规划（DP）<a class="headerlink" href="#dp" title="Permanent link">¶</a></h4>
+<p>动态规划用于解决“有重复子问题、可以从较小状态推到较大状态”的问题。视频里强调的触发信号是“选或不选”和“最优解”。</p>
+<h3 id="333">3.3.3 第三看：看题目的目标要求<a class="headerlink" href="#333" title="Permanent link">¶</a></h3>
+<p>作者特别提醒，不要忽略题目里直接写出来的复杂度目标。</p>
+<p>例如“寻找两个正序数组的中位数”这道题，题目明确要求时间复杂度应为 <code>O(log(m+n))</code> 量级。作者认为，这不是可有可无的提示，而是在直接告诉你：</p>
+<ul>
+<li>面试官希望你用某种更优的方法；</li>
+<li>普通合并数组再求中位数的思路虽然能做，但不符合这道题的考点；</li>
+<li>这种复杂度要求本身就在指向二分法一类的解法。</li>
+</ul>
+<h4 id="_9">概念：看目标<a class="headerlink" href="#_9" title="Permanent link">¶</a></h4>
+<p>“看目标”指的不是看题目想让你输出什么，而是看题目对解法质量的要求，例如：</p>
+<ul>
+<li>最优时间复杂度；</li>
+<li>最优空间复杂度；</li>
+<li>是否必须原地修改；</li>
+<li>是否要求线性时间。</li>
+</ul>
+<p>作者的核心观点是：这类约束就是考点，不能当作装饰。</p>
+<h3 id="34">3.4 分论点三：刷题后要做“三背”<a class="headerlink" href="#34" title="Permanent link">¶</a></h3>
+<p>视频的 ASR 文稿里有“三倍”的表述，但结合上下文，作者实际想表达的是“三背”，也就是刷完题之后真正要背下来的内容。</p>
+<h3 id="341">3.4.1 第一背：背题型模板与触发条件<a class="headerlink" href="#341" title="Permanent link">¶</a></h3>
+<p>作者认为，LeetCode 题面会把信息给得很全，但真实面试不一定这样。面试官往往只给你一个简化描述和少量样例，这时候你必须靠平时积累的“题型识别能力”快速定位套路。</p>
+<h4 id="_10">概念：题型模板<a class="headerlink" href="#_10" title="Permanent link">¶</a></h4>
+<p>题型模板是某类题的标准解法骨架，例如：</p>
+<ul>
+<li>二分法怎么取中点、怎么收缩边界；</li>
+<li>BFS 怎么维护队列；</li>
+<li>滑动窗口什么时候扩张右边界、什么时候收缩左边界；</li>
+<li>DP 状态如何定义、状态转移如何写；</li>
+<li>LRU 中哈希表负责什么、双向链表负责什么。</li>
+</ul>
+<h4 id="_11">概念：触发条件<a class="headerlink" href="#_11" title="Permanent link">¶</a></h4>
+<p>触发条件就是你一看到某些题面特征，就应该条件反射般联想到某类模板。例如：</p>
+<ul>
+<li>“下一个更大元素 / 下一个更小元素”：
+  容易触发单调栈。</li>
+<li>“选或不选、最大收益、最优方案”：
+  容易触发动态规划。</li>
+<li>“连续子数组”：
+  容易触发滑动窗口或前缀和。</li>
+</ul>
+<h3 id="342">3.4.2 第二背：背模板里的关键动作，而不是只背结果<a class="headerlink" href="#342" title="Permanent link">¶</a></h3>
+<p>作者并不主张死背整段代码，而是强调要背“模板里的关键动作”。例如：</p>
+<ul>
+<li>二分法如何更新左右边界；</li>
+<li>BFS 什么时候入队、什么时候出队；</li>
+<li>滑动窗口什么时候右扩、什么时候左缩；</li>
+<li>动态规划是一维还是二维，转移方程怎么确定；</li>
+<li>LRU 什么时候查哈希表，什么时候移动或删除双向链表节点。</li>
+</ul>
+<p>也就是说，真正需要形成肌肉记忆的是“结构和动作”，这样题目稍微变化，也还能迁移。</p>
+<h3 id="343-ai">3.4.3 第三背：用 AI 辅助整理和复习<a class="headerlink" href="#343-ai" title="Permanent link">¶</a></h3>
+<p>视频最后提到，AI 已经非常普及，可以拿来辅助刷题后的整理与记忆，例如：</p>
+<ul>
+<li>帮你提炼题型；</li>
+<li>帮你总结关键词到模板的映射；</li>
+<li>帮你把题目的核心结论压缩成可复习的笔记。</li>
+</ul>
+<p>这里 AI 的角色不是替你做题，而是辅助你做归纳、压缩和复盘。</p>
+<h2 id="4">4. 这套方法具体怎么操作<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<p>为了不混场景，下面严格按视频原顺序，拆成“刷题前、刷题中、刷题后”三段操作。</p>
+<h3 id="41-a">4.1 场景 A：刷题前怎么做<a class="headerlink" href="#41-a" title="Permanent link">¶</a></h3>
+<ol>
+<li>确定目标场景：校招、实习、考研复试，或者某个具体岗位。</li>
+<li>补齐基础代码能力：确保自己知道哈希表、栈、队列等基础结构在做什么。</li>
+<li>补齐 ACM 模式能力：准备输入输出模板、常用头文件、常见节点定义。</li>
+<li>整理经典模板题：例如两数之和、接雨水、LRU 这类高频代表题。</li>
+<li>收集目标岗位的面经题和手撕题：让刷题内容更贴近真实面试。</li>
+</ol>
+<h3 id="42-b">4.2 场景 B：刷题时怎么做<a class="headerlink" href="#42-b" title="Permanent link">¶</a></h3>
+<ol>
+<li>先看数据范围：先判断 <code>O(n)</code>、<code>O(n log n)</code>、<code>O(n^2)</code> 哪些可能成立。</li>
+<li>再看关键词：识别连续子数组、是否出现过、两端移动、选或不选等信号。</li>
+<li>再看题目目标：是否明确要求某个时间复杂度或空间复杂度。</li>
+<li>根据前三步缩小候选方法：例如哈希表、双指针、单调栈、DP、二分、回溯。</li>
+<li>再进入具体求解：此时你是在“有限候选集”里做选择，而不是完全裸想。</li>
+</ol>
+<h3 id="43-c">4.3 场景 C：刷题后怎么做<a class="headerlink" href="#43-c" title="Permanent link">¶</a></h3>
+<ol>
+<li>复盘这道题属于什么题型。</li>
+<li>记录它的触发条件：题面里哪些词、哪些约束让你应该想到这种方法。</li>
+<li>记录模板骨架：关键步骤是什么，边界如何处理。</li>
+<li>提炼成可背诵的短笔记：例如“下一个更大元素 -&gt; 单调栈”“最优收益 + 选不选 -&gt; DP”。</li>
+<li>用 AI 或自己的笔记系统做二次压缩，形成后续复习卡片。</li>
+</ol>
+<h2 id="5">5. 实际应用时的启示<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<h3 id="51">5.1 启示一：刷题效率不取决于做了多少题，而取决于是否建立了“识别系统”<a class="headerlink" href="#51" title="Permanent link">¶</a></h3>
+<p>真正的差异不在于谁见过更多答案，而在于谁能快速判断：</p>
+<ul>
+<li>这题大概是什么类型；</li>
+<li>哪些方法一开始就该排除；</li>
+<li>关键词在暗示什么套路；</li>
+<li>面试官真正想考什么能力。</li>
+</ul>
+<h3 id="52-leetcode">5.2 启示二：LeetCode 成绩不等于面试表现<a class="headerlink" href="#52-leetcode" title="Permanent link">¶</a></h3>
+<p>如果只会在平台给定函数里补代码，到了需要自己写输入输出、自己定义结构、自己解释思路的场景，表现可能会明显掉档。所以“平台刷题能力”和“真实手撕能力”必须同时准备。</p>
+<h3 id="53">5.3 启示三：要把刷题和岗位绑定，而不是把刷题当成纯竞赛<a class="headerlink" href="#53" title="Permanent link">¶</a></h3>
+<p>作者多次强调岗位差异，这意味着更高效的做法不是无差别刷题，而是：</p>
+<ul>
+<li>用通用题型打底；</li>
+<li>用目标岗位高频题做重点突破；</li>
+<li>用真实面经校准训练方向。</li>
+</ul>
+<h2 id="6-sop">6. 可直接套用的 SOP<a class="headerlink" href="#6-sop" title="Permanent link">¶</a></h2>
+<p>下面给出一版适合校招/实习算法准备的 SOP，同样按“前中后”顺序组织，不混阶段。</p>
+<h3 id="61-sop">6.1 阶段一：刷题前 SOP<a class="headerlink" href="#61-sop" title="Permanent link">¶</a></h3>
+<ol>
+<li>先定目标岗位：后端、前端、算法、测试开发等。</li>
+<li>列出对应高频来源：Hot100、目标公司面经、同岗位手撕题。</li>
+<li>补齐基础模板：ACM 输入输出、常用头文件、链表/树节点定义。</li>
+<li>准备经典代表题清单：两数之和、接雨水、LRU 等。</li>
+<li>形成自己的“题型目录”：哈希、双指针、滑窗、单调栈、二分、DFS/BFS、DP。</li>
+</ol>
+<h3 id="62-sop">6.2 阶段二：刷题中 SOP<a class="headerlink" href="#62-sop" title="Permanent link">¶</a></h3>
+<ol>
+<li>拿到题目先看数据范围。</li>
+<li>根据数据范围排除不可能的复杂度。</li>
+<li>再看关键词，匹配常见模板。</li>
+<li>再看题目是否显式要求更优复杂度或更优空间复杂度。</li>
+<li>确认候选方法后再写代码。</li>
+<li>写完后检查边界条件、空输入、下标越界、重复元素等问题。</li>
+</ol>
+<h3 id="63-sop">6.3 阶段三：刷题后 SOP<a class="headerlink" href="#63-sop" title="Permanent link">¶</a></h3>
+<ol>
+<li>给每道题打标签：题型、数据结构、复杂度级别。</li>
+<li>写一句“触发条件总结”：看到什么特征就想到什么模板。</li>
+<li>写一段“模板骨架总结”：这类题解法的关键步骤是什么。</li>
+<li>记录容易错的边界：例如二分边界更新、窗口收缩时机、DP 初始值。</li>
+<li>每周回顾自己的模板库，而不是只重刷旧题。</li>
+<li>用 AI 辅助压缩成更短的复习卡片，方便模拟面试前速刷。</li>
+</ol>
+<h2 id="7">7. 一句话总结<a class="headerlink" href="#7" title="Permanent link">¶</a></h2>
+<p>这期视频的本质是在讲一套“面试导向的刷题框架”：刷题前补能力，刷题中看边界、看关键词、看目标，刷题后背模板、背触发条件、背关键动作，最终把“会做题”升级为“会识别题、会迁移题、会在面试里稳定写出来”。</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
