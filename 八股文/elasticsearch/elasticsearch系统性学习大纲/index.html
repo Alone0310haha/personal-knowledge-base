@@ -1,0 +1,964 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87/elasticsearch/elasticsearch%E7%B3%BB%E7%BB%9F%E6%80%A7%E5%AD%A6%E4%B9%A0%E5%A4%A7%E7%BA%B2/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Elasticsearch系统性学习大纲 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#elasticsearch-13" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Elasticsearch系统性学习大纲
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#elasticsearch-13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elasticsearch 系统学习：从单机到集群的 13 节课主线大纲
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Elasticsearch 系统学习：从单机到集群的 13 节课主线大纲">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-es" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 1 课：单机启动与 ES 作为“搜索 + 分析引擎”的定位
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-crud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 2 课：单机数据写入：文档 CRUD、批量写入与幂等
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-1mapping-dynamic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 3 课：单机建模 1：Mapping 设计、dynamic 风险与字段治理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 4 课：索引管理：创建、模板、别名与零停机变更
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-ingest-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 5 课：写入预处理：Ingest Pipeline 与数据清洗
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 6 课：单机建模 2：文本分析链路与中文分词
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-1query-dsl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 7 课：单机查询 1：Query DSL 基础（检索 + 过滤）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 8 课：单机查询 2：排序、分页、高亮与深分页替代方案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-bm25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 9 课：相关性评分：BM25 原理与评分调优
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-aggregations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 10 课：单机分析：Aggregations（从统计到报表）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 11 课：单机内核视角：写入/可见性/持久化的真实链路
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 12 课：从单机到集群：分片/副本/路由与一次请求的分布式路径
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 13 课：集群上生产：容量规划、运维监控、生命周期与最佳实践清单
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>Elasticsearch系统性学习大纲</h1>
+
+<h3 id="elasticsearch-13">Elasticsearch 系统学习：从单机到集群的 13 节课主线大纲<a class="headerlink" href="#elasticsearch-13" title="Permanent link">¶</a></h3>
+<p>这套安排按“先把单机用顺（能建模、能写、能查、能算、能调）→ 再把集群跑稳（能扩容、能容灾、能运维）→ 最后上生产级最佳实践”的链路组织。</p>
+<p>下面给每一课补上“最短官方文档学习路径（建议顺序）”，每课只保留 2-3 个最值得先看的链接，优先按“概念页 -&gt; API / 专题页”的顺序阅读，这样和课程主线更一致。</p>
+<h4 id="1-es">第 1 课：单机启动与 ES 作为“搜索 + 分析引擎”的定位<a class="headerlink" href="#1-es" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/elasticsearch-intro-what-is-es.html">What is Elasticsearch?</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/run-elasticsearch-locally.html">Run Elasticsearch locally</a></li>
+<li><a href="https://www.elastic.co/docs/manage-data/data-store/index-basics">Index fundamentals</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：把 ES 在单机上跑起来，明确它解决的问题边界与核心对象。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>ES 能力边界：搜索（全文检索）、分析（聚合）、近实时（NRT）。</li>
+<li>最小心智模型：Index / Document / Field，与关系型数据库的相似与差异。</li>
+<li>单机安装与基础健康检查：Kibana Dev Tools / <code>_cluster/health</code> / <code>_cat</code> 入门。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li>ES 的定位是什么？“近实时”是什么意思，为什么不是强实时？</li>
+<li>ES 与 MySQL 的关键差异是什么（数据模型、查询方式、扩展方式）？</li>
+<li>Index / Document / Field 分别是什么？它们与库/表/行/列如何类比，哪里不能类比？</li>
+<li>如何用最少的 API 判断 ES 是否可用（健康、节点、索引）？</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-crud">第 2 课：单机数据写入：文档 CRUD、批量写入与幂等<a class="headerlink" href="#2-crud" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/docs/manage-data/data-store/manage-data-from-the-command-line">Manage data using APIs</a></li>
+<li><a href="https://www.elastic.co/docs/api/doc/elasticsearch/v8/group/endpoint-document">Document APIs</a></li>
+<li><a href="https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-bulk">Bulk API</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：能把数据稳定写进 ES，并理解写入的幂等、冲突与吞吐。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>单文档 CRUD：<code>index/get/delete/update</code> 的语义与响应结构。</li>
+<li>ID 设计：业务主键 vs 自动 ID；幂等、去重、覆盖更新的取舍。</li>
+<li>批量写入：<code>_bulk</code> 格式、部分失败处理与重试策略的基本原则。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li><code>PUT index/_doc/id</code>、<code>POST index/_doc</code>、<code>POST index/_update/id</code> 分别适合什么场景？</li>
+<li>为什么 ID 设计会影响“是否幂等”“是否容易去重”和写入性能？</li>
+<li><code>_bulk</code> 的 action/metadata + source 是什么结构？如何定位部分失败并做可重试的幂等处理？</li>
+<li><code>_version</code>/并发冲突通常怎么产生？有哪些常见应对（重试、业务补偿）？</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-1mapping-dynamic">第 3 课：单机建模 1：Mapping 设计、dynamic 风险与字段治理<a class="headerlink" href="#3-1mapping-dynamic" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/docs/manage-data/data-store/mapping">Mapping</a></li>
+<li><a href="https://www.elastic.co/docs/manage-data/data-store/mapping/dynamic-mapping">Dynamic mapping</a></li>
+<li><a href="https://www.elastic.co/docs/manage-data/data-store/mapping/dynamic-templates">Dynamic templates</a></li>
+<li><a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/nested">Nested field type</a>（<code>object</code> 数组被扁平化导致跨字段条件”错位”的本质原因，以及 <code>nested</code> 如何将每个数组元素存为独立隐藏文档）</li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：把”字段类型选对”这件事做扎实，避免后期返工。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>Dynamic mapping 的便利与风险（类型误判、字段爆炸）。</li>
+<li>显式 mapping 的基本写法：数值/日期/布尔/对象等常见类型。</li>
+<li>字段治理：禁用/限制动态字段、字段命名、避免高基数字段滥用。</li>
+<li><code>object</code> vs <code>nested</code> 的本质差异：<code>object</code> 数组在索引时被扁平化，跨字段组合条件会”错位”；<code>nested</code> 将每个数组元素存为独立隐藏文档，保留元素内部的字段关联。</li>
+<li><code>nested</code> 的查询语法（<code>nested</code> query）与聚合写法；写入放大代价（更新一个元素等于重建整条父文档）；何时该用 <code>nested</code>、何时考虑其他数据建模方案。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li>为什么生产更偏向显式 mapping？dynamic 的典型事故有哪些？</li>
+<li>日期/数值字段如何建模？时区、格式、范围查询会踩哪些坑？</li>
+<li>什么是字段爆炸？如何通过动态模板/限制字段数等手段规避？</li>
+<li><code>object</code> 数组扁平化会导致什么查询结果异常？举一个具体例子说明何时必须用 <code>nested</code>。</li>
+<li><code>nested</code> 文档底层如何存储？为什么更新 <code>nested</code> 数组中的一个元素代价高昂？</li>
+</ul>
+</li>
+</ul>
+<h4 id="4">第 4 课：索引管理：创建、模板、别名与零停机变更<a class="headerlink" href="#4" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index-templates.html">Index templates</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/aliases.html">Aliases</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html">Reindex API</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：能在生产环境中规范创建索引、用模板统一管理 mapping 与 settings、用别名实现零停机 mapping 变更。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>显式创建索引：<code>PUT /index</code> 同时指定 <code>settings</code>（<code>number_of_shards</code>、<code>refresh_interval</code>）与 <code>mappings</code>；避免依赖 auto-create 带来的隐患。</li>
+<li>Component Templates + Index Templates：模板优先级与继承关系；让新索引自动套用规范的 mapping 和 settings。</li>
+<li>Index Aliases：别名作为”索引指针”；写别名（<code>is_write_index</code>）与读别名的分工；原子切换（<code>_aliases</code> 批操作）。</li>
+<li>Reindex API：mapping 变更后的数据迁移；结合别名的零停机切换标准步骤（建新索引 → reindex → 切换别名 → 删旧索引）。</li>
+<li>动态调整 Index Settings：批量写入优化（关副本、提升 <code>refresh_interval</code>）；写完还原；哪些 settings 不可动态修改。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li>为什么推荐显式创建索引而非依赖 auto-create？后者会带来哪些隐患？</li>
+<li>Component Template 和 Index Template 分别管什么？优先级如何叠加？</li>
+<li>如何用别名 + Reindex 完成零停机 mapping 变更？切换期间新写入如何保证不丢？</li>
+<li><code>number_of_shards</code> 和 <code>number_of_replicas</code> 哪个可以动态修改？为什么主分片数不可改？</li>
+<li>批量导入数据时常用哪些 settings 临时优化？导入完成后需要还原哪些？</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-ingest-pipeline">第 5 课：写入预处理：Ingest Pipeline 与数据清洗<a class="headerlink" href="#5-ingest-pipeline" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest.html">Ingest pipelines</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/processors.html">Processors reference</a></li>
+<li><a href="https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-ingest-simulate">Simulate pipeline API</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：能在文档写入时自动完成字段提取、格式转换和数据清洗，不依赖外部 ETL 工具。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>Pipeline 模型：写入请求经过 Processor 链式处理后再存入索引；Pipeline 在写入链路中的位置（Ingest Node 阶段）。</li>
+<li>常用 Processor：<code>grok</code>（正则提取非结构化文本）、<code>date</code>（时间字符串解析与时区处理）、<code>convert</code>（类型转换）、<code>rename/remove/set</code>（字段操作）。</li>
+<li>Pipeline 与写入的绑定：<code>_bulk</code>/<code>_doc</code> 请求指定 <code>pipeline</code> 参数；索引默认 pipeline（<code>default_pipeline</code>）。</li>
+<li>Simulate API：在不写入数据的情况下测试 pipeline 对文档的处理结果；调试多个 Processor 的逐步输出。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li>Pipeline 在写入链路的哪个阶段执行？它与 Logstash 的定位有什么区别，各自适合什么场景？</li>
+<li><code>grok</code> 如何从非结构化日志中提取字段？正则匹配失败时默认行为是什么，如何设置 <code>ignore_failure</code>？</li>
+<li>如何为索引设置 <code>default_pipeline</code>，使所有写入请求自动经过处理？</li>
+<li>如何用 Simulate API 调试一个有多个 Processor 的 pipeline？</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-2">第 6 课：单机建模 2：文本分析链路与中文分词<a class="headerlink" href="#6-2" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/docs/manage-data/data-store/text-analysis">Text analysis</a></li>
+<li><a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text">Text field type</a></li>
+<li><a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/multi-fields">Multi-fields</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：理解“索引时怎么切词、查询时怎么切词”，能解释召回/误召回问题。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li><code>text</code> vs <code>keyword</code>：全文检索与精确匹配的分工；multi-fields 的常用模式。</li>
+<li>分析器链路：字符过滤器 → 分词器 → token 过滤器；索引/查询分析器差异。</li>
+<li>中文分词（如 IK）的使用思路与词典维护注意点；同义词的收益与风险。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li>为什么 <code>text</code> 不适合做精确过滤/聚合？为什么 <code>keyword</code> 不适合全文检索？</li>
+<li>analyzer 在索引阶段与查询阶段分别做了什么？分词不一致会导致什么现象？</li>
+<li>multi-fields 解决了什么问题？典型 mapping 怎么写、怎么用？</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-1query-dsl">第 7 课：单机查询 1：Query DSL 基础（检索 + 过滤）<a class="headerlink" href="#7-1query-dsl" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/docs/explore-analyze/query-filter/languages/querydsl">Query DSL</a></li>
+<li><a href="https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-search">Search API</a></li>
+<li><a href="https://www.elastic.co/docs/reference/query-languages/query-dsl/query-dsl-bool-query">Bool query</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：能写出覆盖 80% 业务的检索 DSL，并把“相关性”和“过滤”分清楚。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>Query context vs Filter context：评分、缓存与性能含义。</li>
+<li>基础查询：<code>match/term/range/exists/prefix</code> 的使用边界。</li>
+<li><code>bool</code> 组合：<code>must/should/must_not/filter</code> 与 <code>minimum_should_match</code>。</li>
+<li>查询诊断：<code>_explain</code> API（查看单条文档评分明细与召回路径）、<code>profile</code> API（分析查询各阶段耗时）、slowlog（索引级别慢查询配置与日志输出）。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li><code>match</code> 与 <code>term</code> 的根本差异是什么？为什么字段类型会决定查询写法？</li>
+<li>过滤为什么通常放到 <code>filter</code>？它对评分和性能有什么影响？</li>
+<li><code>should</code> 在有/没有 <code>must</code> 时默认行为有什么不同？什么时候要 <code>minimum_should_match</code>？</li>
+<li><code>_explain</code> 与 <code>profile</code> API 各自解决什么问题？什么情况下该先用哪一个？</li>
+<li>如何为索引配置 slowlog 阈值？slowlog 输出在哪里查看，记录了哪些关键信息？</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-2">第 8 课：单机查询 2：排序、分页、高亮与深分页替代方案<a class="headerlink" href="#8-2" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/docs/reference/elasticsearch/rest-apis/sort-search-results">Sort search results</a></li>
+<li><a href="https://www.elastic.co/docs/reference/elasticsearch/rest-apis/paginate-search-results">Paginate search results</a></li>
+<li><a href="https://www.elastic.co/docs/reference/elasticsearch/rest-apis/highlighting">Highlighting</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：能把“用户看到的搜索体验”做完整：排序、分页、高亮，并避开深分页坑。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>排序与字段：<code>sort</code> 对性能/内存的影响；为什么排序字段通常用 <code>keyword/numeric/date</code>。</li>
+<li>分页策略：<code>from/size</code> 的机制与深分页问题；<code>search_after</code> 的使用前提。</li>
+<li>高亮：基本原理与开销来源，何时该用/不该用。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li>为什么 <code>from/size</code> 深分页会越来越慢？瓶颈在哪里？</li>
+<li><code>search_after</code> 需要哪些前提（稳定排序字段、唯一性）？适合什么场景？</li>
+<li>高亮为什么可能显著增大查询开销？如何控制成本？</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-bm25">第 9 课：相关性评分：BM25 原理与评分调优<a class="headerlink" href="#9-bm25" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-filter-context.html">Relevance scores</a></li>
+<li><a href="https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-explain">Explain API</a></li>
+<li><a href="https://www.elastic.co/docs/reference/query-languages/query-dsl/query-dsl-function-score-query">Function score query</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：能解释 ES 默认评分的来源，能用 <code>_explain</code> 定位召回与排序异常，能通过 <code>function_score</code> 在业务层干预评分。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>BM25 原理：TF（词频）、IDF（逆文档频率）、字段长度归一化三要素的直觉含义；与经典 TF-IDF 的主要区别。</li>
+<li><code>_explain</code> API：逐层查看单条文档的评分明细；诊断"为什么这条文档排第一"或"为什么没有被召回"。</li>
+<li><code>boost</code>：查询级别与字段级别的权重调整；<code>boost</code> 对最终评分的实际影响方式。</li>
+<li><code>function_score</code>：在原始查询评分基础上叠加业务信号；常用函数 <code>field_value_factor</code>（热度加权）、<code>decay</code>（时间/距离衰减）、<code>random_score</code>（随机打散）；<code>score_mode</code> 与 <code>boost_mode</code> 的组合含义。</li>
+<li><code>constant_score</code>：绕过评分计算，适合纯过滤场景的查询包装。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li>BM25 中 TF、IDF 和字段长度归一化分别解决了什么问题？为什么词频越高不一定得分越高？</li>
+<li>如何用 <code>_explain</code> API 诊断一条文档得分异常或没有被召回的根因？</li>
+<li><code>boost</code> 放在 <code>query</code> 子句里和放在字段 <code>mapping</code> 的 <code>boost</code> 参数上有什么区别？</li>
+<li><code>function_score</code> 的 <code>score_mode</code> 和 <code>boost_mode</code> 分别控制什么？举例说明如何叠加业务热度信号。</li>
+<li>什么时候应该用 <code>constant_score</code> 而不是直接将条件放进 <code>filter</code>？</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-aggregations">第 10 课：单机分析：Aggregations（从统计到报表）<a class="headerlink" href="#10-aggregations" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/docs/explore-analyze/query-filter/aggregations">Aggregations</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html">Terms aggregation</a></li>
+<li><a href="https://www.elastic.co/docs/reference/aggregations/search-aggregations-bucket-datehistogram-aggregation">Date histogram aggregation</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：把 ES 的“分析能力”用起来，能做常见统计报表并读懂返回结构。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>Metrics：<code>sum/avg/min/max/value_count/cardinality</code>。</li>
+<li>Buckets：<code>terms/range/date_histogram</code>；子聚合表达“先分桶再算指标”。</li>
+<li>聚合性能：桶数量控制、<code>size/shard_size</code>、字段类型与 <code>doc_values</code> 的关系。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li><code>terms</code> 聚合为何要求 <code>keyword</code>（或可聚合字段）？<code>text</code> 为什么不行？</li>
+<li><code>cardinality</code> 是精确还是近似？它适合解决什么问题？</li>
+<li><code>terms</code> 的 <code>size/shard_size/order</code> 会如何影响准确性与性能？</li>
+</ul>
+</li>
+</ul>
+<h4 id="11">第 11 课：单机内核视角：写入/可见性/持久化的真实链路<a class="headerlink" href="#11" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/near-real-time.html">Near real-time search</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-translog.html">Translog settings</a></li>
+<li><a href="https://www.elastic.co/docs/api/doc/elasticsearch/v9/operation/operation-indices-flush">Flush API</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：从内核角度解释“写入成功后为何不立刻可搜”“为什么 refresh/flush 影响性能”。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>写入链路：buffer / translog / segment 的角色分工。</li>
+<li>Refresh vs Flush：可搜索性 vs 持久化；NRT 的工作方式。</li>
+<li>段合并（merge）与写入/查询抖动；基本的调优抓手（<code>refresh_interval</code> 等）。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li>refresh 与 flush 的区别是什么？分别解决什么问题？</li>
+<li>translog 为什么存在？它对数据安全与性能意味着什么？</li>
+<li>为什么会发生 merge？merge 对线上查询/写入会产生什么影响？</li>
+</ul>
+</li>
+</ul>
+<h4 id="12">第 12 课：从单机到集群：分片/副本/路由与一次请求的分布式路径<a class="headerlink" href="#12" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/docs/deploy-manage/distributed-architecture/clusters-nodes-shards">Clusters, nodes, and shards</a></li>
+<li><a href="https://www.elastic.co/docs/deploy-manage/distributed-architecture/shard-allocation-relocation-recovery">Shard allocation, relocation, and recovery</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-replication.html">Reading and writing documents</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：把“扩容与容灾”的核心机制讲清楚，能推导查询/写入在集群中的流转。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>分片与副本：容量、并行、容灾；主分片数为何不可随意改。</li>
+<li>路由与热点：<code>shard = hash(routing) % primary_shards</code> 的含义；自定义 routing 的收益与风险。</li>
+<li>节点角色与请求路径：协调节点、数据节点、主节点；搜索的 scatter/gather。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li>为什么需要分片？为什么需要副本？它们分别对读性能与高可用的影响是什么？</li>
+<li>默认 routing 是什么？什么时候要自定义 routing？如何避免热点分片？</li>
+<li>一次搜索请求在集群中的基本流程是什么（协调 → 分片并行 → 合并返回）？</li>
+<li>主节点的职责是什么？为什么需要选主与集群状态（元数据）管理？</li>
+</ul>
+</li>
+</ul>
+<h4 id="13">第 13 课：集群上生产：容量规划、运维监控、生命周期与最佳实践清单<a class="headerlink" href="#13" title="Permanent link">¶</a></h4>
+<ul>
+<li>
+<p><strong>最短官方文档学习路径（建议顺序）</strong>：</p>
+<ul>
+<li><a href="https://www.elastic.co/docs/deploy-manage/production-guidance/optimize-performance/size-shards">Size your shards</a></li>
+<li><a href="https://www.elastic.co/docs/troubleshoot/elasticsearch/red-yellow-cluster-status">Red or yellow cluster health status</a></li>
+<li><a href="https://www.elastic.co/docs/manage-data/lifecycle/index-lifecycle-management">Index lifecycle management (ILM)</a></li>
+</ul>
+</li>
+<li>
+<p><strong>学习目标</strong>：能把集群跑稳、跑省、可恢复：监控、扩缩容、备份与权限到位。</p>
+</li>
+<li><strong>核心内容</strong>：<ul>
+<li>容量与分片规划：数据量/读写比例/节点数推导；避免过多小分片。</li>
+<li>运维监控与排障：<code>_cluster/health</code>、<code>_cat/shards</code>；未分配分片常见原因（磁盘水位、节点离线、限制策略）。</li>
+<li>生命周期与成本：ILM（rollover/迁移/删除）、冷热分层思路。</li>
+<li>安全与灾备：Snapshot/Restore 的原则；RBAC 最小权限。</li>
+<li>Data Streams：时序/日志场景的现代索引方案；backing indices + write index 的数据模型；与 ILM rollover 结合的标准方式；”Data Stream + ILM + Component Template”三件套的配置路径。</li>
+<li>反模式与红线：字段爆炸、深分页、滥用 nested、无 ILM、无快照、过量小索引等。</li>
+</ul>
+</li>
+<li><strong>课程问题（学完要能回答）</strong>：<ul>
+<li>如何从 <code>_cluster/health</code> 判断集群状态？green/yellow/red 分别意味着什么行动？</li>
+<li>如何用 <code>_cat/shards</code> 定位未分配分片与分片倾斜？常见根因与处理步骤是什么？</li>
+<li>ILM 的核心价值是什么？如何把索引按时间滚动并自动迁移/删除？</li>
+<li>Snapshot 能备份哪些内容？为什么不建议直接拷贝 data 目录？Restore 有哪些风险点？</li>
+<li>Data Stream 和直接用 rollover 别名有什么区别？什么场景下应该优先用 Data Stream？</li>
+<li>如何做一份”可落地”的上线检查清单（建模、写入、查询、分片、监控、备份、权限）？</li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

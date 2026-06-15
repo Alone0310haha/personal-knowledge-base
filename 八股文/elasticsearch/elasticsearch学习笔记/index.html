@@ -363,6 +363,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#class-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        class 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        class 3
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="class 3">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cluster-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster State 是什么、如何同步
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -428,6 +467,224 @@ es并不是写入立刻可搜，而是写入后很快可搜，中间有时间差
 - 到点后做一次 refresh：把内存里的积累的变更整理成一个新段（segment）并打开给查询用。该新segment会写进文件系统缓存，这个时候就能被查询看见了。
 - 生成的 segment 之后会被操作系统慢慢刷到磁盘。</p>
 <p>触发一次refresh的时机由 <code>index.refresh_interval</code> 配置，默认为1s，默认只对“最近 30 秒内被搜索过”的索引才按 1 秒 refresh。</p>
+<h3 id="class-2">class 2<a class="headerlink" href="#class-2" title="Permanent link">¶</a></h3>
+<p>es的CRUD：</p>
+<p><a href="https://www.elastic.co/docs/api/doc/elasticsearch/v8/operation/operation-index">新增或更新</a>：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>curl http://localhost:9200/my_index/_doc -XPOST -H 'Content-Type: application/json' -d '{
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    "title": "One", "tags": ["ruby"]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>}'
+</span></code></pre></div>
+<p>返回：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>{"_index":"my_index","_id":"DEPss54BbLlHK8J7VuRv","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
+</span></code></pre></div></p>
+<p>这里的my_index就是索引名</p>
+<p><a href="https://www.elastic.co/docs/api/doc/elasticsearch/v8/operation/operation-bulk">批量创建文档</a>:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>curl http://localhost:9200/my_index/_bulk -XPOST -H 'Content-Type: application/json' -d '
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>{"index": {}}
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>{"title": "Two", "tags": ["ruby", "python"] }
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>{"index": {}}
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>{"title": "Three", "tags": ["java"] }
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a>{"index": {}}
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a>{"title": "Four", "tags": ["ruby", "php"] }
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a>'
+</span></code></pre></div>
+<p>返回:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>{"errors":false,"took":24,"items":[{"index":{"_index":"my_index","_id":"DUPys54BbLlHK8J72OQV","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":1,"_primary_term":1,"status":201}},{"index":{"_index":"my_index","_id":"DkPys54BbLlHK8J72OQV","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":2,"_primary_term":1,"status":201}},{"index":{"_index":"my_index","_id":"D0Pys54BbLlHK8J72OQV","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":3,"_primary_term":1,"status":201}}]}
+</span></code></pre></div>
+<p><a href="https://www.elastic.co/docs/api/doc/elasticsearch/v8/operation/operation-update">更新</a>:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>curl http://localhost:9200/my_index/_doc/DEPss54BbLlHK8J7VuRv -XPOST -H 'Content-Type: application/json' -d '{
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>    "title": "Four updated", "tags": ["ruby", "php", "python"]
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>}'
+</span></code></pre></div></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>curl -X POST "http://localhost:9200/my_index/_update/DEPss54BbLlHK8J7VuRv" \
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>  -H "Content-Type: application/json" \
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>  -d '{
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>    "doc": {
+</span><span id="__span-5-5"><a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a>      "title": "Five updated",
+</span><span id="__span-5-6"><a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a>      "tags": ["ruby", "php", "python"]
+</span><span id="__span-5-7"><a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a>    }
+</span><span id="__span-5-8"><a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a>  }'
+</span></code></pre></div>
+<p><code>_update</code> 是部分更新，只更新需要的字段, <code>_doc</code> 是整条更新。</p>
+<p><code>/_update</code>  常见三种写法</p>
+<ul>
+<li>doc ：部分字段替换</li>
+<li>script ：按脚本逻辑修改</li>
+<li>upsert ：不存在时顺便插入</li>
+</ul>
+<p><a href="https://www.elastic.co/docs/api/doc/elasticsearch/v8/operation/operation-get">查询</a>:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a>curl http://localhost:9200/my_index/_doc/D0Pys54BbLlHK8J72OQV
+</span></code></pre></div>
+返回：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>{"_index":"my_index","_id":"D0Pys54BbLlHK8J72OQV","_version":1,"_seq_no":3,"_primary_term":1,"found":true,"_source":{"title": "Four", "tags": ["ruby", "php"] }}
+</span></code></pre></div>
+<p><a href="https://www.elastic.co/docs/api/doc/elasticsearch/v8/operation/operation-delete">删除</a>:</p>
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a>curl http://localhost:9200/my_index/_doc/D0Pys54BbLlHK8J72OQV -XDELETE
+</span></code></pre></div>
+返回：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a>{"_index":"my_index","_id":"D0Pys54BbLlHK8J72OQV","_version":2,"result":"deleted","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":6,"_primary_term":1}
+</span></code></pre></div></p>
+<p>删除整个索引：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a>curl http://localhost:9200/my_index -XDELETE
+</span></code></pre></div>
+<p>为什么es文档的 ID 设计会影响“是否幂等”“是否容易去重”和写入性能？</p>
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a>flowchart TD
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a>    A["写入请求到达协调节点"] --&gt; B{{"有 ID？"}}
+</span><span id="__span-11-3"><a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a>    B -- "自定义 ID" --&gt; C["查询主分片&lt;br&gt;该 ID 是否已存在？"]
+</span><span id="__span-11-4"><a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a>    B -- "自动生成 ID" --&gt; F["跳过读取&lt;br&gt;直接 append 到分片"]
+</span><span id="__span-11-5"><a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a>    C --&gt; D["存在 → 更新&lt;br&gt;版本号 +1，覆盖写"]
+</span><span id="__span-11-6"><a href="#__codelineno-11-6" id="__codelineno-11-6" name="__codelineno-11-6"></a>    D --&gt; E["幂等 / 可去重"]
+</span><span id="__span-11-7"><a href="#__codelineno-11-7" id="__codelineno-11-7" name="__codelineno-11-7"></a>    F --&gt; G["生成唯一 TSID&lt;br&gt;无版本冲突检查"]
+</span><span id="__span-11-8"><a href="#__codelineno-11-8" id="__codelineno-11-8" name="__codelineno-11-8"></a>    G --&gt; H["高吞吐 / 不可去重"]
+</span><span id="__span-11-9"><a href="#__codelineno-11-9" id="__codelineno-11-9" name="__codelineno-11-9"></a>    E --&gt; I["写入 Lucene segment"]
+</span><span id="__span-11-10"><a href="#__codelineno-11-10" id="__codelineno-11-10" name="__codelineno-11-10"></a>    H --&gt; I
+</span></code></pre></div>
+es在指定id的情况下，会在主分片上查询这个id是否存在，如果存在就更新主分片上的文档并递增版本号，不存在就新建。当使用自定义id（比如业务主键等）的时候天然就覆盖了这层逻辑，代码层面不需要再去判断我是否已经写过。如果让es自动生成id的话，这一部分内容就需要在业务代码层面自己做。
+ES 官方文档明确建议：日志、指标等只追加（append-only）的场景优先用自动 ID。原因是自定义 ID 在主分片上触发的那次"先读再写"（read-before-write）会访问 Lucene 的 <code>_id</code> 字段缓存，在高并发下这个查找会成为瓶颈。自动 ID 完全跳过这一步，直接追加到 segment。</p>
+<p>es分片路由的具体机制：
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a>flowchart TD
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>    A["客户端请求"] --&gt; B["协调节点\nshard = hash(routing) % N"]
+</span><span id="__span-12-3"><a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a>    B --&gt; C{{"routing key\n默认 = _id"}}
+</span><span id="__span-12-4"><a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a>
+</span><span id="__span-12-5"><a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a>    C -- "默认" --&gt; D["hash(_id) % N\n唯一确定主分片"]
+</span><span id="__span-12-6"><a href="#__codelineno-12-6" id="__codelineno-12-6" name="__codelineno-12-6"></a>    C -- "自定义" --&gt; E["hash(custom) % N\n需查询时一致携带"]
+</span><span id="__span-12-7"><a href="#__codelineno-12-7" id="__codelineno-12-7" name="__codelineno-12-7"></a>
+</span><span id="__span-12-8"><a href="#__codelineno-12-8" id="__codelineno-12-8" name="__codelineno-12-8"></a>    D --&gt; F["主分片写入\nread-before-write（自定义 ID）"]
+</span><span id="__span-12-9"><a href="#__codelineno-12-9" id="__codelineno-12-9" name="__codelineno-12-9"></a>    E --&gt; F
+</span><span id="__span-12-10"><a href="#__codelineno-12-10" id="__codelineno-12-10" name="__codelineno-12-10"></a>
+</span><span id="__span-12-11"><a href="#__codelineno-12-11" id="__codelineno-12-11" name="__codelineno-12-11"></a>    F -- "并行同步" --&gt; G["副本 0"]
+</span><span id="__span-12-12"><a href="#__codelineno-12-12" id="__codelineno-12-12" name="__codelineno-12-12"></a>    F -- "并行同步" --&gt; H["副本 1"]
+</span><span id="__span-12-13"><a href="#__codelineno-12-13" id="__codelineno-12-13" name="__codelineno-12-13"></a>    F -- "并行同步" --&gt; I["副本 2"]
+</span><span id="__span-12-14"><a href="#__codelineno-12-14" id="__codelineno-12-14" name="__codelineno-12-14"></a>
+</span><span id="__span-12-15"><a href="#__codelineno-12-15" id="__codelineno-12-15" name="__codelineno-12-15"></a>    note["副本只接收同步，不参与路由决策"]
+</span></code></pre></div></p>
+<p><strong>第一层：路由公式</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a>shard_num = hash(routing_key) % number_of_primary_shards
+</span></code></pre></div>
+<p><code>routing_key</code> 默认是文档的 <code>_id</code>。哈希函数用的是 Murmur3，结果对主分片数取模，得到一个 0 到 N-1 的编号。这个计算是纯本地运算，协调节点自己就能算出来，不需要问任何其他节点。</p>
+<p><strong>第二层：协调节点的职责</strong></p>
+<p>每个 ES 节点都持有一份集群状态（cluster state），里面有完整的分片路由表——哪个分片在哪个节点上、谁是主谁是副本。协调节点算出分片编号后，直接查这张表，把请求转发给对应的主分片所在节点。整个过程最多一跳。
+I
+<strong>第三层：主分片写完后的副本同步</strong></p>
+<p>主分片写入成功后，并行把操作转发给所有副本分片。副本收到的是操作日志（translog 里的操作），不是原始请求，所以副本不会重新计算路由，也不会再做 read-before-write。<code>wait_for_active_shards</code> 参数控制要等几个副本确认才返回客户端。</p>
+<hr/>
+<p><strong>主分片数为什么不能改？</strong></p>
+<p>公式里的 N 是创建索引时固定的。如果 N 变了，<code>hash(_id) % N</code> 的结果就变了，所有已有文档的"应在位置"都会错位，整个路由表就乱了。这就是为什么 ES 不允许修改主分片数——如果业务真的需要扩容，只能用 <code>_reindex</code> 把数据迁移到一个分片数更大的新索引。</p>
+<p><strong>自定义 routing 的陷阱</strong></p>
+<p>用 <code>?routing=user_id</code> 可以把同一个用户的数据强制打到同一个分片（对聚合查询有利）。但写入和查询必须携带**完全相同**的 routing 值，否则查询会算出不同的分片编号，找不到数据。ES 8.x 引入了 <code>routing_required</code> 设置，可以在 mapping 层面强制要求所有请求都带 routing，避免漏掉。</p>
+<h3 id="class-3">class 3<a class="headerlink" href="#class-3" title="Permanent link">¶</a></h3>
+<p>什么是es的动态映射（Dynamic Mapping）？
+es自己决定新加入的文档的数据类型。
+显式映射（Explicit mapping）：用户自己决定es字段的类型。
+修改映射的话，需要reindex。</p>
+<p>纯Dynamic Mapping的场景可以有：
+- 日志/事件收集：处理多个服务的日志的时候会出现服务A和服务B结构不一样的情况
+- 数据管道/ETL中间层</p>
+<p>通常用的更多的是混合模式（固定+动态）：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a>PUT /products
+</span><span id="__span-14-2"><a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a>{
+</span><span id="__span-14-3"><a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a>  "mappings": {
+</span><span id="__span-14-4"><a href="#__codelineno-14-4" id="__codelineno-14-4" name="__codelineno-14-4"></a>    "dynamic": "strict",          // ① 顶层：严格模式，不允许随意新增字段
+</span><span id="__span-14-5"><a href="#__codelineno-14-5" id="__codelineno-14-5" name="__codelineno-14-5"></a>    "properties": {
+</span><span id="__span-14-6"><a href="#__codelineno-14-6" id="__codelineno-14-6" name="__codelineno-14-6"></a>      "name":     { "type": "keyword" },
+</span><span id="__span-14-7"><a href="#__codelineno-14-7" id="__codelineno-14-7" name="__codelineno-14-7"></a>      "price":    { "type": "float" },
+</span><span id="__span-14-8"><a href="#__codelineno-14-8" id="__codelineno-14-8" name="__codelineno-14-8"></a>      "category": { "type": "keyword" },
+</span><span id="__span-14-9"><a href="#__codelineno-14-9" id="__codelineno-14-9" name="__codelineno-14-9"></a>
+</span><span id="__span-14-10"><a href="#__codelineno-14-10" id="__codelineno-14-10" name="__codelineno-14-10"></a>      "attributes": {
+</span><span id="__span-14-11"><a href="#__codelineno-14-11" id="__codelineno-14-11" name="__codelineno-14-11"></a>        "dynamic": true,          // ② 仅在 attributes 内部允许动态扩展
+</span><span id="__span-14-12"><a href="#__codelineno-14-12" id="__codelineno-14-12" name="__codelineno-14-12"></a>        "properties": {}          // 初始为空，字段由写入数据时自动创建
+</span><span id="__span-14-13"><a href="#__codelineno-14-13" id="__codelineno-14-13" name="__codelineno-14-13"></a>      }
+</span><span id="__span-14-14"><a href="#__codelineno-14-14" id="__codelineno-14-14" name="__codelineno-14-14"></a>    }
+</span><span id="__span-14-15"><a href="#__codelineno-14-15" id="__codelineno-14-15" name="__codelineno-14-15"></a>  }
+</span><span id="__span-14-16"><a href="#__codelineno-14-16" id="__codelineno-14-16" name="__codelineno-14-16"></a>}
+</span></code></pre></div>
+<p>这样商品的动态属性就由es自己判断类型， <code>dynamic</code> 可以在每一层单独设置，子层会覆盖父层的规则。</p>
+<p>es自动推断mapping规则的时候是以写入的第一条数据为准，后续如果有不符合推断出来的类型的数据，能转换的会进行隐式类型转换，不能转换的会拒绝。</p>
+<p>Question 1:为什么生产更偏向显式 mapping？dynamic 的典型事故有哪些？
+A：因为dynamic是由写入的第一行数据来决定映射类型。这不可控。dynamic可能会引起字段爆炸，推断类型不正确，日期格式推断错误等问题。</p>
+<p>过多字段会引起映射爆炸：
+es官方规定： <code>index.mapping.total_fields.limit</code> = 1000 超过这个数字，写入直接报错。
+字段映射，对象映射，字段别名，映射的运行时字段都计入这个上限。
+<code>index.mapping.total_fields.ignore_dynamic_beyond_limit</code>，默认值为 <code>false</code>。设为 <code>true</code> 时，超出限制的动态字段不会导致写入失败，而是被跳过不加入 mapping，同时记录到 <code>_ignored</code> 字段中。这个配置在日志场景下很实用。</p>
+<h4 id="cluster-state">Cluster State 是什么、如何同步<a class="headerlink" href="#cluster-state" title="Permanent link">¶</a></h4>
+<p><strong>Cluster State 的作用</strong></p>
+<p>Cluster State 是整个集群的共享元数据，包含：</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>索引元数据</strong></td>
+<td>所有索引的 mapping、settings、aliases</td>
+</tr>
+<tr>
+<td><strong>分片分配表</strong></td>
+<td>每个 shard 在哪个节点上（主/副）</td>
+</tr>
+<tr>
+<td><strong>节点成员表</strong></td>
+<td>当前集群中有哪些节点、各自的角色</td>
+</tr>
+<tr>
+<td><strong>模板/Pipeline</strong></td>
+<td>Index template、Ingest pipeline 定义</td>
+</tr>
+<tr>
+<td><strong>快照/恢复状态</strong></td>
+<td>正在进行的快照任务信息</td>
+</tr>
+</tbody>
+</table>
+<p>任何需要"知道集群全局情况"的操作都依赖它。比如协调节点收到搜索请求，查本地 cluster state 的分片分配表，才知道该把请求转发给哪些节点上的哪些 shard。</p>
+<p><strong>同步机制：每个节点都有一份完整副本</strong></p>
+<p>不是物理数据只有一份传参，而是：</p>
+<blockquote>
+<p>Master 持有权威副本 → 通过"发布-提交"两阶段协议广播给所有节点 → 每个节点在自己的 JVM 堆内存里维护一份完整的本地副本</p>
+</blockquote>
+<p>具体流程（ES 7.x+ 的 Raft-like 实现，称为 Zen2）：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a>Master 检测到 cluster state 需要变更
+</span><span id="__span-15-2"><a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a>        │
+</span><span id="__span-15-3"><a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a>        ▼
+</span><span id="__span-15-4"><a href="#__codelineno-15-4" id="__codelineno-15-4" name="__codelineno-15-4"></a>① Publish 阶段
+</span><span id="__span-15-5"><a href="#__codelineno-15-5" id="__codelineno-15-5" name="__codelineno-15-5"></a>   Master 将新 cluster state（或增量 diff）序列化后
+</span><span id="__span-15-6"><a href="#__codelineno-15-6" id="__codelineno-15-6" name="__codelineno-15-6"></a>   发送给集群中所有节点，节点收到后写入内存但先不生效，
+</span><span id="__span-15-7"><a href="#__codelineno-15-7" id="__codelineno-15-7" name="__codelineno-15-7"></a>   然后向 Master 回 ACK
+</span><span id="__span-15-8"><a href="#__codelineno-15-8" id="__codelineno-15-8" name="__codelineno-15-8"></a>
+</span><span id="__span-15-9"><a href="#__codelineno-15-9" id="__codelineno-15-9" name="__codelineno-15-9"></a>        │ 等待"多数派"的 master-eligible 节点 ACK
+</span><span id="__span-15-10"><a href="#__codelineno-15-10" id="__codelineno-15-10" name="__codelineno-15-10"></a>        ▼
+</span><span id="__span-15-11"><a href="#__codelineno-15-11" id="__codelineno-15-11" name="__codelineno-15-11"></a>② Commit 阶段
+</span><span id="__span-15-12"><a href="#__codelineno-15-12" id="__codelineno-15-12" name="__codelineno-15-12"></a>   Master 收到法定数量 ACK 后，广播 commit 指令
+</span><span id="__span-15-13"><a href="#__codelineno-15-13" id="__codelineno-15-13" name="__codelineno-15-13"></a>   所有节点将新 cluster state 正式应用到本地内存副本
+</span><span id="__span-15-14"><a href="#__codelineno-15-14" id="__codelineno-15-14" name="__codelineno-15-14"></a>
+</span><span id="__span-15-15"><a href="#__codelineno-15-15" id="__codelineno-15-15" name="__codelineno-15-15"></a>        │
+</span><span id="__span-15-16"><a href="#__codelineno-15-16" id="__codelineno-15-16" name="__codelineno-15-16"></a>        ▼
+</span><span id="__span-15-17"><a href="#__codelineno-15-17" id="__codelineno-15-17" name="__codelineno-15-17"></a>   各节点用新的 cluster state 处理后续请求
+</span></code></pre></div>
+<p>关键细节：</p>
+<ul>
+<li><strong>增量 diff</strong>（7.x+ 优化）：不是每次都发整个 cluster state，而是只发"变更部分"，大幅降低网络开销，mapping 很大时这个优化很重要。</li>
+<li><strong>法定数量（quorum）</strong>：必须是 <code>(master-eligible 节点数 / 2) + 1</code> 个节点 ACK 才能提交，保证即使 master 在 publish 中途挂掉，新选出的 master 也能确定正确状态。</li>
+<li><strong>每个节点都有完整副本</strong>：data 节点、coordinating 节点都有，不需要每次查询都问 master，routing 完全靠本地 cluster state 完成。</li>
+</ul>
+<p><strong>CRUD 时 cluster state 的角色</strong></p>
+<p>不是作为参数传递，而是各节点预先持有副本，本地查表路由：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a>客户端 → 协调节点
+</span><span id="__span-16-2"><a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a>            │
+</span><span id="__span-16-3"><a href="#__codelineno-16-3" id="__codelineno-16-3" name="__codelineno-16-3"></a>            │ 查本地 cluster state 的分片分配表
+</span><span id="__span-16-4"><a href="#__codelineno-16-4" id="__codelineno-16-4" name="__codelineno-16-4"></a>            │ 得到：index "orders" 的 shard 0 主分片在 node-2
+</span><span id="__span-16-5"><a href="#__codelineno-16-5" id="__codelineno-16-5" name="__codelineno-16-5"></a>            ▼
+</span><span id="__span-16-6"><a href="#__codelineno-16-6" id="__codelineno-16-6" name="__codelineno-16-6"></a>         直接把请求转发给 node-2（文档数据走节点间直连）
+</span><span id="__span-16-7"><a href="#__codelineno-16-7" id="__codelineno-16-7" name="__codelineno-16-7"></a>            │
+</span><span id="__span-16-8"><a href="#__codelineno-16-8" id="__codelineno-16-8" name="__codelineno-16-8"></a>            ▼
+</span><span id="__span-16-9"><a href="#__codelineno-16-9" id="__codelineno-16-9" name="__codelineno-16-9"></a>         node-2 写入本地 shard，再复制给副本节点
+</span></code></pre></div>
+<p>cluster state 在这里只起"路由字典"的作用，文档数据本身从不经过它。</p>
+<p><strong>一句话总结</strong></p>
+<p>Cluster state 是全局元数据，每个节点内存里有一份完整副本；master 通过"两阶段广播 + 多数派 ACK"保证所有副本一致；CRUD 时节点查自己的本地副本做路由，文档数据直接在节点间流动，不经过 cluster state。</p>
 
 
 

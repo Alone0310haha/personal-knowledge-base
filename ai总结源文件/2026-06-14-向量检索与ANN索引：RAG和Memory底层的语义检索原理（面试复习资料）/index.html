@@ -1,0 +1,1270 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-06-14-%E5%90%91%E9%87%8F%E6%A3%80%E7%B4%A2%E4%B8%8EANN%E7%B4%A2%E5%BC%95%EF%BC%9ARAG%E5%92%8CMemory%E5%BA%95%E5%B1%82%E7%9A%84%E8%AF%AD%E4%B9%89%E6%A3%80%E7%B4%A2%E5%8E%9F%E7%90%86%EF%BC%88%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0%E8%B5%84%E6%96%99%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>向量检索与 ANN 索引：RAG 和 Memory 底层的语义检索原理（面试复习资料） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ann-rag-memory" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              向量检索与 ANN 索引：RAG 和 Memory 底层的语义检索原理（面试复习资料）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        来源
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念定位
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        背景与动机
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="背景与动机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        什么叫"近邻问题"？为什么它很难？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        已有方案（精确搜索）为什么不够？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心机制拆解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="核心机制拆解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第零步：向量化（Embedding）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hnsw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        索引算法一：HNSW（分层可导航小世界图）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="索引算法一：HNSW（分层可导航小世界图）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        构图方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        查询方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ivfinverted-file-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        索引算法二：IVF（倒排文件索引，Inverted File Index）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="索引算法二：IVF（倒排文件索引，Inverted File Index）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        构建方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        查询方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pqproduct-quantization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        索引算法三：PQ（乘积量化，Product Quantization）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="索引算法三：PQ（乘积量化，Product Quantization）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        压缩方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        查询加速
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ann" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ANN 的本质取舍
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        向量数据库（Vector Database）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rag-agent-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与 RAG / Agent Memory 的关联
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与相关概念的对比
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="与相关概念的对比">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#annvs-exact-nn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        向量检索（ANN）vs 精确搜索（Exact NN）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hnsw-vs-ivf_pq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HNSW vs IVF_PQ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键词检索 vs 向量检索（语义检索）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vs-mysql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        向量数据库 vs 传统关系型数据库（MySQL）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        典型应用场景
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        局限性与常见误区
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="局限性与常见误区">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        局限性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        面试常见误区
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        面试高频问题与回答框架
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        用自己的话解释（费曼测试）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ann-rag-memory">向量检索与 ANN 索引：RAG 和 Memory 底层的语义检索原理（面试复习资料）<a class="headerlink" href="#ann-rag-memory" title="Permanent link">¶</a></h1>
+<h2 id="_1">来源<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://www.bilibili.com/video/BV1RCGR6yEEw/">AI Agent的RAG、Memory底层的语义检索原理是啥 | 向量数据库-索引篇</a></li>
+<li>BV 号：BV1RCGR6yEEw</li>
+<li>UP 主：小白debug</li>
+</ul>
+<hr/>
+<h2 id="_2">概念定位<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>概念名称与领域</strong>：向量检索（Vector Retrieval）/ 近似最近邻搜索（ANN，Approximate Nearest Neighbor Search），属于数据库索引与 AI 应用工程领域</li>
+<li><strong>非技术语言</strong>：就像用一张猫的照片去找"长得最像"的其他猫——计算机把每张图片或每段文字都变成一串数字，然后比谁的数字"距离"最近，距离最近的就是最相似的</li>
+<li><strong>技术语言（面试可直接说）</strong>：向量检索是把非结构化数据（图片、文本、音频）通过 Embedding 模型映射为高维浮点数组（向量），在高维空间中以距离度量语义相似度，再借助 HNSW、IVF、PQ 等近似最近邻（ANN）索引算法，从亿级向量中毫秒级找出最相似结果的技术；向量数据库是其工程化封装，RAG 和 Agent Memory 的语义检索底层均依赖于此</li>
+</ul>
+<hr/>
+<h2 id="_3">背景与动机<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="_4">什么叫"近邻问题"？为什么它很难？<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<p>给定一个查询向量，从数据库的数百万乃至数亿个向量中找出距离最近的那几个，这叫 <strong>Nearest Neighbor Problem（最近邻问题）</strong>。</p>
+<p>最朴素的方法：逐一计算查询向量与每个数据库向量的距离，取最小值。</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据量爆炸</td>
+<td>商品库/人脸库动辄千万级向量，逐一计算耗时不可接受</td>
+</tr>
+<tr>
+<td>B+ 树失效</td>
+<td>B+ 树是为标量（数字、字符串）设计的，无法处理高维浮点数组</td>
+</tr>
+<tr>
+<td>高维诅咒</td>
+<td>维度越高，空间越稀疏，传统空间索引（KD-Tree 等）效率急剧下降</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">已有方案（精确搜索）为什么不够？<a class="headerlink" href="#_5" title="Permanent link">¶</a></h3>
+<p>精确搜索（Exact Nearest Neighbor）能保证找到最近的向量，但代价是必须扫描全量数据。对于亿级数据量，这不现实。</p>
+<p>工程上的取舍：<strong>用"足够近"代替"最近"</strong>，允许微小误差换取数量级的速度和内存提升，这就是 ANN（Approximate Nearest Neighbor）的设计哲学。</p>
+<hr/>
+<h2 id="_6">核心机制拆解<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<h3 id="embedding">第零步：向量化（Embedding）<a class="headerlink" href="#embedding" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>做了什么</strong>：用神经网络（Embedding 模型）把图片/文字/音频映射成一个高维浮点数组。以 128 维为例，每个维度对应一种抽象特征（如"是否有尖耳朵""是否有长尾"）</li>
+<li><strong>为什么必须有</strong>：计算机不理解语义，只理解数字；向量空间中语义相近的内容距离更近，这是一切后续操作的前提</li>
+<li><strong>如果省略</strong>：无从比较"猫"和"猫咪"的相似度，检索只能退化为关键词匹配</li>
+</ul>
+<hr/>
+<h3 id="hnsw">索引算法一：HNSW（分层可导航小世界图）<a class="headerlink" href="#hnsw" title="Permanent link">¶</a></h3>
+<p><strong>原理类比</strong>：六度分隔理论 + 社会层级结构</p>
+<h4 id="_7">构图方式<a class="headerlink" href="#_7" title="Permanent link">¶</a></h4>
+<ol>
+<li><strong>底层（Base Layer）</strong>：把所有向量作为节点，把"距离近"的节点用边连起来，形成邻居图</li>
+<li><strong>上层（Sparse Layers）</strong>：从底层抽出一个子集形成更稀疏的上层图，再抽出更小子集形成再上一层，最终形成金字塔形多层图</li>
+</ol>
+<h4 id="_8">查询方式<a class="headerlink" href="#_8" title="Permanent link">¶</a></h4>
+<ul>
+<li>从顶层的单个节点出发，贪心地往"距离更近的邻居"走</li>
+<li>每层快速定位一个大致区域，下沉到下一层后继续精化</li>
+<li>最终从底层返回最近邻向量</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>查询速度极快，只需少量跳跃</td>
+<td>整个图结构必须常驻内存，数据量大时内存压力巨大</td>
+</tr>
+<tr>
+<td>精度高（接近精确搜索）</td>
+<td>图结构维护成本高（插入/删除节点需要更新边）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>如果省略上层图（直接在底层贪心游走）</strong>：容易陷入局部最优，找不到全局最近邻；同时没有好的起始点，搜索路径不可控。</p>
+<hr/>
+<h3 id="ivfinverted-file-index">索引算法二：IVF（倒排文件索引，Inverted File Index）<a class="headerlink" href="#ivfinverted-file-index" title="Permanent link">¶</a></h3>
+<p><strong>原理类比</strong>：找穿白大褂的人不用挨家敲门，直接去医院</p>
+<h4 id="_9">构建方式<a class="headerlink" href="#_9" title="Permanent link">¶</a></h4>
+<ol>
+<li>用聚类算法（如 K-Means）把所有向量分成 K 个桶（Cluster），每个桶有一个**质心（Cluster Center）**代表该桶</li>
+<li>每个向量被分配到距离最近的桶中存储</li>
+</ol>
+<h4 id="_10">查询方式<a class="headerlink" href="#_10" title="Permanent link">¶</a></h4>
+<ol>
+<li>计算查询向量与所有质心的距离，找出最近的若干个桶（粗筛）</li>
+<li>只在这几个桶内做精确比对（细筛）</li>
+</ol>
+<p><strong>量化收益示例</strong>：
+- 1000 万向量，分成 1000 个桶，每次只搜索最近的 10 个桶
+- 候选数从 1000 万降到 10 万，计算量减少 99%</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内存占用远低于 HNSW（无需维护图结构）</td>
+<td>查询向量恰好落在桶边界时，可能被分到邻桶而漏掉真正最近的结果</td>
+</tr>
+<tr>
+<td>可通过调整搜索桶数灵活权衡精度/速度</td>
+<td>聚类质量直接影响检索精度</td>
+</tr>
+</tbody>
+</table>
+<p><strong>如果省略粗筛（直接全量比对）</strong>：退回暴力搜索，速度无法接受。</p>
+<hr/>
+<h3 id="pqproduct-quantization">索引算法三：PQ（乘积量化，Product Quantization）<a class="headerlink" href="#pqproduct-quantization" title="Permanent link">¶</a></h3>
+<p><strong>目标</strong>：在 IVF 的基础上进一步压缩内存、加速桶内距离计算</p>
+<h4 id="_11">压缩方式<a class="headerlink" href="#_11" title="Permanent link">¶</a></h4>
+<ol>
+<li>将原始向量按维度切成若干**子向量**（如 128 维切成 8 段，每段 16 维）</li>
+<li>对每段子向量单独做聚类，得到每段的质心集合（即**码本，Codebook**）</li>
+<li>用每段子向量所属质心的 **ID 编号**替代原始浮点值存储</li>
+</ol>
+<p><strong>压缩效果</strong>（以 128 维 float32 为例）：
+- 原始：128 × 4 bytes = <strong>512 bytes/向量</strong>
+- PQ 后（每段 256 个质心，1 byte 即可存 ID）：8 段 × 1 byte = <strong>8 bytes/向量</strong>
+- 压缩比约 <strong>64x</strong></p>
+<h4 id="_12">查询加速<a class="headerlink" href="#_12" title="Permanent link">¶</a></h4>
+<p>查询时预先计算查询子向量与所有质心的距离，存成**查找表（Lookup Table）**。之后对每个候选向量的距离估算变为：查表 + 加法，大幅减少浮点运算量。</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>极大节省内存</td>
+<td>用质心 ID 替代原始值，引入精度损失</td>
+</tr>
+<tr>
+<td>加速桶内距离计算</td>
+<td>码本训练需要额外时间</td>
+</tr>
+</tbody>
+</table>
+<p><strong>IVF_PQ 组合</strong>：IVF 负责缩小搜索范围，PQ 负责压缩内存和加速距离计算，是实际生产中常见的组合方案。</p>
+<hr/>
+<h3 id="ann">ANN 的本质取舍<a class="headerlink" href="#ann" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>速度</th>
+<th>内存</th>
+<th>精度损失来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HNSW</td>
+<td>极快</td>
+<td>高（全量图驻内存）</td>
+<td>贪心游走可能绕路，错过真正最近邻</td>
+</tr>
+<tr>
+<td>IVF</td>
+<td>快</td>
+<td>中</td>
+<td>查询向量落在桶边界时漏检</td>
+</tr>
+<tr>
+<td>PQ</td>
+<td>快（向量计算）</td>
+<td>极低</td>
+<td>用质心 ID 近似，损失精度</td>
+</tr>
+<tr>
+<td>IVF_PQ</td>
+<td>快</td>
+<td>低</td>
+<td>IVF 桶边界 + PQ 量化误差叠加</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ANN 的定义</strong>：允许小概率找不到严格最近邻，换取速度和内存的数量级提升。与 MySQL B+ 树精确定位某一行不同，向量检索天然是"近似"的。</p>
+<hr/>
+<h3 id="vector-database">向量数据库（Vector Database）<a class="headerlink" href="#vector-database" title="Permanent link">¶</a></h3>
+<p>将以上 ANN 索引算法封装成支持向量存储、索引、检索的数据库系统，就是**向量数据库**（如 Milvus、Pinecone、Weaviate、Qdrant、Chroma 等）。</p>
+<p>任何能被向量化的数据（图片、文本、音频、视频）都可以存入并被高效检索。</p>
+<hr/>
+<h3 id="rag-agent-memory">与 RAG / Agent Memory 的关联<a class="headerlink" href="#rag-agent-memory" title="Permanent link">¶</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>用户提问
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>   ↓
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>Embedding 模型 → 查询向量
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>   ↓
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>向量数据库（ANN 检索）→ Top-K 最相关文本片段
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>   ↓
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>拼入 Prompt → LLM 生成答案
+</span></code></pre></div>
+<ul>
+<li><strong>RAG</strong>：知识库文档被 Embedding 后存入向量数据库；用户提问时检索最相关片段，交给 LLM 作答</li>
+<li><strong>Agent Memory</strong>：历史对话被 Embedding 后存入向量数据库；下次对话时检索最相关记忆片段，让模型"记住"之前说过的话</li>
+</ul>
+<p>两者的语义检索本质都是**向量检索（Vector Retrieval）**。</p>
+<hr/>
+<h2 id="_13">与相关概念的对比<a class="headerlink" href="#_13" title="Permanent link">¶</a></h2>
+<h3 id="annvs-exact-nn">向量检索（ANN）vs 精确搜索（Exact NN）<a class="headerlink" href="#annvs-exact-nn" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>ANN</th>
+<th>Exact NN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>精度</td>
+<td>近似（允许小误差）</td>
+<td>精确（100% 找到最近邻）</td>
+</tr>
+<tr>
+<td>速度</td>
+<td>毫秒级（亿级数据）</td>
+<td>随数据量线性增长，不可接受</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>生产环境（图搜图、RAG、人脸识别）</td>
+<td>数据量极小或对精度要求绝对严格的场景</td>
+</tr>
+<tr>
+<td>本质区别</td>
+<td>用"足够近"换速度</td>
+<td>保证"最近"但无法扩展</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hnsw-vs-ivf_pq">HNSW vs IVF_PQ<a class="headerlink" href="#hnsw-vs-ivf_pq" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>HNSW</th>
+<th>IVF_PQ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内存</td>
+<td>高（图驻内存）</td>
+<td>低（PQ 压缩 + 只存桶内向量）</td>
+</tr>
+<tr>
+<td>速度</td>
+<td>极快</td>
+<td>快（粗筛后细搜）</td>
+</tr>
+<tr>
+<td>精度</td>
+<td>高</td>
+<td>中（两处近似误差叠加）</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>内存充裕、追求低延迟</td>
+<td>数据量极大、内存受限</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vs">关键词检索 vs 向量检索（语义检索）<a class="headerlink" href="#vs" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>关键词检索（BM25、倒排索引）</th>
+<th>向量检索（ANN）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>匹配方式</td>
+<td>词项精确匹配</td>
+<td>语义相似度匹配</td>
+</tr>
+<tr>
+<td>优势</td>
+<td>专有名词、精确匹配不会漏</td>
+<td>同义词、改写、跨语言都能命中</td>
+</tr>
+<tr>
+<td>劣势</td>
+<td>无法理解语义，词不同就匹配不到</td>
+<td>专有名词可能被语义相近但无关的内容"污染"</td>
+</tr>
+<tr>
+<td>实践</td>
+<td>混合检索（Hybrid Search）互补</td>
+<td>混合检索（Hybrid Search）互补</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vs-mysql">向量数据库 vs 传统关系型数据库（MySQL）<a class="headerlink" href="#vs-mysql" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>向量数据库</th>
+<th>MySQL（B+ 树）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据类型</td>
+<td>高维浮点向量（非结构化数据）</td>
+<td>结构化标量（数字、字符串）</td>
+</tr>
+<tr>
+<td>查询目标</td>
+<td>找最相似（近似）</td>
+<td>找精确匹配（精确）</td>
+</tr>
+<tr>
+<td>索引结构</td>
+<td>HNSW、IVF、PQ</td>
+<td>B+ 树、哈希索引</td>
+</tr>
+<tr>
+<td>典型场景</td>
+<td>语义搜索、推荐系统、RAG</td>
+<td>事务处理、精确查询</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="_14">典型应用场景<a class="headerlink" href="#_14" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>用向量检索的理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>以图搜图（电商拍照找同款）</strong></td>
+<td>图片转向量后，距离近 = 视觉相似，精确关键词无法描述视觉特征</td>
+</tr>
+<tr>
+<td><strong>人脸识别</strong></td>
+<td>人脸转向量，在人脸库中找距离最近的，天然处理光线、角度变化</td>
+</tr>
+<tr>
+<td><strong>RAG 知识库问答</strong></td>
+<td>用户问题与文档片段在语义空间中比较相似度，解决同义词/改写问题</td>
+</tr>
+<tr>
+<td><strong>Agent Memory（对话记忆）</strong></td>
+<td>历史对话向量化存储，查当前对话最相关的历史记忆片段，实现长期记忆</td>
+</tr>
+<tr>
+<td><strong>推荐系统（"猜你喜欢"）</strong></td>
+<td>用户行为/物品特征向量化，找"用户向量"与"商品向量"距离最近的商品</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="_15">局限性与常见误区<a class="headerlink" href="#_15" title="Permanent link">¶</a></h2>
+<h3 id="_16">局限性<a class="headerlink" href="#_16" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>精度不是 100%</strong>：ANN 本质是近似搜索，在桶边界（IVF）、量化误差（PQ）、图局部最优（HNSW）等情况下可能漏掉真正最近邻</li>
+<li><strong>内存压力</strong>：HNSW 需要把全量向量图驻内存，超大规模数据下成本高</li>
+<li><strong>Embedding 质量是上限</strong>：向量检索的语义相似度完全取决于 Embedding 模型的质量；模型不好，检索再快也没意义</li>
+<li><strong>无法处理精确约束</strong>：向量检索不能像 SQL 那样做精确过滤（如"只查2025年之后的文档"），通常需要结合传统数据库的元数据过滤</li>
+<li><strong>高维诅咒</strong>：维度过高时，向量之间距离趋于均匀，相似度区分度下降</li>
+</ol>
+<h3 id="_17">面试常见误区<a class="headerlink" href="#_17" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>误区1</strong>："向量数据库就是用来存向量的普通数据库" → 核心价值在于 ANN 索引，支持亿级向量毫秒级语义检索，这是传统数据库做不到的</li>
+<li><strong>误区2</strong>："HNSW 一定比 IVF 好" → 各有场景：内存充裕选 HNSW，内存受限选 IVF_PQ</li>
+<li><strong>误区3</strong>："向量检索找到的是精确最近邻" → 是近似最近邻（ANN），允许小误差</li>
+<li><strong>误区4</strong>："RAG 的检索就是关键词匹配" → RAG 用的是语义向量检索，能处理同义词和语义改写；关键词检索只是其中一种补充（混合检索）</li>
+<li><strong>误区5</strong>："向量维度越高越好" → 维度越高，内存越大，计算越慢，且存在高维诅咒；维度选择取决于 Embedding 模型，不是越高越好</li>
+</ul>
+<hr/>
+<h2 id="_18">面试高频问题与回答框架<a class="headerlink" href="#_18" title="Permanent link">¶</a></h2>
+<p><strong>Q1：什么是向量，为什么要把文本/图片转成向量？</strong>
+- 考察意图：是否理解向量的直觉含义
+- 回答框架：
+  1. 向量 = 一组浮点数，在高维坐标系中对应一个点
+  2. Embedding 模型保证：语义越相近的内容，对应的向量距离越近
+  3. 计算机不懂语义，但会算距离；向量化让"语义相似"变成可计算的"距离相近"</p>
+<hr/>
+<p><strong>Q2：什么是 ANN？为什么不用精确最近邻搜索？</strong>
+- 考察意图：是否理解工程取舍
+- 回答框架：
+  1. 精确搜索要扫全量数据，亿级向量下耗时不可接受
+  2. ANN = 允许小概率找不到严格最近邻，换取数量级的速度/内存提升
+  3. 实际场景（RAG、推荐）对"最近"的精度要求不是 100%，ANN 足够用</p>
+<hr/>
+<p><strong>Q3：HNSW 是什么？它的原理是什么？</strong>
+- 考察意图：是否理解图索引的核心思路
+- 回答框架：
+  1. 类比六度分隔理论：近邻向量连边形成图
+  2. 分层金字塔：上层稀疏（快速定位大致区域），底层密集（精确找最近邻）
+  3. 查询时从顶层出发贪心下沉，无需遍历全量节点
+  4. 缺点：图结构常驻内存，内存开销大</p>
+<hr/>
+<p><strong>Q4：IVF 和 PQ 分别解决什么问题，IVF_PQ 为什么是常见组合？</strong>
+- 考察意图：是否理解两种方法的分工
+- 回答框架：
+  - IVF：先聚类，查询时只搜最近的若干个桶，缩小搜索范围（解决速度问题）
+  - PQ：把向量切段量化压缩，用 ID 替代浮点值（解决内存问题），同时用查表加速距离计算
+  - IVF_PQ 组合：IVF 管"搜哪里"，PQ 管"怎么存和算"，两者互补</p>
+<hr/>
+<p><strong>Q5：向量数据库和 MySQL 的本质区别是什么？</strong>
+- 考察意图：是否能清晰区分两种数据库的定位
+- 回答框架：
+  1. MySQL 用 B+ 树做精确匹配，向量数据库用 ANN 索引做近似相似搜索
+  2. 查询目标不同：MySQL 找"某一行"，向量数据库找"最像的几个"
+  3. 数据类型不同：MySQL 处理结构化标量，向量数据库处理高维浮点向量
+  4. 两者常结合使用：向量库做语义检索 + 关系库做精确过滤</p>
+<hr/>
+<p><strong>Q6：RAG 和 Agent Memory 的底层检索机制是什么？有什么共同点？</strong>
+- 考察意图：能否打通 RAG / Memory 与向量检索的关系
+- 回答框架：
+  1. 两者底层都是向量检索：文档/对话 → Embedding → 存入向量数据库
+  2. 查询时：问题/当前对话 → Embedding → ANN 检索最相关片段 → 喂给 LLM
+  3. 区别仅在于检索的"库"不同：RAG 检索知识文档库，Memory 检索历史对话库</p>
+<hr/>
+<p><strong>Q7：向量检索的精度损失来自哪里？如何权衡？</strong>
+- 考察意图：是否理解 ANN 的误差来源
+- 回答框架：
+  - HNSW：贪心游走可能陷入局部最优，绕路后错过真正最近邻
+  - IVF：查询向量落在桶边界，被分到错误的桶，最近邻在另一个桶里
+  - PQ：用质心 ID 近似原始向量，量化本身有精度损失
+  - 权衡：增大 HNSW 的搜索范围（ef 参数）；IVF 搜更多桶（nprobe 参数）；PQ 增加码本大小，均可提升精度但同时增加计算量</p>
+<hr/>
+<p><strong>Q8：什么是混合检索？为什么实际 RAG 系统常用它？</strong>
+- 考察意图：是否了解实际工程中的检索优化
+- 回答框架：
+  1. 关键词检索（BM25）：精确匹配专有名词、型号、人名，不会被语义干扰
+  2. 向量检索（ANN）：处理同义词、语义改写、跨语言问题
+  3. 两者盲区互补，混合使用（Hybrid Search）是生产中的主流方案
+  4. 常见实现：分别检索后用 RRF（Reciprocal Rank Fusion）合并排名</p>
+<hr/>
+<h2 id="_19">用自己的话解释（费曼测试）<a class="headerlink" href="#_19" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>面试中我会这样说：</p>
+<p>"向量检索解决的是这样一个问题：我想在亿级数据里找'最像'我查询内容的那几条——不是精确匹配某个关键词，而是语义上最接近。它的做法是把所有内容用 Embedding 模型转成高维空间里的一个点，然后找距离最近的几个点。但亿级向量你不可能逐一比，所以就有了 HNSW、IVF、PQ 这些索引算法——简单说就是'先找大概方向，再在附近精搜'，把计算量从线性降到亚线性，代价是允许极小概率找不到严格最近的，所以叫近似最近邻（ANN）。把这些算法封装起来，就是向量数据库。RAG 和 Agent Memory 的语义检索，底层都是这一套。所以它解决的核心问题是：如何在海量非结构化数据中，毫秒级地找到语义上最相关的内容。"</p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

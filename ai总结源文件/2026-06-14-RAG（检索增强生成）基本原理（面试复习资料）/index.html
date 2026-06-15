@@ -1,0 +1,1083 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-06-14-RAG%EF%BC%88%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%EF%BC%89%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%EF%BC%88%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0%E8%B5%84%E6%96%99%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>RAG（检索增强生成）基本原理（面试复习资料） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rag" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RAG（检索增强生成）基本原理（面试复习资料）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        来源
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概念定位
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        背景与动机
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="背景与动机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM 本身的三大缺陷
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "直接把整个知识库塞进 Prompt"为什么不行？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rag_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAG 的针对性解法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心机制拆解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="核心机制拆解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段一：数据准备（离线）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="阶段一：数据准备（离线）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1chunking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1：文档切分（Chunking）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2：向量化（Embedding）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-vector-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3：存入 Vector Database
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段二：用户提问（在线）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="阶段二：用户提问（在线）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-4query-rewrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4：Query Rewrite（问题重写）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5：向量检索（召回，Retrieval）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6rerank" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6：Rerank（精排/重排序）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-7-prompt-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7：构建 Prompt，交给 LLM 生成答案
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与相关概念的对比
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="与相关概念的对比">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rag-vs-fine-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAG vs Fine-tuning（微调）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rag-vs-graphrag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAG vs GraphRAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键词检索 vs 向量相似度检索（混合检索）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        典型应用场景
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        局限性与常见误区
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="局限性与常见误区">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        局限性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        面试常见误区
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        面试高频问题与回答框架
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        用自己的话解释（费曼测试）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="rag">RAG（检索增强生成）基本原理（面试复习资料）<a class="headerlink" href="#rag" title="Permanent link">¶</a></h1>
+<h2 id="_1">来源<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://www.bilibili.com/video/BV1C69iBgEMk/">十分钟了解RAG基本原理</a></li>
+<li>BV 号：BV1C69iBgEMk</li>
+<li>UP 主：林爻linyao</li>
+</ul>
+<hr/>
+<h2 id="_2">概念定位<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>概念名称与领域</strong>：RAG（Retrieval Augmented Generation，检索增强生成），属于大模型应用工程领域</li>
+<li><strong>非技术语言</strong>：就像考试前临时查资料——不是让 AI 变得更聪明，而是在它回答前先帮它找到相关页面，让它对着资料作答</li>
+<li><strong>技术语言（面试可直接说）</strong>：RAG 是一种在大语言模型（LLM）生成回答之前，先通过检索系统从外部知识库中取回相关上下文片段，再将其拼入 Prompt 共同输入 LLM 的技术框架</li>
+</ul>
+<hr/>
+<h2 id="_3">背景与动机<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="llm">LLM 本身的三大缺陷<a class="headerlink" href="#llm" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>幻觉</td>
+<td>训练数据中没有答案时，LLM 不会说"我不知道"，而是预测下一个 token，编造合理答案</td>
+</tr>
+<tr>
+<td>知识过时</td>
+<td>训练数据有截止日期，之后的事件完全不知道</td>
+</tr>
+<tr>
+<td>无法访问私有数据</td>
+<td>企业内部文档、业务数据等从未进入训练集</td>
+</tr>
+</tbody>
+</table>
+<h3 id="prompt">"直接把整个知识库塞进 Prompt"为什么不行？<a class="headerlink" href="#prompt" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>上下文窗口限制</strong>：内容太多时 LLM 注意力分散，精度下降</li>
+<li><strong>计算成本高</strong>：每次请求都处理海量文本，费用不可接受</li>
+<li><strong>响应速度慢</strong>：用户无法接受等待分钟级别的回答</li>
+</ol>
+<h3 id="rag_1">RAG 的针对性解法<a class="headerlink" href="#rag_1" title="Permanent link">¶</a></h3>
+<blockquote>
+<p>"开卷考试不是从第一页翻到最后一页，而是先定位到相关页，再作答。"</p>
+</blockquote>
+<p>RAG 在 LLM 回答前插入一个「先检索相关片段，再基于片段生成」的步骤，既解决了知识缺口，又控制了输入规模。</p>
+<hr/>
+<h2 id="_4">核心机制拆解<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p>RAG 分两个阶段：<strong>数据准备</strong> 和 <strong>用户提问</strong>。</p>
+<h3 id="_5">阶段一：数据准备（离线）<a class="headerlink" href="#_5" title="Permanent link">¶</a></h3>
+<h4 id="step-1chunking">Step 1：文档切分（Chunking）<a class="headerlink" href="#step-1chunking" title="Permanent link">¶</a></h4>
+<ul>
+<li><strong>做了什么</strong>：将原始文档切成若干小块，每块尽量表达一个完整语义</li>
+<li><strong>切分方式</strong>：按章节 / 段落 / 固定字数（如每 500 字一块）</li>
+<li><strong>为什么必须切</strong>：整篇文档向量化后语义混杂，检索不准；切分让每块聚焦单一主题</li>
+<li><strong>如果省略</strong>：一个超大 chunk 含有 ABCDEFG 多个主题，检索到它但实际上大多数内容都不相关</li>
+</ul>
+<h4 id="step-2embedding">Step 2：向量化（Embedding）<a class="headerlink" href="#step-2embedding" title="Permanent link">¶</a></h4>
+<ul>
+<li><strong>做了什么</strong>：用 Embedding 模型把每个文本块转成高维向量（实际几百到上千维）</li>
+<li><strong>为什么必须有</strong>：计算机不理解文字，只理解数字；向量空间中语义相近的内容距离更近</li>
+<li><strong>直觉理解</strong>：想象一个坐标轴，"张三是男的"和"张三30岁"的坐标会比"销售额1万元"更接近</li>
+<li><strong>如果省略</strong>：无法度量"问题和片段语义有多近"，检索退化为关键词匹配</li>
+</ul>
+<h4 id="step-3-vector-database">Step 3：存入 Vector Database<a class="headerlink" href="#step-3-vector-database" title="Permanent link">¶</a></h4>
+<ul>
+<li><strong>做了什么</strong>：将（文本内容, 对应向量）成对存入向量数据库</li>
+<li><strong>为什么必须有</strong>：向量数据库支持高效的相似度查询，是后续检索的基础设施</li>
+<li><strong>如果省略</strong>：检索时没有索引，每次都要暴力全量比对，速度无法接受</li>
+</ul>
+<hr/>
+<h3 id="_6">阶段二：用户提问（在线）<a class="headerlink" href="#_6" title="Permanent link">¶</a></h3>
+<h4 id="step-4query-rewrite">Step 4：Query Rewrite（问题重写）<a class="headerlink" href="#step-4query-rewrite" title="Permanent link">¶</a></h4>
+<ul>
+<li><strong>做了什么</strong>：将用户口语化的短问题扩写/改写，使其更贴近知识库的语言风格</li>
+<li><strong>例子</strong>：用户问"张三是谁" → 改写为"详细介绍张三的性别、年龄、家庭住址等情况"</li>
+<li><strong>为什么要做</strong>：用户提问往往短、碎、口语化，直接拿去向量检索命中率低</li>
+<li><strong>如果省略</strong>：召回率下降，漏掉相关片段</li>
+</ul>
+<h4 id="step-5retrieval">Step 5：向量检索（召回，Retrieval）<a class="headerlink" href="#step-5retrieval" title="Permanent link">¶</a></h4>
+<ul>
+<li><strong>做了什么</strong>：将改写后的问题也转成向量，在数据库中按相似度找出 Top-K 个最近的片段</li>
+<li><strong>相似度算法</strong>：余弦相似度（计算向量夹角的 cos 值）或欧式距离（直线距离）</li>
+<li><strong>这一步的局限</strong>：只是粗筛，判断"片段和问题像不像"，不能保证片段真的回答了问题</li>
+<li><strong>如果省略</strong>：直接把全部知识库喂给 LLM，回到"不可行"的原始方案</li>
+</ul>
+<h4 id="step-6rerank">Step 6：Rerank（精排/重排序）<a class="headerlink" href="#step-6rerank" title="Permanent link">¶</a></h4>
+<ul>
+<li><strong>做了什么</strong>：用更强的模型把 Top-K 候选片段与问题逐一深度比对，选出最能回答问题的 Top-M 片段</li>
+<li><strong>和上一步的区别</strong>：检索看的是"像不像"（向量距离），Rerank 看的是"有没有回答"（语义理解）</li>
+<li><strong>如果省略</strong>：召回的片段里可能有和问题"长得像"但实际答非所问的干扰项</li>
+</ul>
+<h4 id="step-7-prompt-llm">Step 7：构建 Prompt，交给 LLM 生成答案<a class="headerlink" href="#step-7-prompt-llm" title="Permanent link">¶</a></h4>
+<ul>
+<li><strong>做了什么</strong>：将用户问题 + 检索到的参考片段 + 系统提示词（如"严格按资料回答，不知道就说不知道"）拼成 Prompt，送入 LLM</li>
+<li><strong>为什么要加提示词约束</strong>：防止 LLM 忽略资料自由发挥，产生幻觉</li>
+<li><strong>用户感知</strong>：以上所有步骤对用户完全透明，用户只看到问题和最终答案</li>
+</ul>
+<hr/>
+<h2 id="_7">与相关概念的对比<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<h3 id="rag-vs-fine-tuning">RAG vs Fine-tuning（微调）<a class="headerlink" href="#rag-vs-fine-tuning" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>RAG</th>
+<th>Fine-tuning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>更新知识的方式</td>
+<td>更新向量数据库（实时可改）</td>
+<td>重新训练模型（代价高）</td>
+</tr>
+<tr>
+<td>适合场景</td>
+<td>私有数据、知识频繁变更</td>
+<td>让模型掌握特定风格/能力</td>
+</tr>
+<tr>
+<td>可解释性</td>
+<td>高（能看到引用片段）</td>
+<td>低（知识融合进权重）</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>较低</td>
+<td>较高</td>
+</tr>
+<tr>
+<td>核心区别</td>
+<td>在推理时检索外部知识</td>
+<td>在训练时把知识固化进模型</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rag-vs-graphrag">RAG vs GraphRAG<a class="headerlink" href="#rag-vs-graphrag" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>RAG</th>
+<th>GraphRAG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>知识组织方式</td>
+<td>向量化的文本块（扁平）</td>
+<td>知识图谱（实体-关系-属性，结构化）</td>
+</tr>
+<tr>
+<td>擅长问题类型</td>
+<td>局部精确查找</td>
+<td>全局/跨片段/关系推理问题</td>
+</tr>
+<tr>
+<td>典型问题</td>
+<td>"张三是谁"</td>
+<td>"文章中所有人物的关系是什么"</td>
+</tr>
+<tr>
+<td>核心区别</td>
+<td>靠向量相似度定位片段</td>
+<td>靠图结构保留跨片段关系</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vs">关键词检索 vs 向量相似度检索（混合检索）<a class="headerlink" href="#vs" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>关键词检索</th>
+<th>向量相似度检索</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>比喻</td>
+<td>查字典（字对字，丁是丁卯是卯）</td>
+<td>问朋友（懂意思但可能有出入）</td>
+</tr>
+<tr>
+<td>优势</td>
+<td>精确匹配，不会"近义词误伤"</td>
+<td>理解语义，能处理同义词/改写</td>
+</tr>
+<tr>
+<td>盲区</td>
+<td>无法处理同义词和语义相近</td>
+<td>可能被语义相似但无关的内容干扰</td>
+</tr>
+<tr>
+<td>实践建议</td>
+<td>混合使用，盲区互补</td>
+<td>混合使用，盲区互补</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="_8">典型应用场景<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>为什么用 RAG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>企业知识库问答</strong></td>
+<td>内部文档是私有数据，LLM 未见过；文档频繁更新，不适合每次微调</td>
+</tr>
+<tr>
+<td><strong>客服机器人</strong></td>
+<td>需要基于最新产品手册/政策回答，不能让 LLM 自由发挥导致承诺失误</td>
+</tr>
+<tr>
+<td><strong>文档助手</strong></td>
+<td>用户上传合同/报告后实时问答，文档是一次性的，无法提前训练</td>
+</tr>
+<tr>
+<td><strong>法律/医疗查询</strong></td>
+<td>答案需要可溯源（能指向具体条文/文献），RAG 天然带引用出处</td>
+</tr>
+<tr>
+<td><strong>代码库问答</strong></td>
+<td>大型私有代码库，LLM 不知道内部实现；向量检索能快速定位相关文件</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="_9">局限性与常见误区<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<h3 id="_10">局限性<a class="headerlink" href="#_10" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>垃圾进，垃圾出</strong>：数据清洗（PDF 解析、OCR、表格处理）是最容易被忽视的卡点，文档解析质量决定上限</li>
+<li><strong>Chunk 粒度两难</strong>：块太大 → 主题混杂，检索不准；块太小 → 语义断裂（"张三"和"是一个好人"被切开，模型不知道谁是好人）</li>
+<li><strong>只能处理已有知识</strong>：RAG 的知识边界由向量库决定，库里没有的问题依然无法回答</li>
+<li><strong>向量检索是粗筛</strong>：余弦相似度高≠真正能回答问题，必须配合 Rerank</li>
+<li><strong>模型基座是底线</strong>：前面流程再好，LLM 本身如果幻觉严重、不遵循指令，输出依然有问题</li>
+</ol>
+<h3 id="_11">面试常见误区<a class="headerlink" href="#_11" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>误区1</strong>："RAG 让 AI 更聪明" → 错。RAG 不改变模型本身，它只是给模型加了"查资料"的能力</li>
+<li><strong>误区2</strong>："向量检索精度足够，不需要 Rerank" → 向量相似度只是语义接近，不等于能回答问题；Rerank 是不可缺少的精排层</li>
+<li><strong>误区3</strong>："切块越细越好" → 太细会导致语义断裂，颗粒度要根据文档类型具体调整</li>
+<li><strong>误区4</strong>："RAG 和微调是竞争关系" → 实践中常常结合使用：微调让模型掌握领域语言风格，RAG 提供最新/私有知识</li>
+</ul>
+<hr/>
+<h2 id="_12">面试高频问题与回答框架<a class="headerlink" href="#_12" title="Permanent link">¶</a></h2>
+<p><strong>Q1：什么是 RAG？为什么需要它？</strong>
+- 考察意图：能否说清楚动机，而不只是背定义
+- 回答框架：
+  1. LLM 的三个固有问题（幻觉、知识过时、私有数据）
+  2. 直接塞知识库不可行（上下文限制、成本、速度）
+  3. RAG = 回答前先检索相关片段，再交给 LLM</p>
+<hr/>
+<p><strong>Q2：RAG 的核心流程是什么？</strong>
+- 考察意图：能否分阶段、有条理地描述
+- 回答框架：两阶段框架
+  1. 数据准备：切分（Chunking）→ 向量化（Embedding）→ 存入 Vector DB
+  2. 用户提问：Query Rewrite → 向量检索（Top-K 粗筛）→ Rerank（精排）→ 构建 Prompt → LLM 生成</p>
+<hr/>
+<p><strong>Q3：Chunking 怎么做？切大还是切小？</strong>
+- 考察意图：是否理解粒度权衡，而非背公式
+- 回答框架：
+  1. 切太大：一个块多主题，检索命中了块但内容不精确
+  2. 切太小：语义断裂，模型失去上下文
+  3. 实践：按文档结构（章节/段落）切，辅以重叠（overlap）避免边界截断；具体策略依文档类型而定</p>
+<hr/>
+<p><strong>Q4：向量检索和 Rerank 有什么区别，为什么需要两步？</strong>
+- 考察意图：是否理解粗筛 vs 精排的设计逻辑
+- 回答框架：
+  - 向量检索（快，粗）：用余弦相似度/欧式距离，找语义接近的 Top-K，判断"像不像"
+  - Rerank（慢，精）：用更强模型逐一比对，判断"有没有回答问题"
+  - 为什么分两步：如果直接 Rerank 全库，计算量爆炸；先粗筛缩小候选集，再精排，效率和精度兼顾</p>
+<hr/>
+<p><strong>Q5：RAG 和 Fine-tuning 怎么选？</strong>
+- 考察意图：是否理解两种方案的本质差异
+- 回答框架：
+  - 知识频繁更新 / 私有数据 / 需要可溯源引用 → 优先 RAG
+  - 需要模型掌握特定风格、专业术语、推理方式 → 考虑 Fine-tuning
+  - 实践中常结合：Fine-tuning 固化风格，RAG 提供动态知识</p>
+<hr/>
+<p><strong>Q6：RAG 的常见优化点有哪些？</strong>
+- 考察意图：是否有实际工程经验或深度理解
+- 回答框架：
+  1. 数据清洗：PDF/表格/图片解析质量是上限
+  2. Chunking 策略：粒度、重叠（overlap）、按结构切
+  3. Query Rewrite：将口语化问题扩写，提升召回
+  4. 混合检索：关键词检索 + 向量检索互补
+  5. Rerank：精排提升准确率
+  6. Prompt 设计：约束 LLM 严格基于资料回答，减少幻觉
+  7. 模型基座选型：幻觉少、遵循指令、优先开源（可本地部署，数据安全）</p>
+<hr/>
+<p><strong>Q7：RAG 有什么局限性？什么情况下不适用？</strong>
+- 考察意图：能否客观评估方案边界
+- 回答框架：
+  - 知识库没有的问题无法回答
+  - 文档质量差时，后续步骤无法弥补
+  - 需要跨多个片段做复杂推理时，标准 RAG 效果下降（可考虑 GraphRAG）
+  - 追求极低延迟的场景，多步流程带来额外 RT</p>
+<hr/>
+<p><strong>Q8：混合检索是什么？为什么比单一向量检索更好？</strong>
+- 考察意图：是否了解实际落地中的工程优化
+- 回答框架：
+  - 关键词检索：精确匹配，适合专有名词、型号、人名等
+  - 向量检索：语义匹配，适合意思相近但用词不同的情况
+  - 两者盲区互补：关键词处理不了同义词；向量可能被语义相似但无关的内容干扰
+  - 混合 = 先查字典 + 再问朋友，综合判断</p>
+<hr/>
+<h2 id="_13">用自己的话解释（费曼测试）<a class="headerlink" href="#_13" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>面试中我会这样说：</p>
+<p>"RAG 要解决的问题是：大模型训练完就'冻住'了，它不知道你公司内部的文档，也不知道最新发生的事。但如果直接把整个知识库塞给它，上下文太长，又慢又贵。所以 RAG 的思路是——在回答之前先去'查资料'：把知识库切成小块存进向量数据库，用户提问时先检索最相关的几段，再把这几段塞进 Prompt 一起给模型。模型就对着这几段资料作答，就像开卷考试。整个过程对用户完全透明，用户只看到问题和答案。所以它解决的核心问题是：如何让 LLM 能够基于它原本不知道的、可能随时更新的私有知识，给出有据可查的回答。"</p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
