@@ -1,0 +1,921 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="通过上下文探索、发散式需求访谈、范围选项对比、逼问式收口、自检和用户审阅，把模糊的新功能/新需求/产品想法收敛成一份可评审、可交接给后续设计或实现计划阶段的 PRD。用户提出需求但还没有清晰 PRD、需要澄清用户/问题/范围/成功指标/验收口径时使用。">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%A8%E8%AE%BA%E7%9B%B8%E5%85%B3/%E7%BC%96%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81/requirement-to-prd/SKILL/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Requirement to PRD - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#requirement-to-prd" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Requirement to PRD
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        边界
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        必做清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        流程图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: 探索上下文
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: 评估范围
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: 发散澄清
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: 提出范围框定选项
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-prd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: 起草 PRD
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: 逼问收口
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: 写入文件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8-prd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: PRD 自检
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9: 用户审阅关卡
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何时可以精简
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键原则
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="requirement-to-prd">Requirement to PRD<a class="headerlink" href="#requirement-to-prd" title="Permanent link">¶</a></h1>
+<p>把一个模糊需求变成一份可以被评审、排期、交接的 PRD。这个技能负责定义"做什么、为谁做、为什么做、做到什么程度算成功"，不负责决定"怎么实现"。</p>
+<p><hard-gate>
+在 PRD 定稿并得到用户明确认可之前，不要写代码、不要拆实现任务、不要做架构/技术选型、不要调用实现类技能。即使需求看起来很小，也必须先完成最小可用的 PRD 收口。
+</hard-gate></p>
+<h2 id="_1">边界<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>负责</th>
+<th>不负责（留给后续阶段）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>理解背景、用户、问题、动机</td>
+<td>技术方案、架构选型、数据库/框架选择</td>
+</tr>
+<tr>
+<td>定义目标、非目标、MVP 范围</td>
+<td>任务拆解、工期估算、实现步骤</td>
+</tr>
+<tr>
+<td>澄清术语、约束、成功指标、验收口径</td>
+<td>ADR、接口细节、数据模型细节</td>
+</tr>
+<tr>
+<td>输出并自检一份可评审 PRD</td>
+<td>直接实现或修改代码</td>
+</tr>
+</tbody>
+</table>
+<p>如果自己开始写"用哪个库""怎么拆模块""接口怎么设计""表结构怎么建"，说明已经越界。停下来，把这类内容标成 <code>待后续设计/架构阶段决定</code>，不要替后续阶段做决定。</p>
+<h2 id="_2">必做清单<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>按顺序推进，并在复杂任务中维护一个可见 checklist：</p>
+<ol>
+<li><strong>探索上下文</strong> - 阅读相关文档、代码、历史对话、已有 issue/PRD，避免问用户已经能查到的事实。</li>
+<li><strong>评估范围</strong> - 判断这是单一需求，还是多个独立子系统/产品方向混在一起。</li>
+<li><strong>发散澄清</strong> - 一次只问一个问题，优先使用选择题，理解用户、问题、约束、成功标准。</li>
+<li><strong>提出 2-3 个范围框定选项</strong> - 给出取舍和推荐，等待用户选择或修正。</li>
+<li><strong>起草 PRD</strong> - 用模板写出草稿，未知项显式标注，不编造事实。</li>
+<li><strong>逼问收口</strong> - 对草稿逐段检查歧义、证据、指标、范围和术语。</li>
+<li><strong>写入 PRD 文件</strong> - 保存到约定位置；若用户没有偏好，默认 <code>docs/prds/YYYY-MM-DD-&lt;topic&gt;-prd.md</code>。</li>
+<li><strong>PRD 自检并修正</strong> - 检查占位符、矛盾、范围过大、验收不可测、术语冲突。</li>
+<li><strong>用户审阅关卡</strong> - 让用户审阅文件；有修改则更新并重新自检；获得批准后才进入下一阶段。</li>
+</ol>
+<h2 id="_3">流程图<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<div class="language-dot highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">digraph</span><span class="w"> </span><span class="nt">requirement_to_prd</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="nt">"Explore context"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">"Scope too large?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">"Decompose into PRD candidates"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="nt">"Ask one clarifying question"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nt">"Enough to frame options?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">"Propose 2-3 scope options"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="nt">"User selects scope?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="nt">"Draft PRD"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="nt">"Interrogate draft"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="nt">"Blocking questions remain?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="nt">"Write PRD file"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="nt">"Self-review and fix"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="nt">"User approves PRD?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">    </span><span class="nt">"Ready for next phase"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">doublecircle</span><span class="p">];</span>
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a>
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">    </span><span class="nt">"Explore context"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Scope too large?"</span><span class="p">;</span>
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">    </span><span class="nt">"Scope too large?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Decompose into PRD candidates"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">    </span><span class="nt">"Decompose into PRD candidates"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Ask one clarifying question"</span><span class="p">;</span>
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">    </span><span class="nt">"Scope too large?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Ask one clarifying question"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">    </span><span class="nt">"Ask one clarifying question"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Enough to frame options?"</span><span class="p">;</span>
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">    </span><span class="nt">"Enough to frame options?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Ask one clarifying question"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">    </span><span class="nt">"Enough to frame options?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Propose 2-3 scope options"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-24"><a href="#__codelineno-0-24" id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">    </span><span class="nt">"Propose 2-3 scope options"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"User selects scope?"</span><span class="p">;</span>
+</span><span id="__span-0-25"><a href="#__codelineno-0-25" id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="w">    </span><span class="nt">"User selects scope?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Propose 2-3 scope options"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"revise"</span><span class="p">];</span>
+</span><span id="__span-0-26"><a href="#__codelineno-0-26" id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">    </span><span class="nt">"User selects scope?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Draft PRD"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-27"><a href="#__codelineno-0-27" id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">    </span><span class="nt">"Draft PRD"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Interrogate draft"</span><span class="p">;</span>
+</span><span id="__span-0-28"><a href="#__codelineno-0-28" id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">    </span><span class="nt">"Interrogate draft"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Blocking questions remain?"</span><span class="p">;</span>
+</span><span id="__span-0-29"><a href="#__codelineno-0-29" id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="w">    </span><span class="nt">"Blocking questions remain?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Ask one clarifying question"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-30"><a href="#__codelineno-0-30" id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">    </span><span class="nt">"Blocking questions remain?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Write PRD file"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-0-31"><a href="#__codelineno-0-31" id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">    </span><span class="nt">"Write PRD file"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Self-review and fix"</span><span class="p">;</span>
+</span><span id="__span-0-32"><a href="#__codelineno-0-32" id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="w">    </span><span class="nt">"Self-review and fix"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"User approves PRD?"</span><span class="p">;</span>
+</span><span id="__span-0-33"><a href="#__codelineno-0-33" id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="w">    </span><span class="nt">"User approves PRD?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Write PRD file"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"changes requested"</span><span class="p">];</span>
+</span><span id="__span-0-34"><a href="#__codelineno-0-34" id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="w">    </span><span class="nt">"User approves PRD?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Ready for next phase"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"approved"</span><span class="p">];</span>
+</span><span id="__span-0-35"><a href="#__codelineno-0-35" id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="step-1">Step 1: 探索上下文<a class="headerlink" href="#step-1" title="Permanent link">¶</a></h2>
+<p>先尽量从现有材料里获得事实，再问用户判断性问题：</p>
+<ul>
+<li>阅读当前需求描述、相关文档、代码结构、已有 PRD/issue、最近变更。</li>
+<li>区分事实、推断、假设。事实可直接写入 Evidence；推断要标明依据；假设必须待验证。</li>
+<li>如果是给已有系统加功能，先核实现有术语、角色、流程和限制，不要把可查证事实丢给用户回答。</li>
+<li>如果发现已有材料互相冲突，先指出冲突，并用一个问题要求用户选择权威来源或解释差异。</li>
+</ul>
+<p>上下文总结要短，只列会影响 PRD 的内容：目标对象、已知问题、明确约束、潜在矛盾。</p>
+<h2 id="step-2">Step 2: 评估范围<a class="headerlink" href="#step-2" title="Permanent link">¶</a></h2>
+<p>在深入问细节之前，先判断需求是否能对应一份 PRD：</p>
+<ul>
+<li>如果它包含多个独立能力、多个用户群体、多个成功指标或多个上线节奏，先拆成候选 PRD。</li>
+<li>不要在过大的需求里逐条抠细节。先帮助用户决定第一份 PRD 覆盖什么。</li>
+<li>每个拆出的 PRD 都应该能回答：谁的问题、什么场景、为什么现在、MVP 如何验证、什么不做。</li>
+</ul>
+<p>范围过大时，用这种格式收口：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>这个需求里至少有 {N} 个可独立成 PRD 的部分：
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="k">1.</span> <span class="gs">**{候选 PRD A}**</span> - 解决 {问题}，适合先做如果 {理由}
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="k">2.</span> <span class="gs">**{候选 PRD B}**</span> - 解决 {问题}，适合后做如果 {理由}
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="k">3.</span> <span class="gs">**{候选 PRD C}**</span> - 解决 {问题}，风险/依赖是 {说明}
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>我建议先收敛 <span class="gs">**{推荐项}**</span>，因为 {一句话理由}。
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>你想先定哪一份？
+</span></code></pre></div>
+<h2 id="step-3">Step 3: 发散澄清<a class="headerlink" href="#step-3" title="Permanent link">¶</a></h2>
+<p>一次只问一个问题。优先给 2-4 个选项，并允许用户补充其他答案。</p>
+<p>优先澄清这些维度：</p>
+<ul>
+<li><strong>Who</strong> - 谁有这个问题？使用具体角色、群体、权限、场景，不写泛称"用户"。</li>
+<li><strong>Trigger</strong> - 他们在什么情况下遇到问题？前置事件是什么？</li>
+<li><strong>Pain</strong> - 可观察的痛点是什么？描述行为、阻塞、成本，不写未经验证的心理推测。</li>
+<li><strong>Current workaround</strong> - 现在怎么处理？为什么不够好？</li>
+<li><strong>Why now</strong> - 为什么现在要做？有没有时间窗口、业务压力或依赖变化？</li>
+<li><strong>Success</strong> - 做成以后，什么数字、行为或状态会变化？</li>
+<li><strong>Constraints</strong> - 有哪些必须遵守的业务、合规、权限、兼容、上线节奏限制？</li>
+<li><strong>Non-goals</strong> - 哪些看起来相关但这次明确不做？</li>
+</ul>
+<p>提问示例：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>这次 PRD 的主用户更接近哪一种？
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>A. {角色 A}，他们的核心问题是 {痛点}
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>B. {角色 B}，他们的核心问题是 {痛点}
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>C. 两者都重要，但 MVP 先服务 {角色}
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a>我倾向选 {推荐项}，因为 {理由}。你更想按哪个方向收口？
+</span></code></pre></div>
+<h2 id="step-4">Step 4: 提出范围框定选项<a class="headerlink" href="#step-4" title="Permanent link">¶</a></h2>
+<p>在有基本上下文后，必须提出 2-3 个"产品范围/问题框定"选项，而不是技术方案。</p>
+<p>每个选项包含：</p>
+<ul>
+<li>目标用户</li>
+<li>核心问题</li>
+<li>MVP 范围</li>
+<li>明确不做</li>
+<li>优点</li>
+<li>代价/风险</li>
+<li>推荐与否</li>
+</ul>
+<p>格式：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>我看到三种可收口方式：
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="gs">**选项 A：{名称}（推荐）**</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="k">-</span><span class="w"> </span>适合：{用户/场景}
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="k">-</span><span class="w"> </span>MVP：{最小范围}
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="k">-</span><span class="w"> </span>不做：{排除项}
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="k">-</span><span class="w"> </span>取舍：{优点}；代价是 {代价}
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a>
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="gs">**选项 B：{名称}**</span>
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="k">-</span><span class="w"> </span>适合：{用户/场景}
+</span><span id="__span-3-11"><a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="k">-</span><span class="w"> </span>MVP：{最小范围}
+</span><span id="__span-3-12"><a href="#__codelineno-3-12" id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="k">-</span><span class="w"> </span>不做：{排除项}
+</span><span id="__span-3-13"><a href="#__codelineno-3-13" id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="k">-</span><span class="w"> </span>取舍：{优点}；代价是 {代价}
+</span><span id="__span-3-14"><a href="#__codelineno-3-14" id="__codelineno-3-14" name="__codelineno-3-14"></a>
+</span><span id="__span-3-15"><a href="#__codelineno-3-15" id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="gs">**选项 C：{名称}**</span>
+</span><span id="__span-3-16"><a href="#__codelineno-3-16" id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="k">-</span><span class="w"> </span>适合：{用户/场景}
+</span><span id="__span-3-17"><a href="#__codelineno-3-17" id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="k">-</span><span class="w"> </span>MVP：{最小范围}
+</span><span id="__span-3-18"><a href="#__codelineno-3-18" id="__codelineno-3-18" name="__codelineno-3-18"></a><span class="k">-</span><span class="w"> </span>不做：{排除项}
+</span><span id="__span-3-19"><a href="#__codelineno-3-19" id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="k">-</span><span class="w"> </span>取舍：{优点}；代价是 {代价}
+</span><span id="__span-3-20"><a href="#__codelineno-3-20" id="__codelineno-3-20" name="__codelineno-3-20"></a>
+</span><span id="__span-3-21"><a href="#__codelineno-3-21" id="__codelineno-3-21" name="__codelineno-3-21"></a>我建议选 <span class="gs">**{A/B/C}**</span>，因为 {一句话理由}。你要按这个方向起草 PRD 吗？
+</span></code></pre></div>
+<p>用户没有选择或没有认可前，不要进入 PRD 定稿。</p>
+<h2 id="step-5-prd">Step 5: 起草 PRD<a class="headerlink" href="#step-5-prd" title="Permanent link">¶</a></h2>
+<p>用下面模板起草。未知项写 <code>TBD - needs validation via {method}</code>，不要编造看似合理的假设。</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="gh"># {功能/产品名称} PRD</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="gu">## Status</span>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>DRAFT
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="gu">## Summary</span>
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a>{3-5 句：为谁、解决什么问题、MVP 做到哪里、不做什么}
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a>
+</span><span id="__span-4-9"><a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="gu">## Problem</span>
+</span><span id="__span-4-10"><a href="#__codelineno-4-10" id="__codelineno-4-10" name="__codelineno-4-10"></a>{2-4 句：具体角色在具体场景里的问题；不解决的代价}
+</span><span id="__span-4-11"><a href="#__codelineno-4-11" id="__codelineno-4-11" name="__codelineno-4-11"></a>
+</span><span id="__span-4-12"><a href="#__codelineno-4-12" id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="gu">## Evidence</span>
+</span><span id="__span-4-13"><a href="#__codelineno-4-13" id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="k">-</span><span class="w"> </span>{用户原话 / 数据 / 观察 / 现有系统事实}
+</span><span id="__span-4-14"><a href="#__codelineno-4-14" id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="k">-</span><span class="w"> </span>Assumption - needs validation via {method}
+</span><span id="__span-4-15"><a href="#__codelineno-4-15" id="__codelineno-4-15" name="__codelineno-4-15"></a>
+</span><span id="__span-4-16"><a href="#__codelineno-4-16" id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="gu">## Users</span>
+</span><span id="__span-4-17"><a href="#__codelineno-4-17" id="__codelineno-4-17" name="__codelineno-4-17"></a>| 用户/角色 | 场景 | 目标 | 备注 |
+</span><span id="__span-4-18"><a href="#__codelineno-4-18" id="__codelineno-4-18" name="__codelineno-4-18"></a>|---|---|---|---|
+</span><span id="__span-4-19"><a href="#__codelineno-4-19" id="__codelineno-4-19" name="__codelineno-4-19"></a>| Primary: {角色} | {触发场景} | {想完成的事} | {限制/权限/频率} |
+</span><span id="__span-4-20"><a href="#__codelineno-4-20" id="__codelineno-4-20" name="__codelineno-4-20"></a>| Secondary: {角色，可选} | {场景} | {目标} | {备注} |
+</span><span id="__span-4-21"><a href="#__codelineno-4-21" id="__codelineno-4-21" name="__codelineno-4-21"></a>| Not for: {排除对象} | {为什么排除} | - | - |
+</span><span id="__span-4-22"><a href="#__codelineno-4-22" id="__codelineno-4-22" name="__codelineno-4-22"></a>
+</span><span id="__span-4-23"><a href="#__codelineno-4-23" id="__codelineno-4-23" name="__codelineno-4-23"></a><span class="gu">## Goals</span>
+</span><span id="__span-4-24"><a href="#__codelineno-4-24" id="__codelineno-4-24" name="__codelineno-4-24"></a><span class="k">-</span><span class="w"> </span>{产品目标，必须能对应成功指标}
+</span><span id="__span-4-25"><a href="#__codelineno-4-25" id="__codelineno-4-25" name="__codelineno-4-25"></a>
+</span><span id="__span-4-26"><a href="#__codelineno-4-26" id="__codelineno-4-26" name="__codelineno-4-26"></a><span class="gu">## Non-Goals</span>
+</span><span id="__span-4-27"><a href="#__codelineno-4-27" id="__codelineno-4-27" name="__codelineno-4-27"></a><span class="k">-</span><span class="w"> </span>{明确不做的事} - {为什么不做/推迟}
+</span><span id="__span-4-28"><a href="#__codelineno-4-28" id="__codelineno-4-28" name="__codelineno-4-28"></a>
+</span><span id="__span-4-29"><a href="#__codelineno-4-29" id="__codelineno-4-29" name="__codelineno-4-29"></a><span class="gu">## Hypothesis</span>
+</span><span id="__span-4-30"><a href="#__codelineno-4-30" id="__codelineno-4-30" name="__codelineno-4-30"></a>We believe <span class="gs">**{能力/体验变化}**</span> will <span class="gs">**{解决问题}**</span> for <span class="gs">**{用户}**</span>.
+</span><span id="__span-4-31"><a href="#__codelineno-4-31" id="__codelineno-4-31" name="__codelineno-4-31"></a>We'll know we're right when <span class="gs">**{可衡量结果}**</span>.
+</span><span id="__span-4-32"><a href="#__codelineno-4-32" id="__codelineno-4-32" name="__codelineno-4-32"></a>
+</span><span id="__span-4-33"><a href="#__codelineno-4-33" id="__codelineno-4-33" name="__codelineno-4-33"></a><span class="gu">## Success Metrics</span>
+</span><span id="__span-4-34"><a href="#__codelineno-4-34" id="__codelineno-4-34" name="__codelineno-4-34"></a>| 指标 | 当前值/基线 | 目标值 | 测量方式 | 观察窗口 |
+</span><span id="__span-4-35"><a href="#__codelineno-4-35" id="__codelineno-4-35" name="__codelineno-4-35"></a>|---|---:|---:|---|---|
+</span><span id="__span-4-36"><a href="#__codelineno-4-36" id="__codelineno-4-36" name="__codelineno-4-36"></a>| {指标} | {baseline/TBD} | {target} | {source/method} | {timeframe} |
+</span><span id="__span-4-37"><a href="#__codelineno-4-37" id="__codelineno-4-37" name="__codelineno-4-37"></a>
+</span><span id="__span-4-38"><a href="#__codelineno-4-38" id="__codelineno-4-38" name="__codelineno-4-38"></a><span class="gu">## User Journey / Core Flow</span>
+</span><span id="__span-4-39"><a href="#__codelineno-4-39" id="__codelineno-4-39" name="__codelineno-4-39"></a><span class="k">1.</span> {用户触发场景}
+</span><span id="__span-4-40"><a href="#__codelineno-4-40" id="__codelineno-4-40" name="__codelineno-4-40"></a><span class="k">2.</span> {用户执行关键动作}
+</span><span id="__span-4-41"><a href="#__codelineno-4-41" id="__codelineno-4-41" name="__codelineno-4-41"></a><span class="k">3.</span> {系统/产品给出结果，避免写技术实现}
+</span><span id="__span-4-42"><a href="#__codelineno-4-42" id="__codelineno-4-42" name="__codelineno-4-42"></a><span class="k">4.</span> {用户完成目标}
+</span><span id="__span-4-43"><a href="#__codelineno-4-43" id="__codelineno-4-43" name="__codelineno-4-43"></a>
+</span><span id="__span-4-44"><a href="#__codelineno-4-44" id="__codelineno-4-44" name="__codelineno-4-44"></a><span class="gu">## Requirements</span>
+</span><span id="__span-4-45"><a href="#__codelineno-4-45" id="__codelineno-4-45" name="__codelineno-4-45"></a>| ID | Requirement | Priority | Acceptance Criteria |
+</span><span id="__span-4-46"><a href="#__codelineno-4-46" id="__codelineno-4-46" name="__codelineno-4-46"></a>|---|---|---|---|
+</span><span id="__span-4-47"><a href="#__codelineno-4-47" id="__codelineno-4-47" name="__codelineno-4-47"></a>| R1 | {用户可完成什么能力} | Must | Given {前置条件}, when {动作}, then {可观察结果} |
+</span><span id="__span-4-48"><a href="#__codelineno-4-48" id="__codelineno-4-48" name="__codelineno-4-48"></a>| R2 | {能力} | Should | {验收口径} |
+</span><span id="__span-4-49"><a href="#__codelineno-4-49" id="__codelineno-4-49" name="__codelineno-4-49"></a>
+</span><span id="__span-4-50"><a href="#__codelineno-4-50" id="__codelineno-4-50" name="__codelineno-4-50"></a><span class="gu">## Scope</span>
+</span><span id="__span-4-51"><a href="#__codelineno-4-51" id="__codelineno-4-51" name="__codelineno-4-51"></a><span class="gu">### MVP</span>
+</span><span id="__span-4-52"><a href="#__codelineno-4-52" id="__codelineno-4-52" name="__codelineno-4-52"></a><span class="k">-</span><span class="w"> </span>{验证核心假设所需的最小范围}
+</span><span id="__span-4-53"><a href="#__codelineno-4-53" id="__codelineno-4-53" name="__codelineno-4-53"></a>
+</span><span id="__span-4-54"><a href="#__codelineno-4-54" id="__codelineno-4-54" name="__codelineno-4-54"></a><span class="gu">### Later</span>
+</span><span id="__span-4-55"><a href="#__codelineno-4-55" id="__codelineno-4-55" name="__codelineno-4-55"></a><span class="k">-</span><span class="w"> </span>{合理但不进入 MVP 的能力}
+</span><span id="__span-4-56"><a href="#__codelineno-4-56" id="__codelineno-4-56" name="__codelineno-4-56"></a>
+</span><span id="__span-4-57"><a href="#__codelineno-4-57" id="__codelineno-4-57" name="__codelineno-4-57"></a><span class="gu">### Out of Scope</span>
+</span><span id="__span-4-58"><a href="#__codelineno-4-58" id="__codelineno-4-58" name="__codelineno-4-58"></a><span class="k">-</span><span class="w"> </span>{即使被要求也不做的内容} - {原因}
+</span><span id="__span-4-59"><a href="#__codelineno-4-59" id="__codelineno-4-59" name="__codelineno-4-59"></a>
+</span><span id="__span-4-60"><a href="#__codelineno-4-60" id="__codelineno-4-60" name="__codelineno-4-60"></a><span class="gu">## Constraints &amp; Dependencies</span>
+</span><span id="__span-4-61"><a href="#__codelineno-4-61" id="__codelineno-4-61" name="__codelineno-4-61"></a><span class="k">-</span><span class="w"> </span>{业务/合规/权限/平台/兼容/时间约束}
+</span><span id="__span-4-62"><a href="#__codelineno-4-62" id="__codelineno-4-62" name="__codelineno-4-62"></a><span class="k">-</span><span class="w"> </span>{依赖的团队、数据、流程、外部系统}
+</span><span id="__span-4-63"><a href="#__codelineno-4-63" id="__codelineno-4-63" name="__codelineno-4-63"></a>
+</span><span id="__span-4-64"><a href="#__codelineno-4-64" id="__codelineno-4-64" name="__codelineno-4-64"></a><span class="gu">## Glossary</span>
+</span><span id="__span-4-65"><a href="#__codelineno-4-65" id="__codelineno-4-65" name="__codelineno-4-65"></a>| 术语 | 定义 | 备注 |
+</span><span id="__span-4-66"><a href="#__codelineno-4-66" id="__codelineno-4-66" name="__codelineno-4-66"></a>|---|---|---|
+</span><span id="__span-4-67"><a href="#__codelineno-4-67" id="__codelineno-4-67" name="__codelineno-4-67"></a>| {术语} | {唯一含义} | {来源/边界} |
+</span><span id="__span-4-68"><a href="#__codelineno-4-68" id="__codelineno-4-68" name="__codelineno-4-68"></a>
+</span><span id="__span-4-69"><a href="#__codelineno-4-69" id="__codelineno-4-69" name="__codelineno-4-69"></a><span class="gu">## Open Questions</span>
+</span><span id="__span-4-70"><a href="#__codelineno-4-70" id="__codelineno-4-70" name="__codelineno-4-70"></a><span class="k">- [ ]</span> {会改变范围、目标、验收或优先级的问题}
+</span><span id="__span-4-71"><a href="#__codelineno-4-71" id="__codelineno-4-71" name="__codelineno-4-71"></a>
+</span><span id="__span-4-72"><a href="#__codelineno-4-72" id="__codelineno-4-72" name="__codelineno-4-72"></a><span class="gu">## Risks</span>
+</span><span id="__span-4-73"><a href="#__codelineno-4-73" id="__codelineno-4-73" name="__codelineno-4-73"></a>| 风险 | 可能性 | 影响 | 缓解/验证方式 |
+</span><span id="__span-4-74"><a href="#__codelineno-4-74" id="__codelineno-4-74" name="__codelineno-4-74"></a>|---|---|---|---|
+</span><span id="__span-4-75"><a href="#__codelineno-4-75" id="__codelineno-4-75" name="__codelineno-4-75"></a>| {风险} | Low/Medium/High | Low/Medium/High | {措施} |
+</span><span id="__span-4-76"><a href="#__codelineno-4-76" id="__codelineno-4-76" name="__codelineno-4-76"></a>
+</span><span id="__span-4-77"><a href="#__codelineno-4-77" id="__codelineno-4-77" name="__codelineno-4-77"></a><span class="gu">## Launch / Review Notes</span>
+</span><span id="__span-4-78"><a href="#__codelineno-4-78" id="__codelineno-4-78" name="__codelineno-4-78"></a><span class="k">-</span><span class="w"> </span>{评审时需要特别确认的点}
+</span></code></pre></div>
+<h2 id="step-6">Step 6: 逼问收口<a class="headerlink" href="#step-6" title="Permanent link">¶</a></h2>
+<p>对草稿逐段检查。一次只问一个阻塞问题；能从上下文查证的，不问用户。</p>
+<p>必须检查：</p>
+<ul>
+<li><strong>Problem</strong> - 痛点是真实观察、数据支持，还是假设？有没有具体场景？</li>
+<li><strong>Users</strong> - Primary 是否足够具体？是否混入多个角色？<code>Not for</code> 是否清楚？</li>
+<li><strong>Goals vs Requirements</strong> - 目标是否是结果，需求是否是能力，二者有没有混淆？</li>
+<li><strong>Success Metrics</strong> - 指标是否可测？基线、目标、数据来源、观察窗口是否明确？</li>
+<li><strong>Scope</strong> - MVP 是否真的最小？Later 和 Out of Scope 是否能抵抗范围蔓延？</li>
+<li><strong>Acceptance Criteria</strong> - 是否用可观察结果表达？是否能让评审者判断通过/不通过？</li>
+<li><strong>Glossary</strong> - 是否存在同词多义、旧系统术语冲突、业务词和技术词混用？</li>
+<li><strong>Open Questions</strong> - 是否只保留会影响范围/优先级/验收的问题？小疑问不要阻塞 PRD。</li>
+<li><strong>Risks</strong> - 是否包含用户不采纳、数据不可得、流程不配合、权限/合规限制等产品风险？</li>
+</ul>
+<p>遇到模糊词要立刻定义。高风险词包括：智能、自动、实时、简单、完整、可配置、优化、权限、管理员、用户、任务、项目、状态、完成、失败、异常、同步、通知、模板。</p>
+<p>逼问不是润色。发现不了任何新问题，通常说明还没有真正检查到位。</p>
+<h2 id="step-7">Step 7: 写入文件<a class="headerlink" href="#step-7" title="Permanent link">¶</a></h2>
+<p>用户没有指定位置时，保存到：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>docs/prds/YYYY-MM-DD-&lt;topic&gt;-prd.md
+</span></code></pre></div>
+<p>写文件前确认项目是否已有 PRD 目录或命名惯例；有惯例就跟随惯例。文件名使用短横线英文或拼音，避免空格。</p>
+<p>如果当前仓库不是产品/代码仓库，而是知识库或文档库，则保存到最贴近当前主题的文档目录，并在最终回复里给出路径。</p>
+<h2 id="step-8-prd">Step 8: PRD 自检<a class="headerlink" href="#step-8-prd" title="Permanent link">¶</a></h2>
+<p>写完文件后，立刻用新鲜眼光自检并就地修复：</p>
+<ol>
+<li><strong>占位符扫描</strong> - 是否还有 <code>TBD</code>、<code>TODO</code>、空表格、半句话？如果存在，确认它们是否应该留在 Open Questions；否则补齐或删除。</li>
+<li><strong>内部一致性</strong> - Summary、Problem、Goals、Requirements、Metrics 是否指向同一个范围？</li>
+<li><strong>范围检查</strong> - 是否混入多个独立 PRD？MVP 是否包含非必要能力？</li>
+<li><strong>歧义检查</strong> - 是否有需求可被两种方式理解？选择一种写清楚，或放入 Open Questions。</li>
+<li><strong>可验收检查</strong> - 每条 Must requirement 是否有可观察的 acceptance criteria？</li>
+<li><strong>术语检查</strong> - Glossary 是否覆盖新增/易混术语？是否与已有系统用语冲突？</li>
+<li><strong>越界检查</strong> - 是否出现技术方案、架构选型、任务拆解？有则移除或标注留给后续阶段。</li>
+</ol>
+<p>可以使用这个审阅口径：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="gu">## PRD Review</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="gs">**Status:**</span> Approved | Issues Found
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="gs">**Issues:**</span>
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="k">-</span><span class="w"> </span>[Section] {具体问题} - {为什么会影响评审/计划/实现}
+</span><span id="__span-6-7"><a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a>
+</span><span id="__span-6-8"><a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="gs">**Advisory:**</span>
+</span><span id="__span-6-9"><a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="k">-</span><span class="w"> </span>{不阻塞但建议改善的点}
+</span></code></pre></div>
+<p>只有会导致后续计划或实现做错的内容才算阻塞问题。纯文风偏好不阻塞。</p>
+<h2 id="step-9">Step 9: 用户审阅关卡<a class="headerlink" href="#step-9" title="Permanent link">¶</a></h2>
+<p>自检通过后，把 PRD 路径交给用户，并明确要求审阅：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>PRD 已写到 <span class="sb">`{path}`</span>，我也做了一轮自检。
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>请你审阅一下：范围、成功指标、验收口径和 Open Questions 是否符合预期？
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>你批准后，我再进入后续设计/计划阶段。
+</span></code></pre></div>
+<p>等待用户回复。用户要求修改时，更新 PRD，重新跑 Step 8，再次请求审阅。</p>
+<p>用户批准后，才可以说 PRD 完成，并交接给下一阶段。交接时说明：</p>
+<ul>
+<li>PRD 状态已改为 <code>FINAL</code>。</li>
+<li>Glossary 里的术语已校准，后续阶段不要重新定义。</li>
+<li>Open Questions 若仍存在，哪些是非阻塞，哪些必须在设计/实现前解决。</li>
+<li>下一阶段可以进入设计/架构或实现计划，但本技能到此结束。</li>
+</ul>
+<h2 id="_4">何时可以精简<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p>小需求可以压缩流程，但不能跳过关卡：</p>
+<ul>
+<li>上下文探索可以很短。</li>
+<li>发散澄清和逼问收口可以合并为一轮问答。</li>
+<li>PRD 可以是一页以内。</li>
+<li>仍然必须包含 Problem、Users、Goals/Non-Goals、Scope、Requirements、Success Metrics 或明确的验收口径。</li>
+<li>仍然必须写入文件、自检、等待用户批准。</li>
+</ul>
+<h2 id="_5">关键原则<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>一次一个问题</strong> - 不要用问题清单压给用户。</li>
+<li><strong>优先选择题</strong> - 让用户更容易快速裁决。</li>
+<li><strong>先范围，后细节</strong> - 范围没定，不要深挖验收细节。</li>
+<li><strong>证据优先</strong> - 区分事实、推断、假设。</li>
+<li><strong>坚决 YAGNI</strong> - 把不能验证核心假设的能力移出 MVP。</li>
+<li><strong>明确不做</strong> - 好 PRD 不只写要做什么，也写即使诱人也不做什么。</li>
+<li><strong>术语落表</strong> - 模糊词必须进入 Glossary。</li>
+<li><strong>可验收</strong> - Must requirement 必须能判断通过/不通过。</li>
+<li><strong>不越界</strong> - PRD 是产品需求文档，不是架构设计或实现计划。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,731 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="zidea2015">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-06-22-%E4%BA%BA%E7%B1%BB%E4%B8%8EAI%E5%8D%8F%E4%BD%9C%E5%BC%80%E5%8F%91%E7%9A%84%E4%B8%89%E5%B1%82%E6%96%87%E6%A1%A3%E4%BD%93%E7%B3%BB%EF%BC%9AADR%E3%80%81PRD%E4%B8%8EBDD%EF%BC%88%E8%A7%86%E9%A2%91%E6%80%BB%E7%BB%93%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>人类与AI协作开发的三层文档体系：ADR、PRD与BDD（视频总结） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#aiadrprdbdd" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              人类与AI协作开发的三层文档体系：ADR、PRD与BDD（视频总结）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 目标听众
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 问题背景与讨论角度
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心论点与三层工具体系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心论点与三层工具体系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心论点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        工具一：ADR（架构决策记录）——技术层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        工具二：PRD（产品需求文档）——业务层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bdd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        工具三：BDD（行为驱动开发）——验证层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三层关系总览
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 可验证闭环的运转机制
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-sop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 实际应用启示与 SOP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 实际应用启示与 SOP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心启示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        落地 SOP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="aiadrprdbdd">人类与AI协作开发的三层文档体系：ADR、PRD与BDD（视频总结）<a class="headerlink" href="#aiadrprdbdd" title="Permanent link">¶</a></h1>
+<p><a href="https://www.bilibili.com/video/BV1ZN7A67Exg/">人类与人工智能协作开发中架构决策记录 (ADR)、产品需求文档 (PRD) 和行为驱动开发 (BDD) 等核心工具</a></p>
+<h2 id="1">1. 目标听众<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<p>本视频面向**使用 AI 辅助编程的开发者**，特别是：</p>
+<ul>
+<li>在 AI 协作开发中遭遇"项目越来越复杂、AI 越来越难对齐"问题的工程师</li>
+<li>希望建立一套可持续、可验证的 AI 编程工作流的团队</li>
+</ul>
+<h2 id="2">2. 问题背景与讨论角度<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<p>视频从一个实际痛点出发：</p>
+<blockquote>
+<p>在真实项目开发中遇到的问题，远比演示 demo 要多得多。随着项目复杂度增加，人类和 AI 之间越来越难以保持对齐。</p>
+</blockquote>
+<p>其根本原因在于：<strong>人和 AI 的记忆都是有限的</strong>。开发经历从 T1 到 T2 到 T3……几个月后，当初为什么这样设计，背景和理由都会被遗忘——不论是人类的记忆，还是 AI 的上下文窗口，都无法覆盖整个项目的生命周期。</p>
+<p>视频要解决的问题是：<strong>如何构建一套"持久性记忆"体系，使得开发意图在整个项目周期内都不丢失，并且能形成可验证的闭环</strong>。</p>
+<h2 id="3">3. 核心论点与三层工具体系<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<h3 id="_1">核心论点<a class="headerlink" href="#_1" title="Permanent link">¶</a></h3>
+<p>ADR、PRD、BDD 三种工具分别对应技术层、业务层、验证层，三者协同构成人类与 AI 协作开发的**可验证闭环**，共同充当项目的"持久性记忆"。</p>
+<p>三者都回答同一组问题，只是视角不同：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Why</strong>（为什么）</td>
+<td>为什么做出这个决策 / 为什么开发这个功能</td>
+</tr>
+<tr>
+<td><strong>What</strong>（做了什么）</td>
+<td>选择了哪个技术 / 开发了哪个功能</td>
+</tr>
+<tr>
+<td><strong>How</strong>（如何执行）</td>
+<td>如何落地实施</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h3 id="adr">工具一：ADR（架构决策记录）——技术层<a class="headerlink" href="#adr" title="Permanent link">¶</a></h3>
+<p><strong>ADR 是什么</strong>：Architecture Decision Record，记录技术架构层面的决策，包括为什么选某个技术、数据库迁移规则、代码层面的强制约束等。</p>
+<p><strong>典型内容</strong>：
+- 为什么选择这个架构？（背景/Context）
+- 最终选定的技术方案是什么？（决策/Decision）
+- 如何落地执行？（执行规则）</p>
+<p><strong>典型例子</strong>：
+- 数据库迁移规则
+- 架构选型（如选用某框架）
+- 代码层强制约束（如"在 Django 模板中禁止使用 ORM 映射对象，以避免 N+1 问题"）</p>
+<p><strong>特点</strong>：
+- 偏技术层，处于较高层次的抽象
+- 通常相对**不变**，是整个项目开发必须遵守的"大原则"
+- 作为 PRD 的技术约束上限，开发时必须在 ADR 划定的边界内进行</p>
+<hr/>
+<h3 id="prd">工具二：PRD（产品需求文档）——业务层<a class="headerlink" href="#prd" title="Permanent link">¶</a></h3>
+<p><strong>PRD 是什么</strong>：Product Requirements Document，记录业务层面的需求，说明要开发什么功能、为什么开发、用户如何使用。</p>
+<p><strong>典型内容</strong>：
+- 功能描述（开发什么）
+- 功能设计理由（为什么设计这个功能）
+- <strong>用户历程 / 用例</strong>（User Journey）：用户一步步如何使用这个功能</p>
+<p><strong>特点</strong>：
+- 偏业务层
+- 用例（User Journey）是 PRD 中最关键的部分——它不仅是需求说明，也是后续 BDD 测试生成的原材料
+- 在 AI 协作开发中，PRD 作为上下文（Context）输入给 AI，AI 据此生成代码</p>
+<hr/>
+<h3 id="bdd">工具三：BDD（行为驱动开发）——验证层<a class="headerlink" href="#bdd" title="Permanent link">¶</a></h3>
+<p><strong>BDD 是什么</strong>：Behavior Driven Development，行为驱动开发。它将 PRD 中的用户历程抽象为**结构化的可执行测试场景**，用于验证生成的代码是否真正满足业务意图。</p>
+<p><strong>核心特点</strong>：
+- <strong>可读性</strong>：测试场景使用自然语言编写，非开发人员（产品、运营）和 AI 都能读懂
+- <strong>可测试性</strong>：每个场景都可以直接被测试工具执行
+- <strong>结构化</strong>：有固定的语法格式（如 Given / When / Then）</p>
+<p><strong>工具支撑</strong>：Cucumber 是常用的 BDD 框架，支持用自然语言描述用例并自动执行。</p>
+<p><strong>BDD 的作用</strong>：将 PRD 的用户历程"翻译"成可验证的测试用例，用来检验 AI 生成的代码是否符合预期。</p>
+<hr/>
+<h3 id="_2">三层关系总览<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>ADR（技术约束层）
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  └─ 划定技术边界和强制规则，作为 PRD 的约束上限
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>PRD（业务需求层）
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>  └─ 描述功能要做什么、为什么做、用户历程是什么
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>  └─ 作为上下文输入给 AI，驱动代码生成
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>  └─ 用户历程输出给 BDD
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>BDD（验证层）
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>  └─ 将用户历程转换为可执行测试场景
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>  └─ 验证 AI 生成的代码是否正确
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>  └─ 测试失败 → 反馈给开发者 → 重新审视 PRD → 修正后再次生成代码
+</span></code></pre></div>
+<h2 id="4">4. 可验证闭环的运转机制<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>① PRD 提供功能需求 + 用户历程
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>         ↓
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>② 开发（人类或 AI）理解 PRD，生成代码
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>         ↓
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>③ BDD 根据用户历程生成测试用例，对代码进行验证
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>         ↓
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>    ┌── 测试通过 → 功能完成 ✓
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>    └── 测试失败 → Feedback 反馈给开发者
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a>                        ↓
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a>               重新审视 PRD，修正设计
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a>                        ↓
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a>               重新生成代码（回到步骤②）
+</span></code></pre></div>
+<p>ADR 在整个过程中不参与迭代循环，而是作为始终有效的技术约束，每次代码提交都需要遵守 ADR 所定义的原则。</p>
+<h2 id="5-sop">5. 实际应用启示与 SOP<a class="headerlink" href="#5-sop" title="Permanent link">¶</a></h2>
+<h3 id="_3">核心启示<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>三层文档是项目的"持久性记忆"</strong>：弥补人和 AI 上下文窗口有限的天然缺陷，使"当初为什么这样设计"在项目全周期内都可被查询。</li>
+<li><strong>BDD 是 AI 生成代码质量的保障机制</strong>：把"可验证性"内建进开发流程，而不是靠人工 review 兜底。</li>
+<li><strong>ADR 是整个体系的护栏</strong>：它不参与功能迭代，但始终约束技术决策的边界。</li>
+</ul>
+<h3 id="sop">落地 SOP<a class="headerlink" href="#sop" title="Permanent link">¶</a></h3>
+<p><strong>第一阶段：项目启动时</strong></p>
+<ol>
+<li>针对核心技术决策，撰写 ADR——选什么数据库、用什么框架、有哪些代码层强制约束</li>
+<li>ADR 一经确认即相对固定，后续开发均须遵守</li>
+</ol>
+<p><strong>第二阶段：每个功能开发前</strong></p>
+<ol>
+<li>撰写该功能的 PRD，明确：</li>
+<li>要开发什么（功能描述）</li>
+<li>为什么开发（业务理由）</li>
+<li>
+<p>用户历程是什么（User Journey，逐步描述用户如何使用该功能）</p>
+</li>
+<li>
+<p>将 PRD 作为上下文输入给 AI，请 AI 在 ADR 约束内生成代码</p>
+</li>
+</ol>
+<p><strong>第三阶段：验证</strong></p>
+<ol>
+<li>根据 PRD 中的用户历程，使用 BDD 工具（如 Cucumber）生成 Given/When/Then 格式的测试场景</li>
+<li>执行测试场景，验证 AI 生成的代码</li>
+<li>若测试失败，将错误信息反馈，重新审视 PRD（是需求不清？还是代码偏差？），修正后返回步骤 4</li>
+</ol>
+<p><strong>第四阶段：持续维护</strong></p>
+<ol>
+<li>当架构发生变化时，更新 ADR（创建新 ADR，旧 ADR 标注被取代）</li>
+<li>功能迭代时，更新对应 PRD 和 BDD 场景</li>
+<li>遇到"为什么当初这样设计"的疑问时，优先查阅 ADR / PRD，而非靠回忆或猜测</li>
+</ol>
+<blockquote>
+<p><strong>关联阅读</strong>：ADR 的详细写法与管理规范见 <a href="../2026-06-22-%E6%9E%B6%E6%9E%84%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95ADR%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%88%E8%A7%86%E9%A2%91%E6%80%BB%E7%BB%93%EF%BC%89/">2026-06-22-架构决策记录ADR最佳实践（视频总结）</a></p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
