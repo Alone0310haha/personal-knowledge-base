@@ -7,15 +7,16 @@
 测试子流程的位置是一个明确决策点：已确认走 **TDD 风格**（测试用例先于功能代码落地，红-绿-重构），不是先实现后补测试的传统风格。
 
 ```
-需求 → PRD → Spec 拆分 → 架构设计 → 任务拆解 → 测试用例编写 → 测试用例审核 → 测试用例编码 → 功能编码实现 → 测试用例运行 → 代码评审 → 验收
- ①        ②          ③         ④           ⑤           ⑥           ⑦           ⑧           ⑨           ⑩          ⑪
+需求 → PRD → Spec 拆分 → AI 闭环评审 → 架构设计 → 任务拆解 → 测试用例编写 → 测试用例审核 → 测试用例编码 → 功能编码实现 → 测试用例运行 → 代码评审 → 验收
+ ①        ②          ②.5          ③         ④           ⑤           ⑥           ⑦           ⑧           ⑨           ⑩          ⑪
 ```
 
 | 阶段 | 目录 | 状态 | 说明 |
 |---|---|---|---|
 | ① 需求 → PRD | [`requirement-to-prd/`](./requirement-to-prd/SKILL.md) | ✅ 已完成设计 | 融合 brainstorming（发散框定）+ grill-with-docs（逼问收口），设计理由见 [`reference/0001-requirement-to-prd-design.md`](./reference/0001-requirement-to-prd-design.md) |
 | ② PRD → Spec 拆分 | [`prd-to-specs/`](./prd-to-specs/SKILL.md) | ✅ 已完成设计 | 把产品视角的 PRD 拆成一个或多个 OpenSpec 风格的工程 Spec，明确每个 Spec 的交付边界、行为契约、依赖关系和追溯到 PRD 的验收口径。设计理由见 [`reference/0002-prd-to-specs-design.md`](./reference/0002-prd-to-specs-design.md) |
-| ③ Spec → 架构设计 | 待建 | 🔲 未开始 | 针对单个工程 Spec 产出 Architecture Design Doc，并为重要、难逆转、有真实 trade-off 的决策产出 ADR。候选素材：ECC 的 `architect` agent（系统设计）、grill-with-docs 的 ADR 产出、ECC 的 `architecture-decision-records` skill |
+| ②.5 PRD/Spec → AI 闭环评审 | [`prd-spec-closure-review/`](./prd-spec-closure-review/SKILL.md) | ✅ 已完成设计 | 在交给人类审查前，独立检查 PRD 的目标、范围、成功指标、验收口径是否被 proposal/specs 完整承接；只输出阻塞问题、覆盖检查、人审焦点，不做架构设计或任务拆解 |
+| ③ Spec → 架构设计 | [`spec-to-architecture/`](./spec-to-architecture/SKILL.md) | ✅ 已完成设计 | 针对单个已通过闭环评审的工程 Spec 产出 Architecture Design Doc，并为重要、难逆转、有真实 trade-off 的决策产出 ADR。设计理由见 [`reference/0003-spec-to-architecture-design.md`](./reference/0003-spec-to-architecture-design.md) |
 | ④ 架构设计 → 任务拆解 | 待建 | 🔲 未开始 | 候选素材：ECC 的 `planner` agent、superpowers 的 `writing-plans` skill |
 | ⑤ 任务拆解 → 测试用例编写 | 待建 | 🔲 未开始 | 产出测试场景/用例描述（Given-When-Then 一类的行为描述），还不是可运行代码。候选素材：ECC 的 `spec-miner` 产出的 Scenario 块可作为格式参考 |
 | ⑥ 测试用例编写 → 测试用例审核 | 待建 | 🔲 未开始 | 逼问式检查用例是否覆盖边界场景、是否和 PRD/Spec/架构的术语一致，属于质量门，不是走过场 |
@@ -46,12 +47,14 @@
 3. **Spec 拆分优先保证边界清晰**：每个 Spec 应明确自己的职责、行为契约、依赖对象、非目标，以及如何追溯到 PRD 的目标和验收口径。前端、后端、前后端契约、基础设施或数据迁移可以拆成不同 Spec；只有边界足够小且实现域一致时才合并。
 4. **访谈类 skill 的交互节奏要匹配**：单线程逐题访谈（一次一问、优先选择题）之间可以顺畅衔接；如果某个候选素材是多子代理并行讨论型（比如 `council`），它更适合用在"已经有多个候选方案、需要仲裁选一个"的节点，而不是访谈节点，接入位置要单独判断，不能和访谈类 skill 简单首尾相连。
 5. **外部 skill 拿来用之前要重新核实内容**，不要凭 skill 名字或历史印象假设它的行为——多个外部 skill（比如 `grill-with-docs`）实际上只是对其他 skill 的组合调用壳，真正的机制在被引用的 skill 里。
-6. **不是每个环节都要跑满全套流程**：需求/方案本身清晰、无歧义风险时，允许精简成一轮访谈；完整流程是为高歧义场景准备的保底方案，不应作为唯一路径。
+6. **人审前先做 AI 闭环评审**：阶段②产出的 proposal/specs 不应直接丢给人类评审；先由独立评审 skill 检查 PRD → Spec 的覆盖、追溯、验收和边界是否闭环，避免把明显缺口转嫁给人类。
+7. **不是每个环节都要跑满全套流程**：需求/方案本身清晰、无歧义风险时，允许精简成一轮访谈；完整流程是为高歧义场景准备的保底方案，不应作为唯一路径。
 
 ## 待办
 
 - [x] 设计阶段②（PRD → Spec 拆分）：确认 OpenSpec 风格 Spec 的最小模板、目录结构、拆分粒度，以及 `council` 是否只在多种拆分方案难以裁决时启用。
-- [ ] 设计阶段③（Spec → 架构设计）：确认 `architect` / ADR 各自的接入点，尤其是 Architecture Design Doc 和 ADR 的边界。
+- [x] 设计阶段②.5（PRD/Spec → AI 闭环评审）：新增人审前质量门，检查 PRD 目标、范围、成功指标、验收口径是否被 proposal/specs 完整承接。
+- [x] 设计阶段③（Spec → 架构设计）：确认 `architect` / ADR 各自的接入点，尤其是 Architecture Design Doc 和 ADR 的边界。
 - [ ] 设计阶段④（架构设计 → 任务拆解）。
 - [ ] 设计阶段⑤⑥⑦（任务拆解 → 测试用例编写 → 审核 → 编码）：三步是否合并成一个 skill（内部分三个子步骤）还是拆成三个独立 skill，需要先设计出来再决定，不要提前假设。
 - [ ] 设计阶段⑧（测试用例编码 → 功能编码实现）：核实 `tdd-guide` agent 当前内容是否还适用。
