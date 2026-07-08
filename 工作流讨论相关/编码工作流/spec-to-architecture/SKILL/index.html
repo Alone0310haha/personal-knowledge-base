@@ -1,0 +1,968 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="将已通过 PRD/Spec 闭环评审的单个 OpenSpec spec 转换成 Architecture Design Doc，并为重要、难逆转、有真实 trade-off 的架构决策产出 ADR。用于 Spec 已经明确工程行为边界、需要分析现有代码架构、提出架构方案、明确组件边界/数据流/接口/错误处理/安全/可观测性，并交接给任务拆解阶段时。">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%A8%E8%AE%BA%E7%9B%B8%E5%85%B3/%E7%BC%96%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81/spec-to-architecture/SKILL/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Spec to Architecture - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#spec-to-architecture" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Spec to Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        边界
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        架构设计原则
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR 条件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        必做清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        流程图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: 确认准入
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: 读取上下文
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: 提取架构驱动力
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: 现状分析
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: 提出架构方案
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-architecture-design-doc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: 写 Architecture Design Doc
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-adr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: 写 ADR
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: 自检
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9: 用户审阅关卡
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何时可以精简
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键原则
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="spec-to-architecture">Spec to Architecture<a class="headerlink" href="#spec-to-architecture" title="Permanent link">¶</a></h1>
+<p>把一个已闭环的 OpenSpec spec 转换成一份可交给任务拆解阶段使用的 Architecture Design Doc，并在必要时记录 ADR。这个技能负责"如何设计这个工程边界"，不负责拆任务或实现。</p>
+<p><hard-gate>
+只处理已经通过 PRD/Spec 闭环评审且没有 blocking issues 的单个 Spec。不要处理未经批准的 PRD、不要合并多个工程边界写一份大设计、不要创建任务列表、不要写测试用例、不要写代码。<code>tasks.md</code> 和测试相关产物属于后续阶段。
+</hard-gate></p>
+<h2 id="_1">边界<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>负责</th>
+<th>不负责（留给后续阶段）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读取已批准 proposal/spec/closure review</td>
+<td>修正 PRD 或 Spec 内容</td>
+</tr>
+<tr>
+<td>分析现有代码、架构、ADR、约定</td>
+<td>任务拆解、工期估算、排期</td>
+</tr>
+<tr>
+<td>提取架构驱动力和非功能约束</td>
+<td>测试用例编写、测试代码</td>
+</tr>
+<tr>
+<td>提出并选择架构方案</td>
+<td>功能代码实现</td>
+</tr>
+<tr>
+<td>输出 Architecture Design Doc</td>
+<td>逐文件实现清单、Build Sequence</td>
+</tr>
+<tr>
+<td>为关键决策输出 ADR</td>
+<td>代码级 patch 计划</td>
+</tr>
+</tbody>
+</table>
+<p>如果自己开始写"创建这些文件""第 1 步实现 X""先写测试 Y""修改某函数"，说明已经越界到任务拆解或实现阶段。把这类内容移到 <code>Handoff to Planning</code> 的约束说明里，不要展开成任务。</p>
+<h2 id="_2">架构设计原则<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>适配现有系统</strong>：先理解现有模块、接口、数据流、错误处理、安全模型、部署和运维约定，再提出设计。</li>
+<li><strong>保持边界清晰</strong>：一个 design 只服务一个 Spec；如果需要设计多个工程边界，分别写多份 design。</li>
+<li><strong>高内聚低耦合</strong>：组件应有单一职责，通过明确接口协作，避免让调用方知道内部实现。</li>
+<li><strong>简单优先</strong>：选择满足 Spec 的最简单架构，不为未承诺的未来需求增加抽象。</li>
+<li><strong>可测试性</strong>：设计应明确可观察行为、接口边界、失败模式和替身/隔离点，方便后续测试用例与任务拆解。</li>
+<li><strong>安全默认</strong>：权限、输入校验、敏感数据、审计和最小权限要在设计阶段显式处理。</li>
+<li><strong>可运维性</strong>：关键流程应说明日志、指标、追踪、告警和排障入口。</li>
+<li><strong>诚实记录取舍</strong>：每个重要选择都要说明为什么不是其它方案；不把 trade-off 藏起来。</li>
+</ul>
+<h2 id="adr">ADR 条件<a class="headerlink" href="#adr" title="Permanent link">¶</a></h2>
+<p>只有同时满足这些条件才写 ADR：</p>
+<ol>
+<li><strong>难逆转</strong>：未来改回去成本明显。</li>
+<li><strong>缺少上下文会令人意外</strong>：未来读代码的人会问"为什么这样做"。</li>
+<li><strong>存在真实取舍</strong>：有可信备选方案，且选择理由不是显而易见。</li>
+</ol>
+<p>适合 ADR 的例子：</p>
+<ul>
+<li>同步调用 vs 异步事件。</li>
+<li>复用现有边界 vs 新建模块边界。</li>
+<li>REST vs GraphQL / RPC。</li>
+<li>新增持久化状态 vs 复用现有状态源。</li>
+<li>引入队列、缓存、搜索、外部服务等带锁定成本的基础设施。</li>
+<li>明确偏离项目常规架构模式。</li>
+</ul>
+<p>不写 ADR 的例子：</p>
+<ul>
+<li>普通命名、文件摆放、局部函数结构。</li>
+<li>代码风格选择。</li>
+<li>没有真实备选的显然决定。</li>
+<li>后续很容易改的小实现细节。</li>
+</ul>
+<h2 id="_3">必做清单<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>按顺序推进：</p>
+<ol>
+<li><strong>确认准入</strong> - Spec 已通过闭环评审；没有 blocking issues。</li>
+<li><strong>读取输入</strong> - PRD、proposal、目标 spec、closure review、现有 specs、相关代码/文档/ADR。</li>
+<li><strong>确认单 Spec 边界</strong> - 如果目标 spec 仍混入多个工程边界，退回 Spec 拆分阶段。</li>
+<li><strong>提取架构驱动力</strong> - 从 requirements/scenarios 中提取功能、NFR、接口、状态、错误、安全、观测性。</li>
+<li><strong>现状分析</strong> - 找到现有模块、数据流、接口、约定、约束和技术债。</li>
+<li><strong>提出架构方案</strong> - 简单情况给一个推荐方案；存在真实分歧时给 2-3 个方案和 trade-off。</li>
+<li><strong>获得用户确认</strong> - 方案未确认前不要定稿 Architecture Design Doc。</li>
+<li><strong>写 Architecture Design Doc</strong> - 只写设计，不写任务列表。</li>
+<li><strong>写必要 ADR</strong> - 只记录符合 ADR 条件的关键决策。</li>
+<li><strong>自检和用户审阅</strong> - 确认可交给任务拆解阶段。</li>
+</ol>
+<h2 id="_4">流程图<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<div class="language-dot highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">digraph</span><span class="w"> </span><span class="nt">spec_to_architecture</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="nt">"Read approved spec bundle"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">"Closure review approved?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">"Return to closure/spec stage"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="nt">"Single engineering boundary?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nt">"Return to spec split stage"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">"Extract architecture drivers"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="nt">"Analyze current architecture"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="nt">"Need alternatives?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="nt">"Propose 2-3 architecture options"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="nt">"User confirms direction?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="nt">"Draft architecture design doc"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="nt">"ADR-worthy decisions?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="nt">"Draft ADRs"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">    </span><span class="nt">"Self-review"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">    </span><span class="nt">"User approves?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">    </span><span class="nt">"Ready for task planning"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">doublecircle</span><span class="p">];</span>
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">    </span><span class="nt">"Read approved spec bundle"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Closure review approved?"</span><span class="p">;</span>
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">    </span><span class="nt">"Closure review approved?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Return to closure/spec stage"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">    </span><span class="nt">"Closure review approved?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Single engineering boundary?"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">    </span><span class="nt">"Single engineering boundary?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Return to spec split stage"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">    </span><span class="nt">"Single engineering boundary?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Extract architecture drivers"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-24"><a href="#__codelineno-0-24" id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">    </span><span class="nt">"Extract architecture drivers"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Analyze current architecture"</span><span class="p">;</span>
+</span><span id="__span-0-25"><a href="#__codelineno-0-25" id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="w">    </span><span class="nt">"Analyze current architecture"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Need alternatives?"</span><span class="p">;</span>
+</span><span id="__span-0-26"><a href="#__codelineno-0-26" id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">    </span><span class="nt">"Need alternatives?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Propose 2-3 architecture options"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-27"><a href="#__codelineno-0-27" id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">    </span><span class="nt">"Need alternatives?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"User confirms direction?"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no, recommended direction"</span><span class="p">];</span>
+</span><span id="__span-0-28"><a href="#__codelineno-0-28" id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">    </span><span class="nt">"Propose 2-3 architecture options"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"User confirms direction?"</span><span class="p">;</span>
+</span><span id="__span-0-29"><a href="#__codelineno-0-29" id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="w">    </span><span class="nt">"User confirms direction?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Propose 2-3 architecture options"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"revise"</span><span class="p">];</span>
+</span><span id="__span-0-30"><a href="#__codelineno-0-30" id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">    </span><span class="nt">"User confirms direction?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Draft architecture design doc"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-31"><a href="#__codelineno-0-31" id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">    </span><span class="nt">"Draft architecture design doc"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"ADR-worthy decisions?"</span><span class="p">;</span>
+</span><span id="__span-0-32"><a href="#__codelineno-0-32" id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="w">    </span><span class="nt">"ADR-worthy decisions?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Draft ADRs"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-33"><a href="#__codelineno-0-33" id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="w">    </span><span class="nt">"ADR-worthy decisions?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Self-review"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-0-34"><a href="#__codelineno-0-34" id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="w">    </span><span class="nt">"Draft ADRs"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Self-review"</span><span class="p">;</span>
+</span><span id="__span-0-35"><a href="#__codelineno-0-35" id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="w">    </span><span class="nt">"Self-review"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"User approves?"</span><span class="p">;</span>
+</span><span id="__span-0-36"><a href="#__codelineno-0-36" id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="w">    </span><span class="nt">"User approves?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Draft architecture design doc"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"changes requested"</span><span class="p">];</span>
+</span><span id="__span-0-37"><a href="#__codelineno-0-37" id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="w">    </span><span class="nt">"User approves?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Ready for task planning"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"approved"</span><span class="p">];</span>
+</span><span id="__span-0-38"><a href="#__codelineno-0-38" id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="step-1">Step 1: 确认准入<a class="headerlink" href="#step-1" title="Permanent link">¶</a></h2>
+<p>必须读取并确认：</p>
+<ul>
+<li>PRD 已批准。</li>
+<li><code>openspec/changes/&lt;change&gt;/proposal.md</code> 已批准。</li>
+<li>目标 <code>openspec/changes/&lt;change&gt;/specs/&lt;spec-domain&gt;/spec.md</code> 已批准。</li>
+<li>PRD/Spec 闭环评审输出为 <code>Approved</code>，或所有 blocking issues 已修正并复审通过。</li>
+</ul>
+<p>如果闭环评审不存在，先执行或要求执行闭环评审。不要跳过。</p>
+<p>如果目标 spec 仍包含多个工程边界，例如同时覆盖 UI、API、worker、migration、contract，先退回 Spec 拆分阶段重新拆分。第 3 步必须按单个 Spec 设计。</p>
+<h2 id="step-2">Step 2: 读取上下文<a class="headerlink" href="#step-2" title="Permanent link">¶</a></h2>
+<p>读取：</p>
+<ul>
+<li>Source PRD、proposal、目标 spec、closure review。</li>
+<li>相关现有 <code>openspec/specs/**/spec.md</code>，理解已有行为。</li>
+<li>相关代码模块、接口、配置、测试、文档。</li>
+<li><code>docs/adr/</code> 或项目已有 ADR，避免重开已决策问题。</li>
+<li>项目架构文档、README、约定、style rules。</li>
+</ul>
+<p>只读取与目标 spec 相关的上下文，避免把无关系统拖进设计。</p>
+<h2 id="step-3">Step 3: 提取架构驱动力<a class="headerlink" href="#step-3" title="Permanent link">¶</a></h2>
+<p>从 spec requirements/scenarios 中提取：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>| Driver | Source | Architectural Implication |
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>|---|---|---|
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>| {功能行为} | {Requirement/Scenario} | {需要什么边界/接口/状态/流程} |
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>| {性能/安全/兼容等 NFR} | {Requirement/Scenario/PRD metric} | {架构约束} |
+</span></code></pre></div>
+<p>覆盖这些类别：</p>
+<ul>
+<li>Functional behavior。</li>
+<li>API/契约/事件/模块接口。</li>
+<li>数据读写、状态变化、一致性要求。</li>
+<li>错误处理、重试、幂等、回滚。</li>
+<li>权限、安全、隐私、审计。</li>
+<li>性能、容量、延迟、可用性。</li>
+<li>兼容性、迁移、灰度、回退。</li>
+<li>可观测性：日志、指标、追踪、告警。</li>
+</ul>
+<p>如果 spec 没有提供足够信息来决定这些架构影响，一次只问一个阻塞问题。</p>
+<h2 id="step-4">Step 4: 现状分析<a class="headerlink" href="#step-4" title="Permanent link">¶</a></h2>
+<p>分析现有系统时，优先回答：</p>
+<ul>
+<li>当前最接近的模块/边界是什么？</li>
+<li>当前调用流、数据流、状态所有权在哪里？</li>
+<li>现有错误处理、安全、观测性模式是什么？</li>
+<li>是否已有类似 API/事件/worker/UI flow 可复用？</li>
+<li>是否有 ADR 或约定限制本次设计？</li>
+<li>哪些技术债会影响该 Spec，但不应扩大成无关重构？</li>
+</ul>
+<p>输出现状摘要要短，只保留会影响设计的事实。</p>
+<h2 id="step-5">Step 5: 提出架构方案<a class="headerlink" href="#step-5" title="Permanent link">¶</a></h2>
+<p>简单、低风险、只有一个明显设计方向时，可以直接给推荐方案和理由。</p>
+<p>当存在真实分歧时，提出 2-3 个架构选项：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>我看到三种架构方向：
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="gs">**选项 A：{名称}（推荐）**</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="k">-</span><span class="w"> </span>适合：{约束/场景}
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="k">-</span><span class="w"> </span>设计：{边界、接口、数据流摘要}
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="k">-</span><span class="w"> </span>优点：{收益}
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="k">-</span><span class="w"> </span>代价：{风险/复杂度}
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="k">-</span><span class="w"> </span>ADR 候选：{是/否，原因}
+</span><span id="__span-2-9"><a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a>
+</span><span id="__span-2-10"><a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="gs">**选项 B：{名称}**</span>
+</span><span id="__span-2-11"><a href="#__codelineno-2-11" id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="k">-</span><span class="w"> </span>适合：{约束/场景}
+</span><span id="__span-2-12"><a href="#__codelineno-2-12" id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="k">-</span><span class="w"> </span>设计：{摘要}
+</span><span id="__span-2-13"><a href="#__codelineno-2-13" id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="k">-</span><span class="w"> </span>优点：{收益}
+</span><span id="__span-2-14"><a href="#__codelineno-2-14" id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="k">-</span><span class="w"> </span>代价：{风险/复杂度}
+</span><span id="__span-2-15"><a href="#__codelineno-2-15" id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="k">-</span><span class="w"> </span>ADR 候选：{是/否，原因}
+</span><span id="__span-2-16"><a href="#__codelineno-2-16" id="__codelineno-2-16" name="__codelineno-2-16"></a>
+</span><span id="__span-2-17"><a href="#__codelineno-2-17" id="__codelineno-2-17" name="__codelineno-2-17"></a>我建议选 <span class="gs">**A**</span>，因为 {一句话理由}。你要按这个方向写 architecture design 吗？
+</span></code></pre></div>
+<p>多方案讨论只用于裁决方向。不要在方向未确认前写最终 design。</p>
+<h2 id="step-6-architecture-design-doc">Step 6: 写 Architecture Design Doc<a class="headerlink" href="#step-6-architecture-design-doc" title="Permanent link">¶</a></h2>
+<p>默认保存到：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>openspec/changes/&lt;change&gt;/design/&lt;spec-domain&gt;-architecture.md
+</span></code></pre></div>
+<p>如果项目已有 design 目录惯例，跟随项目惯例。不要写 <code>tasks.md</code>。</p>
+<p>模板：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="gh"># {Spec Domain} Architecture Design</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="gu">## Status</span>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>DRAFT
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="gu">## Source</span>
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="k">-</span><span class="w"> </span>PRD: <span class="sb">`{path}`</span>
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="k">-</span><span class="w"> </span>Proposal: <span class="sb">`{path}`</span>
+</span><span id="__span-4-9"><a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="k">-</span><span class="w"> </span>Spec: <span class="sb">`{path}`</span>
+</span><span id="__span-4-10"><a href="#__codelineno-4-10" id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="k">-</span><span class="w"> </span>Closure Review: <span class="sb">`{path or summary}`</span>
+</span><span id="__span-4-11"><a href="#__codelineno-4-11" id="__codelineno-4-11" name="__codelineno-4-11"></a>
+</span><span id="__span-4-12"><a href="#__codelineno-4-12" id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="gu">## Summary</span>
+</span><span id="__span-4-13"><a href="#__codelineno-4-13" id="__codelineno-4-13" name="__codelineno-4-13"></a>{3-5 句：本设计解决什么 Spec、采用什么架构方向、主要边界和非目标}
+</span><span id="__span-4-14"><a href="#__codelineno-4-14" id="__codelineno-4-14" name="__codelineno-4-14"></a>
+</span><span id="__span-4-15"><a href="#__codelineno-4-15" id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="gu">## Architecture Drivers</span>
+</span><span id="__span-4-16"><a href="#__codelineno-4-16" id="__codelineno-4-16" name="__codelineno-4-16"></a>| Driver | Source | Implication |
+</span><span id="__span-4-17"><a href="#__codelineno-4-17" id="__codelineno-4-17" name="__codelineno-4-17"></a>|---|---|---|
+</span><span id="__span-4-18"><a href="#__codelineno-4-18" id="__codelineno-4-18" name="__codelineno-4-18"></a>| {driver} | {Requirement/Scenario} | {implication} |
+</span><span id="__span-4-19"><a href="#__codelineno-4-19" id="__codelineno-4-19" name="__codelineno-4-19"></a>
+</span><span id="__span-4-20"><a href="#__codelineno-4-20" id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="gu">## Current State</span>
+</span><span id="__span-4-21"><a href="#__codelineno-4-21" id="__codelineno-4-21" name="__codelineno-4-21"></a>{相关现有模块、数据流、接口、约束、ADR}
+</span><span id="__span-4-22"><a href="#__codelineno-4-22" id="__codelineno-4-22" name="__codelineno-4-22"></a>
+</span><span id="__span-4-23"><a href="#__codelineno-4-23" id="__codelineno-4-23" name="__codelineno-4-23"></a><span class="gu">## Proposed Architecture</span>
+</span><span id="__span-4-24"><a href="#__codelineno-4-24" id="__codelineno-4-24" name="__codelineno-4-24"></a>{选定方案的整体说明；可以包含 Mermaid 图，但不强制}
+</span><span id="__span-4-25"><a href="#__codelineno-4-25" id="__codelineno-4-25" name="__codelineno-4-25"></a>
+</span><span id="__span-4-26"><a href="#__codelineno-4-26" id="__codelineno-4-26" name="__codelineno-4-26"></a><span class="gu">## Components / Boundaries</span>
+</span><span id="__span-4-27"><a href="#__codelineno-4-27" id="__codelineno-4-27" name="__codelineno-4-27"></a>| Component/Boundary | Responsibility | Inputs | Outputs | Notes |
+</span><span id="__span-4-28"><a href="#__codelineno-4-28" id="__codelineno-4-28" name="__codelineno-4-28"></a>|---|---|---|---|---|
+</span><span id="__span-4-29"><a href="#__codelineno-4-29" id="__codelineno-4-29" name="__codelineno-4-29"></a>
+</span><span id="__span-4-30"><a href="#__codelineno-4-30" id="__codelineno-4-30" name="__codelineno-4-30"></a><span class="gu">## Data / Control Flow</span>
+</span><span id="__span-4-31"><a href="#__codelineno-4-31" id="__codelineno-4-31" name="__codelineno-4-31"></a>{关键流程、状态所有权、一致性边界}
+</span><span id="__span-4-32"><a href="#__codelineno-4-32" id="__codelineno-4-32" name="__codelineno-4-32"></a>
+</span><span id="__span-4-33"><a href="#__codelineno-4-33" id="__codelineno-4-33" name="__codelineno-4-33"></a><span class="gu">## Interfaces / Contracts</span>
+</span><span id="__span-4-34"><a href="#__codelineno-4-34" id="__codelineno-4-34" name="__codelineno-4-34"></a>{API、事件、模块接口、前后端契约；只到设计层，不写代码}
+</span><span id="__span-4-35"><a href="#__codelineno-4-35" id="__codelineno-4-35" name="__codelineno-4-35"></a>
+</span><span id="__span-4-36"><a href="#__codelineno-4-36" id="__codelineno-4-36" name="__codelineno-4-36"></a><span class="gu">## Error Handling</span>
+</span><span id="__span-4-37"><a href="#__codelineno-4-37" id="__codelineno-4-37" name="__codelineno-4-37"></a>{失败模式、权限失败、校验失败、重试、幂等、回滚/补偿}
+</span><span id="__span-4-38"><a href="#__codelineno-4-38" id="__codelineno-4-38" name="__codelineno-4-38"></a>
+</span><span id="__span-4-39"><a href="#__codelineno-4-39" id="__codelineno-4-39" name="__codelineno-4-39"></a><span class="gu">## Security / Privacy</span>
+</span><span id="__span-4-40"><a href="#__codelineno-4-40" id="__codelineno-4-40" name="__codelineno-4-40"></a>{权限、数据暴露、审计、敏感信息、租户/角色边界}
+</span><span id="__span-4-41"><a href="#__codelineno-4-41" id="__codelineno-4-41" name="__codelineno-4-41"></a>
+</span><span id="__span-4-42"><a href="#__codelineno-4-42" id="__codelineno-4-42" name="__codelineno-4-42"></a><span class="gu">## Observability</span>
+</span><span id="__span-4-43"><a href="#__codelineno-4-43" id="__codelineno-4-43" name="__codelineno-4-43"></a>{日志、指标、追踪、告警、调试入口}
+</span><span id="__span-4-44"><a href="#__codelineno-4-44" id="__codelineno-4-44" name="__codelineno-4-44"></a>
+</span><span id="__span-4-45"><a href="#__codelineno-4-45" id="__codelineno-4-45" name="__codelineno-4-45"></a><span class="gu">## Alternatives Considered</span>
+</span><span id="__span-4-46"><a href="#__codelineno-4-46" id="__codelineno-4-46" name="__codelineno-4-46"></a>| Option | Pros | Cons | Decision |
+</span><span id="__span-4-47"><a href="#__codelineno-4-47" id="__codelineno-4-47" name="__codelineno-4-47"></a>|---|---|---|---|
+</span><span id="__span-4-48"><a href="#__codelineno-4-48" id="__codelineno-4-48" name="__codelineno-4-48"></a>
+</span><span id="__span-4-49"><a href="#__codelineno-4-49" id="__codelineno-4-49" name="__codelineno-4-49"></a><span class="gu">## ADRs</span>
+</span><span id="__span-4-50"><a href="#__codelineno-4-50" id="__codelineno-4-50" name="__codelineno-4-50"></a>| Decision | ADR | Reason |
+</span><span id="__span-4-51"><a href="#__codelineno-4-51" id="__codelineno-4-51" name="__codelineno-4-51"></a>|---|---|---|
+</span><span id="__span-4-52"><a href="#__codelineno-4-52" id="__codelineno-4-52" name="__codelineno-4-52"></a>
+</span><span id="__span-4-53"><a href="#__codelineno-4-53" id="__codelineno-4-53" name="__codelineno-4-53"></a><span class="gu">## Open Questions</span>
+</span><span id="__span-4-54"><a href="#__codelineno-4-54" id="__codelineno-4-54" name="__codelineno-4-54"></a><span class="k">- [ ]</span> {会阻塞任务拆解的问题}
+</span><span id="__span-4-55"><a href="#__codelineno-4-55" id="__codelineno-4-55" name="__codelineno-4-55"></a>
+</span><span id="__span-4-56"><a href="#__codelineno-4-56" id="__codelineno-4-56" name="__codelineno-4-56"></a><span class="gu">## Handoff to Planning</span>
+</span><span id="__span-4-57"><a href="#__codelineno-4-57" id="__codelineno-4-57" name="__codelineno-4-57"></a>{任务拆解时必须遵守的边界、顺序约束、不可越界事项}
+</span></code></pre></div>
+<h2 id="step-7-adr">Step 7: 写 ADR<a class="headerlink" href="#step-7-adr" title="Permanent link">¶</a></h2>
+<p>如果有 ADR-worthy decision，默认保存到：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>docs/adr/NNNN-&lt;decision-slug&gt;.md
+</span></code></pre></div>
+<p>若项目已有 ADR 目录，跟随现有目录。写 ADR 前先扫描已有 ADR 编号和相关决策，避免重复。</p>
+<p>ADR 模板：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="gh"># ADR-NNNN: {Decision Title}</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="gs">**Date**</span>: YYYY-MM-DD
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="gs">**Status**</span>: proposed | accepted
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="gs">**Deciders**</span>: {names/roles}
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a>
+</span><span id="__span-6-7"><a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="gu">## Context</span>
+</span><span id="__span-6-8"><a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a>{2-5 句：这个 Spec 下为什么需要做这个选择；相关约束和 forces}
+</span><span id="__span-6-9"><a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a>
+</span><span id="__span-6-10"><a href="#__codelineno-6-10" id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="gu">## Decision</span>
+</span><span id="__span-6-11"><a href="#__codelineno-6-11" id="__codelineno-6-11" name="__codelineno-6-11"></a>{1-3 句：明确选择}
+</span><span id="__span-6-12"><a href="#__codelineno-6-12" id="__codelineno-6-12" name="__codelineno-6-12"></a>
+</span><span id="__span-6-13"><a href="#__codelineno-6-13" id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="gu">## Alternatives Considered</span>
+</span><span id="__span-6-14"><a href="#__codelineno-6-14" id="__codelineno-6-14" name="__codelineno-6-14"></a>
+</span><span id="__span-6-15"><a href="#__codelineno-6-15" id="__codelineno-6-15" name="__codelineno-6-15"></a><span class="gu">### {Alternative}</span>
+</span><span id="__span-6-16"><a href="#__codelineno-6-16" id="__codelineno-6-16" name="__codelineno-6-16"></a><span class="k">-</span><span class="w"> </span><span class="gs">**Pros**</span>: {benefits}
+</span><span id="__span-6-17"><a href="#__codelineno-6-17" id="__codelineno-6-17" name="__codelineno-6-17"></a><span class="k">-</span><span class="w"> </span><span class="gs">**Cons**</span>: {drawbacks}
+</span><span id="__span-6-18"><a href="#__codelineno-6-18" id="__codelineno-6-18" name="__codelineno-6-18"></a><span class="k">-</span><span class="w"> </span><span class="gs">**Why not**</span>: {rejection reason}
+</span><span id="__span-6-19"><a href="#__codelineno-6-19" id="__codelineno-6-19" name="__codelineno-6-19"></a>
+</span><span id="__span-6-20"><a href="#__codelineno-6-20" id="__codelineno-6-20" name="__codelineno-6-20"></a><span class="gu">## Consequences</span>
+</span><span id="__span-6-21"><a href="#__codelineno-6-21" id="__codelineno-6-21" name="__codelineno-6-21"></a>
+</span><span id="__span-6-22"><a href="#__codelineno-6-22" id="__codelineno-6-22" name="__codelineno-6-22"></a><span class="gu">### Positive</span>
+</span><span id="__span-6-23"><a href="#__codelineno-6-23" id="__codelineno-6-23" name="__codelineno-6-23"></a><span class="k">-</span><span class="w"> </span>{benefit}
+</span><span id="__span-6-24"><a href="#__codelineno-6-24" id="__codelineno-6-24" name="__codelineno-6-24"></a>
+</span><span id="__span-6-25"><a href="#__codelineno-6-25" id="__codelineno-6-25" name="__codelineno-6-25"></a><span class="gu">### Negative</span>
+</span><span id="__span-6-26"><a href="#__codelineno-6-26" id="__codelineno-6-26" name="__codelineno-6-26"></a><span class="k">-</span><span class="w"> </span>{trade-off}
+</span><span id="__span-6-27"><a href="#__codelineno-6-27" id="__codelineno-6-27" name="__codelineno-6-27"></a>
+</span><span id="__span-6-28"><a href="#__codelineno-6-28" id="__codelineno-6-28" name="__codelineno-6-28"></a><span class="gu">### Risks</span>
+</span><span id="__span-6-29"><a href="#__codelineno-6-29" id="__codelineno-6-29" name="__codelineno-6-29"></a><span class="k">-</span><span class="w"> </span>{risk and mitigation}
+</span></code></pre></div>
+<p>如果用户尚未批准架构方向，ADR 状态用 <code>proposed</code>；批准后可改为 <code>accepted</code>。</p>
+<h2 id="step-8">Step 8: 自检<a class="headerlink" href="#step-8" title="Permanent link">¶</a></h2>
+<p>定稿前检查：</p>
+<ul>
+<li><strong>Spec 覆盖</strong>：每个 requirement/scenario 是否在设计中有对应组件、接口、流程或错误处理？</li>
+<li><strong>边界洁癖</strong>：是否只设计目标 spec？是否混入其他 spec 的实现域？</li>
+<li><strong>现有架构一致性</strong>：是否遵循已有模块边界、命名、错误处理、测试和 ADR？</li>
+<li><strong>NFR 覆盖</strong>：安全、性能、可靠性、兼容、可观测性是否按 spec 风险覆盖？</li>
+<li><strong>Trade-off 清楚</strong>：关键选择是否记录 alternatives 和 rationale？</li>
+<li><strong>ADR 适度</strong>：是否只为真正值得记录的决策写 ADR？</li>
+<li><strong>无任务泄漏</strong>：是否出现文件清单、build sequence、逐步实现计划？有则移除。</li>
+<li><strong>可交接</strong>：任务拆解阶段是否能基于 design 拆任务，而不需要重新做架构判断？</li>
+</ul>
+<p>如果 Open Questions 仍会改变组件边界、接口契约或数据流，禁止定稿。</p>
+<h2 id="step-9">Step 9: 用户审阅关卡<a class="headerlink" href="#step-9" title="Permanent link">¶</a></h2>
+<p>自检通过后请求用户审阅：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>Architecture design 已写到 <span class="sb">`{design path}`</span>。
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>ADR 草稿：{ADR paths or "无"}。
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>请重点审阅：架构方向、边界、接口/数据流、错误处理、安全/观测性，以及是否足够交给任务拆解。
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a>你批准后，我会把状态改为 FINAL/accepted，并交接给下一阶段。
+</span></code></pre></div>
+<p>用户要求修改时，更新 design/ADR，重新自检，再请求审阅。</p>
+<p>用户批准后：</p>
+<ul>
+<li>将 design 状态改为 <code>FINAL</code>。</li>
+<li>将已批准 ADR 状态改为 <code>accepted</code>。</li>
+<li>明确交接给下一阶段：design 路径、ADR 路径、仍需注意的 Open Questions。</li>
+</ul>
+<h2 id="_5">何时可以精简<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<p>小 Spec 可以使用 Lite 模式：</p>
+<ul>
+<li>直接给一个推荐架构方向。</li>
+<li>Architecture Design Doc 可以是一页以内。</li>
+<li>ADR 仅在满足 ADR 条件时创建。</li>
+</ul>
+<p>但不能跳过：</p>
+<ul>
+<li>closure review 准入。</li>
+<li>单 Spec 边界检查。</li>
+<li>现有代码/架构上下文读取。</li>
+<li>Spec requirement/scenario 覆盖检查。</li>
+<li>用户审阅。</li>
+</ul>
+<h2 id="_6">关键原则<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>一个 Spec，一份 design</strong>。</li>
+<li><strong>先确认边界，再设计架构</strong>。</li>
+<li><strong>顺着现有架构长出来</strong>。</li>
+<li><strong>架构文档服务任务拆解，但不是任务拆解</strong>。</li>
+<li><strong>ADR 记录为什么，不记录流水账</strong>。</li>
+<li><strong>发现 Spec 过大就退回，不硬写大设计</strong>。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

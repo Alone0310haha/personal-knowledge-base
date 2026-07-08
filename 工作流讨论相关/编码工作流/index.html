@@ -419,8 +419,8 @@
 <p>记录"从一个模糊需求，到最终验收通过"这条完整工作流的设计过程。每个阶段单独开一个子目录，放该阶段的 skill 定义和相关说明；本文件是总览，后续每完善一个阶段就在这里更新一次。</p>
 <h2 id="_2">目标管线（草案）<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
 <p>测试子流程的位置是一个明确决策点：已确认走 <strong>TDD 风格</strong>（测试用例先于功能代码落地，红-绿-重构），不是先实现后补测试的传统风格。</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>需求 → PRD → Spec 拆分 → 架构设计 → 任务拆解 → 测试用例编写 → 测试用例审核 → 测试用例编码 → 功能编码实现 → 测试用例运行 → 代码评审 → 验收
-</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a> ①        ②          ③         ④           ⑤           ⑥           ⑦           ⑧           ⑨           ⑩          ⑪
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>需求 → PRD → Spec 拆分 → AI 闭环评审 → 架构设计 → 任务拆解 → 测试用例编写 → 测试用例审核 → 测试用例编码 → 功能编码实现 → 测试用例运行 → 代码评审 → 验收
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a> ①        ②          ②.5          ③         ④           ⑤           ⑥           ⑦           ⑧           ⑨           ⑩          ⑪
 </span></code></pre></div>
 <table>
 <thead>
@@ -445,10 +445,16 @@
 <td>把产品视角的 PRD 拆成一个或多个 OpenSpec 风格的工程 Spec，明确每个 Spec 的交付边界、行为契约、依赖关系和追溯到 PRD 的验收口径。设计理由见 <a href="reference/0002-prd-to-specs-design/"><code>reference/0002-prd-to-specs-design.md</code></a></td>
 </tr>
 <tr>
+<td>②.5 PRD/Spec → AI 闭环评审</td>
+<td><a href="prd-spec-closure-review/SKILL/"><code>prd-spec-closure-review/</code></a></td>
+<td>✅ 已完成设计</td>
+<td>在交给人类审查前，独立检查 PRD 的目标、范围、成功指标、验收口径是否被 proposal/specs 完整承接；只输出阻塞问题、覆盖检查、人审焦点，不做架构设计或任务拆解</td>
+</tr>
+<tr>
 <td>③ Spec → 架构设计</td>
-<td>待建</td>
-<td>🔲 未开始</td>
-<td>针对单个工程 Spec 产出 Architecture Design Doc，并为重要、难逆转、有真实 trade-off 的决策产出 ADR。候选素材：ECC 的 <code>architect</code> agent（系统设计）、grill-with-docs 的 ADR 产出、ECC 的 <code>architecture-decision-records</code> skill</td>
+<td><a href="spec-to-architecture/SKILL/"><code>spec-to-architecture/</code></a></td>
+<td>✅ 已完成设计</td>
+<td>针对单个已通过闭环评审的工程 Spec 产出 Architecture Design Doc，并为重要、难逆转、有真实 trade-off 的决策产出 ADR。设计理由见 <a href="reference/0003-spec-to-architecture-design/"><code>reference/0003-spec-to-architecture-design.md</code></a></td>
 </tr>
 <tr>
 <td>④ 架构设计 → 任务拆解</td>
@@ -519,12 +525,14 @@
 <li><strong>Spec 拆分优先保证边界清晰</strong>：每个 Spec 应明确自己的职责、行为契约、依赖对象、非目标，以及如何追溯到 PRD 的目标和验收口径。前端、后端、前后端契约、基础设施或数据迁移可以拆成不同 Spec；只有边界足够小且实现域一致时才合并。</li>
 <li><strong>访谈类 skill 的交互节奏要匹配</strong>：单线程逐题访谈（一次一问、优先选择题）之间可以顺畅衔接；如果某个候选素材是多子代理并行讨论型（比如 <code>council</code>），它更适合用在"已经有多个候选方案、需要仲裁选一个"的节点，而不是访谈节点，接入位置要单独判断，不能和访谈类 skill 简单首尾相连。</li>
 <li><strong>外部 skill 拿来用之前要重新核实内容</strong>，不要凭 skill 名字或历史印象假设它的行为——多个外部 skill（比如 <code>grill-with-docs</code>）实际上只是对其他 skill 的组合调用壳，真正的机制在被引用的 skill 里。</li>
+<li><strong>人审前先做 AI 闭环评审</strong>：阶段②产出的 proposal/specs 不应直接丢给人类评审；先由独立评审 skill 检查 PRD → Spec 的覆盖、追溯、验收和边界是否闭环，避免把明显缺口转嫁给人类。</li>
 <li><strong>不是每个环节都要跑满全套流程</strong>：需求/方案本身清晰、无歧义风险时，允许精简成一轮访谈；完整流程是为高歧义场景准备的保底方案，不应作为唯一路径。</li>
 </ol>
 <h2 id="_5">待办<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段②（PRD → Spec 拆分）：确认 OpenSpec 风格 Spec 的最小模板、目录结构、拆分粒度，以及 <code>council</code> 是否只在多种拆分方案难以裁决时启用。</li>
-<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段③（Spec → 架构设计）：确认 <code>architect</code> / ADR 各自的接入点，尤其是 Architecture Design Doc 和 ADR 的边界。</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段②.5（PRD/Spec → AI 闭环评审）：新增人审前质量门，检查 PRD 目标、范围、成功指标、验收口径是否被 proposal/specs 完整承接。</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段③（Spec → 架构设计）：确认 <code>architect</code> / ADR 各自的接入点，尤其是 Architecture Design Doc 和 ADR 的边界。</li>
 <li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段④（架构设计 → 任务拆解）。</li>
 <li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段⑤⑥⑦（任务拆解 → 测试用例编写 → 审核 → 编码）：三步是否合并成一个 skill（内部分三个子步骤）还是拆成三个独立 skill，需要先设计出来再决定，不要提前假设。</li>
 <li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段⑧（测试用例编码 → 功能编码实现）：核实 <code>tdd-guide</code> agent 当前内容是否还适用。</li>
