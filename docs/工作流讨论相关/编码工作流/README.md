@@ -6,25 +6,22 @@
 
 测试子流程的位置是一个明确决策点：已确认走 **TDD 风格**（测试用例先于功能代码落地，红-绿-重构），不是先实现后补测试的传统风格。
 
-```
-需求 → PRD → Spec 拆分 → AI 闭环评审 → 架构设计 → 任务拆解 → 测试用例编写 → 测试用例审核 → 测试用例编码 → 功能编码实现 → 测试用例运行 → 代码评审 → 验收
- ①        ②          ②.5          ③         ④           ⑤           ⑥           ⑦           ⑧           ⑨           ⑩          ⑪
+```text
+需求 → PRD → Spec 拆分 → AI 闭环评审 → 架构设计 → 任务拆解 → 测试用例编写/AI审核闭环 → TDD实现闭环 → AI代码评审闭环 → 人审与UI自动化验收
+ ①        ②          ②.5          ③         ④             ⑤⑥                 ⑦⑧⑨        ⑩             ⑪
 ```
 
 | 阶段 | 目录 | 状态 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | ① 需求 → PRD | [`requirement-to-prd/`](./requirement-to-prd/SKILL.md) | ✅ 已完成设计 | 融合 brainstorming（发散框定）+ grill-with-docs（逼问收口），设计理由见 [`reference/0001-requirement-to-prd-design.md`](./reference/0001-requirement-to-prd-design.md) |
 | ② PRD → Spec 拆分 | [`prd-to-specs/`](./prd-to-specs/SKILL.md) | ✅ 已完成设计 | 把产品视角的 PRD 拆成一个或多个 OpenSpec 风格的工程 Spec，明确每个 Spec 的交付边界、行为契约、依赖关系和追溯到 PRD 的验收口径。设计理由见 [`reference/0002-prd-to-specs-design.md`](./reference/0002-prd-to-specs-design.md) |
 | ②.5 PRD/Spec → AI 闭环评审 | [`prd-spec-closure-review/`](./prd-spec-closure-review/SKILL.md) | ✅ 已完成设计 | 在交给人类审查前，独立检查 PRD 的目标、范围、成功指标、验收口径是否被 proposal/specs 完整承接；只输出阻塞问题、覆盖检查、人审焦点，不做架构设计或任务拆解 |
 | ③ Spec → 架构设计 | [`spec-to-architecture/`](./spec-to-architecture/SKILL.md) | ✅ 已完成设计 | 针对单个已通过闭环评审的工程 Spec 产出 Architecture Design Doc，并为重要、难逆转、有真实 trade-off 的决策产出 ADR。设计理由见 [`reference/0003-spec-to-architecture-design.md`](./reference/0003-spec-to-architecture-design.md) |
-| ④ 架构设计 → 任务拆解 | 待建 | 🔲 未开始 | 候选素材：ECC 的 `planner` agent、superpowers 的 `writing-plans` skill |
-| ⑤ 任务拆解 → 测试用例编写 | 待建 | 🔲 未开始 | 产出测试场景/用例描述（Given-When-Then 一类的行为描述），还不是可运行代码。候选素材：ECC 的 `spec-miner` 产出的 Scenario 块可作为格式参考 |
-| ⑥ 测试用例编写 → 测试用例审核 | 待建 | 🔲 未开始 | 逼问式检查用例是否覆盖边界场景、是否和 PRD/Spec/架构的术语一致，属于质量门，不是走过场 |
-| ⑦ 测试用例审核 → 测试用例编码 | 待建 | 🔲 未开始 | 把审核通过的用例落地成可运行的测试代码（TDD 的"红"阶段：此时测试应该是失败的） |
-| ⑧ 测试用例编码 → 功能编码实现 | 待建 | 🔲 未开始 | 以测试驱动实现功能代码（TDD 的"绿 + 重构"阶段）。候选素材：ECC 的 `tdd-guide` agent |
-| ⑨ 功能编码实现 → 测试用例运行 | 待建 | 🔲 未开始 | 完整测试套件的正式运行（区别于开发过程中的本地跑测），作为进入代码评审前的准入门槛 |
-| ⑩ 测试用例运行 → 代码评审 | 待建 | 🔲 未开始 | 候选素材：ECC 的 `code-reviewer` agent / `/code-review` skill |
-| ⑪ 代码评审 → 验收 | 待建 | 🔲 未开始 | 目前还没有明确候选素材，需要另外调研"验收"具体指谁来验收、按什么标准验收（业务方 UAT？对照 PRD 的 Success Metrics？） |
+| ④ 架构设计 → 任务拆解 | [`architecture-to-tasks/`](./architecture-to-tasks/SKILL.md) | ✅ 已完成设计 | 将已批准的单个 Architecture Design Doc 拆成约 300 行代码 review 粒度的任务计划，明确依赖顺序、风险、回滚和交接给测试用例编写阶段的关注点；不写测试用例、测试代码或功能代码。设计理由见 [`reference/0004-architecture-to-tasks-design.md`](./reference/0004-architecture-to-tasks-design.md) |
+| ⑤⑥ 任务拆解 → 测试用例编写/AI审核闭环 | [`test-case-authoring-review/`](./test-case-authoring-review/SKILL.md) | 已完成设计 | 由 Author Agent 产出测试用例文档，再新开 Reviewer Agent 按 [`REVIEWER.md`](./test-case-authoring-review/REVIEWER.md) 独立审核；Author 根据阻塞问题修订并复审，直到形成 AI 已评审版本后再交给人审。设计理由见 [`reference/0005-test-case-authoring-review-design.md`](./reference/0005-test-case-authoring-review-design.md) |
+| ⑦⑧⑨ 测试用例闭环 → TDD实现闭环 | [`test-driven-implementation/`](./test-driven-implementation/SKILL.md) | 已完成设计 | 将人审通过的 AI 已评审用例落地为测试代码，按 Red-Green-Refactor 完成功能编码、单元测试和单模块接口集成测试；本阶段内测试失败或实现有问题时直接修复并重跑。设计理由见 [`reference/0006-test-driven-implementation-design.md`](./reference/0006-test-driven-implementation-design.md) |
+| ⑩ TDD实现闭环 → AI代码评审闭环 | 待建 | 🔲 未开始 | TDD 阶段通过后，新开代码评审 agent 进行一轮 AI code review；发现问题则退回 ⑦⑧⑨ 修复，修复后再次触发 AI 复审，直到无阻塞问题。候选目录名：`ai-code-review-loop/` |
+| ⑪ AI代码评审闭环 → 人审与UI自动化验收 | 待建 | 🔲 未开始 | 人触发面向累计变更的一轮 AI 代码评审（此时可能包含多个 spec），再由人类 review；人审后由 AI 编写从 UI 触发的 Playwright 集成测试用例并运行 UI 自动化测试，全部通过后结束。候选目录名：`human-review-ui-acceptance/` |
 
 > 阶段划分和候选素材都是讨论过程中的暂定结论，不是最终方案，后续设计每个阶段时应该重新核实这些 agent/skill 当前是否还存在、内容是否有变化，不要直接假设当时看到的版本还成立。
 
@@ -55,9 +52,9 @@
 - [x] 设计阶段②（PRD → Spec 拆分）：确认 OpenSpec 风格 Spec 的最小模板、目录结构、拆分粒度，以及 `council` 是否只在多种拆分方案难以裁决时启用。
 - [x] 设计阶段②.5（PRD/Spec → AI 闭环评审）：新增人审前质量门，检查 PRD 目标、范围、成功指标、验收口径是否被 proposal/specs 完整承接。
 - [x] 设计阶段③（Spec → 架构设计）：确认 `architect` / ADR 各自的接入点，尤其是 Architecture Design Doc 和 ADR 的边界。
-- [ ] 设计阶段④（架构设计 → 任务拆解）。
-- [ ] 设计阶段⑤⑥⑦（任务拆解 → 测试用例编写 → 审核 → 编码）：三步是否合并成一个 skill（内部分三个子步骤）还是拆成三个独立 skill，需要先设计出来再决定，不要提前假设。
-- [ ] 设计阶段⑧（测试用例编码 → 功能编码实现）：核实 `tdd-guide` agent 当前内容是否还适用。
-- [ ] 设计阶段⑨⑩（功能编码实现 → 测试用例运行 → 代码评审）。
-- [ ] 设计阶段⑪（代码评审 → 验收）：目前最大的空白，"验收"的定义和标准需要先厘清，再谈用什么素材落地。
+- [x] 设计阶段④（架构设计 → 任务拆解）：确认任务粒度以约 300 行代码变更为 review 参考线，任务可包含多个内部步骤，但不输出测试用例、测试代码、功能代码或新架构决策。
+- [x] 设计阶段⑤⑥（任务拆解 → 测试用例编写/AI审核闭环）：确认 ⑤/⑥ 合并为一个复合 skill，内部由 Author Agent 和独立 Reviewer Agent 循环，阶段⑦仍独立负责测试代码落地。
+- [x] 设计阶段⑦⑧⑨（测试用例闭环 → TDD实现闭环）：确认测试代码落地、功能编码、单元测试和单模块接口集成测试如何按 Red-Green-Refactor 组织，核实 `tdd-guide` agent 当前内容是否还适用。
+- [ ] 设计阶段⑩（TDD实现闭环 → AI代码评审闭环）：确认代码评审 agent 的准入、输出格式、阻塞问题回退到 ⑦⑧⑨ 的复审机制。
+- [ ] 设计阶段⑪（AI代码评审闭环 → 人审与UI自动化验收）：确认人触发的累计变更 AI 复审、人类 review、Playwright UI 集成测试用例编写和 UI 自动化测试运行的边界。
 - [ ] 全部阶段设计完成后，评估是否需要一个顶层"调度"文档/脚本，把十一个阶段串起来自动衔接，而不是每次手动切换。
