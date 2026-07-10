@@ -1,0 +1,615 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%A8%E8%AE%BA%E7%9B%B8%E5%85%B3/%E7%BC%96%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81/reference/0005-test-case-authoring-review-design/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>ADR 0005: test-case-authoring-review Skill 设计 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#adr-0005-test-case-authoring-review-skill" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ADR 0005: test-case-authoring-review Skill 设计
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consequences
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Consequences">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#positive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Positive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#negative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Negative
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives-considered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternatives Considered
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#date" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Date
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="adr-0005-test-case-authoring-review-skill">ADR 0005: test-case-authoring-review Skill 设计<a class="headerlink" href="#adr-0005-test-case-authoring-review-skill" title="Permanent link">¶</a></h1>
+<h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">¶</a></h2>
+<p>阶段④已经产出任务计划，并明确只交接给测试用例编写阶段，不写 Given-When-Then 测试用例、测试代码或功能代码。后续需要把任务计划中的 Outcome、Done When、Risk、Integration Points 和 Handoff 转换成可供测试代码落地的测试用例文档。</p>
+<p>原路线图把“测试用例编写”和“测试用例审核”拆成两个连续阶段。用户进一步确认：这两个动作不应该是一次性串行交接，而应该形成 AI 内部闭环。Author Agent 写完测试用例后，必须新开独立 Reviewer Agent 审核；Author 根据审核意见修改，再交给 Reviewer 复审；最终形成 AI 已评审的测试用例文档，再交给人类 review。</p>
+<p>用户同时补充了测试用例文档的强约束：</p>
+<ul>
+<li>测试分层只使用 <code>UT</code> / <code>IT</code>。</li>
+<li><code>UT</code> 使用 Mock Repository，不依赖真实数据库。</li>
+<li><code>IT</code> 使用真实 PostgreSQL / Testcontainers，验证 DDL 与 INSERT 行为。</li>
+<li>能用 <code>UT</code> 验证的不要升级为 <code>IT</code>。</li>
+<li>文档头部必须有用例索引表。</li>
+<li>每条用例必须说明测什么、为什么、场景数据、覆盖类型。</li>
+<li>正例和反例必须拆开；反例必须同时包含空场景和错误场景。</li>
+<li>适合参数化的用例标注“建议 @ParameterizedTest”。</li>
+<li>文档末尾必须附最小 IT 数据样例，包含半成品行和完整可执行行。</li>
+<li>不写与测试无关的背景介绍，不把正反向用例合并含糊带过。</li>
+</ul>
+<p>调研 ECC 项目后，没有发现主分支中可直接复用的“测试用例文档评审”专用 agent 或 skill。<code>tdd-guide</code> 更偏测试代码和 Red-Green-Refactor，<code>code-reviewer</code> 更偏代码 diff 审核，<code>test-coverage</code> 发生在测试代码之后，<code>gan-evaluator</code> 可借鉴“独立评审和反馈循环”的形态，但评审对象是运行中的应用，不是测试用例文档。因此本阶段需要沉淀为独立 skill。</p>
+<h2 id="decision">Decision<a class="headerlink" href="#decision" title="Permanent link">¶</a></h2>
+<p>新增 <code>test-case-authoring-review</code>，采用“Author 编写 + Reviewer 独立审核 + 修订复审”的复合流程。</p>
+<ol>
+<li>阶段⑤和阶段⑥合并为一个复合 skill，但内部保留两个角色：</li>
+<li>Author Agent：负责读取任务计划和上游设计资料，编写测试用例文档。</li>
+<li>Reviewer Agent：负责独立审核测试用例文档，只输出问题和结论，不参与初稿编写。</li>
+<li>阶段⑦保持独立，只接收人类批准后的 <code>AI_REVIEWED</code> 测试用例文档，再进入测试代码落地。</li>
+<li>输出测试用例文档，默认路径为：</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>openspec/changes/&lt;change&gt;/test-cases/&lt;spec-domain&gt;-test-cases.md
+</span></code></pre></div>
+<ol>
+<li>测试用例文档状态从 <code>DRAFT</code> 开始，至少经过一轮 Reviewer 审核后，才允许变为 <code>AI_REVIEWED</code>。</li>
+<li>Reviewer 审核循环上限建议为 3 轮。3 轮后仍有 blocking issues 时，停止循环并交给人类裁决。</li>
+<li>采用三文件结构：</li>
+<li><code>test-case-authoring-review/SKILL.md</code>：主 skill 本体，定义准入、边界、Author 编写流程、Reviewer 调度循环、人审交接和禁止越界项。</li>
+<li><code>test-case-authoring-review/REVIEWER.md</code>：审核 agent 定义，单独描述角色、输入、检查清单、输出格式、通过标准和失败处理。</li>
+<li><code>reference/0005-test-case-authoring-review-design.md</code>：记录本决策的背景、取舍和影响。</li>
+<li><code>SKILL.md</code> 不写外部项目引用，直接沉淀为自包含规则；本 ADR 记录来源、调研和取舍。</li>
+</ol>
+<h2 id="consequences">Consequences<a class="headerlink" href="#consequences" title="Permanent link">¶</a></h2>
+<h3 id="positive">Positive<a class="headerlink" href="#positive" title="Permanent link">¶</a></h3>
+<ul>
+<li>人类 review 前先经过 AI 审核闭环，减少明显缺口转嫁给人类。</li>
+<li>Author 和 Reviewer 独立，避免同一个上下文自写自审导致盲点。</li>
+<li><code>SKILL.md</code> 保持流程编排清晰，不被审核细则撑得过长。</li>
+<li><code>REVIEWER.md</code> 可以独立强化审核标准，例如扩展 UT/IT 分层、正反例质量门或最小 IT 数据样例检查。</li>
+<li>阶段⑦仍保持 TDD 红灯阶段的边界，不把测试用例设计和测试代码落地混在一起。</li>
+</ul>
+<h3 id="negative">Negative<a class="headerlink" href="#negative" title="Permanent link">¶</a></h3>
+<ul>
+<li>相比单次写用例，多了一次或多次 AI 审核调用，耗时和上下文成本更高。</li>
+<li>Reviewer 独立文档会多一个维护点，修改测试用例格式时需要同步检查 <code>SKILL.md</code> 和 <code>REVIEWER.md</code>。</li>
+<li>3 轮循环上限只是经验值，复杂业务可能仍需人类提前介入。</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered<a class="headerlink" href="#alternatives-considered" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>保留 ⑤ 和 ⑥ 为两个独立 skill</strong>：职责边界清楚，但容易变成 Author 写完后人工手动切换一次审核，缺少自然的修订复审循环。</li>
+<li><strong>把 ⑤/⑥/⑦ 合并为一个测试总 skill</strong>：交接成本最低，但会把测试用例设计、AI 审核和测试代码落地混在一起，削弱 TDD 红灯阶段。</li>
+<li><strong>直接复用 ECC <code>tdd-guide</code></strong>：它适合写测试代码和推动 Red-Green-Refactor，不适合单独审核测试用例文档。</li>
+<li><strong>直接复用 ECC <code>code-reviewer</code></strong>：它的 blocking issue / verdict 思路可借鉴，但默认审核代码 diff，不适合直接承担测试用例文档评审。</li>
+<li><strong>把 Reviewer 规则全部写进 <code>SKILL.md</code></strong>：文件更少，但主流程和审核细则混杂，后续强化审核规则会让 skill 本体难以阅读。</li>
+</ul>
+<h2 id="status">Status<a class="headerlink" href="#status" title="Permanent link">¶</a></h2>
+<p>Accepted</p>
+<h2 id="date">Date<a class="headerlink" href="#date" title="Permanent link">¶</a></h2>
+<p>2026-07-10</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">¶</a></h2>
+<ul>
+<li><code>https://github.com/affaan-m/ECC/tree/main</code></li>
+<li><code>https://raw.githubusercontent.com/affaan-m/ECC/main/agents/tdd-guide.md</code></li>
+<li><code>https://raw.githubusercontent.com/affaan-m/ECC/main/agents/code-reviewer.md</code></li>
+<li><code>https://raw.githubusercontent.com/affaan-m/ECC/main/agents/gan-evaluator.md</code></li>
+<li>2026-07-10 用户确认：阶段⑤和阶段⑥应形成 Author / Reviewer 循环，而不是一次性串行交接。</li>
+<li>2026-07-10 用户确认：Reviewer Agent 的定义应拆成独立文档，不全部写入 <code>SKILL.md</code>。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

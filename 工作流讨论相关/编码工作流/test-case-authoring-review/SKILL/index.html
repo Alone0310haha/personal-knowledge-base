@@ -1,0 +1,899 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="根据已批准的任务计划编写测试用例文档，并通过独立 Reviewer Agent 进行 AI 审核闭环。用于测试代码落地前，先产出业务语义清晰、UT/IT 分层明确、正反例完整、已通过 AI 评审的测试用例说明。">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%A8%E8%AE%BA%E7%9B%B8%E5%85%B3/%E7%BC%96%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81/test-case-authoring-review/SKILL/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Test Case Authoring Review - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#test-case-authoring-review" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Test Case Authoring Review
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hard-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard Gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        边界
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        必做清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        流程图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: 确认准入
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: 读取上下文
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: 提取测试关注点
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: 测试分层约定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: 写测试用例文档
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        用例格式规则
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: AI 审核循环
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: 自检
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: 用户审阅关卡
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何时可以精简
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键原则
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="test-case-authoring-review">Test Case Authoring Review<a class="headerlink" href="#test-case-authoring-review" title="Permanent link">¶</a></h1>
+<p>把已批准的任务计划转换成测试用例文档，并在交给人类审阅前完成 AI 审核闭环。这个技能负责"应该测试哪些业务行为、为什么测、用什么层级测、需要哪些场景数据"，不负责写测试代码或功能代码。</p>
+<h2 id="hard-gate">Hard Gate<a class="headerlink" href="#hard-gate" title="Permanent link">¶</a></h2>
+<p>只处理已经批准、且没有会改变测试边界的阻塞问题的单个任务计划。不要修改 PRD、Spec、Architecture Design、ADR 或任务计划，不要写测试代码、不要写功能代码、不要输出 patch、类名、测试方法实现或逐文件修改说明。</p>
+<h2 id="_1">边界<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>负责</th>
+<th>不负责（留给其他阶段）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读取已批准的任务计划及其上游设计资料</td>
+<td>修改 PRD、Spec、Architecture Design、ADR 或任务计划</td>
+</tr>
+<tr>
+<td>编写测试用例文档，说明测什么、为什么测、场景数据和覆盖类型</td>
+<td>编写可运行测试代码</td>
+</tr>
+<tr>
+<td>区分 UT / IT，并优先选择 UT</td>
+<td>功能代码实现</td>
+</tr>
+<tr>
+<td>调用独立 Reviewer Agent 审核测试用例文档</td>
+<td>代码 review、测试运行、覆盖率统计</td>
+</tr>
+<tr>
+<td>根据 blocking issues 修订用例并复审</td>
+<td>工期排期、人员分配、版本承诺</td>
+</tr>
+</tbody>
+</table>
+<p>如果自己开始写 <code>@Test</code>、测试类名、Mock 代码、SQL 脚本、实现步骤或代码 patch，说明已经越界。停下来，把内容改回测试用例文档的业务行为、场景数据或交接说明。</p>
+<h2 id="_2">必做清单<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>按顺序推进：</p>
+<ol>
+<li><strong>确认准入</strong> - 任务计划已批准；关联 Spec、闭环评审、Architecture Design 和必要 ADR 可追溯；没有会改变测试边界的阻塞问题。</li>
+<li><strong>读取输入</strong> - 读取任务计划、关联设计资料、项目测试目录和测试约定。</li>
+<li><strong>确认测试边界</strong> - 确认本次只服务一个任务计划覆盖的工程边界；如果任务计划混入多个独立边界，先退回任务拆解阶段。</li>
+<li><strong>提取测试关注点</strong> - 从任务的 Outcome、Done When、Risk、Integration Points、Handoff to Test Case Writing 中提取行为、边界和风险。</li>
+<li><strong>编写测试用例文档</strong> - 按固定格式输出用例索引、每条用例详情和最小 IT 数据样例。</li>
+<li><strong>启动独立审核</strong> - 新开 Reviewer Agent，要求其严格按同目录 <code>REVIEWER.md</code> 审核。</li>
+<li><strong>修订与复审</strong> - Author 根据 blocking issues 修改用例，再交给 Reviewer 复审。</li>
+<li><strong>交给人审</strong> - Reviewer 给出 <code>Approved for Human Review</code> 后，将文档状态改为 <code>AI_REVIEWED</code> 并请求人类审阅。</li>
+</ol>
+<h2 id="_3">流程图<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<div class="language-dot highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">digraph</span><span class="w"> </span><span class="nt">test_case_authoring_review</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="nt">"Read approved task plan"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">"Inputs approved?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">"Return to planning stage"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="nt">"Extract test concerns"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nt">"Draft test cases"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">"Launch independent Reviewer"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="nt">"Blocking issues?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="nt">"Revise test cases"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="nt">"AI_REVIEWED test cases"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">doublecircle</span><span class="p">];</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="nt">"Human review"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="nt">"Read approved task plan"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Inputs approved?"</span><span class="p">;</span>
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="nt">"Inputs approved?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Return to planning stage"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">    </span><span class="nt">"Inputs approved?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Extract test concerns"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">    </span><span class="nt">"Extract test concerns"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Draft test cases"</span><span class="p">;</span>
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">    </span><span class="nt">"Draft test cases"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Launch independent Reviewer"</span><span class="p">;</span>
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">    </span><span class="nt">"Launch independent Reviewer"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Blocking issues?"</span><span class="p">;</span>
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">    </span><span class="nt">"Blocking issues?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Revise test cases"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">    </span><span class="nt">"Revise test cases"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Launch independent Reviewer"</span><span class="p">;</span>
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">    </span><span class="nt">"Blocking issues?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"AI_REVIEWED test cases"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">    </span><span class="nt">"AI_REVIEWED test cases"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Human review"</span><span class="p">;</span>
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="step-1">Step 1: 确认准入<a class="headerlink" href="#step-1" title="Permanent link">¶</a></h2>
+<p>必须读取并确认：</p>
+<ul>
+<li>Source PRD 已批准。</li>
+<li>Proposal 和目标 Spec 已批准。</li>
+<li>PRD/Spec 闭环评审输出为 <code>Approved</code>，或 blocking issues 已修正并复审通过。</li>
+<li>Architecture Design Doc 已批准。</li>
+<li>任务计划状态为 <code>FINAL</code>，或用户明确批准。</li>
+<li>任务计划没有会改变测试边界、任务范围、数据所有权或接口契约的 Open Questions。</li>
+<li>同目录存在 <code>REVIEWER.md</code>，可用于独立审核。</li>
+</ul>
+<p>如果任务计划尚未批准，先退回任务拆解阶段。不要为了写测试用例替用户默认接受任务计划。</p>
+<h2 id="step-2">Step 2: 读取上下文<a class="headerlink" href="#step-2" title="Permanent link">¶</a></h2>
+<p>读取：</p>
+<ul>
+<li>任务计划的 Planning Scope、Task Overview、Work Breakdown、Done When、Risk、Integration Points、Handoff to Test Case Writing。</li>
+<li>关联 Spec 的 Requirements 和 Scenarios。</li>
+<li>Architecture Design 的组件边界、接口契约、数据/控制流、错误处理、安全、观测性和 Handoff。</li>
+<li>相关 ADR，尤其是会约束一致性、幂等、事务、数据库行为、兼容策略或失败处理的决策。</li>
+<li>项目现有测试目录、测试命名、测试框架、Mock 习惯和集成测试基础设施。</li>
+</ul>
+<p>只读取能影响测试用例设计的上下文。不要重新做架构调研，也不要把无关系统拖进测试文档。</p>
+<h2 id="step-3">Step 3: 提取测试关注点<a class="headerlink" href="#step-3" title="Permanent link">¶</a></h2>
+<p>从任务计划中提取测试关注点：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>| Concern | Source | Business Behavior | Risk | Candidate Coverage |
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>|---|---|---|---|---|
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>| {关注点} | {任务/设计来源} | {业务行为} | {风险} | UT/IT |
+</span></code></pre></div>
+<p>覆盖这些来源：</p>
+<ul>
+<li>正常业务流程。</li>
+<li>空数据、缺失数据、可选数据。</li>
+<li>错误数据、非法状态、越权或不满足前置条件。</li>
+<li>数据读写、约束、事务、一致性、幂等和回滚。</li>
+<li>外部接口、消息、异步任务或集成边界。</li>
+<li>错误处理、重试、补偿和失败可见性。</li>
+<li>权限、安全、审计、隐私。</li>
+<li>日志、指标、追踪、告警或排障入口。</li>
+</ul>
+<p>如果缺少信息导致无法判断测试边界，一次只问一个阻塞问题。</p>
+<h2 id="step-4">Step 4: 测试分层约定<a class="headerlink" href="#step-4" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>标记</th>
+<th>含义</th>
+<th>典型手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UT</td>
+<td>单元测试</td>
+<td>Mock Repository，不依赖真实数据库</td>
+</tr>
+<tr>
+<td>IT</td>
+<td>集成测试</td>
+<td>真实 PostgreSQL / Testcontainers，验证 DDL 与 INSERT 行为</td>
+</tr>
+</tbody>
+</table>
+<p>默认优先选择 <code>UT</code>。如果能用 <code>UT</code> 验证业务规则、分支、错误处理或边界条件，就不要升级为 <code>IT</code>。</p>
+<p>只有出现这些情况时才选择 <code>IT</code>：</p>
+<ul>
+<li>需要验证真实 DDL、数据库约束、默认值、触发器或索引行为。</li>
+<li>需要验证真实 INSERT、UPDATE、事务提交、回滚或唯一约束冲突。</li>
+<li>需要验证 ORM / SQL 映射和数据库类型转换。</li>
+<li>需要验证真实集成边界，Mock 会掩盖关键风险。</li>
+</ul>
+<h2 id="step-5">Step 5: 写测试用例文档<a class="headerlink" href="#step-5" title="Permanent link">¶</a></h2>
+<p>默认保存到：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>openspec/changes/&lt;change&gt;/test-cases/&lt;spec-domain&gt;-test-cases.md
+</span></code></pre></div>
+<p>如果项目已有测试用例文档路径惯例，跟随项目惯例。</p>
+<p>模板：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="gh"># {Spec Domain} Test Cases</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="gu">## Status</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>DRAFT
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="gu">## Source</span>
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="k">-</span><span class="w"> </span>PRD: <span class="sb">`{path}`</span>
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="k">-</span><span class="w"> </span>Proposal: <span class="sb">`{path}`</span>
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="k">-</span><span class="w"> </span>Spec: <span class="sb">`{path}`</span>
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="k">-</span><span class="w"> </span>Closure Review: <span class="sb">`{path or summary}`</span>
+</span><span id="__span-3-11"><a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="k">-</span><span class="w"> </span>Architecture Design: <span class="sb">`{path}`</span>
+</span><span id="__span-3-12"><a href="#__codelineno-3-12" id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="k">-</span><span class="w"> </span>Task Plan: <span class="sb">`{path}`</span>
+</span><span id="__span-3-13"><a href="#__codelineno-3-13" id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="k">-</span><span class="w"> </span>ADRs:
+</span><span id="__span-3-14"><a href="#__codelineno-3-14" id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">  </span><span class="k">-</span><span class="w"> </span><span class="sb">`{path or "None"}`</span>
+</span><span id="__span-3-15"><a href="#__codelineno-3-15" id="__codelineno-3-15" name="__codelineno-3-15"></a>
+</span><span id="__span-3-16"><a href="#__codelineno-3-16" id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="gu">## Scope</span>
+</span><span id="__span-3-17"><a href="#__codelineno-3-17" id="__codelineno-3-17" name="__codelineno-3-17"></a>{本测试用例文档负责的业务边界、明确非目标、必须继承的设计约束}
+</span><span id="__span-3-18"><a href="#__codelineno-3-18" id="__codelineno-3-18" name="__codelineno-3-18"></a>
+</span><span id="__span-3-19"><a href="#__codelineno-3-19" id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="gu">## Case Index</span>
+</span><span id="__span-3-20"><a href="#__codelineno-3-20" id="__codelineno-3-20" name="__codelineno-3-20"></a>| 编号 | 标题 | 类型 |
+</span><span id="__span-3-21"><a href="#__codelineno-3-21" id="__codelineno-3-21" name="__codelineno-3-21"></a>|---|---|---|
+</span><span id="__span-3-22"><a href="#__codelineno-3-22" id="__codelineno-3-22" name="__codelineno-3-22"></a>| TC-001 | {业务语义标题} | UT/IT |
+</span><span id="__span-3-23"><a href="#__codelineno-3-23" id="__codelineno-3-23" name="__codelineno-3-23"></a>
+</span><span id="__span-3-24"><a href="#__codelineno-3-24" id="__codelineno-3-24" name="__codelineno-3-24"></a><span class="gu">## Test Cases</span>
+</span><span id="__span-3-25"><a href="#__codelineno-3-25" id="__codelineno-3-25" name="__codelineno-3-25"></a>
+</span><span id="__span-3-26"><a href="#__codelineno-3-26" id="__codelineno-3-26" name="__codelineno-3-26"></a><span class="gu">### TC-001: {业务语义标题}</span>
+</span><span id="__span-3-27"><a href="#__codelineno-3-27" id="__codelineno-3-27" name="__codelineno-3-27"></a>
+</span><span id="__span-3-28"><a href="#__codelineno-3-28" id="__codelineno-3-28" name="__codelineno-3-28"></a><span class="gs">**测什么：**</span> {用业务语义描述要验证的行为}
+</span><span id="__span-3-29"><a href="#__codelineno-3-29" id="__codelineno-3-29" name="__codelineno-3-29"></a>
+</span><span id="__span-3-30"><a href="#__codelineno-3-30" id="__codelineno-3-30" name="__codelineno-3-30"></a><span class="gs">**为什么：**</span> {对应哪条设计约束，并用业务语言解释该约束的含义}
+</span><span id="__span-3-31"><a href="#__codelineno-3-31" id="__codelineno-3-31" name="__codelineno-3-31"></a>
+</span><span id="__span-3-32"><a href="#__codelineno-3-32" id="__codelineno-3-32" name="__codelineno-3-32"></a><span class="gs">**场景数据：**</span>
+</span><span id="__span-3-33"><a href="#__codelineno-3-33" id="__codelineno-3-33" name="__codelineno-3-33"></a>
+</span><span id="__span-3-34"><a href="#__codelineno-3-34" id="__codelineno-3-34" name="__codelineno-3-34"></a>正例：
+</span><span id="__span-3-35"><a href="#__codelineno-3-35" id="__codelineno-3-35" name="__codelineno-3-35"></a><span class="k">-</span><span class="w"> </span>{完整、可理解的业务数据}
+</span><span id="__span-3-36"><a href="#__codelineno-3-36" id="__codelineno-3-36" name="__codelineno-3-36"></a>
+</span><span id="__span-3-37"><a href="#__codelineno-3-37" id="__codelineno-3-37" name="__codelineno-3-37"></a>反例：
+</span><span id="__span-3-38"><a href="#__codelineno-3-38" id="__codelineno-3-38" name="__codelineno-3-38"></a><span class="k">-</span><span class="w"> </span>空场景：{缺失、为空或不存在的业务数据}
+</span><span id="__span-3-39"><a href="#__codelineno-3-39" id="__codelineno-3-39" name="__codelineno-3-39"></a><span class="k">-</span><span class="w"> </span>错误场景：{非法状态、非法值、冲突、越权或不满足前置条件的数据}
+</span><span id="__span-3-40"><a href="#__codelineno-3-40" id="__codelineno-3-40" name="__codelineno-3-40"></a>
+</span><span id="__span-3-41"><a href="#__codelineno-3-41" id="__codelineno-3-41" name="__codelineno-3-41"></a><span class="gs">**覆盖类型：**</span> UT/IT
+</span><span id="__span-3-42"><a href="#__codelineno-3-42" id="__codelineno-3-42" name="__codelineno-3-42"></a>
+</span><span id="__span-3-43"><a href="#__codelineno-3-43" id="__codelineno-3-43" name="__codelineno-3-43"></a><span class="gs">**参数化建议：**</span> {建议 <span class="ni">@ParameterizedTest</span> / 不需要}
+</span><span id="__span-3-44"><a href="#__codelineno-3-44" id="__codelineno-3-44" name="__codelineno-3-44"></a>
+</span><span id="__span-3-45"><a href="#__codelineno-3-45" id="__codelineno-3-45" name="__codelineno-3-45"></a><span class="gu">## Minimal IT Data Samples</span>
+</span><span id="__span-3-46"><a href="#__codelineno-3-46" id="__codelineno-3-46" name="__codelineno-3-46"></a>
+</span><span id="__span-3-47"><a href="#__codelineno-3-47" id="__codelineno-3-47" name="__codelineno-3-47"></a><span class="gu">### 半成品行</span>
+</span><span id="__span-3-48"><a href="#__codelineno-3-48" id="__codelineno-3-48" name="__codelineno-3-48"></a>{只包含验证 DDL/INSERT 边界所需的半成品数据，不写 SQL 脚本}
+</span><span id="__span-3-49"><a href="#__codelineno-3-49" id="__codelineno-3-49" name="__codelineno-3-49"></a>
+</span><span id="__span-3-50"><a href="#__codelineno-3-50" id="__codelineno-3-50" name="__codelineno-3-50"></a><span class="gu">### 完整可执行行</span>
+</span><span id="__span-3-51"><a href="#__codelineno-3-51" id="__codelineno-3-51" name="__codelineno-3-51"></a>{能支撑关键 IT 场景的完整业务数据，不写 SQL 脚本}
+</span><span id="__span-3-52"><a href="#__codelineno-3-52" id="__codelineno-3-52" name="__codelineno-3-52"></a>
+</span><span id="__span-3-53"><a href="#__codelineno-3-53" id="__codelineno-3-53" name="__codelineno-3-53"></a><span class="gu">## AI Review Summary</span>
+</span><span id="__span-3-54"><a href="#__codelineno-3-54" id="__codelineno-3-54" name="__codelineno-3-54"></a>{Reviewer 最后一轮结论；状态为 AI_REVIEWED 前必须填写}
+</span><span id="__span-3-55"><a href="#__codelineno-3-55" id="__codelineno-3-55" name="__codelineno-3-55"></a>
+</span><span id="__span-3-56"><a href="#__codelineno-3-56" id="__codelineno-3-56" name="__codelineno-3-56"></a><span class="gu">## Human Review Focus</span>
+</span><span id="__span-3-57"><a href="#__codelineno-3-57" id="__codelineno-3-57" name="__codelineno-3-57"></a><span class="k">-</span><span class="w"> </span>{交给人类重点看的残余风险或业务判断点}
+</span></code></pre></div>
+<h2 id="_4">用例格式规则<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<ul>
+<li>文档头部必须有用例索引表，字段为：编号、标题、类型。</li>
+<li>每条用例必须包含：测什么、为什么、场景数据、覆盖类型。</li>
+<li>“测什么”必须用业务语义描述，不写成纯技术操作。</li>
+<li>“为什么”必须追溯到 Spec、Architecture Design、ADR 或任务计划中的设计约束，并用业务语言解释含义。</li>
+<li>“场景数据”必须把正例和反例分开列出。</li>
+<li>反例必须同时包含空场景和错误场景，不能只测空数据。</li>
+<li>覆盖类型只能是 <code>UT</code> 或 <code>IT</code>。</li>
+<li>适合参数化的用例必须标注“建议 @ParameterizedTest”。</li>
+<li>文档末尾必须附“最小 IT 数据样例”，包含半成品行和完整可执行行。</li>
+</ul>
+<p>禁止：</p>
+<ul>
+<li>不写与测试无关的背景介绍章节。</li>
+<li>正向和反向用例不得合并在同一格内含糊带过。</li>
+<li>不把测试用例扩展成测试代码、类名、方法名、SQL 脚本或 patch。</li>
+</ul>
+<h2 id="step-6-ai">Step 6: AI 审核循环<a class="headerlink" href="#step-6-ai" title="Permanent link">¶</a></h2>
+<p>Author 完成测试用例草案后，必须新开独立 Reviewer Agent。</p>
+<p>Reviewer Agent 的任务：</p>
+<ul>
+<li>只审核测试用例文档。</li>
+<li>必须读取同目录 <code>REVIEWER.md</code> 并按其中规则执行。</li>
+<li>不参与初稿编写。</li>
+<li>不直接替 Author 修改测试用例文档。</li>
+<li>输出 blocking issues、non-blocking suggestions、human review focus 和最终 verdict。</li>
+</ul>
+<p>Author 根据 Reviewer 输出处理：</p>
+<ul>
+<li>有 <code>Blocking Issues</code>：逐条修订测试用例文档，再交给 Reviewer 复审。</li>
+<li>只有 <code>Non-blocking Suggestions</code>：Author 判断是否采纳，说明处理结果。</li>
+<li>Reviewer 给出 <code>Approved for Human Review</code> 且无 blocking issues：将文档状态改为 <code>AI_REVIEWED</code>。</li>
+</ul>
+<p>循环上限建议为 3 轮。3 轮后仍存在 blocking issues 时，停止循环，把未收敛问题写入 <code>Human Review Focus</code>，交给人类裁决。</p>
+<h2 id="step-7">Step 7: 自检<a class="headerlink" href="#step-7" title="Permanent link">¶</a></h2>
+<p>交给 Reviewer 前检查：</p>
+<ul>
+<li><strong>准入完整</strong>：是否只处理已批准任务计划？</li>
+<li><strong>边界清晰</strong>：是否只服务一个 Spec / design / task plan？</li>
+<li><strong>格式完整</strong>：是否有用例索引、每条用例详情和最小 IT 数据样例？</li>
+<li><strong>业务语义清楚</strong>：测什么、为什么是否能让业务和开发都看懂？</li>
+<li><strong>正反例分离</strong>：正例、空场景、错误场景是否分开写？</li>
+<li><strong>分层克制</strong>：能用 UT 的是否没有升级为 IT？</li>
+<li><strong>无代码泄漏</strong>：是否写了测试代码、SQL 脚本、类名、方法名或 patch？</li>
+</ul>
+<p>如果 Open Questions 会改变测试边界或用例分类，禁止定稿。</p>
+<h2 id="step-8">Step 8: 用户审阅关卡<a class="headerlink" href="#step-8" title="Permanent link">¶</a></h2>
+<p>AI 审核通过后请求用户审阅：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>测试用例文档已写到 <span class="sb">`{test cases path}`</span>，状态为 <span class="sb">`AI_REVIEWED`</span>。
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>请重点审阅：用例是否符合业务语义、设计约束解释是否准确、正反例数据是否完整、UT/IT 分层是否合理，以及 <span class="sb">`Human Review Focus`</span> 中的残余问题。
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>你批准后，我会交接给测试代码落地阶段。
+</span></code></pre></div>
+<p>用户要求修改时，更新测试用例文档，重新执行 Reviewer 审核循环，再请求审阅。</p>
+<p>用户批准后，明确交接给下一阶段：</p>
+<ul>
+<li>测试用例文档路径。</li>
+<li>用例编号与标题。</li>
+<li>覆盖类型 <code>UT</code> / <code>IT</code>。</li>
+<li>参数化建议。</li>
+<li>最小 IT 数据样例。</li>
+<li>人审确认事项或残余风险。</li>
+</ul>
+<h2 id="_5">何时可以精简<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<p>小任务计划可以使用 Lite 模式：</p>
+<ul>
+<li>只列 1-3 条测试用例。</li>
+<li><code>Concern</code> 表可以省略。</li>
+<li><code>Human Review Focus</code> 可以为空，但必须保留标题。</li>
+</ul>
+<p>但不能跳过：</p>
+<ul>
+<li>已批准任务计划准入。</li>
+<li>UT 优先原则。</li>
+<li>正例、空场景、错误场景分离。</li>
+<li>最小 IT 数据样例。</li>
+<li>独立 Reviewer 审核。</li>
+<li>人类审阅。</li>
+</ul>
+<h2 id="_6">关键原则<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>测试用例先于测试代码</strong>：先确认应该测什么，再进入可运行测试代码落地。</li>
+<li><strong>业务语义优先</strong>：用例标题和说明必须让不了解实现细节的人也能理解。</li>
+<li><strong>用例追溯设计约束</strong>：每条用例都应说明为什么存在，避免为了覆盖而覆盖。</li>
+<li><strong>UT 优先</strong>：能用 Mock Repository 验证的场景不要使用真实数据库。</li>
+<li><strong>反例必须包含错误场景</strong>：空数据不是唯一风险，非法状态、冲突、越权和不满足前置条件同样要覆盖。</li>
+<li><strong>审核独立</strong>：Reviewer 只审，不写初稿，不替 Author 直接改文档。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
