@@ -1,0 +1,867 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="IT老齐">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87/%E5%9C%BA%E6%99%AF%E9%A2%98/2026-07-12-PG%E6%97%A0%E6%97%A5%E5%BF%97%E8%A1%A8%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88%E9%9D%A2%E8%AF%95%E4%B8%8E%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>PG 无日志表在项目中的应用（面试与实战笔记） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pg" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PG 无日志表在项目中的应用（面试与实战笔记）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 核心架构/流程可视化（必选）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 核心主题与背景（它在讲什么？）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 核心主题与背景（它在讲什么？）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 一句话概括
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 技术体系位置与背景痛点
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心知识点/解决方案拆解（它是怎么做的？）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心知识点/解决方案拆解（它是怎么做的？）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 先理解 WAL：为什么普通表写入会慢？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-unlogged-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 UNLOGGED 表做了什么：跳过数据相关 WAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 性能收益来自哪里？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 崩溃后会发生什么：不是回滚，而是清空
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 它和临时表有什么区别？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 典型应用场景
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6 典型应用场景">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景一：ETL 中间加工表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景二：高并发写入缓冲表
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 亮点、坑点与最佳实践（如何体现经验？）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 亮点、坑点与最佳实践（如何体现经验？）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 亮点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 避坑/局限性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 最佳实践
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 总结与升华（一句话亮点）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="pg">PG 无日志表在项目中的应用（面试与实战笔记）<a class="headerlink" href="#pg" title="Permanent link">¶</a></h1>
+<h2 id="1">1. 核心架构/流程可视化（必选）<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>graph LR
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    subgraph Normal[普通表写入链路]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>        N1[业务 DML: INSERT/UPDATE/DELETE] --&gt; N2[修改共享内存 Buffer]
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>        N2 --&gt; N3[写入 WAL 预写日志]
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>        N3 --&gt; N4[事务提交可恢复]
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>        N4 --&gt; N5[Checkpoint 后刷入数据文件]
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>        N3 --&gt; N6[主从复制/崩溃恢复/PITR]
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>    end
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>    subgraph Unlogged[UNLOGGED 无日志表写入链路]
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>        U1[业务 DML: INSERT/UPDATE/DELETE] --&gt; U2[修改共享内存 Buffer]
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>        U2 --&gt; U3[跳过数据页 WAL]
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a>        U3 --&gt; U4[直接写入目标数据文件]
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a>        U4 --&gt; U5[正常启停: 数据仍可读写]
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a>        U3 --&gt; U6[仅记录少量元信息]
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a>        U6 --&gt; U7[事务提交/DDL/系统目录/init fork]
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a>    end
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a>    subgraph Crash[异常崩溃后的差异]
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a>        C1[数据库崩溃/突然断电] --&gt; C2{表类型}
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a>        C2 --&gt;|普通表| C3[通过 WAL 重放恢复数据]
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a>        C2 --&gt;|UNLOGGED 表| C4[按 init fork 还原为空表]
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a>        C4 --&gt; C5[保留表结构, 清空表数据与索引数据]
+</span><span id="__span-0-24"><a href="#__codelineno-0-24" id="__codelineno-0-24" name="__codelineno-0-24"></a>    end
+</span><span id="__span-0-25"><a href="#__codelineno-0-25" id="__codelineno-0-25" name="__codelineno-0-25"></a>
+</span><span id="__span-0-26"><a href="#__codelineno-0-26" id="__codelineno-0-26" name="__codelineno-0-26"></a>    N6 -.支撑.-&gt; C3
+</span><span id="__span-0-27"><a href="#__codelineno-0-27" id="__codelineno-0-27" name="__codelineno-0-27"></a>    U7 -.无数据页日志.-&gt; C4
+</span></code></pre></div>
+<ul>
+<li>关键路径一句话：普通表用 WAL 换取崩溃恢复、复制和一致性；UNLOGGED 表跳过数据页与索引页 WAL，用可丢失、可重建的数据换取更低磁盘 IO 和更高写入吞吐。</li>
+</ul>
+<h2 id="2">2. 核心主题与背景（它在讲什么？）<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<h3 id="21">2.1 一句话概括<a class="headerlink" href="#21" title="Permanent link">¶</a></h3>
+<ul>
+<li>这期视频讲的是：PostgreSQL 的无日志表如何通过绕开部分 WAL 写入来提升写性能，以及它适合和不适合放在哪些业务场景里。</li>
+</ul>
+<h3 id="22">2.2 技术体系位置与背景痛点<a class="headerlink" href="#22" title="Permanent link">¶</a></h3>
+<ul>
+<li>技术体系位置：它属于 PostgreSQL 存储引擎/事务日志机制下的表类型选择问题，是数据库性能优化、数据可靠性设计和架构选型的交叉点。</li>
+<li>核心痛点：</li>
+<li>普通表每次写入都要产生 WAL，可靠性高，但磁盘 IO 压力也大。</li>
+<li>在 ETL 中间表、临时加工结果、高吞吐写缓冲这类场景里，数据往往可以从上游重放或重建。</li>
+<li>如果仍然按核心业务表的强一致标准处理，会把大量 IO 花在“不值得保护到极致”的数据上。</li>
+</ul>
+<h2 id="3">3. 核心知识点/解决方案拆解（它是怎么做的？）<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<h3 id="31-wal">3.1 先理解 WAL：为什么普通表写入会慢？<a class="headerlink" href="#31-wal" title="Permanent link">¶</a></h3>
+<ul>
+<li>WAL（Write-Ahead Logging，预写日志）是 PostgreSQL 保证可靠性的核心机制。</li>
+<li>普通表执行新增、修改、删除时，通常不是只改数据文件，而是先把“我要做什么变更”写入 WAL。</li>
+<li>WAL 持久化后，数据库即使宕机，也能通过日志重放把数据追回来。</li>
+<li>代价是：每次写入都会产生额外磁盘 IO，尤其在高频写、大批量写、索引较多的场景下，WAL 会成为明显成本。</li>
+</ul>
+<h3 id="32-unlogged-wal">3.2 UNLOGGED 表做了什么：跳过数据相关 WAL<a class="headerlink" href="#32-unlogged-wal" title="Permanent link">¶</a></h3>
+<ul>
+<li>创建方式：</li>
+</ul>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="n">UNLOGGED</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">device_event_buffer</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="n">device_id</span><span class="w"> </span><span class="nb">bigint</span><span class="p">,</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="n">event_time</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="n">payload</span><span class="w"> </span><span class="n">jsonb</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="p">);</span>
+</span></code></pre></div>
+<ul>
+<li>UNLOGGED 表不是“不落盘”，而是“不记录数据页和索引页的 WAL”。</li>
+<li>视频中强调，UNLOGGED 表仍会在 WAL 中保留少量必要信息：</li>
+<li>事务提交信息</li>
+<li>DDL 表结构变更信息</li>
+<li>系统目录修改信息</li>
+<li><code>init fork</code> 创建信息，也就是用于异常恢复时还原空表的模板</li>
+<li>不记录到 WAL 的主要是：</li>
+<li>数据页修改</li>
+<li>索引页修改</li>
+<li>FSM（Free Space Map，空闲空间映射）变化</li>
+<li>VM（Visibility Map，可见性映射）变化</li>
+</ul>
+<h3 id="33">3.3 性能收益来自哪里？<a class="headerlink" href="#33" title="Permanent link">¶</a></h3>
+<ul>
+<li>本质原因：少写日志，少刷盘，减少 WAL 体积和磁盘 IO。</li>
+<li>视频举例：</li>
+<li>100 万行全量 update，普通表可能产生约 320MB WAL，而 UNLOGGED 表可能只有约 16MB。</li>
+<li>小批量 insert、大容量 insert 等写入场景，可能出现数倍级性能提升。</li>
+<li>这类收益在以下场景更明显：</li>
+<li>批量导入</li>
+<li>高频 insert</li>
+<li>中间结果表</li>
+<li>数据可重建的缓冲表</li>
+<li>对主从同步和点时间恢复没有要求的数据</li>
+</ul>
+<h3 id="34">3.4 崩溃后会发生什么：不是回滚，而是清空<a class="headerlink" href="#34" title="Permanent link">¶</a></h3>
+<ul>
+<li>正常运行、正常关闭、正常启动：UNLOGGED 表的数据仍然存在，可以像普通表一样查询和写入。</li>
+<li>异常断电、进程崩溃、数据库非正常恢复：UNLOGGED 表会被截断，恢复成空表。</li>
+<li>原因很简单：</li>
+<li>数据页和索引页变化没有完整 WAL。</li>
+<li>PostgreSQL 无法判断表内数据是否处于一致状态。</li>
+<li>所以恢复时用 <code>init fork</code> 把它还原成“结构还在、数据清空”的状态。</li>
+</ul>
+<h3 id="35">3.5 它和临时表有什么区别？<a class="headerlink" href="#35" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>临时表 TEMP TABLE</th>
+<th>无日志表 UNLOGGED TABLE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>生命周期</td>
+<td>通常绑定当前会话或事务</td>
+<td>持久对象，像普通表一样长期存在</td>
+</tr>
+<tr>
+<td>跨会话可见性</td>
+<td>其他会话不可见</td>
+<td>多个会话可见，可共享</td>
+</tr>
+<tr>
+<td>正常重启后数据</td>
+<td>通常不保留</td>
+<td>正常启停保留</td>
+</tr>
+<tr>
+<td>异常崩溃后数据</td>
+<td>会话结束即消失</td>
+<td>表被清空</td>
+</tr>
+<tr>
+<td>典型用途</td>
+<td>单会话临时计算</td>
+<td>多会话共享的高性能中间表/缓冲表</td>
+</tr>
+</tbody>
+</table>
+<h3 id="36">3.6 典型应用场景<a class="headerlink" href="#36" title="Permanent link">¶</a></h3>
+<h4 id="etl">场景一：ETL 中间加工表<a class="headerlink" href="#etl" title="Permanent link">¶</a></h4>
+<ul>
+<li>业务流程：</li>
+<li>从原始数据源导出数据。</li>
+<li>导入 PostgreSQL 中间表做清洗、转换、聚合。</li>
+<li>处理完成后写入目标库、数仓或正式业务表。</li>
+<li>为什么适合：</li>
+<li>原始数据还在，上游可重放。</li>
+<li>中间表只是加工态，不是最终可信数据源。</li>
+<li>数据量大，对写入性能要求高。</li>
+<li>设计要点：</li>
+<li>UNLOGGED 表只承载中间状态。</li>
+<li>处理失败后允许清空重跑。</li>
+<li>最终结果落到普通表或其他可靠存储。</li>
+</ul>
+<h4 id="_1">场景二：高并发写入缓冲表<a class="headerlink" href="#_1" title="Permanent link">¶</a></h4>
+<ul>
+<li>业务示例：IoT 设备上报、埋点日志、短周期采集数据。</li>
+<li>典型做法：</li>
+<li>高频数据先写入 UNLOGGED 缓冲表。</li>
+<li>每分钟或每个小窗口批量刷新到下游数据仓库。</li>
+<li>即使异常崩溃，损失也被控制在最近一个时间窗口内。</li>
+<li>适合前提：</li>
+<li>数据不是核心交易数据。</li>
+<li>允许小概率丢失或可由设备/消息队列补偿。</li>
+<li>更关注吞吐、延迟和 IO 压力。</li>
+</ul>
+<h2 id="4">4. 亮点、坑点与最佳实践（如何体现经验？）<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<h3 id="41">4.1 亮点<a class="headerlink" href="#41" title="Permanent link">¶</a></h3>
+<ul>
+<li>性能收益直接：绕过数据页 WAL 后，写入链路更短，WAL 文件膨胀更少。</li>
+<li>使用成本低：SQL 层只需在建表时加 <code>UNLOGGED</code>，对应用读写模型影响较小。</li>
+<li>适合“中间态数据”：对 ETL、批处理、可重建缓存表来说，可靠性要求天然低于最终数据。</li>
+<li>能降低主库 IO 压力：在高写入场景里，可以减少 WAL 写放大带来的抖动。</li>
+</ul>
+<h3 id="42">4.2 避坑/局限性<a class="headerlink" href="#42" title="Permanent link">¶</a></h3>
+<ul>
+<li>不能放核心业务数据：订单、账户、支付流水、库存扣减这类强一致数据绝不能用。</li>
+<li>异常崩溃会清空：它不是少量丢数据，而是整张表恢复为空表。</li>
+<li>不适合依赖主从复制的场景：UNLOGGED 表的数据变化不会通过 WAL 正常复制到从库，从库侧通常只有空表结构。</li>
+<li>不适合依赖 PITR 的场景：PITR（Point-In-Time Recovery，时间点恢复）依赖 WAL，UNLOGGED 表数据无法按时间点恢复。</li>
+<li>索引也不受 WAL 保护：表数据和索引数据都可能在崩溃恢复后被重置。</li>
+<li>序列要谨慎：和 UNLOGGED 表一起创建的序列也可能带有 unlogged 行为，异常后序列状态可能回退。</li>
+<li>分区表要单独关注：PostgreSQL 官方文档明确说明 <code>UNLOGGED</code> 这种建表形式不支持直接用于分区父表；如果确实要在分区场景里使用类似能力，需要针对具体版本和具体子分区 DDL 单独验证。</li>
+<li>备份策略要验证：部分物理备份工具可能不会保留 UNLOGGED 表数据；逻辑导出一般可以导出当时可见的数据。</li>
+<li>LOGGED 与 UNLOGGED 转换有成本：互相转换需要重写数据，数据量大时耗时明显，不适合高峰期随意操作。</li>
+</ul>
+<h3 id="43">4.3 最佳实践<a class="headerlink" href="#43" title="Permanent link">¶</a></h3>
+<ul>
+<li>选型原则：只把“可丢、可重建、可补偿”的数据放进 UNLOGGED 表。</li>
+<li>给表名加语义：例如 <code>xxx_buffer</code>、<code>xxx_stage</code>、<code>xxx_tmp_pipeline</code>，让团队一眼知道它不是最终可信表。</li>
+<li>建立重建机制：崩溃清空后，应能从上游数据、消息队列、对象存储或原始表自动重放。</li>
+<li>控制损失窗口：高并发写缓冲建议按分钟级或更短周期批量落入可靠存储。</li>
+<li>监控和告警：</li>
+<li>监控表行数异常归零。</li>
+<li>监控批处理延迟和下游写入失败。</li>
+<li>监控数据库异常重启事件。</li>
+<li>正式上线前做一次演练：</li>
+<li>写入 UNLOGGED 表。</li>
+<li>模拟异常中断。</li>
+<li>验证恢复后表结构保留、数据清空。</li>
+<li>验证业务是否能自动补偿。</li>
+</ul>
+<h2 id="5">5. 总结与升华（一句话亮点）<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<ul>
+<li>面试行话版：PostgreSQL 的 UNLOGGED 表本质是用“放弃数据页 WAL 保护”换取写入吞吐，它适合 ETL 中间态和可重建缓冲数据，但凡涉及强一致、主从复制、PITR 或核心业务资产，都应该回到普通表。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

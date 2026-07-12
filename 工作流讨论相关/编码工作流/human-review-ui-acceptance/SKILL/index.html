@@ -1,0 +1,841 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="在单个或多个 Spec 已通过 TDD 实现闭环和 AI 代码评审闭环后，执行最终验收门。用于人触发累计变更 AI 复审、交给人类 review，并在人审通过后编写和运行从 UI 触发的 Playwright 验收测试，直到累计变更可被验收。">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%A8%E8%AE%BA%E7%9B%B8%E5%85%B3/%E7%BC%96%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81/human-review-ui-acceptance/SKILL/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Human Review UI Acceptance - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#human-review-ui-acceptance" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Human Review UI Acceptance
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hard-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard Gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        边界
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        必做清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        输入
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        输出
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        流程图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: 累计变更 AI 复审
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-review-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: 人类 Review Gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: UI 验收设计
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-playwright" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Playwright 编写与运行
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: 失败分类
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: 最终验收报告
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何时可以精简
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键原则
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="human-review-ui-acceptance">Human Review UI Acceptance<a class="headerlink" href="#human-review-ui-acceptance" title="Permanent link">¶</a></h1>
+<p>把已经通过阶段性 AI 代码评审的累计变更交给最终验收。这个技能负责"累计变更 AI 复审 → 人类 review → UI 触发的 Playwright 验收测试编写与运行 → 最终验收报告"，不负责重新实现功能、替代人类审批或发布上线。</p>
+<h2 id="hard-gate">Hard Gate<a class="headerlink" href="#hard-gate" title="Permanent link">¶</a></h2>
+<p>只处理已经完成 TDD 实现闭环，并且对应单 Spec / 单任务 AI Code Review Report 为 <code>Approved for Human Review</code> 的累计变更。</p>
+<p>不要代表人类批准 review。没有明确的人类 review 通过结论，不要编写或运行 Playwright UI 验收测试。发现代码、测试、设计或验收口径阻塞问题时，退回相应上游阶段修复，而不是在本阶段现场改功能。</p>
+<h2 id="_1">边界<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>负责</th>
+<th>不负责（留给其他阶段）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>面向累计变更执行一轮 AI 代码复审</td>
+<td>单任务 TDD 修复或重写功能实现</td>
+</tr>
+<tr>
+<td>汇总单 Spec / 单任务 AI Code Review Report</td>
+<td>替代阶段⑩的单任务代码评审</td>
+</tr>
+<tr>
+<td>准备人类 review 包和人审焦点</td>
+<td>代表人类 approve / reject</td>
+</tr>
+<tr>
+<td>在人审通过后编写 UI 触发的 Playwright 验收测试</td>
+<td>编写模块级 UT / IT</td>
+</tr>
+<tr>
+<td>运行 UI 自动化验收测试并记录证据</td>
+<td>发布上线、业务 UAT 或生产监控</td>
+</tr>
+<tr>
+<td>输出最终验收报告和残余风险</td>
+<td>修改 PRD、Spec、Architecture Design、ADR 或任务计划</td>
+</tr>
+</tbody>
+</table>
+<p>如果人审或 UI 验收发现实现问题，退回阶段⑦⑧⑨修复；修复后必须重新经过阶段⑩和本阶段的累计复审。</p>
+<h2 id="_2">必做清单<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>按顺序推进：</p>
+<ol>
+<li><strong>确认准入</strong> - 所有相关 Spec / task 均有通过的 TDD 证据和 AI Code Review Report。</li>
+<li><strong>汇总累计变更</strong> - 收集 PRD、Spec、Architecture Design、ADR、任务计划、测试用例、TDD 证据、AI code review 报告、代码 diff、测试 diff 和命令结果。</li>
+<li><strong>累计 AI 复审</strong> - 新开独立 Reviewer Agent，按 <code>CUMULATIVE_REVIEWER.md</code> 审核跨 Spec / 跨任务集成风险。</li>
+<li><strong>处理复审结果</strong> - 有 blocking issues 时退回相应上游阶段；无阻塞问题时准备人类 review 包。</li>
+<li><strong>人类 Review Gate</strong> - 明确等待人类 review 结论。只有人类批准后才进入 UI 自动化验收。</li>
+<li><strong>UI 验收设计</strong> - 人审通过后，按 <code>PLAYWRIGHT_ACCEPTANCE.md</code> 从 PRD 验收口径、Spec scenarios 和人审焦点提炼 UI 触发路径。</li>
+<li><strong>编写 Playwright 测试</strong> - 只覆盖真实用户可触发的关键验收路径，不补写模块级测试。</li>
+<li><strong>运行 UI 自动化测试</strong> - 启动必要服务，运行 Playwright，记录命令、环境、结果和失败证据。</li>
+<li><strong>失败处理</strong> - 如果失败来自产品行为或实现问题，退回实现闭环；如果失败来自测试脚本或环境，修正验收脚本或环境后重跑。</li>
+<li><strong>最终验收报告</strong> - 所有 UI 验收通过后，输出最终报告并标记可验收。</li>
+</ol>
+<h2 id="_3">输入<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>必须读取：</p>
+<ul>
+<li>PRD，尤其是 Goals、Success Metrics 和 Acceptance Criteria。</li>
+<li><code>openspec/changes/&lt;change&gt;/proposal.md</code>。</li>
+<li>相关 <code>openspec/changes/&lt;change&gt;/specs/**/spec.md</code>。</li>
+<li>Architecture Design 和相关 ADR。</li>
+<li>任务计划。</li>
+<li>测试用例文档。</li>
+<li>TDD 证据摘要。</li>
+<li>单 Spec / 单任务 AI Code Review Report。</li>
+<li>累计代码 diff 和测试 diff。</li>
+<li>已运行的单元测试、单模块接口集成测试、构建和静态检查结果。</li>
+<li>人类 review 结论和 review comments。</li>
+<li>项目现有 Playwright 配置、测试目录、fixture、认证方式、测试数据和启动命令。</li>
+</ul>
+<p>如果人类 review 结论不可见，必须停止在 Human Review Gate，不要默认通过。</p>
+<h2 id="_4">输出<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p>建议输出三类材料：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>openspec/changes/&lt;change&gt;/reviews/&lt;change&gt;-cumulative-ai-review.md
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>openspec/changes/&lt;change&gt;/acceptance/&lt;change&gt;-ui-acceptance-plan.md
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>openspec/changes/&lt;change&gt;/acceptance/&lt;change&gt;-final-acceptance.md
+</span></code></pre></div>
+<p>如果项目已有 review、evidence、acceptance 或 test report 目录，跟随项目惯例。</p>
+<p>最终验收报告应包含：</p>
+<ul>
+<li>累计 AI 复审结论。</li>
+<li>人类 review 结论和关键 comment 处理状态。</li>
+<li>Playwright 验收测试清单。</li>
+<li>UI 自动化测试命令、环境和结果。</li>
+<li>失败重试记录。</li>
+<li>残余风险。</li>
+<li>最终状态：<code>Accepted</code> / <code>Blocked</code>。</li>
+</ul>
+<h2 id="_5">流程图<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<div class="language-dot highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">digraph</span><span class="w"> </span><span class="nt">human_review_ui_acceptance</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="nt">"Collect cumulative change"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="nt">"All AI code reviews approved?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="nt">"Return to AI code review loop"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="nt">"Cumulative AI review"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="nt">"Blocking issues?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="nt">"Return to upstream fix"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="nt">"Prepare human review package"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">    </span><span class="nt">"Human approved?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">    </span><span class="nt">"Wait or return to upstream fix"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="nt">"Design UI acceptance tests"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="nt">"Write Playwright tests"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-13"><a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">    </span><span class="nt">"Run UI acceptance tests"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-14"><a href="#__codelineno-1-14" id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">    </span><span class="nt">"All UI tests pass?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-1-15"><a href="#__codelineno-1-15" id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">    </span><span class="nt">"Classify failure"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-16"><a href="#__codelineno-1-16" id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">    </span><span class="nt">"Final acceptance report"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">doublecircle</span><span class="p">];</span>
+</span><span id="__span-1-17"><a href="#__codelineno-1-17" id="__codelineno-1-17" name="__codelineno-1-17"></a>
+</span><span id="__span-1-18"><a href="#__codelineno-1-18" id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="w">    </span><span class="nt">"Collect cumulative change"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"All AI code reviews approved?"</span><span class="p">;</span>
+</span><span id="__span-1-19"><a href="#__codelineno-1-19" id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="w">    </span><span class="nt">"All AI code reviews approved?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Return to AI code review loop"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-1-20"><a href="#__codelineno-1-20" id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="w">    </span><span class="nt">"All AI code reviews approved?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Cumulative AI review"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-1-21"><a href="#__codelineno-1-21" id="__codelineno-1-21" name="__codelineno-1-21"></a><span class="w">    </span><span class="nt">"Cumulative AI review"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Blocking issues?"</span><span class="p">;</span>
+</span><span id="__span-1-22"><a href="#__codelineno-1-22" id="__codelineno-1-22" name="__codelineno-1-22"></a><span class="w">    </span><span class="nt">"Blocking issues?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Return to upstream fix"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-1-23"><a href="#__codelineno-1-23" id="__codelineno-1-23" name="__codelineno-1-23"></a><span class="w">    </span><span class="nt">"Blocking issues?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Prepare human review package"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-1-24"><a href="#__codelineno-1-24" id="__codelineno-1-24" name="__codelineno-1-24"></a><span class="w">    </span><span class="nt">"Prepare human review package"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Human approved?"</span><span class="p">;</span>
+</span><span id="__span-1-25"><a href="#__codelineno-1-25" id="__codelineno-1-25" name="__codelineno-1-25"></a><span class="w">    </span><span class="nt">"Human approved?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Wait or return to upstream fix"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-1-26"><a href="#__codelineno-1-26" id="__codelineno-1-26" name="__codelineno-1-26"></a><span class="w">    </span><span class="nt">"Human approved?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Design UI acceptance tests"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-1-27"><a href="#__codelineno-1-27" id="__codelineno-1-27" name="__codelineno-1-27"></a><span class="w">    </span><span class="nt">"Design UI acceptance tests"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Write Playwright tests"</span><span class="p">;</span>
+</span><span id="__span-1-28"><a href="#__codelineno-1-28" id="__codelineno-1-28" name="__codelineno-1-28"></a><span class="w">    </span><span class="nt">"Write Playwright tests"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Run UI acceptance tests"</span><span class="p">;</span>
+</span><span id="__span-1-29"><a href="#__codelineno-1-29" id="__codelineno-1-29" name="__codelineno-1-29"></a><span class="w">    </span><span class="nt">"Run UI acceptance tests"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"All UI tests pass?"</span><span class="p">;</span>
+</span><span id="__span-1-30"><a href="#__codelineno-1-30" id="__codelineno-1-30" name="__codelineno-1-30"></a><span class="w">    </span><span class="nt">"All UI tests pass?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Final acceptance report"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-1-31"><a href="#__codelineno-1-31" id="__codelineno-1-31" name="__codelineno-1-31"></a><span class="w">    </span><span class="nt">"All UI tests pass?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Classify failure"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-1-32"><a href="#__codelineno-1-32" id="__codelineno-1-32" name="__codelineno-1-32"></a><span class="w">    </span><span class="nt">"Classify failure"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Return to upstream fix"</span><span class="p">;</span>
+</span><span id="__span-1-33"><a href="#__codelineno-1-33" id="__codelineno-1-33" name="__codelineno-1-33"></a><span class="w">    </span><span class="nt">"Classify failure"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Write Playwright tests"</span><span class="p">;</span>
+</span><span id="__span-1-34"><a href="#__codelineno-1-34" id="__codelineno-1-34" name="__codelineno-1-34"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="step-1-ai">Step 1: 累计变更 AI 复审<a class="headerlink" href="#step-1-ai" title="Permanent link">¶</a></h2>
+<p>新开独立 Reviewer Agent，按 <code>CUMULATIVE_REVIEWER.md</code> 检查：</p>
+<ul>
+<li>多个 Spec / task 的集成边界是否一致。</li>
+<li>单任务评审通过后是否仍存在累计层面的冲突、遗漏或顺序问题。</li>
+<li>PRD acceptance criteria 是否被累计实现和测试证据覆盖。</li>
+<li>迁移、配置、权限、观测性、兼容性和回滚是否在累计变更层面可接受。</li>
+<li>是否存在人类 review 必须裁决的业务或发布风险。</li>
+</ul>
+<p>累计复审通过后，生成或更新累计 AI Review Report。</p>
+<h2 id="step-2-review-gate">Step 2: 人类 Review Gate<a class="headerlink" href="#step-2-review-gate" title="Permanent link">¶</a></h2>
+<p>准备人类 review 包：</p>
+<ul>
+<li>累计变更摘要。</li>
+<li>PRD / Spec / Architecture / ADR 链接。</li>
+<li>单任务 AI Code Review Report 列表。</li>
+<li>累计 AI Review Report。</li>
+<li>测试和构建命令结果。</li>
+<li>需要人类重点看的业务语义、风险取舍、兼容性和 UI 行为。</li>
+</ul>
+<p>必须等待人类明确结论：</p>
+<ul>
+<li><code>Approved</code>：进入 UI 自动化验收。</li>
+<li><code>Changes Requested</code>：按 comment 退回相应上游阶段。</li>
+<li><code>Blocked / Need Decision</code>：停止自动推进，等待人类裁决。</li>
+</ul>
+<p>不要把"没有反对意见"当作通过。</p>
+<h2 id="step-3-ui">Step 3: UI 验收设计<a class="headerlink" href="#step-3-ui" title="Permanent link">¶</a></h2>
+<p>人审通过后，按 <code>PLAYWRIGHT_ACCEPTANCE.md</code> 编写 UI 验收计划。验收计划必须从用户可观察行为出发：</p>
+<ul>
+<li>覆盖 PRD acceptance criteria 中需要 UI 触发的路径。</li>
+<li>覆盖 Spec scenarios 中最终用户能观察的关键结果。</li>
+<li>覆盖人审焦点中的 UI 风险和集成风险。</li>
+<li>明确哪些验收项不适合 UI 自动化，并说明已有 UT / IT / 人审覆盖方式。</li>
+</ul>
+<p>不要把内部服务、数据库约束或纯 API 行为强行塞进 UI 测试。</p>
+<h2 id="step-4-playwright">Step 4: Playwright 编写与运行<a class="headerlink" href="#step-4-playwright" title="Permanent link">¶</a></h2>
+<p>编写 Playwright 测试时：</p>
+<ul>
+<li>优先复用项目现有 Playwright 配置、fixture、page object、认证和测试数据模式。</li>
+<li>测试名称保留业务语义和验收项编号。</li>
+<li>断言用户可见结果、可访问状态、关键提示、导航结果或 UI 可触发的业务状态。</li>
+<li>避免只断言 CSS、DOM 结构或实现细节，除非它们就是验收口径。</li>
+<li>不通过修改产品代码来让验收测试通过。</li>
+</ul>
+<p>运行时必须记录：</p>
+<ul>
+<li>启动命令。</li>
+<li>Playwright 命令。</li>
+<li>浏览器和环境。</li>
+<li>测试结果。</li>
+<li>失败截图、trace、video 或日志路径（如果有）。</li>
+</ul>
+<h2 id="step-5">Step 5: 失败分类<a class="headerlink" href="#step-5" title="Permanent link">¶</a></h2>
+<p>UI 验收失败后先分类：</p>
+<ul>
+<li><strong>Product Failure</strong>：产品行为与 PRD / Spec / 人审结论不一致。退回阶段⑦⑧⑨修复，再经过阶段⑩和本阶段复审。</li>
+<li><strong>Test Script Failure</strong>：测试选择器、等待条件、fixture、认证或测试数据错误。修正 Playwright 测试后重跑。</li>
+<li><strong>Environment Failure</strong>：服务未启动、依赖不可用、端口冲突、网络或浏览器环境问题。修复环境后重跑。</li>
+<li><strong>Spec Ambiguity</strong>：验收口径不清。退回对应设计阶段或请求人类裁决。</li>
+</ul>
+<p>不要把产品失败改写成测试脚本失败，也不要为了通过而删除关键验收断言。</p>
+<h2 id="step-6">Step 6: 最终验收报告<a class="headerlink" href="#step-6" title="Permanent link">¶</a></h2>
+<p>模板：</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="gh"># Final Acceptance Report</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="gu">## Status</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>Accepted / Blocked
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="gu">## Source</span>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="k">-</span><span class="w"> </span>PRD: <span class="sb">`{path}`</span>
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="k">-</span><span class="w"> </span>Proposal: <span class="sb">`{path}`</span>
+</span><span id="__span-2-9"><a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="k">-</span><span class="w"> </span>Specs: <span class="sb">`{paths}`</span>
+</span><span id="__span-2-10"><a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="k">-</span><span class="w"> </span>Human Review: <span class="sb">`{summary or link}`</span>
+</span><span id="__span-2-11"><a href="#__codelineno-2-11" id="__codelineno-2-11" name="__codelineno-2-11"></a>
+</span><span id="__span-2-12"><a href="#__codelineno-2-12" id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="gu">## Cumulative AI Review</span>
+</span><span id="__span-2-13"><a href="#__codelineno-2-13" id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="k">-</span><span class="w"> </span>Report: <span class="sb">`{path}`</span>
+</span><span id="__span-2-14"><a href="#__codelineno-2-14" id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="k">-</span><span class="w"> </span>Verdict: Approved / Changes Required
+</span><span id="__span-2-15"><a href="#__codelineno-2-15" id="__codelineno-2-15" name="__codelineno-2-15"></a>
+</span><span id="__span-2-16"><a href="#__codelineno-2-16" id="__codelineno-2-16" name="__codelineno-2-16"></a><span class="gu">## Human Review</span>
+</span><span id="__span-2-17"><a href="#__codelineno-2-17" id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="k">-</span><span class="w"> </span>Verdict: Approved / Changes Requested / Blocked
+</span><span id="__span-2-18"><a href="#__codelineno-2-18" id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="k">-</span><span class="w"> </span>Required Changes: {None or summary}
+</span><span id="__span-2-19"><a href="#__codelineno-2-19" id="__codelineno-2-19" name="__codelineno-2-19"></a><span class="k">-</span><span class="w"> </span>Human Review Focus Resolved: Yes/No
+</span><span id="__span-2-20"><a href="#__codelineno-2-20" id="__codelineno-2-20" name="__codelineno-2-20"></a>
+</span><span id="__span-2-21"><a href="#__codelineno-2-21" id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="gu">## UI Acceptance</span>
+</span><span id="__span-2-22"><a href="#__codelineno-2-22" id="__codelineno-2-22" name="__codelineno-2-22"></a>| ID | User Journey | Source | Playwright Test | Result |
+</span><span id="__span-2-23"><a href="#__codelineno-2-23" id="__codelineno-2-23" name="__codelineno-2-23"></a>|---|---|---|---|---|
+</span><span id="__span-2-24"><a href="#__codelineno-2-24" id="__codelineno-2-24" name="__codelineno-2-24"></a>| UIA-001 | {journey} | {PRD/Spec/Human Review} | <span class="sb">`{test}`</span> | PASS/FAIL |
+</span><span id="__span-2-25"><a href="#__codelineno-2-25" id="__codelineno-2-25" name="__codelineno-2-25"></a>
+</span><span id="__span-2-26"><a href="#__codelineno-2-26" id="__codelineno-2-26" name="__codelineno-2-26"></a><span class="gu">## Commands</span>
+</span><span id="__span-2-27"><a href="#__codelineno-2-27" id="__codelineno-2-27" name="__codelineno-2-27"></a>| Command | Purpose | Result |
+</span><span id="__span-2-28"><a href="#__codelineno-2-28" id="__codelineno-2-28" name="__codelineno-2-28"></a>|---|---|---|
+</span><span id="__span-2-29"><a href="#__codelineno-2-29" id="__codelineno-2-29" name="__codelineno-2-29"></a>| <span class="sb">`{command}`</span> | {purpose} | PASS/FAIL |
+</span><span id="__span-2-30"><a href="#__codelineno-2-30" id="__codelineno-2-30" name="__codelineno-2-30"></a>
+</span><span id="__span-2-31"><a href="#__codelineno-2-31" id="__codelineno-2-31" name="__codelineno-2-31"></a><span class="gu">## Failure Handling</span>
+</span><span id="__span-2-32"><a href="#__codelineno-2-32" id="__codelineno-2-32" name="__codelineno-2-32"></a><span class="k">-</span><span class="w"> </span>{failure, classification, action, rerun result; None if no failures}
+</span><span id="__span-2-33"><a href="#__codelineno-2-33" id="__codelineno-2-33" name="__codelineno-2-33"></a>
+</span><span id="__span-2-34"><a href="#__codelineno-2-34" id="__codelineno-2-34" name="__codelineno-2-34"></a><span class="gu">## Residual Risks</span>
+</span><span id="__span-2-35"><a href="#__codelineno-2-35" id="__codelineno-2-35" name="__codelineno-2-35"></a><span class="k">-</span><span class="w"> </span>{risk or None}
+</span></code></pre></div>
+<p>只有累计 AI 复审通过、人类 review 明确通过、UI 自动化验收全部通过，最终状态才能是 <code>Accepted</code>。</p>
+<h2 id="_6">何时可以精简<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<p>小型后端或无 UI 变更可以使用 Lite 模式：</p>
+<ul>
+<li>仍必须执行累计 AI 复审和人类 review gate。</li>
+<li>如果没有用户可触发 UI 路径，UI Acceptance 写明 <code>Not Applicable</code>，并说明原因。</li>
+<li>不强制新增 Playwright 测试，但必须列出已有 UT / IT / 人审如何覆盖验收口径。</li>
+</ul>
+<p>不能精简：</p>
+<ul>
+<li>人类 review 明确批准。</li>
+<li>累计变更 AI 复审。</li>
+<li>对 UI 可观察验收路径的判断。</li>
+<li>最终验收报告。</li>
+</ul>
+<h2 id="_7">关键原则<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>人类批准不可替代</strong>：AI 可以准备材料和复审，但不能代表人类 approve。</li>
+<li><strong>累计视角</strong>：阶段⑩看单范围，本阶段看多个变更合在一起后的风险。</li>
+<li><strong>UI 只验收用户可见行为</strong>：不要用 UI 测试替代模块级 UT / IT。</li>
+<li><strong>失败先分类</strong>：产品失败、脚本失败、环境失败和规格歧义走不同路径。</li>
+<li><strong>证据闭环</strong>：最终通过必须有 AI 复审、人审和 UI 自动化结果三类证据。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

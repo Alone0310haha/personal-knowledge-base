@@ -1,0 +1,745 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="在 TDD 实现闭环通过后，对单 Spec / 单任务范围内的代码 diff、测试 diff 和 TDD 证据执行独立 AI 代码评审闭环。用于发现会阻塞人审或后续验收的问题，并在修复后复审，直到无阻塞问题。">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%A8%E8%AE%BA%E7%9B%B8%E5%85%B3/%E7%BC%96%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81/ai-code-review-loop/SKILL/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>AI Code Review Loop - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ai-code-review-loop" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              AI Code Review Loop
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hard-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard Gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        边界
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        必做清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        输入
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        输出
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        流程图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: 确认准入
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-reviewer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: 独立 Reviewer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-blocking-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: 处理 Blocking Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: 通过后交接
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何时可以精简
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键原则
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ai-code-review-loop">AI Code Review Loop<a class="headerlink" href="#ai-code-review-loop" title="Permanent link">¶</a></h1>
+<p>在 TDD 实现闭环通过后，启动独立代码评审。这个技能负责检查本次实现是否忠实承接测试用例、任务计划、Spec、Architecture Design 和 ADR，并判断是否可以进入人审与 UI 自动化验收阶段。</p>
+<p>本阶段只做 AI 代码评审和复审编排，不直接修改代码、测试或设计文档。</p>
+<h2 id="hard-gate">Hard Gate<a class="headerlink" href="#hard-gate" title="Permanent link">¶</a></h2>
+<p>只处理已经完成阶段性 TDD 验证的单 Spec / 单任务范围变更。必须能看到 TDD 证据、代码 diff、测试 diff 和已运行命令结果。</p>
+<p>不要编写功能代码、修改测试、重跑 TDD 修复、做人类 review、编写 Playwright / UI E2E 或跨系统验收测试。发现阻塞问题时，退回 TDD 实现闭环修复并重跑相关测试。</p>
+<h2 id="_1">边界<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>负责</th>
+<th>不负责（留给其他阶段）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>审核代码 diff、测试 diff 和 TDD 证据</td>
+<td>修改功能代码或测试代码</td>
+</tr>
+<tr>
+<td>检查实现是否满足测试用例与 Spec 行为契约</td>
+<td>重新设计 PRD、Spec、Architecture Design、ADR 或任务计划</td>
+</tr>
+<tr>
+<td>检查是否违反 Architecture Design / ADR</td>
+<td>写新的测试用例设计文档</td>
+</tr>
+<tr>
+<td>检查正确性、边界条件、错误处理、事务、幂等、并发、资源释放、安全和观测性风险</td>
+<td>Playwright、UI E2E、跨系统验收测试</td>
+</tr>
+<tr>
+<td>输出 blocking issues、非阻塞建议和人审焦点</td>
+<td>人类 review、发布决策、业务 UAT</td>
+</tr>
+<tr>
+<td>组织最多 3 轮修复后复审</td>
+<td>为了通过评审而弱化测试或扩大任务范围</td>
+</tr>
+</tbody>
+</table>
+<p>如果评审发现问题需要改代码，应明确退回 TDD 实现闭环。不要在本阶段直接修复。</p>
+<h2 id="_2">必做清单<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>按顺序推进：</p>
+<ol>
+<li><strong>确认准入</strong> - TDD 证据存在，相关单元测试、单模块接口集成测试、构建或静态检查已经运行并记录结果。</li>
+<li><strong>读取输入</strong> - 读取测试用例文档、任务计划、Spec、Architecture Design、ADR、TDD 证据、代码 diff、测试 diff 和命令结果。</li>
+<li><strong>确认评审范围</strong> - 确认本轮只覆盖单 Spec / 单任务范围；累计变更、多 Spec 或最终人审复核留给后续阶段。</li>
+<li><strong>启动 Reviewer</strong> - 新开独立 Reviewer Agent，按 <code>REVIEWER.md</code> 审核，不复用实现阶段的自我判断。</li>
+<li><strong>处理评审结果</strong> - 有 blocking issues 时退回 TDD 实现闭环；无 blocking issues 时进入人审与 UI 自动化验收阶段。</li>
+<li><strong>复审闭环</strong> - 修复后重新读取相关材料，重点确认上一轮 blocking issues 是否消失，并快速扫描是否引入新问题。</li>
+<li><strong>交接后续阶段</strong> - 输出 AI Code Review Report 路径或完整内容、人审焦点、剩余非阻塞建议和已验证命令。</li>
+</ol>
+<h2 id="_3">输入<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>必须读取：</p>
+<ul>
+<li>测试用例文档，通常来自 <code>openspec/changes/&lt;change&gt;/test-cases/</code>。</li>
+<li>任务计划，通常来自 <code>openspec/changes/&lt;change&gt;/tasks/</code>。</li>
+<li>目标 Spec。</li>
+<li>Architecture Design。</li>
+<li>相关 ADR。</li>
+<li>TDD 证据摘要，通常来自 <code>openspec/changes/&lt;change&gt;/evidence/</code>。</li>
+<li>本次功能代码 diff。</li>
+<li>本次测试代码 diff。</li>
+<li>已运行命令及结果，包括相关单元测试、单模块接口集成测试、构建或静态检查。</li>
+</ul>
+<p>如果项目已有语言、框架或领域 code review checklist，可以把它作为补充输入。补充 checklist 不能替代本阶段的通用审核规则，也不能把 checklist 中的风格偏好升级成阻塞问题。</p>
+<h2 id="_4">输出<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p>输出 AI Code Review Report。默认路径：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>openspec/changes/&lt;change&gt;/reviews/&lt;spec-domain&gt;-ai-code-review.md
+</span></code></pre></div>
+<p>如果项目已有 review 或 evidence 目录，跟随项目惯例。</p>
+<p>报告必须使用 Reviewer 的固定格式，并包含：</p>
+<ul>
+<li><code>Verdict</code>。</li>
+<li><code>Blocking Issues</code>。</li>
+<li><code>Non-blocking Suggestions</code>。</li>
+<li><code>Design &amp; Scope Check</code>。</li>
+<li><code>Test &amp; TDD Evidence Check</code>。</li>
+<li><code>Human Review Focus</code>。</li>
+</ul>
+<h2 id="_5">流程图<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<div class="language-dot highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">digraph</span><span class="w"> </span><span class="nt">ai_code_review_loop</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="nt">"Read TDD handoff"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="nt">"Inputs complete?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="nt">"Return to TDD handoff"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="nt">"Independent AI review"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="nt">"Blocking issues?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="nt">"Return to TDD implementation"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="nt">"Fix and rerun relevant tests"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">    </span><span class="nt">"Review rounds exceeded?"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">diamond</span><span class="p">];</span>
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">    </span><span class="nt">"Escalate to human decision"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="nt">"Approved for human review"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">doublecircle</span><span class="p">];</span>
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="nt">"Handoff to human review and UI acceptance"</span><span class="w"> </span><span class="p">[</span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="p">];</span>
+</span><span id="__span-1-13"><a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a>
+</span><span id="__span-1-14"><a href="#__codelineno-1-14" id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">    </span><span class="nt">"Read TDD handoff"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Inputs complete?"</span><span class="p">;</span>
+</span><span id="__span-1-15"><a href="#__codelineno-1-15" id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">    </span><span class="nt">"Inputs complete?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Return to TDD handoff"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-1-16"><a href="#__codelineno-1-16" id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">    </span><span class="nt">"Inputs complete?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Independent AI review"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-1-17"><a href="#__codelineno-1-17" id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="w">    </span><span class="nt">"Independent AI review"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Blocking issues?"</span><span class="p">;</span>
+</span><span id="__span-1-18"><a href="#__codelineno-1-18" id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="w">    </span><span class="nt">"Blocking issues?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Approved for human review"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-1-19"><a href="#__codelineno-1-19" id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="w">    </span><span class="nt">"Blocking issues?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Review rounds exceeded?"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-1-20"><a href="#__codelineno-1-20" id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="w">    </span><span class="nt">"Review rounds exceeded?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Escalate to human decision"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"yes"</span><span class="p">];</span>
+</span><span id="__span-1-21"><a href="#__codelineno-1-21" id="__codelineno-1-21" name="__codelineno-1-21"></a><span class="w">    </span><span class="nt">"Review rounds exceeded?"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Return to TDD implementation"</span><span class="w"> </span><span class="p">[</span><span class="na">label</span><span class="p">=</span><span class="s2">"no"</span><span class="p">];</span>
+</span><span id="__span-1-22"><a href="#__codelineno-1-22" id="__codelineno-1-22" name="__codelineno-1-22"></a><span class="w">    </span><span class="nt">"Return to TDD implementation"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Fix and rerun relevant tests"</span><span class="p">;</span>
+</span><span id="__span-1-23"><a href="#__codelineno-1-23" id="__codelineno-1-23" name="__codelineno-1-23"></a><span class="w">    </span><span class="nt">"Fix and rerun relevant tests"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Independent AI review"</span><span class="p">;</span>
+</span><span id="__span-1-24"><a href="#__codelineno-1-24" id="__codelineno-1-24" name="__codelineno-1-24"></a><span class="w">    </span><span class="nt">"Approved for human review"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">"Handoff to human review and UI acceptance"</span><span class="p">;</span>
+</span><span id="__span-1-25"><a href="#__codelineno-1-25" id="__codelineno-1-25" name="__codelineno-1-25"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="step-1">Step 1: 确认准入<a class="headerlink" href="#step-1" title="Permanent link">¶</a></h2>
+<p>必须确认：</p>
+<ul>
+<li>TDD 实现阶段已经完成 RED、GREEN、Refactor 和 Module Verification。</li>
+<li>TDD 证据摘要记录了测试映射、RED 失败、GREEN 通过、重构验证和模块验证命令。</li>
+<li>代码 diff 与测试 diff 可读。</li>
+<li>上游测试用例、任务计划、Spec、Architecture Design 和 ADR 可追溯。</li>
+<li>本次变更没有故意跳过、删除或弱化测试。</li>
+<li>本轮评审目标是单 Spec / 单任务范围。</li>
+</ul>
+<p>如果缺少 TDD 证据、diff 或命令结果，先退回 TDD 实现阶段补齐交接材料。</p>
+<h2 id="step-2-reviewer">Step 2: 独立 Reviewer<a class="headerlink" href="#step-2-reviewer" title="Permanent link">¶</a></h2>
+<p>必须新开独立 Reviewer Agent，并提供：</p>
+<ul>
+<li>本 skill 的目标和边界。</li>
+<li><code>REVIEWER.md</code> 的完整审核规则。</li>
+<li>所有输入材料路径或内容。</li>
+<li>本轮是否为首次评审或第几轮复审。</li>
+<li>如果是复审，提供上一轮 AI Code Review Report。</li>
+</ul>
+<p>Reviewer 只输出报告，不修改代码。不要让实现 Agent 自己给自己做最终评审。</p>
+<h2 id="step-3-blocking-issues">Step 3: 处理 Blocking Issues<a class="headerlink" href="#step-3-blocking-issues" title="Permanent link">¶</a></h2>
+<p>如果 <code>Verdict</code> 为 <code>Changes Required</code>：</p>
+<ul>
+<li>将每个 blocking issue 退回 TDD 实现闭环。</li>
+<li>修复时必须重跑与问题相关的测试、必要构建或静态检查。</li>
+<li>修复后重新触发 Reviewer 复审。</li>
+<li>复审时必须读取完整上下文和新 diff，不只看修复片段。</li>
+</ul>
+<p>建议最多 3 轮 AI review / fix / rereview。3 轮后仍有 blocking issues 时，停止自动闭环，交给人类裁决。</p>
+<h2 id="step-4">Step 4: 通过后交接<a class="headerlink" href="#step-4" title="Permanent link">¶</a></h2>
+<p>如果 <code>Verdict</code> 为 <code>Approved for Human Review</code>，交接给人审与 UI 自动化验收阶段：</p>
+<ul>
+<li>AI Code Review Report 路径或完整内容。</li>
+<li>代码 diff 和测试 diff 摘要。</li>
+<li>TDD 证据摘要路径。</li>
+<li>已运行命令及结果。</li>
+<li>Non-blocking Suggestions。</li>
+<li>Human Review Focus。</li>
+</ul>
+<p>本阶段通过不代表最终验收通过。它只表示当前单 Spec / 单任务实现已经通过 AI 代码评审质量门，可以进入后续人审和 UI 自动化验收。</p>
+<h2 id="_6">何时可以精简<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<p>小改动可以使用 Lite 模式：</p>
+<ul>
+<li>评审报告可以直接写在交接消息中，不强制单独建文件。</li>
+<li>只检查本次相关 diff、TDD 证据和目标测试命令。</li>
+<li>Non-blocking Suggestions 可以为空。</li>
+</ul>
+<p>但不能跳过：</p>
+<ul>
+<li>TDD 证据准入。</li>
+<li>独立 Reviewer。</li>
+<li>blocking issues 判定。</li>
+<li>修复后复审。</li>
+<li>明确 <code>Verdict</code>。</li>
+<li>人审焦点交接。</li>
+</ul>
+<h2 id="_7">关键原则<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>独立评审</strong>：实现者和 Reviewer 视角分离，避免自写自审。</li>
+<li><strong>证据优先</strong>：每个阻塞问题都必须指向代码、测试、设计文档或 TDD 证据。</li>
+<li><strong>阻塞要克制</strong>：只阻塞会导致行为错误、设计违背、风险失控或后续验收误判的问题。</li>
+<li><strong>不越界修复</strong>：评审阶段只输出问题和结论，修复回到 TDD 实现闭环。</li>
+<li><strong>单范围闭环</strong>：本阶段只审单 Spec / 单任务变更；累计变更复核留给后续阶段。</li>
+<li><strong>UI 验收后置</strong>：Playwright 和 UI 自动化验收属于人审与 UI 自动化验收阶段。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

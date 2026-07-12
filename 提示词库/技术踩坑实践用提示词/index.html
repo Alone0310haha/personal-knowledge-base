@@ -1,0 +1,584 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BA%93/%E6%8A%80%E6%9C%AF%E8%B8%A9%E5%9D%91%E5%AE%9E%E8%B7%B5%E7%94%A8%E6%8F%90%E7%A4%BA%E8%AF%8D/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>技术踩坑实践用提示词 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              技术踩坑实践用提示词
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数据库架构规范提取提示词
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        测试方法论与边界提炼提示词
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        程序员方法论通用提取提示词
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>技术踩坑实践用提示词</h1>
+
+<p>请你扮演一位拥有10年以上开发经验的资深架构师，擅长从他人的失败经验中提炼技术规律。我将提供一段关于技术实践踩坑记录的文字稿，请你帮我进行深度总结，以便我将其作为后续编码的参考和警示。</p>
+<p>请按照以下结构和要求输出总结：</p>
+<ol>
+<li><strong>核心痛点与场景</strong>：用一句话概括这个“坑”发生在什么业务场景下，以及它导致的直接后果是什么。</li>
+<li><strong>根本原因分析</strong>：深入剖析导致该问题的技术底层原因或逻辑漏洞（不仅仅是表面现象）。</li>
+<li><strong>解决方案与最佳实践</strong>：总结视频作者最终是如何解决这个问题的，以及推荐的正确编码姿势或架构设计。</li>
+<li><strong>避坑检查清单</strong>：提取3-5个关键检查点，我可以在代码审查或开发时对照自查。</li>
+<li><strong>适用技术栈</strong>：注明该内容主要针对哪些编程语言、框架或中间件。</li>
+</ol>
+<p><strong>要求</strong>：</p>
+<ul>
+<li>语言风格要专业、干练，直接切中要害。</li>
+<li>如果文字稿中包含具体的错误日志或代码片段，请在总结中保留关键信息。</li>
+<li>忽略无关的寒暄和广告内容，只关注技术干货。</li>
+</ul>
+<p><strong>以下是文字稿内容</strong>：<br/>
+[在此处粘贴你的文字稿]</p>
+<h4 id="_1">数据库架构规范提取提示词<a class="headerlink" href="#_1" title="Permanent link">¶</a></h4>
+<p>请你扮演一位严谨的资深数据库架构师（DBA）和技术导师。我将提供一段关于“数据库设计与编码规范”的视频文字稿。请你帮我提炼其中的核心规范与最佳实践，作为我日常编码的“红线”和“指南”。</p>
+<p>请按照以下结构进行深度总结：</p>
+<ol>
+<li><strong>核心设计哲学</strong>：用一两句话总结这份规范背后的核心思想（例如：是为了极致的性能、还是为了高并发下的稳定性、或是为了团队协作的可维护性？）。</li>
+<li><strong>黄金法则（推荐做法）</strong>：提炼出视频中最核心的3-5条“必须这样做”的建议。<ul>
+<li>每条建议请采用【场景/目的】+【具体规范】的格式。</li>
+<li>如果涉及命名、字段类型选择，请给出具体的例子。</li>
+</ul>
+</li>
+<li><strong>避坑红线（禁止做法）</strong>：总结视频中提到的“反模式”或“绝对不要做”的操作，并简述为什么这样做会带来灾难性后果。</li>
+<li><strong>实战权衡（Trade-off）</strong>：架构设计往往没有绝对的对错。请总结视频中提到的需要“权衡”的场景（例如：规范化与反规范化的取舍、索引数量与写入性能的平衡等），并给出判断标准。</li>
+<li><strong>日常开发自查清单</strong>：将上述内容浓缩为一份简短的Checklist，方便我在写DDL或SQL时快速对照。</li>
+</ol>
+<p><strong>要求</strong>：</p>
+<ul>
+<li>语言风格要专业、精炼，突出“规范”和“标准”。</li>
+<li>忽略视频中的口语化表达和无关内容，直接提取技术干货。</li>
+<li>对于关键的SQL语法或字段类型，请使用代码块高亮显示。</li>
+<li>请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范</li>
+</ul>
+<p><strong>以下是文字稿内容</strong>：<br/>
+[在此处粘贴你的文字稿]</p>
+<h4 id="_2">测试方法论与边界提炼提示词<a class="headerlink" href="#_2" title="Permanent link">¶</a></h4>
+<p>请你扮演一位经验丰富的敏捷教练和测试专家。我将提供一段关于“测试方法论与认知纠偏”的视频文字稿。请你帮我提炼其中的核心思维模型、判断边界和实操策略，帮助我在日常开发中建立正确的测试观，避免陷入过度测试的陷阱。</p>
+<p>请按照以下结构进行深度总结：</p>
+<ol>
+<li><strong>核心痛点与认知纠偏</strong>：<ul>
+<li>总结视频指出的普遍存在的“错误认知”或“行业通病”（例如：为什么大家会陷入过度测试？盲目追求覆盖率带来了什么副作用？）。</li>
+<li>提炼作者给出的“正确认知”或“破局思路”。</li>
+</ul>
+</li>
+<li><strong>判断边界与决策模型（核心）</strong>：<ul>
+<li>提取视频中的“判断标准”：在什么场景下**必须写**单元测试？在什么场景下**坚决不写**或**少写**？</li>
+<li>如果视频提供了决策矩阵或评估维度（如：代码复杂度、业务重要性、变更频率等），请详细列出。</li>
+</ul>
+</li>
+<li><strong>实操策略与落地指南</strong>：<ul>
+<li>总结作者推荐的具体做法（例如：如何重构测试代码、如何平衡测试与开发时间、推荐的测试分层策略等）。</li>
+<li>提炼出可落地的“最佳实践”动作。</li>
+</ul>
+</li>
+<li><strong>反模式（Anti-Patterns）警示</strong>：<ul>
+<li>列出视频中提到的“典型的错误做法”或“需要警惕的信号”（例如：为了测试而测试、测试代码比业务代码还复杂等）。</li>
+</ul>
+</li>
+<li><strong>核心金句或思维模型</strong>：<ul>
+<li>提取1-2句视频中最具启发性的“金句”或“思维模型”，作为我后续思考测试问题的锚点。</li>
+</ul>
+</li>
+</ol>
+<p><strong>要求</strong>：</p>
+<ul>
+<li>语言风格要犀利、深刻，直击问题本质。</li>
+<li>重点突出“权衡”和“判断标准”，帮助我建立自己的决策框架。</li>
+<li>忽略无关的寒暄，聚焦于方法论和实操建议。</li>
+<li>请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范</li>
+</ul>
+<p><strong>以下是文字稿内容</strong>：<br/>
+[在此处粘贴你的文字稿]</p>
+<h4 id="_3">程序员方法论通用提取提示词<a class="headerlink" href="#_3" title="Permanent link">¶</a></h4>
+<p>请你扮演一位拥有10年以上一线开发经验的资深技术专家和架构师。我将提供一段关于“技术方法论、架构设计或工程实践”的视频文字稿。请你帮我深度提炼其中的核心思想、判断标准和实操策略，将其转化为我日常开发中的“决策框架”和“行动指南”。</p>
+<p>请按照以下结构进行深度总结：</p>
+<ol>
+<li><strong>核心理念与痛点剖析</strong>：<ul>
+<li>总结该方法论试图解决的核心痛点或行业通病是什么？</li>
+<li>提炼作者给出的“破局思路”或“核心设计哲学”（用一两句话概括其本质）。</li>
+</ul>
+</li>
+<li><strong>决策模型与判断边界（核心）</strong>：<ul>
+<li>提取该方法论的“适用场景”与“不适用场景”。</li>
+<li>总结作者在面临技术选型或方案权衡（Trade-off）时，给出的具体判断标准或评估维度（例如：在什么情况下该用A，什么情况下该用B）。</li>
+</ul>
+</li>
+<li><strong>落地实操与最佳实践</strong>：<ul>
+<li>提炼出可落地的具体步骤、推荐做法或标准流程（SOP）。</li>
+<li>如果涉及具体的代码规范、架构模式或工具链，请给出具体的例子或关键要点。</li>
+</ul>
+</li>
+<li><strong>反模式（Anti-Patterns）与避坑警示</strong>：<ul>
+<li>列出视频中提到的“典型的错误做法”、“常见误区”或“需要警惕的信号”。</li>
+<li>简述这些错误做法会导致什么灾难性后果。</li>
+</ul>
+</li>
+<li><strong>核心金句或思维模型</strong>：<ul>
+<li>提取1-2句视频中最具启发性的“金句”或“思维模型”，作为我后续思考该类问题的认知锚点。</li>
+</ul>
+</li>
+</ol>
+<p><strong>要求</strong>：</p>
+<ul>
+<li>语言风格要专业、犀利、直击本质，剔除视频中的口语化表达和无关内容。</li>
+<li>重点突出“权衡（Trade-off）”和“判断标准”，帮助我建立自己的决策框架，而不是死记硬背规则。</li>
+<li>对于关键的术语、架构模式或代码示例，请使用代码块或加粗高亮显示。</li>
+<li>请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范</li>
+</ul>
+<p><strong>以下是文字稿内容</strong>：<br/>
+[在此处粘贴你的文字稿]</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

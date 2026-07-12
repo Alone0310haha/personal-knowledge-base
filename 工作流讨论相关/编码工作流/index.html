@@ -476,15 +476,15 @@
 </tr>
 <tr>
 <td>⑩ TDD实现闭环 → AI代码评审闭环</td>
-<td>待建</td>
-<td>🔲 未开始</td>
-<td>TDD 阶段通过后，新开代码评审 agent 进行一轮 AI code review；发现问题则退回 ⑦⑧⑨ 修复，修复后再次触发 AI 复审，直到无阻塞问题。候选目录名：<code>ai-code-review-loop/</code></td>
+<td><a href="ai-code-review-loop/SKILL/"><code>ai-code-review-loop/</code></a></td>
+<td>已完成设计</td>
+<td>TDD 阶段通过后，新开独立 Reviewer Agent 审核单 Spec / 单任务范围内的代码 diff、测试 diff 和 TDD 证据；发现阻塞问题则退回 ⑦⑧⑨ 修复并重跑测试，修复后再次触发 AI 复审，直到无阻塞问题。设计理由见 <a href="reference/0007-ai-code-review-loop-design/"><code>reference/0007-ai-code-review-loop-design.md</code></a></td>
 </tr>
 <tr>
 <td>⑪ AI代码评审闭环 → 人审与UI自动化验收</td>
-<td>待建</td>
-<td>🔲 未开始</td>
-<td>人触发面向累计变更的一轮 AI 代码评审（此时可能包含多个 spec），再由人类 review；人审后由 AI 编写从 UI 触发的 Playwright 集成测试用例并运行 UI 自动化测试，全部通过后结束。候选目录名：<code>human-review-ui-acceptance/</code></td>
+<td><a href="human-review-ui-acceptance/SKILL/"><code>human-review-ui-acceptance/</code></a></td>
+<td>已完成设计</td>
+<td>人触发面向累计变更的一轮 AI 复审（此时可能包含多个 spec），再由人类 review；人审通过后由 AI 编写从 UI 触发的 Playwright 验收测试并运行 UI 自动化验收，全部通过后输出最终验收报告。设计理由见 <a href="reference/0008-human-review-ui-acceptance-design/"><code>reference/0008-human-review-ui-acceptance-design.md</code></a></td>
 </tr>
 </tbody>
 </table>
@@ -518,8 +518,8 @@
 <li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段④（架构设计 → 任务拆解）：确认任务粒度以约 300 行代码变更为 review 参考线，任务可包含多个内部步骤，但不输出测试用例、测试代码、功能代码或新架构决策。</li>
 <li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段⑤⑥（任务拆解 → 测试用例编写/AI审核闭环）：确认 ⑤/⑥ 合并为一个复合 skill，内部由 Author Agent 和独立 Reviewer Agent 循环，阶段⑦仍独立负责测试代码落地。</li>
 <li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段⑦⑧⑨（测试用例闭环 → TDD实现闭环）：确认测试代码落地、功能编码、单元测试和单模块接口集成测试如何按 Red-Green-Refactor 组织，核实 <code>tdd-guide</code> agent 当前内容是否还适用。</li>
-<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段⑩（TDD实现闭环 → AI代码评审闭环）：确认代码评审 agent 的准入、输出格式、阻塞问题回退到 ⑦⑧⑨ 的复审机制。</li>
-<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段⑪（AI代码评审闭环 → 人审与UI自动化验收）：确认人触发的累计变更 AI 复审、人类 review、Playwright UI 集成测试用例编写和 UI 自动化测试运行的边界。</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段⑩（TDD实现闭环 → AI代码评审闭环）：确认代码评审 agent 的准入、输出格式、阻塞问题回退到 ⑦⑧⑨ 的复审机制。</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 设计阶段⑪（AI代码评审闭环 → 人审与UI自动化验收）：确认人触发的累计变更 AI 复审、人类 review、Playwright UI 集成测试用例编写和 UI 自动化测试运行的边界。</li>
 <li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 全部阶段设计完成后，评估是否需要一个顶层"调度"文档/脚本，把十一个阶段串起来自动衔接，而不是每次手动切换。</li>
 </ul>
 

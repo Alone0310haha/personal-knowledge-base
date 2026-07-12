@@ -1,0 +1,923 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="IT老齐">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-07-12-MySQL%E8%A1%A8%E6%8F%90%E5%8D%87%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7%E7%9A%84%E5%8D%81%E4%B8%AA%E5%BB%BA%E8%AE%AE%EF%BC%88%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>MySQL 表提升可维护性的十个建议（数据库设计规范） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mysql" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MySQL 表提升可维护性的十个建议（数据库设计规范）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 核心设计哲学
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 黄金法则（推荐做法）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 黄金法则（推荐做法）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 【数据追踪与增量同步】业务主表必须预留审计字段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 【数据量可预期增长】提前规划分区或分表维度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 【低频扩展属性】用 JSON 承载弱业务属性，而不是频繁改表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 【数据一致性与查询效率】规范化为主，反规范化为辅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 【长期稳定性】主键使用无业务含义的代理主键
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 避坑红线（禁止做法）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 避坑红线（禁止做法）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-alter-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 禁止在生产环境直接手工执行高风险 ALTER TABLE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 禁止把所有查询字段都建索引
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 禁止使用业务含义字段做主键
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-uuid-innodb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 禁止滥用 UUID 作为 InnoDB 聚簇主键
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 禁止命名随意、缩写泛滥
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实战权衡（Trade-off）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 实战权衡（Trade-off）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 范式化 vs 反范式化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-json-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 JSON 扩展列 vs 正式字段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 索引数量 vs 写入性能
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 分区设计 vs 运维复杂度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-ddl-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 在线 DDL vs 新表迁移
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 日常开发自查清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 一句话准则
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="mysql">MySQL 表提升可维护性的十个建议（数据库设计规范）<a class="headerlink" href="#mysql" title="Permanent link">¶</a></h1>
+<h2 id="1">1. 核心设计哲学<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<p>数据库表设计的核心不是“把字段存进去”这么简单，而是要在性能、可演进性、数据一致性和团队协作之间建立长期稳定的约束。</p>
+<p>这份规范背后的思想是：<strong>提前把可维护性设计进表结构，用审计字段、命名规范、主键策略、分区规划和受控变更机制，降低线上 DDL、数据冗余、查询退化和团队协作失控的风险。</strong></p>
+<h2 id="2">2. 黄金法则（推荐做法）<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<h3 id="21">2.1 【数据追踪与增量同步】业务主表必须预留审计字段<a class="headerlink" href="#21" title="Permanent link">¶</a></h3>
+<p><strong>具体规范：</strong> 主要业务表默认增加创建时间、更新时间、删除时间、创建人、更新人等审计字段。审计字段不直接承载业务含义，但必须支撑数据同步、排障、追责和变更追踪。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">order_info</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="n">UNSIGNED</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'代理主键'</span><span class="p">,</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="n">order_no</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'业务订单号'</span><span class="p">,</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="n">user_id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="n">UNSIGNED</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'用户ID'</span><span class="p">,</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="n">total_amount</span><span class="w"> </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'订单金额'</span><span class="p">,</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="n">TINYINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'订单状态'</span><span class="p">,</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'创建时间'</span><span class="p">,</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="n">updated_at</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'更新时间'</span><span class="p">,</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="n">created_by</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="n">UNSIGNED</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'创建人'</span><span class="p">,</span>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="n">updated_by</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="n">UNSIGNED</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'更新人'</span><span class="p">,</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="n">deleted_at</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'软删除时间'</span><span class="p">,</span>
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">pk_order_info</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">uk_order_info_order_no</span><span class="w"> </span><span class="p">(</span><span class="n">order_no</span><span class="p">),</span>
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="k">KEY</span><span class="w"> </span><span class="n">idx_order_info_user_id_created_at</span><span class="w"> </span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="p">)</span>
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="w"> </span><span class="k">COMMENT</span><span class="o">=</span><span class="s1">'订单信息表'</span><span class="p">;</span>
+</span></code></pre></div>
+<p><strong>标准判断：</strong> 如果这张表后续可能参与数据同步、审计、问题定位、软删除恢复，就不要省略审计字段。</p>
+<h3 id="22">2.2 【数据量可预期增长】提前规划分区或分表维度<a class="headerlink" href="#22" title="Permanent link">¶</a></h3>
+<p><strong>具体规范：</strong> 对明显具备时间序列特征的数据，优先按时间范围规划分区；对天然按用户、租户、设备查询的数据，可以考虑按 <code>user_id</code>、<code>tenant_id</code>、<code>device_id</code> 做哈希分区或分表路由。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">device_event</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="n">UNSIGNED</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="n">device_id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="n">UNSIGNED</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="n">event_time</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="n">payload</span><span class="w"> </span><span class="n">JSON</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">pk_device_event</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">event_time</span><span class="p">),</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="k">KEY</span><span class="w"> </span><span class="n">idx_device_event_device_time</span><span class="w"> </span><span class="p">(</span><span class="n">device_id</span><span class="p">,</span><span class="w"> </span><span class="n">event_time</span><span class="p">)</span>
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="p">)</span>
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">RANGE</span><span class="w"> </span><span class="n">COLUMNS</span><span class="p">(</span><span class="n">event_time</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p202601</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="s1">'2026-02-01'</span><span class="p">),</span>
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p202602</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="s1">'2026-03-01'</span><span class="p">),</span>
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">pmax</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="k">MAXVALUE</span><span class="p">)</span>
+</span><span id="__span-1-13"><a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="p">);</span>
+</span></code></pre></div>
+<p><strong>标准判断：</strong> 分区键必须匹配高频查询条件，否则分区只会增加复杂度，无法减少扫描范围。</p>
+<h3 id="23-json">2.3 【低频扩展属性】用 JSON 承载弱业务属性，而不是频繁改表<a class="headerlink" href="#23-json" title="Permanent link">¶</a></h3>
+<p><strong>具体规范：</strong> 对只用于展示、不参与筛选、不参与分组、不参与排序的弱属性，可以放入 <code>JSON</code> 扩展列，减少频繁 DDL。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">product_info</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">ext_json</span><span class="w"> </span><span class="n">JSON</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'扩展属性，仅用于低频展示字段'</span><span class="p">;</span>
+</span></code></pre></div>
+<p>适合放入 JSON 的属性：</p>
+<ul>
+<li>营销展示字段</li>
+<li>第三方返回的非核心扩展信息</li>
+<li>低频透传属性</li>
+<li>临时灰度字段</li>
+</ul>
+<p>不适合放入 JSON 的属性：</p>
+<ul>
+<li>高频查询条件</li>
+<li>需要排序、分组、聚合的字段</li>
+<li>需要强约束、强校验的核心业务字段</li>
+<li>高频更新且 JSON 体较大的字段</li>
+</ul>
+<p>如果 JSON 中某个属性后来成为查询条件，应映射为生成列并建立索引。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">product_info</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">brand_code</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="k">GENERATED</span><span class="w"> </span><span class="n">ALWAYS</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="n">JSON_UNQUOTE</span><span class="p">(</span><span class="n">JSON_EXTRACT</span><span class="p">(</span><span class="n">ext_json</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.brandCode'</span><span class="p">)))</span><span class="w"> </span><span class="n">STORED</span><span class="p">,</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="k">ADD</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">idx_product_info_brand_code</span><span class="w"> </span><span class="p">(</span><span class="n">brand_code</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="24">2.4 【数据一致性与查询效率】规范化为主，反规范化为辅<a class="headerlink" href="#24" title="Permanent link">¶</a></h3>
+<p><strong>具体规范：</strong> 核心业务模型优先遵循第三范式，避免把国家名、城市名、用户等级名等可变维度字段大量冗余到主表；统计分析、报表、检索场景可以额外建设反规范化宽表。</p>
+<p>推荐结构：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1">-- 规范化主数据</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="n">country</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">country_name</span><span class="p">)</span>
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="n">city</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">country_id</span><span class="p">,</span><span class="w"> </span><span class="n">city_name</span><span class="p">)</span>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="n">user_info</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span>
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="c1">-- 面向分析或查询加速的反规范化宽表</span>
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="n">user_profile_snapshot</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">country_name</span><span class="p">,</span><span class="w"> </span><span class="n">city_name</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span>
+</span></code></pre></div>
+<p><strong>标准判断：</strong> 交易链路优先一致性，分析链路优先查询效率；反规范化表必须有同步策略和数据校验机制。</p>
+<h3 id="25">2.5 【长期稳定性】主键使用无业务含义的代理主键<a class="headerlink" href="#25" title="Permanent link">¶</a></h3>
+<p><strong>具体规范：</strong> 主键优先使用 <code>BIGINT UNSIGNED AUTO_INCREMENT</code> 或趋势递增的分布式 ID，不使用身份证号、手机号、学号、订单号等业务字段作为主键。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="n">UNSIGNED</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'代理主键'</span>
+</span></code></pre></div>
+<p>业务唯一性通过唯一索引保证：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">pk_user_info</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="k">UNIQUE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">uk_user_info_id_card_no</span><span class="w"> </span><span class="p">(</span><span class="n">id_card_no</span><span class="p">),</span>
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="k">UNIQUE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">uk_user_info_mobile</span><span class="w"> </span><span class="p">(</span><span class="n">mobile</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>标准判断：</strong> 主键一旦被外键、缓存、消息、日志、下游系统引用，就必须保持不可变；凡是未来可能变更的业务编码，都不应成为主键。</p>
+<h2 id="3">3. 避坑红线（禁止做法）<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<h3 id="31-alter-table">3.1 禁止在生产环境直接手工执行高风险 <code>ALTER TABLE</code><a class="headerlink" href="#31-alter-table" title="Permanent link">¶</a></h3>
+<p>直接在线上大表执行 DDL 是最高风险操作之一。它可能导致锁表、元数据锁等待、复制延迟、业务写入阻塞，甚至改错后难以回滚。</p>
+<p>错误示例：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">order_info</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">risk_tag</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">);</span>
+</span></code></pre></div>
+<p>正确原则：</p>
+<ul>
+<li>先评估表大小、QPS、DDL 算法、锁影响和回滚方案。</li>
+<li>先备份，再变更。</li>
+<li>优先使用版本化迁移工具或在线 DDL 工具。</li>
+<li>大表变更优先考虑新表替换、影子表迁移、灰度双写、回放校验。</li>
+</ul>
+<h3 id="32">3.2 禁止把所有查询字段都建索引<a class="headerlink" href="#32" title="Permanent link">¶</a></h3>
+<p>索引是查询加速结构，但不是免费午餐。每多一个索引，<code>INSERT</code>、<code>UPDATE</code>、<code>DELETE</code> 都要同步维护更多 B+Tree，写入成本、磁盘占用、Buffer Pool 压力都会上升。</p>
+<p>禁止做法：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="k">KEY</span><span class="w"> </span><span class="n">idx_order_info_status</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">),</span>
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="k">KEY</span><span class="w"> </span><span class="n">idx_order_info_type</span><span class="w"> </span><span class="p">(</span><span class="k">type</span><span class="p">),</span>
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="k">KEY</span><span class="w"> </span><span class="n">idx_order_info_channel</span><span class="w"> </span><span class="p">(</span><span class="n">channel</span><span class="p">),</span>
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="k">KEY</span><span class="w"> </span><span class="n">idx_order_info_remark</span><span class="w"> </span><span class="p">(</span><span class="n">remark</span><span class="p">)</span>
+</span></code></pre></div>
+<p>判断标准：</p>
+<ul>
+<li>高频过滤条件可以建。</li>
+<li>高频 <code>ORDER BY</code> / <code>GROUP BY</code> 可以建。</li>
+<li>低频查询、小表查询、低选择性字段不要盲目建。</li>
+<li>联合索引必须考虑最左前缀、字段选择性和排序方向。</li>
+</ul>
+<h3 id="33">3.3 禁止使用业务含义字段做主键<a class="headerlink" href="#33" title="Permanent link">¶</a></h3>
+<p>身份证、手机号、学号、业务订单号都可能变更、脱敏、重发或迁移。一旦作为主键，后续修改会牵动外键、缓存 Key、消息幂等 Key、数据同步和审计链路。</p>
+<p>禁止示例：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id_card_no</span><span class="p">)</span>
+</span></code></pre></div>
+<p>推荐示例：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">pk_user_info</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="k">UNIQUE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">uk_user_info_id_card_no</span><span class="w"> </span><span class="p">(</span><span class="n">id_card_no</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="34-uuid-innodb">3.4 禁止滥用 UUID 作为 InnoDB 聚簇主键<a class="headerlink" href="#34-uuid-innodb" title="Permanent link">¶</a></h3>
+<p>无序 UUID 写入 B+Tree 时会随机插入叶子页，容易造成页分裂、页碎片和缓存命中率下降；同时 UUID 字符串存储空间远大于 <code>BIGINT</code>，二级索引也会被放大。</p>
+<p>如果必须使用全局唯一 ID，应优先选择趋势递增 ID；如果使用 UUID，也应避免以普通字符串形式作为聚簇主键。</p>
+<h3 id="35">3.5 禁止命名随意、缩写泛滥<a class="headerlink" href="#35" title="Permanent link">¶</a></h3>
+<p>字段、索引、表名必须可读、可搜索、可协作。禁止使用只有个人知道含义的拼音首字母或模糊缩写。</p>
+<p>禁止示例：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="n">yxbc</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="n">ddzt</span><span class="w"> </span><span class="n">TINYINT</span>
+</span></code></pre></div>
+<p>推荐示例：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="n">marketing_batch_code</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="n">order_status</span><span class="w"> </span><span class="n">TINYINT</span>
+</span></code></pre></div>
+<p>命名标准：</p>
+<ul>
+<li>表名、字段名统一小写。</li>
+<li>单词用下划线分隔。</li>
+<li>尽量使用完整英文语义。</li>
+<li>索引名前缀统一：<code>pk_</code>、<code>uk_</code>、<code>idx_</code>、<code>fk_</code>。</li>
+<li>大系统表名增加模块前缀，如 <code>oms_order_info</code>、<code>ums_user_info</code>、<code>billing_invoice</code>。</li>
+</ul>
+<h2 id="4-trade-off">4. 实战权衡（Trade-off）<a class="headerlink" href="#4-trade-off" title="Permanent link">¶</a></h2>
+<h3 id="41-vs">4.1 范式化 vs 反范式化<a class="headerlink" href="#41-vs" title="Permanent link">¶</a></h3>
+<ul>
+<li>范式化优势：减少冗余，降低更新异常，保证主数据一致。</li>
+<li>范式化代价：查询需要多表 join，复杂报表性能较差。</li>
+<li>反范式化优势：减少 join，提升查询和分析效率。</li>
+<li>反范式化代价：需要同步机制，存在数据延迟和一致性校验成本。</li>
+</ul>
+<p>判断标准：</p>
+<ul>
+<li>核心交易表：优先范式化。</li>
+<li>统计报表、搜索、画像、分析宽表：允许反范式化。</li>
+<li>冗余字段必须回答三个问题：谁写入、谁同步、如何校验。</li>
+</ul>
+<h3 id="42-json-vs">4.2 JSON 扩展列 vs 正式字段<a class="headerlink" href="#42-json-vs" title="Permanent link">¶</a></h3>
+<ul>
+<li>JSON 优势：减少低价值字段带来的频繁 DDL，适合弱属性扩展。</li>
+<li>JSON 代价：更新通常更重，字段约束弱，直接索引能力有限，查询表达复杂。</li>
+</ul>
+<p>判断标准：</p>
+<ul>
+<li>只展示、不筛选、不排序、不聚合：可以放 JSON。</li>
+<li>参与核心查询、统计、约束、风控、对账：必须独立成列。</li>
+<li>JSON 字段变热后，应通过生成列或正式 DDL 治理。</li>
+</ul>
+<h3 id="43-vs">4.3 索引数量 vs 写入性能<a class="headerlink" href="#43-vs" title="Permanent link">¶</a></h3>
+<ul>
+<li>索引越多，读路径可能越快。</li>
+<li>索引越多，写路径一定更重。</li>
+</ul>
+<p>判断标准：</p>
+<ul>
+<li>高频查询优先。</li>
+<li>大表优先。</li>
+<li>高选择性字段优先。</li>
+<li>能被联合索引覆盖的，不要拆成多个孤立单列索引。</li>
+<li>写多读少的表，索引必须克制。</li>
+</ul>
+<h3 id="44-vs">4.4 分区设计 vs 运维复杂度<a class="headerlink" href="#44-vs" title="Permanent link">¶</a></h3>
+<ul>
+<li>分区优势：减少扫描范围，便于冷热数据管理和历史数据归档。</li>
+<li>分区代价：DDL、主键、唯一约束、SQL 写法、分区维护都会更复杂。</li>
+</ul>
+<p>判断标准：</p>
+<ul>
+<li>查询条件稳定包含分区键，才值得分区。</li>
+<li>时间序列表优先按时间范围分区。</li>
+<li>用户/租户维度明显时，才考虑哈希分区或分库分表。</li>
+<li>MySQL 分区需要提前规划分区生命周期，避免数据落入兜底分区后失控。</li>
+</ul>
+<h3 id="45-ddl-vs">4.5 在线 DDL vs 新表迁移<a class="headerlink" href="#45-ddl-vs" title="Permanent link">¶</a></h3>
+<ul>
+<li>小表、低峰期、明确支持 instant/inplace 的 DDL，可以走受控在线变更。</li>
+<li>大表、高 QPS、核心交易表，应优先考虑影子表、新表迁移、双写校验或在线变更工具。</li>
+</ul>
+<p>判断标准：</p>
+<ul>
+<li>能否回滚。</li>
+<li>是否锁表。</li>
+<li>是否影响复制延迟。</li>
+<li>是否有备份。</li>
+<li>是否经过预发环境和低峰演练。</li>
+</ul>
+<h2 id="5">5. 日常开发自查清单<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 表是否有稳定、无业务含义的代理主键？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 业务唯一字段是否使用唯一索引表达，而不是直接当主键？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 主业务表是否包含 <code>created_at</code>、<code>updated_at</code>、<code>created_by</code>、<code>updated_by</code>、<code>deleted_at</code> 等审计字段？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 表名、字段名、索引名是否统一小写、英文、下划线分隔？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 索引命名是否使用 <code>pk_</code>、<code>uk_</code>、<code>idx_</code>、<code>fk_</code> 前缀？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 金额是否使用 <code>DECIMAL</code>，而不是 <code>FLOAT</code> / <code>DOUBLE</code>？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 布尔/状态字段是否使用合适的 <code>TINYINT</code> 或枚举编码，并有清晰注释？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 是否避免了身份证、手机号、学号、订单号等业务字段做主键？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 是否避免了无序 UUID 作为 InnoDB 聚簇主键？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 每个索引是否都对应明确的高频查询、排序或唯一约束？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 是否避免了为低频查询和低选择性字段盲目建索引？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> JSON 字段是否只用于低频展示型扩展属性？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> JSON 中的字段是否没有参与高频筛选、排序、分组和聚合？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 大表是否提前评估分区、归档或冷热分离策略？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 分区键是否出现在高频查询条件中？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 反规范化字段是否有同步策略、校验机制和责任边界？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 生产 DDL 是否有备份、评估、回滚方案和变更窗口？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 是否避免了直接在生产环境手工执行高风险 <code>ALTER TABLE</code>？</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> 大系统是否通过表名前缀或 schema 区分业务模块和权限边界？</li>
+</ul>
+<h2 id="6">6. 一句话准则<a class="headerlink" href="#6" title="Permanent link">¶</a></h2>
+<p><strong>数据库设计的红线是：核心字段要稳定、关键数据要可追踪、线上变更要可回滚、索引和冗余要有明确业务收益；凡是为了省一时开发成本而牺牲长期可维护性的设计，都会在生产环境加倍偿还。</strong></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
