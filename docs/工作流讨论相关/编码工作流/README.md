@@ -20,8 +20,8 @@
 | ④ 架构设计 → 任务拆解 | [`architecture-to-tasks/`](./architecture-to-tasks/SKILL.md) | ✅ 已完成设计 | 将已批准的单个 Architecture Design Doc 拆成约 300 行代码 review 粒度的任务计划，明确依赖顺序、风险、回滚和交接给测试用例编写阶段的关注点；不写测试用例、测试代码或功能代码。设计理由见 [`reference/0004-architecture-to-tasks-design.md`](./reference/0004-architecture-to-tasks-design.md) |
 | ⑤⑥ 任务拆解 → 测试用例编写/AI审核闭环 | [`test-case-authoring-review/`](./test-case-authoring-review/SKILL.md) | 已完成设计 | 由 Author Agent 产出测试用例文档，再新开 Reviewer Agent 按 [`REVIEWER.md`](./test-case-authoring-review/REVIEWER.md) 独立审核；Author 根据阻塞问题修订并复审，直到形成 AI 已评审版本后再交给人审。设计理由见 [`reference/0005-test-case-authoring-review-design.md`](./reference/0005-test-case-authoring-review-design.md) |
 | ⑦⑧⑨ 测试用例闭环 → TDD实现闭环 | [`test-driven-implementation/`](./test-driven-implementation/SKILL.md) | 已完成设计 | 将人审通过的 AI 已评审用例落地为测试代码，按 Red-Green-Refactor 完成功能编码、单元测试和单模块接口集成测试；本阶段内测试失败或实现有问题时直接修复并重跑。设计理由见 [`reference/0006-test-driven-implementation-design.md`](./reference/0006-test-driven-implementation-design.md) |
-| ⑩ TDD实现闭环 → AI代码评审闭环 | 待建 | 🔲 未开始 | TDD 阶段通过后，新开代码评审 agent 进行一轮 AI code review；发现问题则退回 ⑦⑧⑨ 修复，修复后再次触发 AI 复审，直到无阻塞问题。候选目录名：`ai-code-review-loop/` |
-| ⑪ AI代码评审闭环 → 人审与UI自动化验收 | 待建 | 🔲 未开始 | 人触发面向累计变更的一轮 AI 代码评审（此时可能包含多个 spec），再由人类 review；人审后由 AI 编写从 UI 触发的 Playwright 集成测试用例并运行 UI 自动化测试，全部通过后结束。候选目录名：`human-review-ui-acceptance/` |
+| ⑩ TDD实现闭环 → AI代码评审闭环 | [`ai-code-review-loop/`](./ai-code-review-loop/SKILL.md) | 已完成设计 | TDD 阶段通过后，新开独立 Reviewer Agent 审核单 Spec / 单任务范围内的代码 diff、测试 diff 和 TDD 证据；发现阻塞问题则退回 ⑦⑧⑨ 修复并重跑测试，修复后再次触发 AI 复审，直到无阻塞问题。设计理由见 [`reference/0007-ai-code-review-loop-design.md`](./reference/0007-ai-code-review-loop-design.md) |
+| ⑪ AI代码评审闭环 → 人审与UI自动化验收 | [`human-review-ui-acceptance/`](./human-review-ui-acceptance/SKILL.md) | 已完成设计 | 人触发面向累计变更的一轮 AI 复审（此时可能包含多个 spec），再由人类 review；人审通过后由 AI 编写从 UI 触发的 Playwright 验收测试并运行 UI 自动化验收，全部通过后输出最终验收报告。设计理由见 [`reference/0008-human-review-ui-acceptance-design.md`](./reference/0008-human-review-ui-acceptance-design.md) |
 
 > 阶段划分和候选素材都是讨论过程中的暂定结论，不是最终方案，后续设计每个阶段时应该重新核实这些 agent/skill 当前是否还存在、内容是否有变化，不要直接假设当时看到的版本还成立。
 
@@ -55,6 +55,6 @@
 - [x] 设计阶段④（架构设计 → 任务拆解）：确认任务粒度以约 300 行代码变更为 review 参考线，任务可包含多个内部步骤，但不输出测试用例、测试代码、功能代码或新架构决策。
 - [x] 设计阶段⑤⑥（任务拆解 → 测试用例编写/AI审核闭环）：确认 ⑤/⑥ 合并为一个复合 skill，内部由 Author Agent 和独立 Reviewer Agent 循环，阶段⑦仍独立负责测试代码落地。
 - [x] 设计阶段⑦⑧⑨（测试用例闭环 → TDD实现闭环）：确认测试代码落地、功能编码、单元测试和单模块接口集成测试如何按 Red-Green-Refactor 组织，核实 `tdd-guide` agent 当前内容是否还适用。
-- [ ] 设计阶段⑩（TDD实现闭环 → AI代码评审闭环）：确认代码评审 agent 的准入、输出格式、阻塞问题回退到 ⑦⑧⑨ 的复审机制。
-- [ ] 设计阶段⑪（AI代码评审闭环 → 人审与UI自动化验收）：确认人触发的累计变更 AI 复审、人类 review、Playwright UI 集成测试用例编写和 UI 自动化测试运行的边界。
+- [x] 设计阶段⑩（TDD实现闭环 → AI代码评审闭环）：确认代码评审 agent 的准入、输出格式、阻塞问题回退到 ⑦⑧⑨ 的复审机制。
+- [x] 设计阶段⑪（AI代码评审闭环 → 人审与UI自动化验收）：确认人触发的累计变更 AI 复审、人类 review、Playwright UI 集成测试用例编写和 UI 自动化测试运行的边界。
 - [ ] 全部阶段设计完成后，评估是否需要一个顶层"调度"文档/脚本，把十一个阶段串起来自动衔接，而不是每次手动切换。

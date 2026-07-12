@@ -23,6 +23,8 @@
   ---
   MySQL、索引、binlog/redo、分页与事务。
   [MySQL 一条 SELECT 的执行过程](<ai总结源文件/MySQL 一条 SELECT 的执行过程.md>)
+  [MySQL 表提升可维护性的十个建议（数据库设计规范）](<ai总结源文件/2026-07-12-MySQL表提升可维护性的十个建议（数据库设计规范）.md>)
+  [PostgreSQL WAL 机制详解](<八股文/mysql/PostgreSQL WAL机制详解.md>)
   [B 树 vs B+ 树](<ai总结源文件/B 树 vs B+ 树 & InnoDB 为什么选 B+ 树.md>)
   [binlog 和 redo log](<ai总结源文件/binlog 和 redo log 缺一不可？.md>)
   [深分页优化](<ai总结源文件/深分页为什么慢，怎么优化？.md>)
@@ -42,6 +44,7 @@
   [Spring Boot 百万数据插入优化](<ai总结源文件/Spring Boot 百万数据插入优化.md>)
   [JPA vs MyBatis](<ai总结源文件/JPA vs MyBatis（架构视角）.md>)
   [Mockito 单测阅读方法](ai总结源文件/Mockito 单测阅读方法.md)
+  [泛滥的单元测试，如何规避“失焦”问题（测试方法论）](<ai总结源文件/2026-07-12-泛滥的单元测试如何规避失焦问题（测试方法论）.md>)
   [Spring 事件监听机制详解](<ai总结源文件/Spring 事件监听机制详解.md>)
 
 - :material-brain: **AI / LLM**
@@ -165,9 +168,12 @@
     - [Java 手写一个简单消息队列（最简 MQ）](<ai总结源文件/Java 手写一个简单消息队列（最简 MQ）.md>)
     - [JPA vs MyBatis（架构视角）](<ai总结源文件/JPA vs MyBatis（架构视角）.md>)
     - [Mockito 单测阅读方法](ai总结源文件/Mockito 单测阅读方法.md)
+    - [泛滥的单元测试，如何规避“失焦”问题（测试方法论）](<ai总结源文件/2026-07-12-泛滥的单元测试如何规避失焦问题（测试方法论）.md>)
     - [八股文背不下来？怎么快速背诵八股文（视频总结）](<ai总结源文件/八股文背不下来？怎么快速背诵八股文（视频总结）.md>)
     - [MVCC（多版本并发控制）如何实现无锁一致性读？](<ai总结源文件/MVCC（多版本并发控制）如何实现无锁一致性读？.md>)
     - [MySQL 一条 SELECT 的执行过程](<ai总结源文件/MySQL 一条 SELECT 的执行过程.md>)
+    - [MySQL 表提升可维护性的十个建议（数据库设计规范）](<ai总结源文件/2026-07-12-MySQL表提升可维护性的十个建议（数据库设计规范）.md>)
+    - [PostgreSQL WAL 机制详解](<八股文/mysql/PostgreSQL WAL机制详解.md>)
     - [MySQL／InnoDB 如何用 Redo Log 做崩溃恢复](<ai总结源文件/MySQL／InnoDB 如何用 Redo Log 做崩溃恢复.md>)
     - [RestTemplate 如何优化连接池？](<ai总结源文件/RestTemplate 如何优化连接池？.md>)
     - [Spring Boot 百万数据插入优化](<ai总结源文件/Spring Boot 百万数据插入优化.md>)
