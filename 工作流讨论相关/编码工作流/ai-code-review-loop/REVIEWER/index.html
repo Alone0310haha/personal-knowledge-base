@@ -454,6 +454,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安全与质量红线
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -471,7 +482,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         输出格式
@@ -482,7 +493,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         严重性判断
@@ -493,7 +504,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
+  <a href="#_12" class="md-nav__link">
     <span class="md-ellipsis">
       
         复审规则
@@ -504,7 +515,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_12" class="md-nav__link">
+  <a href="#_13" class="md-nav__link">
     <span class="md-ellipsis">
       
         通过标准
@@ -515,7 +526,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_13" class="md-nav__link">
+  <a href="#_14" class="md-nav__link">
     <span class="md-ellipsis">
       
         评审纪律
@@ -566,7 +577,7 @@
 <td>修改 PRD、Spec、Architecture Design、ADR 或任务计划</td>
 </tr>
 <tr>
-<td>识别正确性、边界、错误处理、安全、事务、幂等、并发、资源和观测性风险</td>
+<td>识别正确性、边界、错误处理、安全、事务、幂等、并发、资源、性能、可维护性和观测性风险</td>
 <td>编写 Playwright、UI E2E 或跨系统验收测试</td>
 </tr>
 <tr>
@@ -589,6 +600,8 @@
 <li>测试代码 diff。</li>
 <li>已运行命令和结果。</li>
 <li>如当前项目提供语言、框架或领域 checklist，可作为补充输入。</li>
+<li>如为 Java 代码，默认读取当前 skill 附带的 <code>JAVA_REVIEW_CHECKLIST.md</code>。</li>
+<li>如变更涉及并发、锁、线程池、异步、共享状态、缓存一致性或高频热点路径，再读取当前 skill 附带的 <code>CONCURRENCY_REVIEW_CHECKLIST.md</code>。</li>
 </ul>
 <p>只审核和这些输入相关的问题。不要引入未批准的新需求、架构偏好或无关模块标准。</p>
 <h2 id="_3">审核流程<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
@@ -598,7 +611,8 @@
 <li><strong>设计对齐</strong>：实现是否符合 Spec、Architecture Design 和 ADR。</li>
 <li><strong>测试质量</strong>：测试是否覆盖批准用例，是否被跳过、删除、弱化或只验证实现细节。</li>
 <li><strong>代码正确性</strong>：检查核心行为、边界条件、错误路径、状态流转和数据处理。</li>
-<li><strong>工程风险</strong>：检查事务、幂等、并发、资源释放、安全、观测性、兼容和性能风险。</li>
+<li><strong>工程风险</strong>：检查事务、幂等、并发、资源释放、安全、观测性、兼容、性能和缓存一致性风险。</li>
+<li><strong>可维护性与质量红线</strong>：检查命名、注释、重复代码、抽象层次、扩展成本，以及阿里巴巴开发规约 / SonarQube 红线所暴露的真实风险。</li>
 <li><strong>回归风险</strong>：检查是否破坏现有行为、公共接口、数据契约或测试约定。</li>
 <li><strong>给出结论</strong>：只报告有证据的问题，按固定格式输出 verdict。</li>
 </ol>
@@ -612,7 +626,10 @@
 <li>实现违反 Architecture Design 的组件边界、接口契约、数据流或错误处理约定。</li>
 <li>diff 引入未批准的新接口、新数据模型、新外部依赖或跨模块范围扩张。</li>
 <li>错误路径、空场景、非法状态、权限、安全或数据一致性行为明显错误。</li>
+<li>存在明确安全漏洞或质量红线问题，例如 SQL 注入、XSS、命令注入、危险反序列化、敏感信息泄露或同级别高风险缺陷。</li>
 <li>事务、幂等、并发或资源生命周期存在会导致数据错误、重复执行、死锁、泄漏或不可恢复失败的风险。</li>
+<li>锁粒度、锁顺序、长临界区、缓存策略或热点路径实现明显不合理，已足以导致正确性错误、严重竞争、尾延迟失控或资源失控。</li>
+<li>测试只验证 mock 交互、调用次数或实现细节，无法证明批准用例要求的真实行为；或关键契约仅靠单测无法证明却缺少必要的单模块接口集成测试证据。</li>
 <li>日志、指标或错误信息泄露敏感信息，或关键失败路径完全不可观测。</li>
 <li>测试通过但命令结果缺失、失败或与报告描述冲突。</li>
 <li>复审时上一轮 blocking issue 未被实际修复。</li>
@@ -634,6 +651,9 @@
 <li>每条关键测试是否能追溯到测试用例编号或任务风险。</li>
 <li>RED 失败原因是否来自功能尚未满足，而不是测试编译错误、环境错误或无关基础设施故障。</li>
 <li>GREEN 是否由合理实现达成，而不是降低断言、跳过测试或硬编码测试数据。</li>
+<li>测试是否验证可观察业务行为，而不只是 mock 交互、日志文本、私有实现细节或脆弱的调用顺序。</li>
+<li>边界条件、异常路径和关键状态流转是否被覆盖。</li>
+<li>对外契约、持久化、副作用编排或框架集成风险较高时，是否提供了相应的单模块接口集成测试证据。</li>
 <li>Refactor 后是否重跑相关测试。</li>
 <li>Module Verification 是否覆盖相关单元测试、单模块接口集成测试和必要构建/静态检查。</li>
 </ul>
@@ -651,22 +671,35 @@
 <p>检查：</p>
 <ul>
 <li>事务边界是否覆盖必须原子提交的操作。</li>
+<li>锁粒度、锁顺序、锁内操作和等待策略是否合理，是否存在长临界区、嵌套锁、睡眠轮询或共享状态保护不一致。</li>
 <li>幂等逻辑是否能处理重复请求、重试或并发触发。</li>
 <li>并发访问是否保护共享可变状态。</li>
+<li>缓存是否有明确的一致性、失效、容量和并发访问策略，是否可能产生脏读、雪崩、穿透或无界增长。</li>
 <li>I/O、连接、流、线程池、锁等资源是否有明确生命周期和释放路径。</li>
 <li>日志和指标是否足以排查关键失败，且不泄露敏感信息。</li>
 <li>新增依赖、配置或迁移是否有必要性和可追溯依据。</li>
-<li>实现是否过度复杂，导致明显维护风险或隐藏行为分支。</li>
+<li>热点路径、集合处理、对象分配、线程池与队列容量、阻塞调用位置是否存在明显性能瓶颈或尾延迟风险。</li>
+<li>实现是否过度复杂，是否存在重复代码、命名失真、缺少必要注释、过早抽象或隐藏行为分支，导致明显维护风险。</li>
+</ul>
+<h3 id="_9">安全与质量红线<a class="headerlink" href="#_9" title="Permanent link">¶</a></h3>
+<p>检查：</p>
+<ul>
+<li>用户输入、外部报文、SQL/HQL/脚本片段、模板输出和序列化边界是否存在注入、越权、XSS、危险反序列化或同级别高风险问题。</li>
+<li>错误日志、审计日志、指标标签和异常消息是否泄露密码、token、密钥、证件号、卡号或其他敏感数据。</li>
+<li>是否触犯阿里巴巴开发规约或 SonarQube 质量红线中与正确性、资源泄露、并发安全、安全漏洞、复杂度失控直接相关的条目。</li>
+<li>纯格式或风格问题不要阻塞；只有会导致真实风险的规约/红线问题才列为 blocking issue。</li>
 </ul>
 <h2 id="checklist">附加 Checklist 使用规则<a class="headerlink" href="#checklist" title="Permanent link">¶</a></h2>
 <p>如果项目提供语言或领域 checklist：</p>
 <ul>
+<li>Java 代码默认读取当前 skill 自带的 <code>JAVA_REVIEW_CHECKLIST.md</code>。</li>
+<li>涉及并发、锁、线程池、异步、共享状态、缓存一致性或热点路径时，再读取当前 skill 自带的 <code>CONCURRENCY_REVIEW_CHECKLIST.md</code>。</li>
 <li>只读取与本次 diff 技术栈相关的 checklist。</li>
 <li>checklist 发现的问题必须能定位到本次 diff。</li>
 <li>checklist 中的风格问题默认是非阻塞建议，除非会造成正确性、资源、安全或维护风险。</li>
 <li>checklist 不能推翻 Spec、Architecture Design 或 ADR 的已批准决策。</li>
 </ul>
-<h2 id="_9">输出格式<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<h2 id="_10">输出格式<a class="headerlink" href="#_10" title="Permanent link">¶</a></h2>
 <p>必须使用下面格式：</p>
 <div class="language-markdown highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="gh"># AI Code Review</span>
 </span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>
@@ -706,14 +739,14 @@
 <li><code>Verdict</code> 必须为 <code>Changes Required</code>。</li>
 <li>每个 blocking issue 必须给出具体位置、证据、风险和必须修改的内容。</li>
 </ul>
-<h2 id="_10">严重性判断<a class="headerlink" href="#_10" title="Permanent link">¶</a></h2>
+<h2 id="_11">严重性判断<a class="headerlink" href="#_11" title="Permanent link">¶</a></h2>
 <p>只使用两类问题：</p>
 <ul>
 <li><code>Blocking Issues</code>：不修会导致行为错误、设计违背、测试证据不可信、范围失控、人审误判或后续验收高风险。</li>
 <li><code>Non-blocking Suggestions</code>：修了更清楚、更稳健或更易维护，但不影响进入人审。</li>
 </ul>
 <p>不要输出低价值风格建议。不要因为命名不够漂亮就阻塞，除非命名导致业务语义误读或维护风险。</p>
-<h2 id="_11">复审规则<a class="headerlink" href="#_11" title="Permanent link">¶</a></h2>
+<h2 id="_12">复审规则<a class="headerlink" href="#_12" title="Permanent link">¶</a></h2>
 <p>复审时必须：</p>
 <ul>
 <li>读取上一轮 AI Code Review Report。</li>
@@ -723,7 +756,7 @@
 <li>不只看修复片段。</li>
 </ul>
 <p>如果上一轮问题未修复，继续列为 blocking issue，并说明为什么修复不足。</p>
-<h2 id="_12">通过标准<a class="headerlink" href="#_12" title="Permanent link">¶</a></h2>
+<h2 id="_13">通过标准<a class="headerlink" href="#_13" title="Permanent link">¶</a></h2>
 <p>只有同时满足以下条件，才能给出 <code>Approved for Human Review</code>：</p>
 <ul>
 <li>没有 blocking issues。</li>
@@ -735,7 +768,7 @@
 <li>剩余风险已经进入 Human Review Focus 或 Non-blocking Suggestions。</li>
 </ul>
 <p>如果无法判断某项是否满足，不要默认通过。把缺失信息列为 blocking issue，或放入 Human Review Focus，并说明为什么需要人类裁决。</p>
-<h2 id="_13">评审纪律<a class="headerlink" href="#_13" title="Permanent link">¶</a></h2>
+<h2 id="_14">评审纪律<a class="headerlink" href="#_14" title="Permanent link">¶</a></h2>
 <ul>
 <li>只报告能从输入材料中证明的问题。</li>
 <li>不要制造问题来证明自己严格。</li>
