@@ -22,7 +22,7 @@ description: 在 TDD 实现闭环通过后，对单 Spec / 单任务范围内的
 | 审核代码 diff、测试 diff 和 TDD 证据 | 修改功能代码或测试代码 |
 | 检查实现是否满足测试用例与 Spec 行为契约 | 重新设计 PRD、Spec、Architecture Design、ADR 或任务计划 |
 | 检查是否违反 Architecture Design / ADR | 写新的测试用例设计文档 |
-| 检查正确性、边界条件、错误处理、事务、幂等、并发、资源释放、安全和观测性风险 | Playwright、UI E2E、跨系统验收测试 |
+| 检查正确性、边界条件、错误处理、事务、幂等、并发、资源释放、安全、性能、可维护性和观测性风险 | Playwright、UI E2E、跨系统验收测试 |
 | 输出 blocking issues、非阻塞建议和人审焦点 | 人类 review、发布决策、业务 UAT |
 | 组织最多 3 轮修复后复审 | 为了通过评审而弱化测试或扩大任务范围 |
 
@@ -35,10 +35,11 @@ description: 在 TDD 实现闭环通过后，对单 Spec / 单任务范围内的
 1. **确认准入** - TDD 证据存在，相关单元测试、单模块接口集成测试、构建或静态检查已经运行并记录结果。
 2. **读取输入** - 读取测试用例文档、任务计划、Spec、Architecture Design、ADR、TDD 证据、代码 diff、测试 diff 和命令结果。
 3. **确认评审范围** - 确认本轮只覆盖单 Spec / 单任务范围；累计变更、多 Spec 或最终人审复核留给后续阶段。
-4. **启动 Reviewer** - 新开独立 Reviewer Agent，按 `REVIEWER.md` 审核，不复用实现阶段的自我判断。
-5. **处理评审结果** - 有 blocking issues 时退回 TDD 实现闭环；无 blocking issues 时进入人审与 UI 自动化验收阶段。
-6. **复审闭环** - 修复后重新读取相关材料，重点确认上一轮 blocking issues 是否消失，并快速扫描是否引入新问题。
-7. **交接后续阶段** - 输出 AI Code Review Report 路径或完整内容、人审焦点、剩余非阻塞建议和已验证命令。
+4. **准备补充清单** - Java 代码默认附带 `JAVA_REVIEW_CHECKLIST.md`；涉及共享状态、锁、线程池、异步回调、并发容器、ThreadLocal、缓存一致性或热点路径时，再附带 `CONCURRENCY_REVIEW_CHECKLIST.md`。
+5. **启动 Reviewer** - 新开独立 Reviewer Agent，按 `REVIEWER.md` 审核，不复用实现阶段的自我判断。
+6. **处理评审结果** - 有 blocking issues 时退回 TDD 实现闭环；无 blocking issues 时进入人审与 UI 自动化验收阶段。
+7. **复审闭环** - 修复后重新读取相关材料，重点确认上一轮 blocking issues 是否消失，并快速扫描是否引入新问题。
+8. **交接后续阶段** - 输出 AI Code Review Report 路径或完整内容、人审焦点、剩余非阻塞建议和已验证命令。
 
 ## 输入
 
@@ -53,8 +54,12 @@ description: 在 TDD 实现闭环通过后，对单 Spec / 单任务范围内的
 - 本次功能代码 diff。
 - 本次测试代码 diff。
 - 已运行命令及结果，包括相关单元测试、单模块接口集成测试、构建或静态检查。
+- 如为 Java 代码，读取本 skill 自带的 `JAVA_REVIEW_CHECKLIST.md`。
+- 如变更涉及并发、锁、线程池、异步、共享状态、缓存一致性或高频热点路径，再读取本 skill 自带的 `CONCURRENCY_REVIEW_CHECKLIST.md`。
 
 如果项目已有语言、框架或领域 code review checklist，可以把它作为补充输入。补充 checklist 不能替代本阶段的通用审核规则，也不能把 checklist 中的风格偏好升级成阻塞问题。
+
+skill 自带 checklist 的目的是保证本 skill 脱离当前仓库后仍可独立工作，不依赖项目内私有文档路径。
 
 ## 输出
 
@@ -124,11 +129,22 @@ digraph ai_code_review_loop {
 
 - 本 skill 的目标和边界。
 - `REVIEWER.md` 的完整审核规则。
+- 适用时附带 `JAVA_REVIEW_CHECKLIST.md` 和 `CONCURRENCY_REVIEW_CHECKLIST.md`。
 - 所有输入材料路径或内容。
 - 本轮是否为首次评审或第几轮复审。
 - 如果是复审，提供上一轮 AI Code Review Report。
 
 Reviewer 只输出报告，不修改代码。不要让实现 Agent 自己给自己做最终评审。
+
+## 默认审查范围
+
+除原有设计对齐、TDD 证据和工程风险外，Reviewer 还必须检查下列范围：
+
+- **可读性与可维护性**：命名是否表达业务语义，注释是否解释必要的复杂意图，是否存在重复代码、过早抽象或隐藏分支，是否明显增加后续改动成本。
+- **性能与资源效率**：是否引入热点路径上的低效循环、无界内存增长、不合理缓存策略、额外锁竞争、长临界区或不必要对象分配。
+- **安全与质量红线**：是否存在注入、越权、敏感信息泄露、危险反序列化或同级别高风险问题；是否触犯阿里巴巴开发规约或 SonarQube 质量红线中会导致正确性、资源、安全、并发或维护风险的条目。
+- **测试有效性**：测试是否验证真实业务行为而不只是 mock 交互或实现细节；边界场景是否被覆盖；仅靠单测不足以证明关键契约时，是否提供了相应的单模块接口集成测试证据。
+- **事务与锁粒度**：事务边界是否与业务原子性一致；锁粒度、锁顺序和锁内操作是否合理，既不放大竞争，也不留下数据竞态。
 
 ## Step 3: 处理 Blocking Issues
 
