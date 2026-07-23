@@ -1,4 +1,3 @@
-Elasticsearch 面试八股文（速刷版｜参考资料已纳入 2026-05-07 Lucene/ES 架构笔记）
 
 # 基础与架构
 
@@ -40,17 +39,18 @@ Elasticsearch 面试八股文（速刷版｜参考资料已纳入 2026-05-07 Luc
   - Q：副本数能改吗？A：可以动态调整，用于读扩展或导入期临时降副本。
 
 ## 4. ES 集群有哪些节点角色？Master（集群管理器）如何选举、如何避免脑裂？
-- **15秒简答**：集群本质是“控制面 + 数据面分离”；核心机制是“多数派选举集群管理器、它负责元数据与分片分配”；特点是高可用但依赖正确的选主与网络。
-- **3分钟详答**：节点常见角色：  
-  - master-eligible：参与选举集群管理器，管理集群元数据与分片分配。  
-  - data：存储分片并执行查询/聚合。  
-  - coordinating-only：接入请求、路由分发、结果汇总（scatter-gather）。  
-  - ingest：写入前做 pipeline 预处理。  
-  选主是多数派机制：现任管理器不可达时，候选节点投票形成法定人数选出新的管理器，避免出现两个管理器同时生效的脑裂。生产常用奇数台专用 master 节点，提升控制面稳定性。  
+- **15秒简答**：集群本质是“控制面 + 数据面分离”；核心机制是“多数派选举集群管理器、它负责元数据与分片分配”；脑裂本质是网络分区或 Master 假死导致多主/无主，靠多数派、专用 Master、资源隔离和正确版本配置来避免。
+- **3分钟详答**：这个问题我会分成节点角色、Master 选举和脑裂三个层次来回答。  
+  首先，ES 节点角色不是只有一种。`master-eligible` 节点有资格参与 Master 选举，真正当选以后主要负责集群状态、索引元数据、节点管理和分片分配；`data` 节点负责保存分片，并执行查询、聚合和写入；`ingest` 节点负责写入前的 pipeline 预处理；`coordinating-only` 节点更像请求入口，负责把请求路由到相关分片，再把结果汇总回来。  
+  其次，Master 可以理解为 ES 集群的“控制面”。它不是所有数据都存在 Master 上，而是由它维护集群该如何组织。选举时，只有 master-eligible 节点参与投票；当现任 Master 不可达，或者集群启动、节点发现发生变化时，会通过多数派机制选出新的 Master。也就是说，候选节点必须拿到法定票数，通常可以按 `floor(N / 2) + 1` 理解，才能成为新的 Master 并发布 cluster state。  
+  最后，脑裂本质上是网络分区后出现多个 Master，或者没有任何一边能正常形成 Master，导致集群状态分叉。它不只可能由网络断开引起，也可能由 Master 负载过高、JVM Full GC、CPU/磁盘压力过大导致心跳和 cluster state 发布超时引起。多数派机制能防脑裂，是因为一个集群里不可能同时存在两个“超过半数”的分区；拿不到多数派的一边即使联系不上原 Master，也不能自己选主。生产上一般会部署 3 个专用 master-eligible 节点，并尽量分散在不同机器或可用区；旧版本要把 `discovery.zen.minimum_master_nodes` 配成过半，7.x+ 则由新的协调模块维护投票配置。  
+  延伸理解：[第4题：ES Master 选举与脑裂（理解型记忆版）](./第4题：ES%20Master%20选举与脑裂（理解型记忆版）.md)。  
   官方文档关键词：Node roles、Cluster coordination、Master election。
 - **可能追问（15秒简答）**：
-  - Q：脑裂会带来什么后果？A：集群状态分叉，可能出现写入异常、路由错误、甚至数据不一致。
-  - Q：7.x 以后还要配 minimum_master_nodes 吗？A：不用；旧版本需要，7.x+ 由新协调模块自动处理多数派。
+  - Q：为什么推荐 3 个专用 Master 节点？A：3 个能容忍 1 个故障并保持 2 票多数派；专用 Master 不被查询/写入拖慢，控制面更稳。
+  - Q：脑裂会带来什么后果？A：集群状态分叉，可能出现两个 Master、分片路由混乱、写入异常，严重时造成数据不一致。
+  - Q：7.x 以后还要配 `minimum_master_nodes` 吗？A：不用；旧版本需要手动配多数派，7.x+ 由新协调模块自动维护投票配置。
+  - Q：除了网络分区，还有什么会诱发脑裂？A：Master 负载过高、Full GC、CPU/磁盘/网络抖动导致心跳超时，都可能让节点误判 Master 不可达。
 
 ## 5. 分片与副本在集群里如何分配与再平衡？节点增减/故障会发生什么？
 - **15秒简答**：分片/副本本质是“拆分+复制”；核心机制是“主分片写入、副本同步，集群自动分配与再平衡”；特点是容灾与并行强，但分片规划不当会增加管理成本。
@@ -76,13 +76,13 @@ Elasticsearch 面试八股文（速刷版｜参考资料已纳入 2026-05-07 Luc
   - Q：为什么分 query/fetch？A：先用轻量信息（docId+sort）做全局排序，再按需取回文档内容，减少网络与 I/O。
 
 ## 7. 什么是 NRT 近实时搜索？refresh / translog / segment / merge 的关系是什么？
-- **15秒简答**：NRT 本质是“写入后很快可搜但非立刻”；核心机制是“写入进 translog 与内存，refresh 让新 segment 可搜，merge 控制段数量”；特点是秒级可见、吞吐与实时性可权衡。
-- **3分钟详答**：ES 写入后不是马上能搜到，原因在 Lucene 的 segment 生命周期：  
-  - 写入先进入内存缓冲并记录 translog（用于崩溃恢复）。  
-  - refresh 会把缓冲内容生成新的可搜索 segment 并打开搜索器，默认约 1s，所以叫 Near Real-Time。  
+- **3分钟详答**：NRT（Near Real-Time）是指一种系统架构使得查询语句能够在接近实时的情况下得到最新的数据结果，是ES的核心特性之一。  
+  - 数据写入时先进入内存缓冲并记录 translog。translog是一种事务日志，它记录所有index和delete操作，在发生崩溃时，没有被刷盘的操作可以通过translog进行恢复。
+  - refresh 操作会把缓存内容生成新的可搜索 segment 并打开搜索器，默认刷新间隔为 1s，这个间隔时间内的数据写入到ES中，虽然它已经被持久化，但是还不会对外立刻可见。
   - segment 不可变，更新/删除会产生标记删除与新段；后台 merge 会合并小段、清理删除标记，保持文件数与查询性能可控。  
-  在批量导入场景，会调大 `refresh_interval` 或设为 `-1` 暂停 refresh，导入完再恢复并按需 refresh。  
-  官方文档关键词：Near real-time search、Refresh、Translog、Segments and merging。
+  - flush是指执行lucence的刷盘操作并启动新的translog生成流程
+  - merge是指refresh/flush/写入等行为不断产生新 segment，导致 shard 内 segment 状态变化；Lucene 的 IndexWriter 会让 MergePolicy 判断是否超过合并策略的阈值，如果超过，就由 ES merge scheduler 在线程池中后台执行合并。
+  官方文档关键词：[Near real-time search](https://www.elastic.co/docs/manage-data/data-store/near-real-time-search)、Refresh、[Translog](https://www.elastic.co/docs/reference/elasticsearch/index-settings/translog)、Segments and [merging](https://www.elastic.co/docs/reference/elasticsearch/index-settings/merge)。
 - **可能追问（15秒简答）**：
   - Q：`refresh_interval=-1` 的影响？A：写入吞吐更高，但新数据不可搜索，需手动 refresh 或恢复配置。
   - Q：merge 有什么副作用？A：merge 会吃 CPU/IO，过于频繁会影响写入与查询，需要平衡与监控。
@@ -178,7 +178,7 @@ Elasticsearch 面试八股文（速刷版｜参考资料已纳入 2026-05-07 Luc
 - **3分钟详答**：`from + size` 深分页会让每个分片计算并返回大量候选，协调节点全局排序后再丢弃前面的，浪费巨大。  
   - Scroll：适合全量遍历/导出这类“静态数据扫描”，维护游标上下文。  
   - Search After：适合在线翻页，依赖稳定且唯一的排序键（常用 时间 + `_id`），用上一页最后一条的 sort 值继续查。  
-  官方文档关键词：Pagination、Scroll API、Search after。
+  官方文档关键词：Pagination、Scroll API、Search after。[深分页](https://www.mianshiya.com/bank/1805423815382736897/question/1827341037887049729#heading-0)
 - **可能追问（15秒简答）**：
   - Q：search_after 为什么要唯一排序？A：避免排序相同导致重复/漏数据，通常加 `_id` 做 tie-breaker。
   - Q：scroll 适合用户分页吗？A：一般不适合；更适合离线扫描任务。
