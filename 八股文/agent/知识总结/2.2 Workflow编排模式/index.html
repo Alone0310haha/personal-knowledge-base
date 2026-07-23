@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87/agent/%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/2026-07-08-Agent%E6%8E%A8%E7%90%86%E6%A8%A1%E5%BC%8F%E4%B8%8EReAct%E5%AE%9E%E7%8E%B0/">
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87/agent/%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/2.2%20Workflow%E7%BC%96%E6%8E%92%E6%A8%A1%E5%BC%8F/">
       
       
       
@@ -19,15 +19,15 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>AI Agent 工程架构 - Alone的知识库</title>
+        <title>2.2 Workflow编排模式 - Alone的知识库</title>
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ai-agent" class="md-skip">
+        <a href="#workflow-agentic-workflow" class="md-skip">
           跳转至
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              AI Agent 工程架构
+              2.2 Workflow编排模式
             
           </span>
         </div>
@@ -345,8 +345,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -355,10 +353,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#agent-react" class="md-nav__link">
+  <a href="#workflow-agentic-workflow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Agent 推理模式有哪些？ReAct 是啥？具体是怎么实现的？
+        Workflow 常见编排模式有哪些？Agentic Workflow 为什么是生产主流？
       
     </span>
   </a>
@@ -382,26 +380,81 @@
 
 
 
-<h1 id="ai-agent">AI Agent 工程架构<a class="headerlink" href="#ai-agent" title="Permanent link">¶</a></h1>
-<h2 id="agent-react">Agent 推理模式有哪些？ReAct 是啥？具体是怎么实现的？<a class="headerlink" href="#agent-react" title="Permanent link">¶</a></h2>
+  <h1>2.2 Workflow编排模式</h1>
+
+<h2 id="workflow-agentic-workflow">Workflow 常见编排模式有哪些？Agentic Workflow 为什么是生产主流？<a class="headerlink" href="#workflow-agentic-workflow" title="Permanent link">¶</a></h2>
 <p><strong>15秒简答</strong></p>
-<p>Agent 常见推理模式包括直接回答、CoT、ReAct 和 Plan-and-Execute。CoT 的本质是把隐式推理显式写出来，降低多步推理误差；ReAct 在 CoT 上加入工具行动，让 LLM 按 Thought -&gt; Action -&gt; Observation 循环推进任务。ReAct 的关键实现不是模型自己循环，而是模型每次输出下一步思考和动作，代码负责解析动作、执行工具、回填观察结果并再次调用模型。它的特点是推理可见、能接外部工具，但长链路容易漂移、成本随轮次增长。</p>
+<p>Workflow 的编排模式本质是在代码里提前定义 LLM、Tools、Agent 的执行顺序和分支逻辑。常见模式包括：
+- Prompt Chaining：把大任务拆成多个串联步骤；
+- Routing：先分类，再把请求路由到不同处理分支；
+- Parallelization：多个子任务并行执行，最后汇总；
+- Orchestrator-Workers：由编排者拆分任务，再分配给多个 Worker；
+- Evaluator-Optimizer：先生成，再评估，不通过就反馈优化。</p>
+<p>这些模式不是互斥关系，真实项目里通常混合使用。生产环境更常见的是 Agentic Workflow：用 Workflow 固定主流程骨架，在少数需要灵活判断的节点嵌入 Agent，从而兼顾可控性、可调试性和局部智能。</p>
 <p><strong>3分钟详答</strong></p>
-<p>推理模式要解决的是 LLM 多步任务里的累积误差问题。LLM 本质上是按上下文逐 token 预测，如果让它直接“一口气”给复杂问题答案，中间推导都藏在隐式状态里，某一步出错很难被纠正。CoT 通过让模型先写推理步骤再给答案，把中间结论放进上下文，后续生成就能基于已写出的步骤继续推断，类似把心算改成笔算。</p>
-<p>CoT 的局限是只能做纯文字推理，不能自然地和外部世界交互。它拿不到实时数据，不能执行计算，也不能访问数据库；即使 prompt 里让模型“建议调用 API”，工具执行和结果回填仍要靠额外胶水。ReAct 就是在这个基础上，把 Reasoning 和 Acting 结合起来：每一轮先 Thought 分析当前情况，再 Action 选择工具和参数，工具执行后系统把 Observation 写回历史，模型基于新观察进入下一轮，直到输出 Final Answer。</p>
-<p>ReAct 和普通 LLM 调用最大的差别在实现分工。模型不会自己“转循环”，它每次只根据当前历史输出一段结构化文本，通常包含 Thought 和 Action；外层代码负责检查是否出现 Final Answer，如果没有，就解析 Action 和 Action Input，调用对应工具，把工具返回值作为 Observation 追加到历史里，再把完整历史传回模型。也就是说，模型负责推理和下一步决策，代码框架负责驱动循环和执行真实动作。</p>
-<p>原文用“查询 2024 年苹果和谷歌市值谁更高”的例子说明：ReAct 会先判断需要实时数据，搜索苹果市值，拿到 Observation 后再搜索谷歌市值，最后基于两个结果计算差距并输出答案。代码示例的意图则是说明 ReAct prompt 只是约束输出格式，真正的运行机制是外层循环不断执行“调用 LLM -&gt; 解析输出 -&gt; 执行工具 -&gt; 回填 Observation”。</p>
-<p>ReAct 的优点是推理过程可见，工具调用可动态调整，适合开放问答、信息搜索、任务边界不清的探索场景；缺点是每一步都要带历史调用 LLM，步骤越多 token 和延迟越高，而且走一步看一步容易漂移或把前面错误继续传播。更复杂、目标明确的任务可以用 Plan-and-Execute：先规划完整步骤，再逐步执行，并在每步后根据结果动态重规划。工程上常见组合是用强模型做规划，用较便宜的小模型或 ReAct executor 执行具体步骤，在质量和成本之间折中。</p>
-<p><strong>追问：为什么需要 CoT 这种推理模式？</strong></p>
-<p><strong>15秒简答：</strong> 因为直接回答会把中间推理藏在隐式状态里，容易累积误差；CoT 把推理步骤显式写进上下文，让后续生成基于清楚的中间结论继续推进。</p>
-<p><strong>追问：Zero-shot CoT 和 Few-shot CoT 有什么区别？</strong></p>
-<p><strong>15秒简答：</strong> Zero-shot CoT 只在 prompt 里加“让我们一步步思考”，成本低但格式和深度不稳定；Few-shot CoT 提供带完整推理的示例让模型模仿，输出更稳定但需要准备高质量样例并占用 token。</p>
-<p><strong>追问：ReAct 为什么比纯 CoT 或 Act-only 更适合 Agent？</strong></p>
-<p><strong>15秒简答：</strong> 纯 CoT 不能自然获取外部事实，容易受过时知识和幻觉影响；Act-only 只行动不显式推理，动作序列脆弱；ReAct 用 Thought 指方向、Action 做操作、Observation 校准事实，形成闭环。</p>
-<p><strong>追问：ReAct 的循环到底是谁驱动的？</strong></p>
-<p><strong>15秒简答：</strong> 不是模型自己循环，而是代码框架驱动：模型输出 Thought 和 Action，代码解析并执行工具，把结果作为 Observation 加回历史，再次调用模型，直到检测到 Final Answer 或达到步数上限。</p>
-<p><strong>追问：ReAct 和 Plan-and-Execute 分别适合什么场景？</strong></p>
-<p><strong>15秒简答：</strong> ReAct 灵活，适合开放式问答、搜索和探索型任务，但容易漂移、成本随轮次增长；Plan-and-Execute 有全局规划，适合目标明确的复杂多步任务，但简单任务上规划本身可能是额外开销。</p>
+<p>Workflow 不是“多个 Agent 串起来”，而是一种控制流编排方式。它的核心特点是：下一步去哪、失败后怎么处理、什么时候结束，主要由开发者在代码里提前定义；LLM、Tool、Agent 都只是流程里的节点。</p>
+<p>纯 Agent 的优点是灵活，适合路径未知、需要动态决策的复杂任务；但缺点也明显：执行路径不稳定、线上复现困难、LLM 调用轮次不可控，成本和延迟都容易膨胀。纯 Workflow 正好相反，路径清晰、可测试、可追踪，但面对预料之外的输入时容易变脆。因此工程上通常采用 Agentic Workflow：主链路用确定流程兜住，只在局部节点让 Agent 自主判断。</p>
+<p>常见 Workflow 编排模式可以从“控制流形态”来理解：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>核心思路</th>
+<th>适合场景</th>
+<th>注意点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompt Chaining</td>
+<td>多个 LLM 调用串联，前一步输出作为后一步输入</td>
+<td>文档生成、信息抽取、分阶段推理</td>
+<td>每一步最好有明确输入输出和校验标准</td>
+</tr>
+<tr>
+<td>Routing</td>
+<td>先识别类型或意图，再进入不同分支</td>
+<td>客服、工单分流、查询改写、多模型选择</td>
+<td>分类错误会导致整条链路走错</td>
+</tr>
+<tr>
+<td>Parallelization</td>
+<td>可独立执行的子任务并行跑，最后合并结果</td>
+<td>多数据源检索、多维度评审、批量分析</td>
+<td>需要定义结果聚合和冲突处理方式</td>
+</tr>
+<tr>
+<td>Orchestrator-Workers</td>
+<td>中央编排者拆解任务，多个 Worker 分别执行</td>
+<td>复杂任务拆分、代码修改、多模块分析</td>
+<td>编排者要能拆得清楚，Worker 输出要可合并</td>
+</tr>
+<tr>
+<td>Evaluator-Optimizer</td>
+<td>生成者产出结果，评估者检查质量，不通过则反馈重做</td>
+<td>代码生成、法律文本、营销文案、高质量回答</td>
+<td>评估标准必须清楚，避免无限循环</td>
+</tr>
+</tbody>
+</table>
+<p>Prompt Chaining 最像流水线。比如生成一篇技术文章，可以先让 LLM 提纲规划，再逐段扩写，再做事实检查，最后统一润色。它的优点是每一步职责清晰，比一次性让模型完成所有事情更稳定；缺点是链路变长后，前面步骤的错误会向后传播，所以关键节点要加校验。</p>
+<p>Routing 适合“不同输入要走不同处理逻辑”的场景。比如客服系统先判断用户是咨询商品、申请退款还是投诉，再分别进入商品查询、订单退款、人工作业流程。这里 LLM 可以参与意图分类，但真正的分支跳转仍然由代码决定，所以它是 Workflow，不是 Agent。</p>
+<p>Parallelization 适合子任务之间相互独立的场景。比如针对一个技术方案，同时让多个节点从性能、安全、成本、可维护性几个角度评审，最后汇总成一个综合结论。它的价值是降低整体延迟，并减少单个模型视角过窄的问题；但要提前设计好结果合并规则。</p>
+<p>Orchestrator-Workers 更适合任务规模大、拆分方式不固定的场景。Orchestrator 负责理解任务、拆分子任务、分配给不同 Worker，Worker 只负责完成局部工作。它比普通并行更灵活，因为子任务数量和内容可以动态产生；但也更依赖编排者的任务拆解质量。</p>
+<p>Evaluator-Optimizer 是质量闭环模式。一个 LLM 负责生成结果，另一个 LLM 或同一模型的评估角色负责检查是否满足标准；如果不满足，就把反馈交回生成者继续优化，直到通过或达到最大重试次数。这个模式适合对输出质量要求高的任务，本质上是把“写作-审稿-修改”的过程自动化。</p>
+<p>工程选型时可以抓住一句话：流程稳定、边界清晰的部分用 Workflow；局部需要动态判断、写死规则覆盖不了的部分再升级为 Agent。这样既不会让系统完全失控，也不会把所有异常情况都硬编码到 if/else 里。</p>
+<p><strong>追问：为什么生产环境不推荐一上来就做纯 Agent？</strong></p>
+<p><strong>15秒简答：</strong> 纯 Agent 的执行路径由 LLM 动态决定，灵活但不可控；线上问题难复现、难测试，调用轮次也容易带来成本和延迟失控。生产环境通常先用 Workflow 固定主链路，只在必要节点嵌入 Agent。</p>
+<p><strong>追问：Prompt Chaining 和普通多轮对话有什么区别？</strong></p>
+<p><strong>15秒简答：</strong> Prompt Chaining 是开发者预先设计好的多步骤流水线，每一步有明确输入输出；普通多轮对话更多依赖模型上下文自然延续，控制流不一定被代码显式管理。</p>
+<p><strong>追问：Routing 模式的关键风险是什么？</strong></p>
+<p><strong>15秒简答：</strong> 关键风险是路由分类错误。一旦第一步意图识别错了，请求就会进入错误分支，所以通常要设计置信度阈值、兜底分支和人工升级机制。</p>
+<p><strong>追问：Evaluator-Optimizer 和 Reflection 有什么关系？</strong></p>
+<p><strong>15秒简答：</strong> 两者都利用“评估-改进”闭环。Evaluator-Optimizer 更偏 Workflow 编排模式，强调生成者和评估者的固定流程；Reflection 更偏 Agent 设计范式，强调模型对执行结果进行反思并调整后续行为。</p>
+<p><strong>参考</strong></p>
+<ul>
+<li><a href="https://xiaolinnote.com/ai/agent/3_workflow_tools.html#%E4%B8%89%E8%80%85%E6%80%8E%E4%B9%88%E7%BB%84%E5%90%88-agentic-workflow-%E6%89%8D%E6%98%AF%E7%94%9F%E4%BA%A7%E4%B8%BB%E6%B5%81">小林面试笔记：Workflow，Agent，Tools 这三个的概念和区别介绍一下？</a></li>
+</ul>
 
 
 
@@ -460,7 +513,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

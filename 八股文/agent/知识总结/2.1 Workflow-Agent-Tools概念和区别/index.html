@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -386,7 +386,7 @@
 <p><strong>15秒简答</strong></p>
 <p>Workflow、Agent、Tools 不是三选一关系，而是粒度不同、可以相互嵌套的三层结构。
 - Tools 是暴露给 LLM 调用的能力函数，只执行不决策；
-- Agent 是以 LLM 为大脑的自主决策系统，会动态判断调哪个工具、是否继续、何时结束；-
+- Agent 是以 LLM 为大脑的自主决策系统，会动态判断调哪个工具、是否继续、何时结束
 - Workflow 是开发者预先写好的流程编排，把 LLM、Tools 或 Agent 组织成确定路径。</p>
 <p>核心区别看“下一步去哪”由谁决定：Tools 不决定，Agent 由 LLM 决定，Workflow 由开发者在代码里提前决定。整体特性是 Tools 简单确定、Agent 灵活但难控、Workflow 可控可调试但灵活性低。</p>
 <p><strong>3分钟详答</strong></p>
@@ -395,14 +395,10 @@
 <p>Workflow 是更上层的编排方式，节点可以是普通 LLM 调用、Tool 或 Agent，关键是流程顺序和分支由开发者提前写在代码里。比如客服场景中，可以先让 LLM 做意图分类，再由 if/elif 把产品问题、退款问题、其他问题分发到不同分支；这里 LLM 只是流程节点，“下一步去哪”仍由代码控制，所以它是 Workflow，不是 Agent。</p>
 <p>这种设计存在的原因是工程取舍：纯 Agent 灵活，但线上行为难控、排查困难、LLM 多轮调用容易带来成本和延迟失控；纯 Workflow 可预测、好调试，但无法穷举所有异常输入，遇到未预料情况会变脆。因此生产环境里更常见的是 Agentic Workflow：用 Workflow 固定主流程骨架，在需要灵活判断的关键节点嵌入 Agent，其余固定节点直接用 LLM 或 Tools，从而兼顾可控性和灵活性。</p>
 <p>原文中的代码示例主要说明两点：Tool 示例强调工具只有描述和执行逻辑，没有决策逻辑；客服 Workflow 示例强调 LLM 可以参与意图分类和回答生成，但分支流转由普通代码决定。</p>
-<p><strong>追问：Workflow 是不是多个 Agent 串联？</strong></p>
-<p><strong>15秒简答：</strong> 不是。Workflow 的节点可以是 LLM、Tools 或 Agent，关键不在节点类型，而在控制流是否由开发者提前写死；多个 Agent 串联只是 Workflow 的一种可能形态。</p>
 <p><strong>追问：Tools 应该怎么设计，LLM 才更容易用好？</strong></p>
 <p><strong>15秒简答：</strong> 好的 Tool 要职责单一、描述精确、参数 schema 清楚、错误信息可理解；因为 LLM 主要靠工具描述判断是否调用，描述含糊会导致误调用或不会用。</p>
 <p><strong>追问：Agent 和 Workflow 最核心的差异是什么？</strong></p>
 <p><strong>15秒简答：</strong> 核心差异是“下一步去哪”由谁决定：Agent 由 LLM 在运行时动态决策，同输入可能走不同路径；Workflow 由开发者在代码里预先定义，路径清晰、行为可预测。</p>
-<p><strong>追问：为什么生产环境更常用 Agentic Workflow？</strong></p>
-<p><strong>15秒简答：</strong> 因为纯 Agent 难控、难调试、成本可能失控，纯 Workflow 又太死板；Agentic Workflow 用确定流程管住主干，在关键节点嵌入 Agent，兼顾可控性、灵活性、成本和调试效率。</p>
 <p><strong>追问：常见 Workflow 编排模式有哪些？</strong></p>
 <p><strong>15秒简答：</strong> 常见模式包括 Prompt Chaining 串联步骤、Routing 按分类分流、Parallelization 并行执行子任务、Orchestrator-Workers 由编排者分配任务，以及 Evaluator-Optimizer 生成后评估再优化；这些模式可混合使用。</p>
 
@@ -463,7 +459,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

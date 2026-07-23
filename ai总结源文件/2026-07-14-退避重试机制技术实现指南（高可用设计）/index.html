@@ -1,0 +1,1015 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+        <meta name="author" content="IT老齐">
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/ai%E6%80%BB%E7%BB%93%E6%BA%90%E6%96%87%E4%BB%B6/2026-07-14-%E9%80%80%E9%81%BF%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0%E6%8C%87%E5%8D%97%EF%BC%88%E9%AB%98%E5%8F%AF%E7%94%A8%E8%AE%BE%E8%AE%A1%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>退避重试机制技术实现指南（高可用设计） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              退避重试机制技术实现指南（高可用设计）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 技术本质与核心痛点
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 核心原理与机制拆解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 核心原理与机制拆解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 重试的前提：只重试“可恢复失败”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 三种退避策略对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Jitter：为什么指数退避还要加随机抖动
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 重试与超时预算必须一起设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 工程落地与实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 工程落地与实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 推荐配置模板
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-javaspring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Java/Spring 落地示例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 必须补齐的工程细节
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 适用边界与权衡
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 适用边界与权衡">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 适用场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 不适用场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Trade-off：重试带来的成本
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 最佳实践与避坑指南
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 设计决策参考
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 一句话落地原则
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">退避重试机制技术实现指南（高可用设计）<a class="headerlink" href="#_1" title="Permanent link">¶</a></h1>
+<h2 id="1">1. 技术本质与核心痛点<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<p><strong>一句话概括：</strong> 退避重试是对“短暂失败”进行有节制的自动恢复，通过延迟、递增等待和随机打散，让客户端在提高成功率的同时不把下游服务压垮。</p>
+<p>它解决的不是“所有失败都自动再来一次”，而是分布式系统里最常见的三类不确定性：</p>
+<ul>
+<li><strong>瞬时故障</strong>：网络抖动、连接重置、临时 DNS 问题、下游短暂过载、服务滚动发布期间的偶发失败。</li>
+<li><strong>未知态</strong>：请求可能已经被下游处理成功，但响应在网络中丢失，上游只能看到超时或失败。</li>
+<li><strong>重试放大效应</strong>：如果大量客户端在同一时间立刻重试，会把原本的小故障放大成下游过载、线程池耗尽、连接池耗尽，最终形成雪崩。</li>
+</ul>
+<p>退避重试的核心目标是：<strong>用可控的额外延迟换取更高的成功概率，同时保护下游恢复窗口</strong>。</p>
+<h2 id="2">2. 核心原理与机制拆解<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<h3 id="21">2.1 重试的前提：只重试“可恢复失败”<a class="headerlink" href="#21" title="Permanent link">¶</a></h3>
+<p>视频中特别强调：不是所有错误都值得重试。密码错误、权限不足这类确定性失败，重试一万次也不会成功。</p>
+<p>工程上可以把错误分成三类：</p>
+<table>
+<thead>
+<tr>
+<th>错误类型</th>
+<th>例子</th>
+<th style="text-align: right;">是否重试</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>确定性业务失败</td>
+<td>密码错误、权限不足、参数非法、余额不足</td>
+<td style="text-align: right;">否</td>
+<td>输入或业务状态不变，重试只会浪费资源</td>
+</tr>
+<tr>
+<td>瞬时技术失败</td>
+<td>网络抖动、连接超时、503、网关短暂不可用</td>
+<td style="text-align: right;">是</td>
+<td>短时间后可能恢复</td>
+</tr>
+<tr>
+<td>结果未知</td>
+<td>调用超时、响应丢失、连接中断但服务端可能已处理</td>
+<td style="text-align: right;">谨慎重试</td>
+<td>必须依赖幂等机制避免重复副作用</td>
+</tr>
+</tbody>
+</table>
+<p>重试不是错误处理的替代品，它只是容错策略的一部分。没有错误分类的重试，本质上是把故障流量重新灌回系统。</p>
+<h3 id="22">2.2 三种退避策略对比<a class="headerlink" href="#22" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>等待时间</th>
+<th>优点</th>
+<th>缺点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>固定退避</td>
+<td><code>delay = fixedDelay</code></td>
+<td>简单、可预测、实现成本低</td>
+<td>高峰期仍以固定速率压下游，容易形成同步重试</td>
+<td>低并发、内部小工具、失败代价低的后台任务</td>
+</tr>
+<tr>
+<td>线性退避</td>
+<td><code>delay = baseDelay * attempt</code></td>
+<td>比固定退避温和，等待时间逐步增加</td>
+<td>降速不够快，下游严重过载时保护不足</td>
+<td>中低并发任务、恢复时间通常较短的场景</td>
+</tr>
+<tr>
+<td>指数退避</td>
+<td><code>delay = baseDelay * 2^(attempt - 1)</code></td>
+<td>降频速度快，能迅速给下游让出恢复时间</td>
+<td>多客户端同算法时可能同频重试，产生“鲸群效应”</td>
+<td>RPC、HTTP 调用、云服务 SDK、消息投递、外部依赖调用</td>
+</tr>
+</tbody>
+</table>
+<p>指数退避的典型序列：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>baseDelay = 1s
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>attempt 1 -&gt; 1s
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>attempt 2 -&gt; 2s
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>attempt 3 -&gt; 4s
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>attempt 4 -&gt; 8s
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>attempt 5 -&gt; 16s
+</span></code></pre></div>
+<p>生产环境通常还会加上最大等待上限，避免等待时间无限增长：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>delay = min(maxDelay, baseDelay * multiplier^(attempt - 1))
+</span></code></pre></div>
+<p>例如：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>baseDelay = 500ms
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>multiplier = 2
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>maxDelay = 30s
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>maxAttempts = 3 或 5
+</span></code></pre></div>
+<h3 id="23-jitter">2.3 Jitter：为什么指数退避还要加随机抖动<a class="headerlink" href="#23-jitter" title="Permanent link">¶</a></h3>
+<p>指数退避解决的是“越失败越慢一点”，但没有解决“大家一起慢”的问题。</p>
+<p>如果成千上万个客户端在同一秒失败，并且都使用同一套指数退避算法，它们会在同一批时间点重新发起请求：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>1s 后一起重试
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>2s 后一起重试
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>4s 后一起重试
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>8s 后一起重试
+</span></code></pre></div>
+<p>这就是视频提到的 <strong>鲸群效应</strong>：请求不是持续平滑地回来，而是一波一波地冲击下游。</p>
+<p><strong>Jitter（随机抖动）</strong> 的作用是在计算出的退避时间附近引入随机性，把同一时刻的重试流量打散。</p>
+<p>常见做法有三种：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>1. 固定比例抖动
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>delay = backoff * random(0.8, 1.2)
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>2. Full Jitter
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>delay = random(0, min(maxDelay, baseDelay * 2^attempt))
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a>
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a>3. Equal Jitter
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a>temp = min(maxDelay, baseDelay * 2^attempt)
+</span><span id="__span-4-9"><a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a>delay = temp / 2 + random(0, temp / 2)
+</span></code></pre></div>
+<p>工程建议：多数在线调用优先使用 <strong>指数退避 + Jitter + 最大上限</strong>。如果没有特殊原因，不要只做裸指数退避。</p>
+<h3 id="24">2.4 重试与超时预算必须一起设计<a class="headerlink" href="#24" title="Permanent link">¶</a></h3>
+<p>重试次数不是越多越好。一次请求的总耗时约等于：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>totalCost =
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>  每次请求超时时间之和
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>  + 每次重试前的等待时间之和
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>  + 排队、连接获取、序列化等额外开销
+</span></code></pre></div>
+<p>如果单次 timeout 是 3 秒，重试 3 次，退避等待是 1s、2s、4s，那么最坏耗时可能接近：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a>3s * 4 次调用 + (1s + 2s + 4s) = 19s
+</span></code></pre></div>
+<p>这会直接拖慢用户请求、占住线程、占住连接池，甚至让上游服务也被拖垮。因此必须先定义总预算，再倒推单次超时和重试次数：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>用户接口总预算：2s
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>下游调用预算：800ms
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>单次 timeout：200ms
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a>最多重试：2 次
+</span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a>退避：50ms -&gt; 100ms，带 jitter
+</span></code></pre></div>
+<h2 id="3">3. 工程落地与实现细节<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<h3 id="31">3.1 推荐配置模板<a class="headerlink" href="#31" title="Permanent link">¶</a></h3>
+<p>通用在线 RPC / HTTP 调用可以从下面的参数起步，再根据 P95/P99 延迟和错误率调优：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th style="text-align: right;">建议起点</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>maxAttempts</code></td>
+<td style="text-align: right;">2-3 次</td>
+<td>包含首次调用时常用 3；用户链路不宜过多</td>
+</tr>
+<tr>
+<td><code>baseDelay</code></td>
+<td style="text-align: right;">50-200ms</td>
+<td>延迟敏感接口取低值，后台任务可更高</td>
+</tr>
+<tr>
+<td><code>multiplier</code></td>
+<td style="text-align: right;">2</td>
+<td>最常见指数增长倍数</td>
+</tr>
+<tr>
+<td><code>maxDelay</code></td>
+<td style="text-align: right;">1-30s</td>
+<td>在线接口通常较小，异步任务可更大</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td style="text-align: right;">小于下游 P99 或调用预算</td>
+<td>必须和总耗时预算一起算</td>
+</tr>
+<tr>
+<td><code>jitterRatio</code></td>
+<td style="text-align: right;">10%-30%</td>
+<td>或直接使用 Full Jitter</td>
+</tr>
+</tbody>
+</table>
+<p>后台任务、消息消费、对账补偿类场景可以接受更长等待，但要配合死信队列或人工处理：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a>maxAttempts = 5-10
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>baseDelay = 1s
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>maxDelay = 5min
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a>失败后进入 DLQ / 异常表 / 告警队列
+</span></code></pre></div>
+<h3 id="32-javaspring">3.2 Java/Spring 落地示例<a class="headerlink" href="#32-javaspring" title="Permanent link">¶</a></h3>
+<p>伪代码层面，一个可靠的重试器至少要包含：错误分类、最大次数、退避、抖动、超时、日志与指标。</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="kd">public</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="nf">executeWithRetry</span><span class="p">(</span><span class="n">Supplier</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">action</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">maxAttempts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">    </span><span class="n">Duration</span><span class="w"> </span><span class="n">baseDelay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Duration</span><span class="p">.</span><span class="na">ofMillis</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+</span><span id="__span-9-4"><a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">    </span><span class="n">Duration</span><span class="w"> </span><span class="n">maxDelay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Duration</span><span class="p">.</span><span class="na">ofSeconds</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span id="__span-9-5"><a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a>
+</span><span id="__span-9-6"><a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">    </span><span class="n">RuntimeException</span><span class="w"> </span><span class="n">lastError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="__span-9-7"><a href="#__codelineno-9-7" id="__codelineno-9-7" name="__codelineno-9-7"></a>
+</span><span id="__span-9-8"><a href="#__codelineno-9-8" id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">attempt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">attempt</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">maxAttempts</span><span class="p">;</span><span class="w"> </span><span class="n">attempt</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-9"><a href="#__codelineno-9-9" id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-10"><a href="#__codelineno-9-10" id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">action</span><span class="p">.</span><span class="na">get</span><span class="p">();</span>
+</span><span id="__span-9-11"><a href="#__codelineno-9-11" id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">RuntimeException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-12"><a href="#__codelineno-9-12" id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isRetryable</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">attempt</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">maxAttempts</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-13"><a href="#__codelineno-9-13" id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+</span><span id="__span-9-14"><a href="#__codelineno-9-14" id="__codelineno-9-14" name="__codelineno-9-14"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-9-15"><a href="#__codelineno-9-15" id="__codelineno-9-15" name="__codelineno-9-15"></a>
+</span><span id="__span-9-16"><a href="#__codelineno-9-16" id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="w">            </span><span class="n">lastError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+</span><span id="__span-9-17"><a href="#__codelineno-9-17" id="__codelineno-9-17" name="__codelineno-9-17"></a><span class="w">            </span><span class="n">Duration</span><span class="w"> </span><span class="n">delay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">computeExponentialBackoffWithJitter</span><span class="p">(</span>
+</span><span id="__span-9-18"><a href="#__codelineno-9-18" id="__codelineno-9-18" name="__codelineno-9-18"></a><span class="w">                    </span><span class="n">baseDelay</span><span class="p">,</span><span class="w"> </span><span class="n">maxDelay</span><span class="p">,</span><span class="w"> </span><span class="n">attempt</span><span class="p">);</span>
+</span><span id="__span-9-19"><a href="#__codelineno-9-19" id="__codelineno-9-19" name="__codelineno-9-19"></a>
+</span><span id="__span-9-20"><a href="#__codelineno-9-20" id="__codelineno-9-20" name="__codelineno-9-20"></a><span class="w">            </span><span class="n">log</span><span class="p">.</span><span class="na">warn</span><span class="p">(</span><span class="s">"retryable call failed, attempt={}, nextDelayMs={}, error={}"</span><span class="p">,</span>
+</span><span id="__span-9-21"><a href="#__codelineno-9-21" id="__codelineno-9-21" name="__codelineno-9-21"></a><span class="w">                    </span><span class="n">attempt</span><span class="p">,</span><span class="w"> </span><span class="n">delay</span><span class="p">.</span><span class="na">toMillis</span><span class="p">(),</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="na">toString</span><span class="p">());</span>
+</span><span id="__span-9-22"><a href="#__codelineno-9-22" id="__codelineno-9-22" name="__codelineno-9-22"></a>
+</span><span id="__span-9-23"><a href="#__codelineno-9-23" id="__codelineno-9-23" name="__codelineno-9-23"></a><span class="w">            </span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">);</span>
+</span><span id="__span-9-24"><a href="#__codelineno-9-24" id="__codelineno-9-24" name="__codelineno-9-24"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-9-25"><a href="#__codelineno-9-25" id="__codelineno-9-25" name="__codelineno-9-25"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-9-26"><a href="#__codelineno-9-26" id="__codelineno-9-26" name="__codelineno-9-26"></a>
+</span><span id="__span-9-27"><a href="#__codelineno-9-27" id="__codelineno-9-27" name="__codelineno-9-27"></a><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">lastError</span><span class="p">;</span>
+</span><span id="__span-9-28"><a href="#__codelineno-9-28" id="__codelineno-9-28" name="__codelineno-9-28"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>核心计算逻辑：</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="kd">private</span><span class="w"> </span><span class="n">Duration</span><span class="w"> </span><span class="nf">computeExponentialBackoffWithJitter</span><span class="p">(</span>
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">        </span><span class="n">Duration</span><span class="w"> </span><span class="n">baseDelay</span><span class="p">,</span><span class="w"> </span><span class="n">Duration</span><span class="w"> </span><span class="n">maxDelay</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">attempt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-3"><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">exponential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">baseDelay</span><span class="p">.</span><span class="na">toMillis</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">1L</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">attempt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+</span><span id="__span-10-4"><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">capped</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="na">min</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">.</span><span class="na">toMillis</span><span class="p">(),</span><span class="w"> </span><span class="n">exponential</span><span class="p">);</span>
+</span><span id="__span-10-5"><a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a>
+</span><span id="__span-10-6"><a href="#__codelineno-10-6" id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">    </span><span class="c1">// Full Jitter: 在 [0, capped] 范围内随机，避免同频重试。</span>
+</span><span id="__span-10-7"><a href="#__codelineno-10-7" id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">jittered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ThreadLocalRandom</span><span class="p">.</span><span class="na">current</span><span class="p">().</span><span class="na">nextLong</span><span class="p">(</span><span class="n">capped</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-10-8"><a href="#__codelineno-10-8" id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Duration</span><span class="p">.</span><span class="na">ofMillis</span><span class="p">(</span><span class="n">jittered</span><span class="p">);</span>
+</span><span id="__span-10-9"><a href="#__codelineno-10-9" id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>实际项目中建议优先使用成熟库，而不是每个业务自己手写一套：</p>
+<ul>
+<li><strong>Resilience4j Retry</strong>：适合 Spring Boot 服务治理，可与 CircuitBreaker、RateLimiter、TimeLimiter 组合。</li>
+<li><strong>Spring Retry</strong>：适合 Spring 生态内的声明式重试，常用于定时任务、远程调用包装。</li>
+<li><strong>客户端 SDK 自带重试</strong>：云服务 SDK、数据库驱动、HTTP 客户端常自带重试能力，使用前要确认默认策略，避免重复叠加。</li>
+</ul>
+<h3 id="33">3.3 必须补齐的工程细节<a class="headerlink" href="#33" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>最大重试次数与最大等待时间</strong></li>
+</ol>
+<p>视频里说的“懂得放手”是生产系统底线。超过上限后应快速失败、降级、入死信队列或触发人工处理，不能无限等待。</p>
+<ol>
+<li><strong>幂等性</strong></li>
+</ol>
+<p>对有副作用的操作，重试必须绑定幂等设计。典型手段包括：</p>
+<ul>
+<li>请求携带 <code>idempotencyKey</code> / <code>requestId</code> / 业务唯一单号。</li>
+<li>服务端建立唯一索引或幂等表，保证同一请求只处理一次。</li>
+<li>状态机更新使用合法状态流转，例如 <code>INIT -&gt; SUCCESS</code>，重复请求直接返回已有结果。</li>
+<li>
+<p>资金、库存、权益发放等场景必须有对账与补偿机制。</p>
+</li>
+<li>
+<p><strong>超时控制</strong></p>
+</li>
+</ul>
+<p>每次调用必须设置连接超时、读超时、整体调用超时。没有超时的重试会变成线程和连接资源泄漏。</p>
+<ol>
+<li><strong>日志与可观测性</strong></li>
+</ol>
+<p>至少记录：</p>
+<ul>
+<li>第几次重试：<code>attempt</code></li>
+<li>最终是否成功：<code>success/failure</code></li>
+<li>失败原因分类：<code>timeout/5xx/network_error/rate_limited</code></li>
+<li>下次等待时间：<code>nextDelayMs</code></li>
+<li>业务请求标识：<code>traceId/requestId/orderId</code></li>
+</ul>
+<p>指标上至少监控：重试次数、最终失败率、重试成功率、重试引入的延迟、下游错误码分布、DLQ 数量。</p>
+<ol>
+<li><strong>避免多层重试叠加</strong></li>
+</ol>
+<p>这是生产里很隐蔽的坑：业务代码重试 3 次，HTTP 客户端重试 3 次，网关再重试 2 次，实际一次用户请求可能打出：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a>3 * 3 * 2 = 18 次下游调用
+</span></code></pre></div>
+<p>重试策略必须在调用链上统一规划，尤其要关注 SDK 默认配置。</p>
+<h2 id="4">4. 适用边界与权衡<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<h3 id="41">4.1 适用场景<a class="headerlink" href="#41" title="Permanent link">¶</a></h3>
+<ul>
+<li>调用外部 HTTP/RPC 服务时遇到短暂网络问题。</li>
+<li>下游返回 <code>429 Too Many Requests</code>、<code>503 Service Unavailable</code>、<code>504 Gateway Timeout</code>，且响应头或协议允许稍后重试。</li>
+<li>消息消费、事件投递、通知发送、异步补偿、对账任务。</li>
+<li>幂等的查询类接口，或已经完成幂等保护的写接口。</li>
+<li>云服务 API、第三方支付查询、物流状态查询等可容忍短暂延迟的外部依赖。</li>
+</ul>
+<h3 id="42">4.2 不适用场景<a class="headerlink" href="#42" title="Permanent link">¶</a></h3>
+<ul>
+<li>参数错误、鉴权失败、权限不足、业务规则不满足，如 <code>400</code>、<code>401</code>、<code>403</code>。</li>
+<li>明确不可恢复的业务失败，如余额不足、库存不足、订单状态非法。</li>
+<li>非幂等写操作且没有幂等键，例如直接扣款、直接发券、直接扣库存。</li>
+<li>用户强交互链路且总延迟预算极短，重试会明显伤害体验。</li>
+<li>下游已经处于持续故障或过载状态，此时应优先熔断、降级、限流，而不是继续重试。</li>
+</ul>
+<h3 id="43-trade-off">4.3 Trade-off：重试带来的成本<a class="headerlink" href="#43-trade-off" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>成本</th>
+<th>表现</th>
+<th>平衡建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>延迟增加</td>
+<td>用户等待时间变长，线程占用更久</td>
+<td>设置总耗时预算，在线链路少重试</td>
+</tr>
+<tr>
+<td>流量放大</td>
+<td>一次失败变多次请求</td>
+<td>加最大次数、Jitter、限流、熔断</td>
+</tr>
+<tr>
+<td>下游压力增加</td>
+<td>故障时反而把下游打得更重</td>
+<td>指数退避、客户端限速、失败快速熔断</td>
+</tr>
+<tr>
+<td>数据重复风险</td>
+<td>扣款、发券、扣库存重复执行</td>
+<td>幂等键、唯一索引、状态机、对账</td>
+</tr>
+<tr>
+<td>系统复杂度上升</td>
+<td>策略配置、日志、监控、告警都要补齐</td>
+<td>用统一组件治理，不散落在业务代码里</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5">5. 最佳实践与避坑指南<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<ol>
+<li><strong>先判断是否值得重试，再决定怎么重试</strong></li>
+</ol>
+<p>没有错误分类的重试是危险的。确定性失败立即返回，瞬时失败才进入退避重试，未知态必须先确认幂等能力。</p>
+<ol>
+<li><strong>默认选择“指数退避 + Jitter + 上限”</strong></li>
+</ol>
+<p>裸固定间隔容易压垮下游，裸指数退避容易同频重试。生产推荐：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a>delay = random(0, min(maxDelay, baseDelay * 2^attempt))
+</span></code></pre></div>
+<ol>
+<li><strong>重试必须和超时预算一起算</strong></li>
+</ol>
+<p>不要只配置 <code>maxAttempts</code>。必须计算最坏耗时是否还在用户链路预算内，否则重试会把一次失败变成一次慢故障。</p>
+<ol>
+<li><strong>所有有副作用的重试都必须幂等</strong></li>
+</ol>
+<p>查询接口通常风险较低，写接口必须有 <code>requestId</code>、唯一约束、状态机或幂等表。涉及资金、库存、权益时，还要有对账和补偿。</p>
+<ol>
+<li><strong>超过上限要有出口</strong></li>
+</ol>
+<p>达到最大重试次数后，不要继续死等。在线请求可以失败返回或降级；异步任务可以进入死信队列、异常表或人工处理流程。</p>
+<ol>
+<li><strong>警惕重试风暴和多层重试</strong></li>
+</ol>
+<p>重试不是孤立配置。要检查业务层、SDK、网关、服务网格、消息队列是否都在重试，避免无意中制造指数级流量放大。</p>
+<h2 id="6">6. 设计决策参考<a class="headerlink" href="#6" title="Permanent link">¶</a></h2>
+<p>做方案评审时，可以用下面这组问题快速判断退避重试是否设计完整：</p>
+<ul>
+<li>这个错误是否真的可恢复？哪些错误码进入重试白名单？</li>
+<li>这次调用是读还是写？如果是写，幂等键是什么？</li>
+<li>单次 timeout 是多少？总耗时预算是多少？</li>
+<li>最大重试次数、最大退避时间是多少？</li>
+<li>是否加入 Jitter？Jitter 的范围或算法是什么？</li>
+<li>下游持续故障时是否有熔断、限流或降级？</li>
+<li>重试失败后进入什么兜底路径：报错、降级、DLQ、补偿任务、人工处理？</li>
+<li>是否有日志、指标和告警能看见重试风暴？</li>
+</ul>
+<h2 id="7">7. 一句话落地原则<a class="headerlink" href="#7" title="Permanent link">¶</a></h2>
+<p><strong>退避重试不是“失败了再试一次”，而是围绕短暂故障、下游保护、幂等正确性和可观测性设计的一整套可靠性机制。</strong></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

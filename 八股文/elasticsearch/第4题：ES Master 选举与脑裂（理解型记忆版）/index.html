@@ -1,0 +1,670 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87/elasticsearch/%E7%AC%AC4%E9%A2%98%EF%BC%9AES%20Master%20%E9%80%89%E4%B8%BE%E4%B8%8E%E8%84%91%E8%A3%82%EF%BC%88%E7%90%86%E8%A7%A3%E5%9E%8B%E8%AE%B0%E5%BF%86%E7%89%88%EF%BC%89/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>第4题：ES Master 选举与脑裂（理解型记忆版） - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第4题：ES Master 选举与脑裂（理解型记忆版）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        题目
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一句话记忆
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        节点角色怎么记
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        选举流程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        脑裂是什么
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        脑裂常见诱因
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多数派为什么能防脑裂
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本差异怎么答
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生产实践
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        脑裂后的排查思路
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        面试回答模板
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        可能追问
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>第4题：ES Master 选举与脑裂（理解型记忆版）</h1>
+
+<h2 id="_1">题目<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>ES 集群有哪些节点角色？Master（集群管理器）如何选举、如何避免脑裂？</p>
+<h2 id="_2">一句话记忆<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>ES 集群可以按“管集群、存数据、接请求、做预处理”理解；Master 负责控制面，不负责承载全部数据。选主靠 master-eligible 节点多数派投票，超过法定票数才允许产生 Master；多数派的目的，是让任意网络分区里最多只有一边能当选，从而避免脑裂。</p>
+<h2 id="_3">节点角色怎么记<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<ul>
+<li>master-eligible：有参选资格，负责选举 Master；当选后维护 cluster state、索引元数据、节点加入/离开和分片分配。</li>
+<li>data：保存主分片/副本分片，执行写入、查询、聚合等数据面任务。</li>
+<li>ingest：用来在文档真正写入索引之前，先做一层数据预处理。比如 用grok拆出ip，接口，状态码、补充/改写字段、删除无用字段、做geoip解析将ip转成地理位置信息等预处理。</li>
+<li>coordinating-only：自己不存数据、不当 Master，只接收请求、路由到相关分片，再汇总结果。</li>
+</ul>
+<p>理解方式：Master 管的是“集群该长什么样”，data 节点干的是“数据怎么读写查”。所以生产里经常把 Master 节点做成专用节点，避免它被大查询、大写入拖慢。</p>
+<h2 id="_4">选举流程<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p>选主可以理解成“先发现同伴，再凑够票，再确认唯一主”。</p>
+<p>当 Master 不可达、节点启动加入集群，或者网络分区导致部分节点看不到当前 Master 时，master-eligible 节点会进入选举。候选节点需要拿到多数派投票，也就是 quorum，一般按 <code>floor(N / 2) + 1</code> 理解，<code>N</code> 是有投票资格的 master-eligible 节点数。只有凑够法定票数，新的 Master 才能发布集群状态；凑不够的一边即使怀疑原 Master 挂了，也不能自立为王。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>flowchart TD
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    A[节点启动 / Master 不可达 / 网络分区] --&gt; B[发现 master-eligible 节点]
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>    B --&gt; C[形成候选节点并发起投票]
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>    C --&gt; D{获得多数派票数?}
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>    D -- 否 --&gt; E[不产生 Master\n集群保持不可用或只读等待恢复]
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>    D -- 是 --&gt; F[候选节点当选 Master]
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>    F --&gt; G[发布新的 cluster state]
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>    G --&gt; H[其他节点确认并跟随该 Master]
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>    H --&gt; I[分片分配、节点管理、元数据变更继续执行]
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>    E --&gt; J[等待节点恢复 / 网络恢复 / 重新选举]
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>    J --&gt; B
+</span></code></pre></div>
+<h2 id="_5">脑裂是什么<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<p>脑裂就是同一个集群因为网络故障被切成多块，每一块都以为自己可以产生 Master，最后出现“多主”或“无主”的状态。</p>
+<p>举个极简例子：原来左边是 Master，右边是普通节点。网络断开后，右边联系不上 Master，它可能会怀疑 Master 挂了，于是尝试把自己选成 Master。如果没有多数派约束，等网络恢复时，两边都认为自己是 Master，就会出现集群状态分叉。</p>
+<p>所以 ES 防脑裂的思路不是保证任何网络故障下都能继续写入，而是保证任何时候最多只有一个合法 Master。少数派分区会牺牲可用性，换取集群状态的一致性；也就是宁可短暂不可写，也不能让两个分区各自写出两套状态。</p>
+<p>脑裂不一定只来自“机器真的挂了”。很多时候是节点之间短时间互相看不见：可能是网络分区，也可能是 Master 因为负载过高、JVM Full GC、磁盘或 CPU 压力太大，导致心跳和集群状态发布超时。其他节点看到 Master 长时间没有响应，就可能误判 Master 已经不可用，从而触发重新选举。</p>
+<p>脑裂的风险包括：</p>
+<ul>
+<li>集群状态分叉：不同节点看到的索引、分片路由、元数据不一致。</li>
+<li>写入异常：请求可能被不同 Master 下的分片路由接收。</li>
+<li>数据不一致：严重时出现重复写、错路由、恢复困难等问题。</li>
+<li>集群不可用：如果没有任何分区能拿到多数派，集群可能进入无主状态，部分写入和管理操作无法继续。</li>
+</ul>
+<h2 id="_6">脑裂常见诱因<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<ul>
+<li>网络分区或网络抖动：节点之间 ping 不通、延迟突然升高，导致彼此误判失联。</li>
+<li>Master 节点负载过高：Master 被查询、写入、聚合或其他重任务拖慢，无法及时处理心跳和 cluster state。</li>
+<li>JVM Full GC：长时间 Stop-The-World 会让节点“看起来像挂了”，其他节点可能触发选举。</li>
+<li>资源不足：CPU、磁盘 I/O、内存压力过大，会放大心跳超时和状态发布延迟。</li>
+<li>旧版本法定票数配置错误：比如 ES 7.x 以前 <code>discovery.zen.minimum_master_nodes</code> 配得过低，网络分区后多个分区都有机会选出 Master。</li>
+</ul>
+<h2 id="_7">多数派为什么能防脑裂<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<p>多数派的关键不是“票数看起来多”，而是数学上保证“过半集合不可能同时出现两个”。</p>
+<p>如果有 5 个 master-eligible 节点：</p>
+<ul>
+<li>法定票数是 <code>floor(5 / 2) + 1 = 3</code>。</li>
+<li>网络切成 <code>2 + 3</code> 时，只有 3 的那边能选主。</li>
+<li>网络切成 <code>1 + 4</code> 时，只有 4 的那边能选主。</li>
+<li>网络切成 <code>2 + 2 + 1</code> 时，没有任何一边能选主。</li>
+</ul>
+<p>所以无论怎么切，最多只有一个网络分区能满足多数派。凑不够票的一边宁可暂时不可用，也不能产生第二个 Master。</p>
+<p>旧版本里这个多数派要靠 <code>minimum_master_nodes</code> 手动配置。如果有 3 个 master-eligible 节点，至少要 2 票才能选主；如果配置成 1，就可能出现每个小分区都觉得自己能选主的风险。</p>
+<h2 id="_8">版本差异怎么答<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<p>ES 7.x 以前常见配置是：</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">discovery.zen.minimum_master_nodes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</span></code></pre></div>
+<p>它的含义是手动配置最小 Master 投票数，一般按：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>floor(master_eligible_nodes / 2) + 1
+</span></code></pre></div>
+<p>ES 7.x 以后使用新的 cluster coordination，不再手动配置 <code>discovery.zen.minimum_master_nodes</code>。首次启动集群时常见配置是：</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">cluster.initial_master_nodes</span><span class="p">:</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-1</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-2</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-3</span>
+</span></code></pre></div>
+<p>运行期由协调模块维护投票配置和多数派选举。</p>
+<h2 id="_9">生产实践<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<ul>
+<li>推荐部署 3 个专用 master-eligible 节点：能容忍 1 个 Master 节点故障，并保持 2 票多数派。</li>
+<li>Master 节点尽量分散到不同机器或可用区，降低同机/同机房故障影响。</li>
+<li>避免让专用 Master 节点承载重查询、重写入和复杂聚合，控制面稳定比单点性能更重要。</li>
+<li>data、ingest、coordinating 节点根据业务压力拆分，避免所有角色都堆在一类节点上。</li>
+<li>旧版本要正确配置 <code>discovery.zen.minimum_master_nodes</code>，一般设置为 <code>floor(N / 2) + 1</code>。</li>
+<li>网络不稳定时要关注节点发现和故障检测参数，比如 <code>discovery.zen.ping_timeout</code>、<code>discovery.zen.fd.ping_interval</code>、<code>discovery.zen.fd.ping_retries</code>。这些参数不是越大越好，核心是减少误判，同时不要让真实故障恢复太慢。</li>
+<li>关注 Master 节点 JVM 和系统资源，避免频繁 Full GC、CPU 打满、磁盘 I/O 抖动导致 Master 短暂“失联”。</li>
+</ul>
+<h2 id="_10">脑裂后的排查思路<a class="headerlink" href="#_10" title="Permanent link">¶</a></h2>
+<p>如果线上怀疑发生过脑裂或选主异常，可以按这个顺序看：</p>
+<ol>
+<li>先看 <code>_cluster/health</code>，确认是否无主、分片是否大量 unassigned。</li>
+<li>再看 <code>_cat/nodes?v</code>，确认当前谁是 Master，以及节点角色和负载是否异常。</li>
+<li>看 Master 和其他节点日志，重点找 master not discovered、elected-as-master、node-left、node-join、GC overhead 这类信息。</li>
+<li>看 <code>_cluster/state/master_node,routing_table</code>，确认 Master ID 和分片路由是否稳定。</li>
+<li>如果是旧版本，检查 <code>minimum_master_nodes</code> 是否按多数派配置。</li>
+</ol>
+<h2 id="_11">面试回答模板<a class="headerlink" href="#_11" title="Permanent link">¶</a></h2>
+<p>ES 节点角色常见有 master-eligible、data、ingest 和 coordinating-only。master-eligible 节点参与 Master 选举；当选后的 Master 负责 cluster state、索引元数据、节点管理和分片分配。data 节点负责真正的数据读写和查询聚合，ingest 做写入前预处理，coordinating 节点负责请求转发和结果汇总。</p>
+<p>Master 选举靠多数派机制。当现任 Master 不可达或集群发生网络分区时，候选 master-eligible 节点会发起投票，只有获得法定票数，也就是通常理解的 <code>floor(N / 2) + 1</code>，才能成为 Master。这样做是为了避免脑裂，因为过半票在数学上只能被一个分区拿到；拿不到多数派的一边不能产生 Master，只能等待恢复或重新选举。</p>
+<p>脑裂的诱因除了网络分区，还包括 Master 负载过高、JVM Full GC、CPU 或磁盘压力导致的心跳超时。版本上，ES 7.x 以前需要关注 <code>discovery.zen.minimum_master_nodes</code>，通常配置为 master-eligible 节点数过半；7.x 以后由新的集群协调模块自动维护投票配置，不再手动配置这个参数。生产一般建议 3 个专用 master-eligible 节点，并分散部署，同时监控 Master 的 GC、CPU、磁盘 I/O 和网络延迟。</p>
+<h2 id="_12">可能追问<a class="headerlink" href="#_12" title="Permanent link">¶</a></h2>
+<ul>
+<li>Q：为什么推荐 3 个专用 Master 节点？A：3 个能容忍 1 个故障并保持 2 票多数派；专用 Master 不被查询/写入拖慢，控制面更稳。</li>
+<li>Q：脑裂会带来什么后果？A：集群状态分叉，可能出现两个 Master、分片路由混乱、写入异常，严重时造成数据不一致。</li>
+<li>Q：7.x 以后还要配 <code>minimum_master_nodes</code> 吗？A：不用；旧版本需要手动配多数派，7.x+ 由新协调模块自动维护投票配置。</li>
+<li>Q：为什么 Full GC 也可能诱发脑裂？A：Full GC 会让 Master 长时间暂停响应，其他节点可能误以为 Master 挂了，从而触发重新选举。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

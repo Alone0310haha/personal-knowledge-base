@@ -1,0 +1,971 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="笔记与技术文档分享">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87/%E5%BE%AE%E6%9C%8D%E5%8A%A1%26%26%E5%88%86%E5%B8%83%E5%BC%8F/TCC%E5%BC%BA%E4%B8%80%E8%87%B4%E6%80%A7%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>TCC 如何保障强一致性分布式事务 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tcc" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              TCC 如何保障强一致性分布式事务
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        内容属性判断
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 核心架构/流程可视化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 核心主题与背景
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心知识点/解决方案拆解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心知识点/解决方案拆解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-tcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 TCC 的三个阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 三类核心角色
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 金融场景示例：账户系统 + 账务系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-tm-rm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 为什么锁放在 TM，而不是只在 RM 各自加锁
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 所谓“强一致性”不是绝对强一致
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 面试高频考点与追问
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 面试高频考点与追问">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1tcc-2pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题 1：TCC 是什么？和 2PC 有什么区别？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2tcc-try" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题 2：TCC 的 Try 阶段应该做什么？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-tcc-confirm-cancel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题 3：为什么 TCC 的 Confirm 和 Cancel 必须保证幂等？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-tm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题 4：为什么要在 TM 侧加全局分布式锁？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5tcc-redis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题 5：TCC + Redis 锁能否真正保证绝对强一致？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 亮点、坑点与最佳实践
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 亮点、坑点与最佳实践">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        亮点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        坑点与局限性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        最佳实践
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 总结与升华
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-xa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 为什么这个场景不优先使用 XA 模式？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 为什么这个场景不优先使用 XA 模式？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-xa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 XA 锁持有时间长，容易拖垮热点资源
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-xa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 XA 性能开销大，不适合高并发核心链路
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-xa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 XA 对资源类型要求高
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-xa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 XA 缺少业务语义表达能力
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-xa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 XA 故障恢复容易阻塞
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 面试总结话术
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tcc">TCC 如何保障强一致性分布式事务<a class="headerlink" href="#tcc" title="Permanent link">¶</a></h1>
+<h2 id="_1">内容属性判断<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>该视频属于 <strong>分布式事务底层原理 + 金融业务场景实战讲解</strong>。它不是单纯介绍 TCC 概念，而是以账户系统、账务系统拆分后的金融交易为背景，讨论如何通过 <strong>TCC 三阶段、事务协调器、资源管理器、全局分布式锁、数据库兜底锁、重试与人工补偿</strong> 来尽可能保障所谓的“强一致性”。</p>
+<h2 id="1">1. 核心架构/流程可视化<a class="headerlink" href="#1" title="Permanent link">¶</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>sequenceDiagram
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    autonumber
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>    participant Client as 业务请求
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>    participant TM as TM 事务管理器
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>    participant Redis as Redis 分布式锁
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>    participant TC as TC 事务协调器
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>    participant AccountRM as 账户 RM
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>    participant LedgerRM as 账务 RM
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>    participant DB as 业务数据库
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>    Client-&gt;&gt;TM: 发起转账/扣款等全局事务
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>    TM-&gt;&gt;Redis: 按 accountId 获取全局锁
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a>    alt 获取锁成功
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a>        TM-&gt;&gt;TC: 开启全局事务
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a>        TC-&gt;&gt;AccountRM: Try 预留账户资源
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a>        AccountRM-&gt;&gt;DB: 冻结金额/预扣减/状态处理中
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a>        TC-&gt;&gt;LedgerRM: Try 预写账务流水
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a>        LedgerRM-&gt;&gt;DB: 写入处理中流水
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a>        alt 所有 Try 成功
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a>            TC-&gt;&gt;AccountRM: Confirm
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a>            AccountRM-&gt;&gt;DB: 扣减真实余额/释放冻结金额
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a>            TC-&gt;&gt;LedgerRM: Confirm
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a>            LedgerRM-&gt;&gt;DB: 流水状态改为成功
+</span><span id="__span-0-24"><a href="#__codelineno-0-24" id="__codelineno-0-24" name="__codelineno-0-24"></a>        else 任一 Try 失败
+</span><span id="__span-0-25"><a href="#__codelineno-0-25" id="__codelineno-0-25" name="__codelineno-0-25"></a>            TC-&gt;&gt;AccountRM: Cancel
+</span><span id="__span-0-26"><a href="#__codelineno-0-26" id="__codelineno-0-26" name="__codelineno-0-26"></a>            AccountRM-&gt;&gt;DB: 释放冻结金额/回滚预留
+</span><span id="__span-0-27"><a href="#__codelineno-0-27" id="__codelineno-0-27" name="__codelineno-0-27"></a>            TC-&gt;&gt;LedgerRM: Cancel
+</span><span id="__span-0-28"><a href="#__codelineno-0-28" id="__codelineno-0-28" name="__codelineno-0-28"></a>            LedgerRM-&gt;&gt;DB: 流水状态改为取消
+</span><span id="__span-0-29"><a href="#__codelineno-0-29" id="__codelineno-0-29" name="__codelineno-0-29"></a>        end
+</span><span id="__span-0-30"><a href="#__codelineno-0-30" id="__codelineno-0-30" name="__codelineno-0-30"></a>        TC--&gt;&gt;TM: 返回全局事务结果
+</span><span id="__span-0-31"><a href="#__codelineno-0-31" id="__codelineno-0-31" name="__codelineno-0-31"></a>        TM-&gt;&gt;Redis: 释放全局锁
+</span><span id="__span-0-32"><a href="#__codelineno-0-32" id="__codelineno-0-32" name="__codelineno-0-32"></a>    else 获取锁失败
+</span><span id="__span-0-33"><a href="#__codelineno-0-33" id="__codelineno-0-33" name="__codelineno-0-33"></a>        TM--&gt;&gt;Client: 等待/重试/失败返回
+</span><span id="__span-0-34"><a href="#__codelineno-0-34" id="__codelineno-0-34" name="__codelineno-0-34"></a>    end
+</span></code></pre></div>
+<p>关键路径说明：TM 在进入 TCC 全局事务前，先按业务主键如 <code>accountId</code> 获取全局锁，把同一账户上的并发操作压成串行；TC 负责调度各个 RM 的 <code>Try / Confirm / Cancel</code>；RM 负责真正的业务资源预留、提交或回滚。</p>
+<h2 id="2">2. 核心主题与背景<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<p>一句话概括：<strong>在金融、合规等对数据一致性要求极高的场景中，可以用 TCC 分布式事务配合全局分布式锁，将跨服务、跨数据库操作的不一致窗口尽量压缩到可控范围。</strong></p>
+<p>它处在微服务架构中的 <strong>分布式事务治理</strong> 位置。单体系统中，一个本地数据库事务通常就能保证账户余额、账务流水等数据同时成功或失败；但系统拆分成账户服务、账务服务后，数据分散在不同服务和数据库中，单个本地事务无法覆盖完整链路，于是会出现“余额扣了但流水没写”“流水成功但账户没变”等问题。</p>
+<p>该方案解决的核心痛点是：</p>
+<ul>
+<li>跨应用、跨数据库的一致性问题。</li>
+<li>同一账户并发交易导致的数据竞争问题。</li>
+<li>TCC 二阶段中部分成功、部分失败时的补偿问题。</li>
+<li>金融场景下“宁可牺牲吞吐，也要控制一致性风险”的架构取舍问题。</li>
+</ul>
+<h2 id="3">3. 核心知识点/解决方案拆解<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<h3 id="31-tcc">3.1 TCC 的三个阶段<a class="headerlink" href="#31-tcc" title="Permanent link">¶</a></h3>
+<p>TCC 是 <code>Try / Confirm / Cancel</code> 的缩写，本质上是把一个完整业务动作拆成三个可控阶段。</p>
+<ul>
+<li><code>Try</code>：尝试执行业务，重点不是最终提交，而是 <strong>检查条件 + 预留资源</strong>。例如账户余额 1000 元，转账 100 元时，Try 阶段不直接扣真实余额，而是冻结 100 元或把可用余额预扣到 900 元。</li>
+<li><code>Confirm</code>：确认提交业务，表示所有参与方的 Try 都成功后，真正完成业务变更。例如扣减真实余额、流水状态改为成功。</li>
+<li><code>Cancel</code>：取消业务，表示 Try 阶段有参与方失败，或者全局事务要回滚，需要释放冻结资源、恢复业务状态。</li>
+</ul>
+<p>面试里要注意：TCC 不是数据库自动帮你回滚，它要求业务方自己设计三套接口和补偿逻辑，因此侵入性强，但控制力也强。</p>
+<h3 id="32">3.2 三类核心角色<a class="headerlink" href="#32" title="Permanent link">¶</a></h3>
+<ul>
+<li><code>TM</code>，Transaction Manager，事务管理器，也就是全局事务的发起方。它决定一笔全局事务什么时候开始、成功或失败。</li>
+<li><code>TC</code>，Transaction Coordinator，事务协调器，例如 Seata Server 一类组件。它负责记录全局事务状态，并通知各个参与者执行 Confirm 或 Cancel。</li>
+<li><code>RM</code>，Resource Manager，资源管理器，也就是具体业务服务，例如账户服务、账务服务。它负责实现 Try、Confirm、Cancel 三个接口。</li>
+</ul>
+<p>可以用大白话理解：</p>
+<ul>
+<li>TM 是“发起交易的人”。</li>
+<li>TC 是“调度和记账的总指挥”。</li>
+<li>RM 是“真正干活的业务系统”。</li>
+</ul>
+<h3 id="33">3.3 金融场景示例：账户系统 + 账务系统<a class="headerlink" href="#33" title="Permanent link">¶</a></h3>
+<p>视频中的典型场景是银行类系统拆分：</p>
+<ul>
+<li>账户系统：维护账户余额、冻结金额、可用余额等核心账户信息。</li>
+<li>账务系统：维护会计分录、交易流水、记账状态等数据。</li>
+</ul>
+<p>转账或扣款时，两个系统必须保持一致。否则就可能出现：</p>
+<ul>
+<li>账户余额已扣，但账务流水没有成功。</li>
+<li>账务流水成功，但账户余额没有扣。</li>
+<li>多个交易同时修改同一账户，导致余额覆盖或重复扣减。</li>
+</ul>
+<p>因此方案设计为：</p>
+<ol>
+<li>TM 收到交易请求。</li>
+<li>TM 先基于账户维度获取 Redis 分布式锁，如 <code>lock:global:transfer:{accountId}</code>。</li>
+<li>获取锁成功后，TM 进入 TCC 全局事务。</li>
+<li>TC 通知账户 RM 执行 Try：冻结或预扣金额。</li>
+<li>TC 通知账务 RM 执行 Try：写入处理中流水。</li>
+<li>所有 Try 成功后，TC 发起 Confirm：账户真实扣减，流水改成功。</li>
+<li>任一 Try 失败后，TC 发起 Cancel：释放冻结金额，流水改取消。</li>
+<li>Confirm 或 Cancel 完成后，TM 释放全局锁。</li>
+</ol>
+<h3 id="34-tm-rm">3.4 为什么锁放在 TM，而不是只在 RM 各自加锁<a class="headerlink" href="#34-tm-rm" title="Permanent link">¶</a></h3>
+<p>视频强调：为了强一致性，核心思路是先在 TM 侧获取一把全局锁，把并行请求变成串行请求。</p>
+<p>原因主要有三个：</p>
+<ol>
+<li>
+<p><strong>全局入口更容易统一规则</strong><br/>
+   同一账户的所有转账请求都必须先经过 TM 的锁。只要锁粒度设计成 <code>accountId</code>，就可以做到同一账户串行，不同账户并行。</p>
+</li>
+<li>
+<p><strong>避免多个 RM 各自加锁引发死锁</strong><br/>
+   如果账户 RM 和账务 RM 分别加锁，不同事务的加锁顺序不一致，就可能出现事务 A 锁账户等账务，事务 B 锁账务等账户，最终互相等待。</p>
+</li>
+<li>
+<p><strong>减少悬挂和半冻结风险</strong><br/>
+   如果一个 RM 已经冻结资源，另一个 RM 加锁失败或调用失败，就需要 Cancel 回滚。若 Cancel 指令丢失或服务宕机，可能导致资金长期冻结。入口锁可以提前挡掉一部分竞争，降低后续补偿压力。</p>
+</li>
+</ol>
+<h3 id="35">3.5 所谓“强一致性”不是绝对强一致<a class="headerlink" href="#35" title="Permanent link">¶</a></h3>
+<p>视频里一个很重要的观点是：这里的“强一致性”要加引号。TCC + 分布式锁并不能在所有极端情况下 100% 消灭不一致，只是将不一致窗口缩小到业务可接受范围。</p>
+<p>典型风险包括：</p>
+<ul>
+<li>Redis 锁超时自动释放，但后续 RM 还没执行完，新的交易进来导致并发写。</li>
+<li>Confirm 阶段一个 RM 成功，另一个 RM 因网络、宕机、超时没有收到命令，TC 只能不断重试。</li>
+<li>两个 RM 的 Confirm 执行耗时不同，中间存在毫秒级不一致窗口。</li>
+<li>其他业务入口绕过了 TM 全局锁，直接修改 RM 数据，导致锁旁路。</li>
+</ul>
+<p>因此生产方案不能只依赖“加一把 Redis 锁”，还需要数据库行锁、幂等、空回滚、防悬挂、重试告警、人工补偿等兜底机制。</p>
+<h2 id="4">4. 面试高频考点与追问<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<h3 id="1tcc-2pc">问题 1：TCC 是什么？和 2PC 有什么区别？<a class="headerlink" href="#1tcc-2pc" title="Permanent link">¶</a></h3>
+<p>参考回答：</p>
+<p>TCC 是 Try、Confirm、Cancel 三阶段的业务型分布式事务方案。Try 阶段预留资源，Confirm 阶段真正提交，Cancel 阶段释放资源或补偿回滚。它和传统 2PC 的区别是，2PC 偏数据库资源层，由事务管理器协调 prepare 和 commit；TCC 偏业务层，需要业务方自己实现三个接口，侵入性更强，但对复杂业务资源的控制能力更强。</p>
+<p>关键词：业务补偿、资源预留、侵入性、最终确认、可控性。</p>
+<h3 id="2tcc-try">问题 2：TCC 的 Try 阶段应该做什么？<a class="headerlink" href="#2tcc-try" title="Permanent link">¶</a></h3>
+<p>参考回答：</p>
+<p>Try 阶段主要做三件事：业务校验、资源预留、状态记录。以账户扣款为例，Try 不应该直接扣真实余额，而应检查余额是否足够，并冻结金额或预扣可用余额，同时记录事务状态为处理中。这样 Confirm 可以基于预留资源完成真实提交，Cancel 可以释放资源恢复状态。</p>
+<p>关键词：校验、冻结、预扣、处理中状态、避免直接提交。</p>
+<h3 id="3-tcc-confirm-cancel">问题 3：为什么 TCC 的 Confirm 和 Cancel 必须保证幂等？<a class="headerlink" href="#3-tcc-confirm-cancel" title="Permanent link">¶</a></h3>
+<p>参考回答：</p>
+<p>因为 TC 在网络超时、服务宕机、响应丢失等情况下，可能重复发送 Confirm 或 Cancel。如果接口不幂等，多次 Confirm 可能重复扣款，多次 Cancel 可能重复释放冻结金额。通常要用全局事务 ID、分支事务 ID、状态机和唯一约束来判断该事务是否已经处理过。</p>
+<p>关键词：重试、重复通知、全局事务 ID、状态机、唯一约束。</p>
+<h3 id="4-tm">问题 4：为什么要在 TM 侧加全局分布式锁？<a class="headerlink" href="#4-tm" title="Permanent link">¶</a></h3>
+<p>参考回答：</p>
+<p>因为金融类场景对同一账户的并发修改非常敏感。TM 侧按账户维度加锁，可以在全局事务开始前把同一账户的并发请求转成串行，降低多个 RM 内部分别加锁带来的死锁、悬挂和局部成功风险。锁粒度一般不能是全局业务锁，而应该按账户、订单、合同等业务主键细化。</p>
+<p>关键词：并行转串行、锁粒度、避免死锁、同账户串行、不同账户并行。</p>
+<h3 id="5tcc-redis">问题 5：TCC + Redis 锁能否真正保证绝对强一致？<a class="headerlink" href="#5tcc-redis" title="Permanent link">¶</a></h3>
+<p>参考回答：</p>
+<p>不能。它只能尽量缩小不一致窗口。比如 Redis 锁过期提前释放、Confirm 阶段部分成功、网络分区、服务宕机、其他业务绕过锁入口，都可能导致短暂甚至长期不一致。因此还要配合数据库行锁、事务状态表、幂等控制、TC 重试、告警和人工补偿，才能形成生产级闭环。</p>
+<p>关键词：不一致窗口、锁超时、部分提交、CAP、补偿闭环。</p>
+<h2 id="5">5. 亮点、坑点与最佳实践<a class="headerlink" href="#5" title="Permanent link">¶</a></h2>
+<h3 id="_2">亮点<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>一致性控制更强</strong>：相比异步消息最终一致性，TCC 能在业务执行链路中显式控制资源预留、提交和回滚。</li>
+<li><strong>适合金融核心链路</strong>：账户、账务、交易、清结算等场景通常更愿意牺牲部分性能，换取更强的数据确定性。</li>
+<li><strong>锁粒度可业务化</strong>：按 <code>accountId</code> 加锁，可以做到同一账户串行，不同账户仍然并行。</li>
+<li><strong>异常处理可审计</strong>：通过事务状态、流水状态、冻结金额等字段，可以追踪每笔交易处于 Try、Confirm、Cancel 的哪个阶段。</li>
+</ul>
+<h3 id="_3">坑点与局限性<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>性能下降</strong>：同一业务主键上的请求会从并行变串行，高热点账户容易成为瓶颈。</li>
+<li><strong>Redis 锁不是万能锁</strong>：锁超时时间过短会提前释放，过长又会影响吞吐；网络抖动和客户端暂停也可能造成锁语义失效。</li>
+<li><strong>Confirm 部分成功很难彻底避免</strong>：一个 RM 成功，另一个 RM 挂掉，只能依靠重试和补偿，不存在魔法般的瞬间全局原子性。</li>
+<li><strong>业务侵入性强</strong>：每个 RM 都要设计 Try、Confirm、Cancel，还要处理幂等、空回滚、防悬挂。</li>
+<li><strong>锁旁路风险高</strong>：只要有其他入口绕过 TM 或不遵守同一套锁规则，整个一致性假设就会被破坏。</li>
+</ul>
+<h3 id="_4">最佳实践<a class="headerlink" href="#_4" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>锁粒度按业务主键设计</strong>：例如 <code>lock:transfer:{accountId}</code>，避免所有交易共用一把大锁。</li>
+<li><strong>锁超时时间要覆盖 P99 执行耗时</strong>：同时配合看门狗续期或明确的超时中断策略。</li>
+<li><strong>Try 阶段使用数据库兜底锁</strong>：核心账户行可配合 <code>select ... for update</code> 或乐观锁版本号，防止 Redis 锁失效后数据被并发破坏。</li>
+<li><strong>Confirm 和 Cancel 必须幂等</strong>：用事务状态表、唯一索引、状态机流转控制重复请求。</li>
+<li><strong>处理空回滚和防悬挂</strong>：Cancel 到达时，如果 Try 没执行过，要记录空回滚标记；Try 后到时发现已 Cancel，必须拒绝继续预留资源。</li>
+<li><strong>建立告警和人工补偿机制</strong>：TC 重试次数过多、事务长时间处理中、冻结金额长时间未释放，都要告警并进入人工处理流程。</li>
+<li><strong>统一业务入口</strong>：所有会修改同一资源的业务，如转账、退款、调账、冲正，都必须遵守同一套锁和事务规则。</li>
+</ul>
+<h2 id="6">6. 总结与升华<a class="headerlink" href="#6" title="Permanent link">¶</a></h2>
+<p>面试中可以这样概括：</p>
+<blockquote>
+<p>TCC 解决的不是“让分布式系统拥有单机事务一样的绝对原子性”，而是通过业务资源预留、全局事务协调、细粒度分布式锁、幂等补偿和人工兜底，把跨服务事务的不一致窗口压缩到业务可接受范围。</p>
+</blockquote>
+<h2 id="7-xa">7. 为什么这个场景不优先使用 XA 模式？<a class="headerlink" href="#7-xa" title="Permanent link">¶</a></h2>
+<p>严格来说，这个场景不是“不能用 XA”，而是 <strong>XA 通常不适合作为金融微服务核心交易链路的首选方案</strong>。</p>
+<p>XA 是数据库层面的二阶段提交协议，它依赖支持 XA 的资源管理器，由事务协调器统一执行 <code>prepare -&gt; commit/rollback</code>。它的优势是协议层强一致，但在账户、账务这类微服务场景中，问题也很明显。</p>
+<h3 id="71-xa">7.1 XA 锁持有时间长，容易拖垮热点资源<a class="headerlink" href="#71-xa" title="Permanent link">¶</a></h3>
+<p>XA 在一阶段 <code>prepare</code> 之后，数据库通常会继续持有相关行锁或事务资源，直到二阶段 <code>commit</code> 或 <code>rollback</code> 完成。</p>
+<p>如果链路中存在网络抖动、服务超时、协调器异常，账户热点行就可能长时间被锁住。金融系统中同一账户、商户账户、平台中间户都可能是热点资源，长事务锁会明显降低吞吐，甚至造成请求堆积。</p>
+<h3 id="72-xa">7.2 XA 性能开销大，不适合高并发核心链路<a class="headerlink" href="#72-xa" title="Permanent link">¶</a></h3>
+<p>XA 是同步阻塞式协议，参与者越多，整体延迟越高。账户系统、账务系统、订单系统、支付系统一旦都被纳入 XA，全局事务会把多个本地事务绑定成一个长链路。</p>
+<p>而 TCC 可以在业务维度做更细粒度的控制，例如按 <code>accountId</code> 串行化同一账户请求，不同账户之间仍然可以并行处理。</p>
+<h3 id="73-xa">7.3 XA 对资源类型要求高<a class="headerlink" href="#73-xa" title="Permanent link">¶</a></h3>
+<p>XA 主要适合数据库这类支持 XA 协议的资源。但真实微服务链路中，参与方可能包括：</p>
+<ul>
+<li>MySQL、Oracle 等数据库。</li>
+<li>Redis 缓存或分布式锁。</li>
+<li>MQ 消息系统。</li>
+<li>第三方支付、风控、清结算系统。</li>
+<li>积分、优惠券、库存等业务服务。</li>
+</ul>
+<p>这些资源不一定都支持 XA。即使部分支持，也很难保证整条链路都能纳入同一个 XA 全局事务。</p>
+<h3 id="74-xa">7.4 XA 缺少业务语义表达能力<a class="headerlink" href="#74-xa" title="Permanent link">¶</a></h3>
+<p>XA 只能表达数据库事务层面的提交和回滚，但它不理解业务上的：</p>
+<ul>
+<li>冻结金额。</li>
+<li>释放冻结金额。</li>
+<li>账务流水处理中。</li>
+<li>库存预占。</li>
+<li>优惠券锁定。</li>
+<li>积分核销。</li>
+</ul>
+<p>而金融场景通常不希望 Try 阶段直接扣真实余额，而是希望先冻结资金，再根据全局事务结果确认扣款或释放冻结。这个“冻结 - 确认 - 释放”的过程是业务语义，TCC 更适合表达。</p>
+<h3 id="75-xa">7.5 XA 故障恢复容易阻塞<a class="headerlink" href="#75-xa" title="Permanent link">¶</a></h3>
+<p>XA 的典型问题是二阶段期间的阻塞风险。如果协调者故障，参与者可能处于不确定状态，只能等待协调者恢复后继续提交或回滚。</p>
+<p>TCC 同样需要处理异常，但它可以通过业务状态表、幂等控制、空回滚、防悬挂、重试告警和人工补偿来形成业务闭环。换句话说，TCC 把不可避免的分布式异常显式暴露给业务系统处理，而不是完全压在数据库协议层。</p>
+<h3 id="76">7.6 面试总结话术<a class="headerlink" href="#76" title="Permanent link">¶</a></h3>
+<p>可以这样回答：</p>
+<blockquote>
+<p>这个场景不是不能用 XA，而是 XA 把一致性压在数据库协议层，强一致但重阻塞、低吞吐、资源要求高；账户、账务这类金融微服务更需要业务层的资源冻结、幂等补偿和异常兜底，所以通常选择 TCC 来用业务语义控制一致性窗口。</p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

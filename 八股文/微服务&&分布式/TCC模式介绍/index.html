@@ -1,0 +1,746 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="TCC 分布式事务模式介绍，说明 TCC 是什么、核心流程、适用场景、优缺点与落地注意事项。">
+      
+      
+      
+        <link rel="canonical" href="https://Alone0310haha.github.io/personal-knowledge-base/%E5%85%AB%E8%82%A1%E6%96%87/%E5%BE%AE%E6%9C%8D%E5%8A%A1%26%26%E5%88%86%E5%B8%83%E5%BC%8F/TCC%E6%A8%A1%E5%BC%8F%E4%BB%8B%E7%BB%8D/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>TCC 模式介绍 - Alone的知识库</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tcc" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Alone的知识库" class="md-header__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Alone的知识库
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              TCC 模式介绍
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prometheus
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Alone的知识库" class="md-nav__button md-logo" aria-label="Alone的知识库" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Alone的知识库
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../prometheus-tech/Prometheus教程目录.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-tcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. TCC 是什么？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-tcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. TCC 核心流程图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-tcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. TCC 适合哪些使用场景？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. TCC 适合哪些使用场景？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 金融交易
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 库存扣减
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 优惠券、积分、权益核销
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 跨服务核心业务链路
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-tcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. TCC 不适合哪些场景？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-tcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. TCC 的优点
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-tcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. TCC 的缺点
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 落地注意事项
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 落地注意事项">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-confirm-cancel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Confirm 和 Cancel 必须幂等
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 要处理空回滚
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 要处理悬挂问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-try" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Try 阶段只做资源预留
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 必须有监控和补偿机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 一句话总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tcc">TCC 模式介绍<a class="headerlink" href="#tcc" title="Permanent link">¶</a></h1>
+<h2 id="1-tcc">1. TCC 是什么？<a class="headerlink" href="#1-tcc" title="Permanent link">¶</a></h2>
+<p>TCC 是一种常见的 <strong>分布式事务解决方案</strong>，全称是：</p>
+<ul>
+<li><code>Try</code>：尝试执行业务，完成业务校验和资源预留。</li>
+<li><code>Confirm</code>：确认执行业务，在 Try 成功后真正提交。</li>
+<li><code>Cancel</code>：取消执行业务，在 Try 失败或全局事务失败时回滚预留资源。</li>
+</ul>
+<p>简单理解：TCC 不是依赖数据库自动回滚，而是把一次完整的业务操作拆成三个业务接口，由业务系统自己控制“先冻结、再确认、失败释放”。</p>
+<p>例如账户扣款 100 元：</p>
+<ul>
+<li>Try：检查余额是否足够，并冻结 100 元。</li>
+<li>Confirm：真正扣减 100 元，并释放冻结记录。</li>
+<li>Cancel：取消冻结，把 100 元恢复为可用余额。</li>
+</ul>
+<h2 id="2-tcc">2. TCC 核心流程图<a class="headerlink" href="#2-tcc" title="Permanent link">¶</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>sequenceDiagram
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    autonumber
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>    participant Client as 业务请求
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>    participant TM as TM 事务发起方
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>    participant TC as TC 事务协调器
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>    participant A as 服务A/RM
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>    participant B as 服务B/RM
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>    Client-&gt;&gt;TM: 发起全局业务操作
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>    TM-&gt;&gt;TC: 开启全局事务
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>    TC-&gt;&gt;A: Try 预留资源
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>    A--&gt;&gt;TC: Try 成功
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a>    TC-&gt;&gt;B: Try 预留资源
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a>    B--&gt;&gt;TC: Try 成功/失败
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a>    alt 所有 Try 都成功
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a>        TC-&gt;&gt;A: Confirm 提交
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a>        TC-&gt;&gt;B: Confirm 提交
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a>        TC--&gt;&gt;TM: 全局事务成功
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a>        TM--&gt;&gt;Client: 返回成功
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a>    else 任一 Try 失败
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a>        TC-&gt;&gt;A: Cancel 回滚
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a>        TC-&gt;&gt;B: Cancel 回滚
+</span><span id="__span-0-24"><a href="#__codelineno-0-24" id="__codelineno-0-24" name="__codelineno-0-24"></a>        TC--&gt;&gt;TM: 全局事务失败
+</span><span id="__span-0-25"><a href="#__codelineno-0-25" id="__codelineno-0-25" name="__codelineno-0-25"></a>        TM--&gt;&gt;Client: 返回失败
+</span><span id="__span-0-26"><a href="#__codelineno-0-26" id="__codelineno-0-26" name="__codelineno-0-26"></a>    end
+</span></code></pre></div>
+<p>关键点：TCC 的核心不是“自动事务”，而是 <strong>业务层面的资源预留与补偿提交</strong>。</p>
+<h2 id="3-tcc">3. TCC 适合哪些使用场景？<a class="headerlink" href="#3-tcc" title="Permanent link">¶</a></h2>
+<p>TCC 适合对一致性要求高、业务资源可以被明确预留和释放的场景。</p>
+<h3 id="31">3.1 金融交易<a class="headerlink" href="#31" title="Permanent link">¶</a></h3>
+<p>例如转账、扣款、提现、充值、清结算。</p>
+<p>这类场景要求账户余额、账务流水、交易订单尽量保持一致。Try 阶段可以冻结资金，Confirm 阶段真实扣款，Cancel 阶段释放冻结金额。</p>
+<h3 id="32">3.2 库存扣减<a class="headerlink" href="#32" title="Permanent link">¶</a></h3>
+<p>例如电商下单扣库存。</p>
+<p>Try 阶段冻结库存，Confirm 阶段真实扣减库存，Cancel 阶段释放库存。这样可以避免并发下单导致超卖。</p>
+<h3 id="33">3.3 优惠券、积分、权益核销<a class="headerlink" href="#33" title="Permanent link">¶</a></h3>
+<p>例如用户下单时同时使用优惠券和积分。</p>
+<p>Try 阶段锁定优惠券和积分，Confirm 阶段核销，Cancel 阶段恢复可用状态。</p>
+<h3 id="34">3.4 跨服务核心业务链路<a class="headerlink" href="#34" title="Permanent link">¶</a></h3>
+<p>例如订单服务、支付服务、库存服务、会员服务之间需要同时成功或失败。</p>
+<p>TCC 可以把每个服务都设计成一个资源管理器，每个服务分别提供 Try、Confirm、Cancel 接口，由事务协调器统一调度。</p>
+<h2 id="4-tcc">4. TCC 不适合哪些场景？<a class="headerlink" href="#4-tcc" title="Permanent link">¶</a></h2>
+<p>TCC 不适合所有分布式事务问题，尤其不适合下面几类情况：</p>
+<ul>
+<li><strong>业务无法预留资源</strong>：例如某些外部系统只提供一次性提交接口，没有冻结、撤销能力。</li>
+<li><strong>一致性要求不高</strong>：如果业务允许延迟一致，用消息队列、事务消息、补偿任务可能更简单。</li>
+<li><strong>高并发低价值链路</strong>：TCC 接口多、状态多、重试多，成本较高，不适合所有普通业务。</li>
+<li><strong>调用链路太长</strong>：参与者越多，Try、Confirm、Cancel 的组合复杂度越高，失败处理也越难。</li>
+</ul>
+<h2 id="5-tcc">5. TCC 的优点<a class="headerlink" href="#5-tcc" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>一致性控制能力强</strong>：可以明确控制每个服务的提交和回滚逻辑。</li>
+<li><strong>业务语义清晰</strong>：冻结、确认、取消都由业务自己定义，可解释、可审计。</li>
+<li><strong>适合核心交易链路</strong>：尤其适合金融、库存、权益等强约束资源。</li>
+<li><strong>降低长期不一致风险</strong>：相比纯异步补偿，TCC 能在主流程中主动控制事务结果。</li>
+</ul>
+<h2 id="6-tcc">6. TCC 的缺点<a class="headerlink" href="#6-tcc" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>业务侵入性强</strong>：每个参与服务都要实现 Try、Confirm、Cancel 三个接口。</li>
+<li><strong>开发复杂度高</strong>：需要处理幂等、空回滚、防悬挂、超时、重试、告警等问题。</li>
+<li><strong>性能有损耗</strong>：一次业务会拆成多阶段调用，链路更长，延迟更高。</li>
+<li><strong>不是绝对强一致</strong>：网络分区、服务宕机、部分 Confirm 成功等极端情况仍然需要补偿和人工兜底。</li>
+</ul>
+<h2 id="7">7. 落地注意事项<a class="headerlink" href="#7" title="Permanent link">¶</a></h2>
+<h3 id="71-confirm-cancel">7.1 Confirm 和 Cancel 必须幂等<a class="headerlink" href="#71-confirm-cancel" title="Permanent link">¶</a></h3>
+<p>事务协调器可能因为网络超时或响应丢失而重复调用 Confirm 或 Cancel。接口必须能承受重复请求，避免重复扣款、重复释放库存等问题。</p>
+<p>常见做法：</p>
+<ul>
+<li>使用全局事务 ID 做唯一约束。</li>
+<li>使用事务状态表记录处理状态。</li>
+<li>使用状态机限制状态流转。</li>
+</ul>
+<h3 id="72">7.2 要处理空回滚<a class="headerlink" href="#72" title="Permanent link">¶</a></h3>
+<p>空回滚是指 Cancel 请求先到了，但 Try 请求因为网络延迟还没执行。</p>
+<p>如果 Cancel 什么都不记录，后续 Try 又执行成功，就会造成资源被错误冻结。正确做法是：Cancel 到达时即使没有 Try 记录，也要记录一条“已回滚”状态，后续 Try 发现已回滚后直接拒绝。</p>
+<h3 id="73">7.3 要处理悬挂问题<a class="headerlink" href="#73" title="Permanent link">¶</a></h3>
+<p>悬挂是指 Cancel 已经执行完成，但 Try 请求后来才到。如果 Try 继续执行，就会出现已经取消的事务又占用了资源。</p>
+<p>解决思路：Try 执行前检查事务状态，如果发现该全局事务已经 Cancel，则不能再预留资源。</p>
+<h3 id="74-try">7.4 Try 阶段只做资源预留<a class="headerlink" href="#74-try" title="Permanent link">¶</a></h3>
+<p>Try 阶段不要直接完成不可逆操作。它应该尽量只做校验、冻结、预占和状态记录，为 Confirm 或 Cancel 留出明确的处理空间。</p>
+<h3 id="75">7.5 必须有监控和补偿机制<a class="headerlink" href="#75" title="Permanent link">¶</a></h3>
+<p>TCC 不能只靠代码逻辑“相信一定成功”。生产环境必须监控：</p>
+<ul>
+<li>长时间 Try 中的事务。</li>
+<li>Confirm 重试多次仍失败的事务。</li>
+<li>Cancel 重试多次仍失败的事务。</li>
+<li>长时间冻结未释放的资源。</li>
+</ul>
+<p>这些异常需要告警，并提供人工补偿入口。</p>
+<h2 id="8">8. 一句话总结<a class="headerlink" href="#8" title="Permanent link">¶</a></h2>
+<p>TCC 的本质是：<strong>用业务层的“资源预留 + 确认提交 + 失败补偿”，在分布式系统中尽可能模拟本地事务的提交和回滚能力。</strong></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -385,6 +385,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        故障排查与性能优化复盘提示词
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        技术点深度解析与设计模式提炼提示词
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -519,6 +541,82 @@
 </ul>
 <p><strong>以下是文字稿内容</strong>：<br/>
 [在此处粘贴你的文字稿]</p>
+<h4 id="_4">故障排查与性能优化复盘提示词<a class="headerlink" href="#_4" title="Permanent link">¶</a></h4>
+<p>请你扮演一位拥有丰富实战经验的故障复盘专家和性能优化架构师。我将提供一段关于“线上故障排查或性能优化实录”的视频文字稿。请你帮我深度复盘整个排查过程，提炼出作者的排查思路、底层根因分析以及最终的解决方案，将其转化为我日常开发中的“故障排查指南”和“性能优化避坑手册”。</p>
+<p>请按照以下结构进行深度总结：</p>
+<ol>
+<li><strong>故障现场与影响（案发现场）</strong>：<ul>
+<li>简述故障发生的业务场景、具体表现（如慢查询、死锁、CPU飙升等）以及对业务造成的影响。</li>
+<li>明确问题的核心矛盾是什么（例如：明明有索引，为什么还是全表扫描？）。</li>
+</ul>
+</li>
+<li><strong>排查路径与关键线索（侦探过程）</strong>：<ul>
+<li>梳理作者从发现问题到定位根因的完整排查步骤（例如：先看执行计划 -&gt; 发现成本异常 -&gt; 分析统计信息 -&gt; 验证数据分布等）。</li>
+<li>重点提炼排查过程中使用的关键工具、命令（如 <code>EXPLAIN</code>、<code>SHOW INDEX</code>、<code>ANALYZE TABLE</code> 等）以及作者是如何通过关键线索推翻初步假设的。</li>
+</ul>
+</li>
+<li><strong>根本原因分析（底层原理）</strong>：<ul>
+<li>深入剖析导致该问题的底层技术原理（例如：优化器的成本计算模型、索引统计信息过期、数据分布不均、隐式转换等）。</li>
+<li>解释为什么会出现这种“反直觉”的现象（例如：为什么优化器会认为全表扫描比走索引更快？）。</li>
+</ul>
+</li>
+<li><strong>解决方案与验证（止血与根治）</strong>：<ul>
+<li>总结作者最终采取的解决方案（包括紧急止血方案和长期根治方案）。</li>
+<li>如果视频中提供了优化前后的性能对比数据（如耗时、扫描行数、成本值等），请务必列出，以直观展示优化效果。</li>
+</ul>
+</li>
+<li><strong>举一反三与自查清单（避坑指南）</strong>：<ul>
+<li>提炼出3-5个通用的排查检查点或编码规范，帮助我在未来的开发中预防类似问题的发生（例如：如何正确查看执行计划、何时需要手动更新统计信息等）。</li>
+</ul>
+</li>
+</ol>
+<p><strong>要求</strong>：</p>
+<ul>
+<li>语言风格要严谨、逻辑性强，突出“排查逻辑”和“底层原理”。</li>
+<li>对于关键的SQL语句、执行计划字段（如 <code>type</code>, <code>rows</code>, <code>Extra</code>）或底层概念，请使用代码块或加粗高亮显示。</li>
+<li>忽略无关的寒暄，聚焦于技术干货和排查思路的还原。</li>
+<li>请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范</li>
+</ul>
+<p><strong>以下是文字稿内容</strong>：<br/>
+[在此处粘贴你的文字稿]</p>
+<h4 id="_5">技术点深度解析与设计模式提炼提示词<a class="headerlink" href="#_5" title="Permanent link">¶</a></h4>
+<p>请你扮演一位专注于高可用系统设计的资深后端架构师。我将提供一段关于“特定技术点或设计模式深度解析”的视频文字稿。请你帮我深度拆解该技术的底层原理、实现细节以及工程实践中的关键考量，将其转化为我日常开发中的“技术实现指南”和“设计决策参考”。</p>
+<p>请按照以下结构进行深度总结：</p>
+<ol>
+<li><strong>技术本质与核心痛点</strong>：<ul>
+<li>用一句话概括该技术点（如退避重试、熔断、限流等）的本质是什么。</li>
+<li>总结它主要解决了分布式系统或高并发场景下的什么核心问题（例如：雪崩效应、资源耗尽、瞬时流量洪峰等）。</li>
+</ul>
+</li>
+<li><strong>核心原理与机制拆解（重点）</strong>：<ul>
+<li>详细拆解该技术点背后的核心算法或运行机制（例如：指数退避的计算公式、随机抖动 Jitter 的作用、状态机的流转逻辑等）。</li>
+<li>如果视频中对比了多种实现方案（如固定间隔 vs 指数退避），请总结它们的优劣势对比。</li>
+</ul>
+</li>
+<li><strong>工程落地与实现细节</strong>：<ul>
+<li>提炼作者在代码实现层面的关键技巧或推荐工具（例如：推荐的第三方库、装饰器用法、配置参数建议等）。</li>
+<li>总结实现该功能时必须考虑的工程细节（例如：最大重试次数的设定、超时时间的控制、日志记录等）。</li>
+</ul>
+</li>
+<li><strong>适用边界与权衡（Trade-off）</strong>：<ul>
+<li>明确该技术点的“适用场景”与“不适用场景”（例如：哪些错误码适合重试，哪些绝对不适合）。</li>
+<li>总结引入该技术点可能带来的副作用或成本（例如：延迟增加、Token消耗、系统复杂度提升等），以及作者给出的平衡建议。</li>
+</ul>
+</li>
+<li><strong>最佳实践与避坑指南</strong>：<ul>
+<li>提炼出3-5条作者在实战中总结的“黄金法则”或“常见误区”，帮助我在落地时少走弯路。</li>
+</ul>
+</li>
+</ol>
+<p><strong>要求</strong>：</p>
+<ul>
+<li>语言风格要专业、严谨，突出“底层原理”和“工程实践”。</li>
+<li>对于关键的算法公式、代码片段、配置参数或专业术语，请使用代码块或加粗高亮显示。</li>
+<li>忽略无关的寒暄，聚焦于技术干货和实现逻辑的拆解。</li>
+<li>请你将总结形成md文档输出到 personal-knowledge-base\docs\ai总结源文件， 并符合 <code>d:\code\self\personal-knowledge-base\rules\rule.md</code> 的规范</li>
+</ul>
+<p><strong>以下是文字稿内容</strong>：<br/>
+[在此处粘贴你的文字稿]</p>
 
 
 
@@ -577,7 +675,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
